@@ -679,6 +679,50 @@ public class OrganizationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Orga
 		return count;
 	}
 	
+	//disconnect Organization with network in Node
+	public Organization planToRemoveNodeListWithNetwork(Organization organization, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.ORGANIZATION_PROPERTY, organization.getId());
+		key.put(Node.NETWORK_PROPERTY, networkId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return organization;
+		}
+		if(externalNodeList.isEmpty()){
+			return organization;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearNetwork();
+			nodeItem.clearOrganization();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = organization.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return organization;
+	}
+	
+	public int countNodeListWithNetwork(String organizationId, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.ORGANIZATION_PROPERTY, organizationId);
+		key.put(Node.NETWORK_PROPERTY, networkId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect Organization with type in Node
 	public Organization planToRemoveNodeListWithType(Organization organization, String typeId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();

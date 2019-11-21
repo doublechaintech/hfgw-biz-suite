@@ -746,7 +746,7 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		return prepareServiceRecordCreateParameters(serviceRecord);
  	}
  	protected Object[] prepareServiceRecordUpdateParameters(ServiceRecord serviceRecord){
- 		Object[] parameters = new Object[13];
+ 		Object[] parameters = new Object[14];
  
  		parameters[0] = serviceRecord.getName();
  		parameters[1] = serviceRecord.getPayLoad(); 	
@@ -758,26 +758,27 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  			parameters[3] = serviceRecord.getChainCode().getId();
  		}
  
- 		parameters[4] = serviceRecord.getTransactionId();
- 		parameters[5] = serviceRecord.getBlockId();
- 		parameters[6] = serviceRecord.getCreateTime(); 	
+ 		parameters[4] = serviceRecord.getChainCodeFunction();
+ 		parameters[5] = serviceRecord.getTransactionId();
+ 		parameters[6] = serviceRecord.getBlockId();
+ 		parameters[7] = serviceRecord.getCreateTime(); 	
  		if(serviceRecord.getApplication() != null){
- 			parameters[7] = serviceRecord.getApplication().getId();
+ 			parameters[8] = serviceRecord.getApplication().getId();
  		}
   	
  		if(serviceRecord.getNetwork() != null){
- 			parameters[8] = serviceRecord.getNetwork().getId();
+ 			parameters[9] = serviceRecord.getNetwork().getId();
  		}
  
- 		parameters[9] = serviceRecord.getCurrentStatus();		
- 		parameters[10] = serviceRecord.nextVersion();
- 		parameters[11] = serviceRecord.getId();
- 		parameters[12] = serviceRecord.getVersion();
+ 		parameters[10] = serviceRecord.getCurrentStatus();		
+ 		parameters[11] = serviceRecord.nextVersion();
+ 		parameters[12] = serviceRecord.getId();
+ 		parameters[13] = serviceRecord.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareServiceRecordCreateParameters(ServiceRecord serviceRecord){
-		Object[] parameters = new Object[11];
+		Object[] parameters = new Object[12];
 		String newServiceRecordId=getNextId();
 		serviceRecord.setId(newServiceRecordId);
 		parameters[0] =  serviceRecord.getId();
@@ -794,20 +795,21 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		
  		}
  		
- 		parameters[5] = serviceRecord.getTransactionId();
- 		parameters[6] = serviceRecord.getBlockId();
- 		parameters[7] = serviceRecord.getCreateTime(); 	
+ 		parameters[5] = serviceRecord.getChainCodeFunction();
+ 		parameters[6] = serviceRecord.getTransactionId();
+ 		parameters[7] = serviceRecord.getBlockId();
+ 		parameters[8] = serviceRecord.getCreateTime(); 	
  		if(serviceRecord.getApplication() != null){
- 			parameters[8] = serviceRecord.getApplication().getId();
+ 			parameters[9] = serviceRecord.getApplication().getId();
  		
  		}
  		 	
  		if(serviceRecord.getNetwork() != null){
- 			parameters[9] = serviceRecord.getNetwork().getId();
+ 			parameters[10] = serviceRecord.getNetwork().getId();
  		
  		}
  		
- 		parameters[10] = serviceRecord.getCurrentStatus();		
+ 		parameters[11] = serviceRecord.getCurrentStatus();		
  				
  		return parameters;
  	}

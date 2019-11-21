@@ -74,7 +74,7 @@ class HyperledgerNetworkAssociateForm extends Component {
     const userContext = null
     
  const {OrganizationModalTable} = GlobalComponents;
- const {NodeTypeModalTable} = GlobalComponents;
+ const {NodeModalTable} = GlobalComponents;
  const {ChannelModalTable} = GlobalComponents;
  const {ApplicationModalTable} = GlobalComponents;
  const {ServiceRecordModalTable} = GlobalComponents;
@@ -186,7 +186,7 @@ class HyperledgerNetworkAssociateForm extends Component {
         </Card>
         
 	<OrganizationModalTable data={data.organizationList} owner={owner} />
-	<NodeTypeModalTable data={data.nodeTypeList} owner={owner} />
+	<NodeModalTable data={data.nodeList} owner={owner} />
 	<ChannelModalTable data={data.channelList} owner={owner} />
 	<ApplicationModalTable data={data.applicationList} owner={owner} />
 	<ServiceRecordModalTable data={data.serviceRecordList} owner={owner} />

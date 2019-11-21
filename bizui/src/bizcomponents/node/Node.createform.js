@@ -20,9 +20,14 @@ const testValues = {};
 const testValues = {
   name: 'skynet-peer',
   url: 'grpcs://www.skynet-peer.skynet.com:7051',
+  address: '北京市建国门内大街100号',
+  contactPerson: '张三',
+  contactTelephone: '010-9998880',
   organizationId: 'O000001',
   channelId: 'C000001',
+  networkId: 'HN000001',
   typeId: 'peer',
+  tlsCacert: '    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n',
 }
 */
 

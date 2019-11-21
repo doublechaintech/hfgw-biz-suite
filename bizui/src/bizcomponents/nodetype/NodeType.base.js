@@ -51,10 +51,6 @@ const fieldLabels = {
   id: 'ID',
   name: '名称',
   code: '代码',
-  network: '网络',
-  address: '地址',
-  contactPerson: '联系人',
-  contactTelephone: '联系电话',
 
 }
 
@@ -62,10 +58,6 @@ const displayColumns = [
   { title: fieldLabels.id, debugtype: 'string', dataIndex: 'id', width: '8', render: (text, record)=>renderTextCell(text,record,'nodeType') , sorter: true },
   { title: fieldLabels.name, debugtype: 'string', dataIndex: 'name', width: '11',render: (text, record)=>renderTextCell(text,record)},
   { title: fieldLabels.code, debugtype: 'string', dataIndex: 'code', width: '11',render: (text, record)=>renderTextCell(text,record)},
-  { title: fieldLabels.network, dataIndex: 'network', render: (text, record) => renderReferenceCell(text, record), sorter:true},
-  { title: fieldLabels.address, debugtype: 'string', dataIndex: 'address', width: '17',render: (text, record)=>renderTextCell(text,record)},
-  { title: fieldLabels.contactPerson, debugtype: 'string', dataIndex: 'contactPerson', width: '6',render: (text, record)=>renderTextCell(text,record)},
-  { title: fieldLabels.contactTelephone, debugtype: 'string', dataIndex: 'contactTelephone', width: '15',render: (text, record)=>renderTextCell(text,record)},
 
 ]
 // refernce to https://ant.design/components/list-cn/
@@ -79,9 +71,6 @@ const renderItemOfList=(nodeType,targetComponent)=>{
         <Description term="ID">{nodeType.id}</Description> 
         <Description term="名称">{nodeType.name}</Description> 
         <Description term="代码">{nodeType.code}</Description> 
-        <Description term="地址">{nodeType.address}</Description> 
-        <Description term="联系人">{nodeType.contactPerson}</Description> 
-        <Description term="联系电话">{nodeType.contactTelephone}</Description> 
 	
         
       </DescriptionList>
@@ -92,15 +81,15 @@ const renderItemOfList=(nodeType,targetComponent)=>{
 }
 	
 const packFormValuesToObject = ( formValuesToPack )=>{
-	const {name, code, address, contactPerson, contactTelephone, networkId} = formValuesToPack
-	const network = {id: networkId, version: 2^31}
-	const data = {name, code, address, contactPerson, contactTelephone, network}
+	const {name, code} = formValuesToPack
+
+	const data = {name, code}
 	return data
 }
 const unpackObjectToFormValues = ( objectToUnpack )=>{
-	const {name, code, address, contactPerson, contactTelephone, network} = objectToUnpack
-	const networkId = network ? network.id : null
-	const data = {name, code, address, contactPerson, contactTelephone, networkId}
+	const {name, code} = objectToUnpack
+
+	const data = {name, code}
 	return data
 }
 const stepOf=(targetComponent, title, content, position, index)=>{

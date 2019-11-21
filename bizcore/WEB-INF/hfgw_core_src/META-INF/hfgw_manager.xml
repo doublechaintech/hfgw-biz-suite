@@ -15,7 +15,7 @@
 	<bean id="organizationManager" class="com.doublechaintech.hfgw.organization.OrganizationManagerImpl" parent="organizationManagerBase" ></bean>
 	
 	<bean id="nodeTypeManagerBase" class="com.doublechaintech.hfgw.nodetype.NodeTypeManagerImpl"/>
-	<bean id="nodeTypeManager" class="com.doublechaintech.hfgw.nodetype.NodeTypeManagerImpl" parent="nodeTypeManagerBase" ></bean>
+	<bean id="nodeTypeManager" class="com.doublechaintech.hfgw.nodetype.NodeTypeCustomManagerImpl" parent="nodeTypeManagerBase" ></bean>
 	
 	<bean id="nodeManagerBase" class="com.doublechaintech.hfgw.node.NodeManagerImpl"/>
 	<bean id="nodeManager" class="com.doublechaintech.hfgw.node.NodeCustomManagerImpl" parent="nodeManagerBase" ></bean>
@@ -23,11 +23,14 @@
 	<bean id="grpcOptionManagerBase" class="com.doublechaintech.hfgw.grpcoption.GrpcOptionManagerImpl"/>
 	<bean id="grpcOptionManager" class="com.doublechaintech.hfgw.grpcoption.GrpcOptionManagerImpl" parent="grpcOptionManagerBase" ></bean>
 	
-	<bean id="tlsCacertManagerBase" class="com.doublechaintech.hfgw.tlscacert.TlsCacertManagerImpl"/>
-	<bean id="tlsCacertManager" class="com.doublechaintech.hfgw.tlscacert.TlsCacertManagerImpl" parent="tlsCacertManagerBase" ></bean>
-	
 	<bean id="channelManagerBase" class="com.doublechaintech.hfgw.channel.ChannelManagerImpl"/>
 	<bean id="channelManager" class="com.doublechaintech.hfgw.channel.ChannelCustomManagerImpl" parent="channelManagerBase" ></bean>
+	
+	<bean id="peerRoleManagerBase" class="com.doublechaintech.hfgw.peerrole.PeerRoleManagerImpl"/>
+	<bean id="peerRoleManager" class="com.doublechaintech.hfgw.peerrole.PeerRoleCustomManagerImpl" parent="peerRoleManagerBase" ></bean>
+	
+	<bean id="channelPeerRoleManagerBase" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl"/>
+	<bean id="channelPeerRoleManager" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl" parent="channelPeerRoleManagerBase" ></bean>
 	
 	<bean id="chainCodeManagerBase" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl"/>
 	<bean id="chainCodeManager" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl" parent="chainCodeManagerBase" ></bean>
@@ -99,8 +102,9 @@
 		<property name="nodeTypeManager" ref="nodeTypeManager"/>
 		<property name="nodeManager" ref="nodeManager"/>
 		<property name="grpcOptionManager" ref="grpcOptionManager"/>
-		<property name="tlsCacertManager" ref="tlsCacertManager"/>
 		<property name="channelManager" ref="channelManager"/>
+		<property name="peerRoleManager" ref="peerRoleManager"/>
+		<property name="channelPeerRoleManager" ref="channelPeerRoleManager"/>
 		<property name="chainCodeManager" ref="chainCodeManager"/>
 		<property name="applicationManager" ref="applicationManager"/>
 		<property name="serviceRecordManager" ref="serviceRecordManager"/>

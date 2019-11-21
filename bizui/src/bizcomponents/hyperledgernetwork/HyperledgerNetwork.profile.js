@@ -53,11 +53,10 @@ class HyperledgerNetworkProfile extends Component {
   render() {
     // eslint-disable-next-line max-len
     const  hyperledgerNetwork = this.props.hyperledgerNetwork;
-    const { id,displayName, organizationCount, nodeTypeCount, channelCount, applicationCount, serviceRecordCount, changeRequestTypeCount, changeRequestCount } = hyperledgerNetwork
+    const { id,displayName, organizationCount, nodeCount, channelCount, applicationCount, serviceRecordCount, changeRequestTypeCount, changeRequestCount } = hyperledgerNetwork
     const  returnURL = `/hyperledgerNetwork/${id}/dashboard`
     const cardsData = {cardsName:"Hyperledger网络",cardsFor: "hyperledgerNetwork",cardsSource: hyperledgerNetwork,displayName,returnURL,
   		subItems: [
-{name: 'nodeTypeList', displayName:'节点类型',type:'nodeType',count:nodeTypeCount,addFunction: false, role: 'nodeType',  renderItem: GlobalComponents.NodeTypeBase.renderItemOfList},
 {name: 'changeRequestTypeList', displayName:'变更请求类型',type:'changeRequestType',count:changeRequestTypeCount,addFunction: false, role: 'changeRequestType',  renderItem: GlobalComponents.ChangeRequestTypeBase.renderItemOfList},
      
       	],

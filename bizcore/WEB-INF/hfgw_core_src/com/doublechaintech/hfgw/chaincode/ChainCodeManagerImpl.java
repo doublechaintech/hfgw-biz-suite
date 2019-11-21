@@ -514,7 +514,7 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 	
 	
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payLoad, String channelId, String transactionId, String blockId, String networkId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payLoad, String channelId, String chainCodeFunction, String transactionId, String blockId, String networkId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChainCode(chainCodeId);
 
@@ -524,6 +524,8 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		checkerOf(userContext).checkPayLoadOfServiceRecord(payLoad);
 		
 		checkerOf(userContext).checkChannelIdOfServiceRecord(channelId);
+		
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
 		
 		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
@@ -535,12 +537,12 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 
 	
 	}
-	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payLoad, String channelId, String transactionId, String blockId, String networkId, String [] tokensExpr) throws Exception
+	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payLoad, String channelId, String chainCodeFunction, String transactionId, String blockId, String networkId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,chainCodeId,name, payLoad, channelId, transactionId, blockId, networkId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,chainCodeId,name, payLoad, channelId, chainCodeFunction, transactionId, blockId, networkId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, channelId, transactionId, blockId, networkId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, channelId, chainCodeFunction, transactionId, blockId, networkId);
 		
 		ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
 		synchronized(chainCode){ 
@@ -553,22 +555,23 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String chainCodeId,String id,String name,String payLoad,String transactionId,String blockId,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String chainCodeId,String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChainCode(chainCodeId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
 		checkerOf(userContext).checkNameOfServiceRecord( name);
 		checkerOf(userContext).checkPayLoadOfServiceRecord( payLoad);
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
 		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
 		
 	}
-	public  ChainCode updateServiceRecordProperties(HfgwUserContext userContext, String chainCodeId, String id,String name,String payLoad,String transactionId,String blockId, String [] tokensExpr) throws Exception
+	public  ChainCode updateServiceRecordProperties(HfgwUserContext userContext, String chainCodeId, String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,chainCodeId,id,name,payLoad,transactionId,blockId,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,chainCodeId,id,name,payLoad,chainCodeFunction,transactionId,blockId,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -585,6 +588,7 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		
 		item.updateName( name );
 		item.updatePayLoad( payLoad );
+		item.updateChainCodeFunction( chainCodeFunction );
 		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
 
@@ -597,7 +601,7 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String channelId, String transactionId, String blockId, String networkId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String channelId, String chainCodeFunction, String transactionId, String blockId, String networkId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
@@ -607,6 +611,7 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		Channel  channel = new Channel();
 		channel.setId(channelId);		
 		serviceRecord.setChannel(channel);		
+		serviceRecord.setChainCodeFunction(chainCodeFunction);		
 		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
@@ -731,6 +736,10 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		
 		if(ServiceRecord.PAY_LOAD_PROPERTY.equals(property)){
 			checkerOf(userContext).checkPayLoadOfServiceRecord(parseString(newValueExpr));
+		}
+		
+		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
+			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){

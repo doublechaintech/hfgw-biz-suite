@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.hfgw.BaseRowMapper;
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 public class NodeTypeMapper extends BaseRowMapper<NodeType>{
 	
@@ -15,10 +14,6 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
  		setId(nodeType, rs, rowNumber); 		
  		setName(nodeType, rs, rowNumber); 		
  		setCode(nodeType, rs, rowNumber); 		
- 		setNetwork(nodeType, rs, rowNumber); 		
- 		setAddress(nodeType, rs, rowNumber); 		
- 		setContactPerson(nodeType, rs, rowNumber); 		
- 		setContactTelephone(nodeType, rs, rowNumber); 		
  		setVersion(nodeType, rs, rowNumber);
 
 		return nodeType;
@@ -63,60 +58,6 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
 		
 		nodeType.setCode(code);
 	}
-		 		
- 	protected void setNetwork(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
- 		String hyperledgerNetworkId = rs.getString(NodeTypeTable.COLUMN_NETWORK);
- 		if( hyperledgerNetworkId == null){
- 			return;
- 		}
- 		if( hyperledgerNetworkId.isEmpty()){
- 			return;
- 		}
- 		HyperledgerNetwork hyperledgerNetwork = nodeType.getNetwork();
- 		if( hyperledgerNetwork != null ){
- 			//if the root object 'nodeType' already have the property, just set the id for it;
- 			hyperledgerNetwork.setId(hyperledgerNetworkId);
- 			
- 			return;
- 		}
- 		nodeType.setNetwork(createEmptyNetwork(hyperledgerNetworkId));
- 	}
- 	
-	protected void setAddress(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String address = rs.getString(NodeTypeTable.COLUMN_ADDRESS);
-		if(address == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		nodeType.setAddress(address);
-	}
-		
-	protected void setContactPerson(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String contactPerson = rs.getString(NodeTypeTable.COLUMN_CONTACT_PERSON);
-		if(contactPerson == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		nodeType.setContactPerson(contactPerson);
-	}
-		
-	protected void setContactTelephone(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String contactTelephone = rs.getString(NodeTypeTable.COLUMN_CONTACT_TELEPHONE);
-		if(contactTelephone == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		nodeType.setContactTelephone(contactTelephone);
-	}
 		
 	protected void setVersion(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
 	
@@ -132,13 +73,6 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
 		
 		
 
- 	protected HyperledgerNetwork  createEmptyNetwork(String hyperledgerNetworkId){
- 		HyperledgerNetwork hyperledgerNetwork = new HyperledgerNetwork();
- 		hyperledgerNetwork.setId(hyperledgerNetworkId);
- 		hyperledgerNetwork.setVersion(Integer.MAX_VALUE);
- 		return hyperledgerNetwork;
- 	}
- 	
 }
 
 

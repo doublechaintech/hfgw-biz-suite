@@ -26,6 +26,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 	public static final String PAY_LOAD_PROPERTY              = "payLoad"           ;
 	public static final String CHANNEL_PROPERTY               = "channel"           ;
 	public static final String CHAIN_CODE_PROPERTY            = "chainCode"         ;
+	public static final String CHAIN_CODE_FUNCTION_PROPERTY   = "chainCodeFunction" ;
 	public static final String TRANSACTION_ID_PROPERTY        = "transactionId"     ;
 	public static final String BLOCK_ID_PROPERTY              = "blockId"           ;
 	public static final String CREATE_TIME_PROPERTY           = "createTime"        ;
@@ -59,6 +60,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mPayLoad            ;
 	protected		Channel             	mChannel            ;
 	protected		ChainCode           	mChainCode          ;
+	protected		String              	mChainCodeFunction  ;
 	protected		String              	mTransactionId      ;
 	protected		String              	mBlockId            ;
 	protected		DateTime            	mCreateTime         ;
@@ -104,6 +106,9 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		if(PAY_LOAD_PROPERTY.equals(property)){
 			changePayLoadProperty(newValueExpr);
 		}
+		if(CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
+			changeChainCodeFunctionProperty(newValueExpr);
+		}
 		if(TRANSACTION_ID_PROPERTY.equals(property)){
 			changeTransactionIdProperty(newValueExpr);
 		}
@@ -142,6 +147,21 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		//they are surely different each other
 		updatePayLoad(newValue);
 		this.onChangeProperty(PAY_LOAD_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
+	protected void changeChainCodeFunctionProperty(String newValueExpr){
+		String oldValue = getChainCodeFunction();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateChainCodeFunction(newValue);
+		this.onChangeProperty(CHAIN_CODE_FUNCTION_PROPERTY, oldValue, newValue);
 		return;
   
 	}
@@ -209,6 +229,9 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CHAIN_CODE_PROPERTY.equals(property)){
 			return getChainCode();
+		}
+		if(CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
+			return getChainCodeFunction();
 		}
 		if(TRANSACTION_ID_PROPERTY.equals(property)){
 			return getTransactionId();
@@ -328,6 +351,22 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		setChainCode ( null );
 		this.changed = true;
 	}
+	
+	public void setChainCodeFunction(String chainCodeFunction){
+		this.mChainCodeFunction = trimString(chainCodeFunction);;
+	}
+	public String getChainCodeFunction(){
+		return this.mChainCodeFunction;
+	}
+	public ServiceRecord updateChainCodeFunction(String chainCodeFunction){
+		this.mChainCodeFunction = trimString(chainCodeFunction);;
+		this.changed = true;
+		return this;
+	}
+	public void mergeChainCodeFunction(String chainCodeFunction){
+		if(chainCodeFunction != null) { setChainCodeFunction(chainCodeFunction);}
+	}
+	
 	
 	public void setTransactionId(String transactionId){
 		this.mTransactionId = trimString(transactionId);;
@@ -496,6 +535,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, PAY_LOAD_PROPERTY, getPayLoad());
 		appendKeyValuePair(result, CHANNEL_PROPERTY, getChannel());
 		appendKeyValuePair(result, CHAIN_CODE_PROPERTY, getChainCode());
+		appendKeyValuePair(result, CHAIN_CODE_FUNCTION_PROPERTY, getChainCodeFunction());
 		appendKeyValuePair(result, TRANSACTION_ID_PROPERTY, getTransactionId());
 		appendKeyValuePair(result, BLOCK_ID_PROPERTY, getBlockId());
 		appendKeyValuePair(result, CREATE_TIME_PROPERTY, getCreateTime());
@@ -522,6 +562,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 			dest.setPayLoad(getPayLoad());
 			dest.setChannel(getChannel());
 			dest.setChainCode(getChainCode());
+			dest.setChainCodeFunction(getChainCodeFunction());
 			dest.setTransactionId(getTransactionId());
 			dest.setBlockId(getBlockId());
 			dest.setCreateTime(getCreateTime());
@@ -547,6 +588,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 			dest.mergePayLoad(getPayLoad());
 			dest.mergeChannel(getChannel());
 			dest.mergeChainCode(getChainCode());
+			dest.mergeChainCodeFunction(getChainCodeFunction());
 			dest.mergeTransactionId(getTransactionId());
 			dest.mergeBlockId(getBlockId());
 			dest.mergeCreateTime(getCreateTime());
@@ -571,6 +613,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 			dest.mergeId(getId());
 			dest.mergeName(getName());
 			dest.mergePayLoad(getPayLoad());
+			dest.mergeChainCodeFunction(getChainCodeFunction());
 			dest.mergeTransactionId(getTransactionId());
 			dest.mergeBlockId(getBlockId());
 			dest.mergeCreateTime(getCreateTime());
@@ -594,6 +637,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		if(getChainCode() != null ){
  			stringBuilder.append("\tchainCode='ChainCode("+getChainCode().getId()+")';");
  		}
+		stringBuilder.append("\tchainCodeFunction='"+getChainCodeFunction()+"';");
 		stringBuilder.append("\ttransactionId='"+getTransactionId()+"';");
 		stringBuilder.append("\tblockId='"+getBlockId()+"';");
 		stringBuilder.append("\tcreateTime='"+getCreateTime()+"';");

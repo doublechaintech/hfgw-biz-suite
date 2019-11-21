@@ -133,10 +133,6 @@ componentDidMount() {
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'id'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'name'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'code'))
-		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'network'))
-		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'address'))
-		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'contactPerson'))
-		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'contactTelephone'))
 
      
       console.log("the final parameter", paramList)
@@ -268,42 +264,6 @@ componentDidMount() {
           <Col md={8} sm={24}>
             <FormItem label="代码">
               {getFieldDecorator('code')(
-                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
-              )}
-            </FormItem>
-          </Col>
- <Col md={8} sm={24}>
-                    <Form.Item label="网络">
-                  {getFieldDecorator('network', {initialValue: tryinit('network')})(
-                  
-                  <SelectObject 
-                    disabled={!availableForEdit('network')}
-                    targetType={"network"} 
-                    requestFunction={NodeTypeService.requestCandidateNetwork} useForSearch />
-                  	
-                 
-                  )}
-                </Form.Item></Col>
-
-          <Col md={8} sm={24}>
-            <FormItem label="地址">
-              {getFieldDecorator('address')(
-                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
-              )}
-            </FormItem>
-          </Col>
-
-          <Col md={8} sm={24}>
-            <FormItem label="联系人">
-              {getFieldDecorator('contactPerson')(
-                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
-              )}
-            </FormItem>
-          </Col>
-
-          <Col md={8} sm={24}>
-            <FormItem label="联系电话">
-              {getFieldDecorator('contactTelephone')(
                 <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
               )}
             </FormItem>

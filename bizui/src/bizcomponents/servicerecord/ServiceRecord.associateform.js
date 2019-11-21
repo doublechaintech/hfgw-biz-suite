@@ -19,6 +19,7 @@ const testValues = {};
 /*
 const testValues = {
   name: '调用链码',
+  chainCodeFunction: 'transact',
   transactionId: 'a21fe3srw',
   blockId: 'a21fe3srw',
   channelId: 'C000001',
@@ -144,6 +145,16 @@ class ServiceRecordAssociateForm extends Component {
                     rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
                   })(
                     <Input size="large" placeholder="名称" />
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col lg={12} md={12} sm={12}>
+                <Form.Item label={fieldLabels.chainCodeFunction} {...formItemLayout}>
+                  {getFieldDecorator('chainCodeFunction', {
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                    <Input size="large" placeholder="链码功能" />
                   )}
                 </Form.Item>
               </Col>

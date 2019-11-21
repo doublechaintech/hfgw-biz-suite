@@ -38,14 +38,14 @@ const transferToAnotherNetwork = (id, parameters) => {
 
 
 const addNode = (targetObjectId, parameters) => {
-  const url = `${PREFIX}channelManager/addNode/channelId/name/url/organizationId/typeId/tokensExpr/`
+  const url = `${PREFIX}channelManager/addNode/channelId/name/url/organizationId/networkId/tlsCacert/typeId/address/contactPerson/contactTelephone/tokensExpr/`
   const channelId = targetObjectId
   const requestParameters = { ...parameters, channelId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateNode = (targetObjectId, parameters) => {
-  const url = `${PREFIX}channelManager/updateNodeProperties/channelId/id/name/url/tokensExpr/`
+  const url = `${PREFIX}channelManager/updateNodeProperties/channelId/id/name/url/tlsCacert/address/contactPerson/contactTelephone/tokensExpr/`
   const channelId = targetObjectId
   const requestParameters = { ...parameters, channelId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
@@ -53,6 +53,28 @@ const updateNode = (targetObjectId, parameters) => {
 
 const removeNodeList = (targetObjectId, parameters) => {
   const url = `${PREFIX}channelManager/removeNodeList/channelId/nodeIds/tokensExpr/`
+  const requestParameters = { ...parameters, channelId: targetObjectId, tokensExpr: 'none' }
+  return postForm({ url,requestParameters})
+}
+
+
+
+const addChannelPeerRole = (targetObjectId, parameters) => {
+  const url = `${PREFIX}channelManager/addChannelPeerRole/channelId/nodeId/peerRoleId/tokensExpr/`
+  const channelId = targetObjectId
+  const requestParameters = { ...parameters, channelId, tokensExpr: 'none' }
+  return postForm({ url,requestParameters})
+}
+
+const updateChannelPeerRole = (targetObjectId, parameters) => {
+  const url = `${PREFIX}channelManager/updateChannelPeerRoleProperties/channelId/id/tokensExpr/`
+  const channelId = targetObjectId
+  const requestParameters = { ...parameters, channelId, tokensExpr: 'none' }
+  return postForm({ url,requestParameters})
+}
+
+const removeChannelPeerRoleList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}channelManager/removeChannelPeerRoleList/channelId/channelPeerRoleIds/tokensExpr/`
   const requestParameters = { ...parameters, channelId: targetObjectId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
@@ -104,14 +126,14 @@ const removeApplicationList = (targetObjectId, parameters) => {
 
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}channelManager/addServiceRecord/channelId/name/payLoad/chainCodeId/transactionId/blockId/networkId/tokensExpr/`
+  const url = `${PREFIX}channelManager/addServiceRecord/channelId/name/payLoad/chainCodeId/chainCodeFunction/transactionId/blockId/networkId/tokensExpr/`
   const channelId = targetObjectId
   const requestParameters = { ...parameters, channelId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}channelManager/updateServiceRecordProperties/channelId/id/name/payLoad/transactionId/blockId/tokensExpr/`
+  const url = `${PREFIX}channelManager/updateServiceRecordProperties/channelId/id/name/payLoad/chainCodeFunction/transactionId/blockId/tokensExpr/`
   const channelId = targetObjectId
   const requestParameters = { ...parameters, channelId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
@@ -154,14 +176,17 @@ const  processRequest = (data) => {
 const ChannelService = { view,
   load,
   addNode,
+  addChannelPeerRole,
   addChainCode,
   addApplication,
   addServiceRecord,
   updateNode,
+  updateChannelPeerRole,
   updateChainCode,
   updateApplication,
   updateServiceRecord,
   removeNodeList,
+  removeChannelPeerRoleList,
   removeChainCodeList,
   removeApplicationList,
   removeServiceRecordList,

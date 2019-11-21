@@ -180,6 +180,34 @@ public class ChannelForm extends BaseForm {
 	}
 
 
+	public ChannelForm networkIdFieldForNode(String parameterName, String initValue){
+		FormField field =  networkIdFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm networkIdFieldForNode(String initValue){
+		return networkIdFieldForNode("networkId",initValue);
+	}
+	public ChannelForm networkIdFieldForNode(){
+		return networkIdFieldForNode("networkId","");
+	}
+
+
+	public ChannelForm tlsCacertFieldForNode(String parameterName, String initValue){
+		FormField field =  tlsCacertFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm tlsCacertFieldForNode(String initValue){
+		return tlsCacertFieldForNode("tlsCacert",initValue);
+	}
+	public ChannelForm tlsCacertFieldForNode(){
+		return tlsCacertFieldForNode("tlsCacert","");
+	}
+
+
 	public ChannelForm typeIdFieldForNode(String parameterName, String initValue){
 		FormField field =  typeIdFromNode(parameterName, initValue);		
 		this.addFormField(field);
@@ -191,6 +219,104 @@ public class ChannelForm extends BaseForm {
 	}
 	public ChannelForm typeIdFieldForNode(){
 		return typeIdFieldForNode("typeId","");
+	}
+
+
+	public ChannelForm addressFieldForNode(String parameterName, String initValue){
+		FormField field =  addressFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm addressFieldForNode(String initValue){
+		return addressFieldForNode("address",initValue);
+	}
+	public ChannelForm addressFieldForNode(){
+		return addressFieldForNode("address","");
+	}
+
+
+	public ChannelForm contactPersonFieldForNode(String parameterName, String initValue){
+		FormField field =  contactPersonFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm contactPersonFieldForNode(String initValue){
+		return contactPersonFieldForNode("contactPerson",initValue);
+	}
+	public ChannelForm contactPersonFieldForNode(){
+		return contactPersonFieldForNode("contactPerson","");
+	}
+
+
+	public ChannelForm contactTelephoneFieldForNode(String parameterName, String initValue){
+		FormField field =  contactTelephoneFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm contactTelephoneFieldForNode(String initValue){
+		return contactTelephoneFieldForNode("contactTelephone",initValue);
+	}
+	public ChannelForm contactTelephoneFieldForNode(){
+		return contactTelephoneFieldForNode("contactTelephone","");
+	}
+
+
+	public ChannelForm channelPeerRoleIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  idFromChannelPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm channelPeerRoleIdFieldForChannelPeerRole(String initValue){
+		return channelPeerRoleIdFieldForChannelPeerRole("channelPeerRoleId",initValue);
+	}
+	public ChannelForm channelPeerRoleIdFieldForChannelPeerRole(){
+		return channelPeerRoleIdFieldForChannelPeerRole("channelPeerRoleId","");
+	}
+
+
+	public ChannelForm channelIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  channelIdFromChannelPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm channelIdFieldForChannelPeerRole(String initValue){
+		return channelIdFieldForChannelPeerRole("channelId",initValue);
+	}
+	public ChannelForm channelIdFieldForChannelPeerRole(){
+		return channelIdFieldForChannelPeerRole("channelId","");
+	}
+
+
+	public ChannelForm nodeIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  nodeIdFromChannelPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm nodeIdFieldForChannelPeerRole(String initValue){
+		return nodeIdFieldForChannelPeerRole("nodeId",initValue);
+	}
+	public ChannelForm nodeIdFieldForChannelPeerRole(){
+		return nodeIdFieldForChannelPeerRole("nodeId","");
+	}
+
+
+	public ChannelForm peerRoleIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  peerRoleIdFromChannelPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm peerRoleIdFieldForChannelPeerRole(String initValue){
+		return peerRoleIdFieldForChannelPeerRole("peerRoleId",initValue);
+	}
+	public ChannelForm peerRoleIdFieldForChannelPeerRole(){
+		return peerRoleIdFieldForChannelPeerRole("peerRoleId","");
 	}
 
 
@@ -443,6 +569,20 @@ public class ChannelForm extends BaseForm {
 	}
 	public ChannelForm chainCodeIdFieldForServiceRecord(){
 		return chainCodeIdFieldForServiceRecord("chainCodeId","");
+	}
+
+
+	public ChannelForm chainCodeFunctionFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  chainCodeFunctionFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm chainCodeFunctionFieldForServiceRecord(String initValue){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction",initValue);
+	}
+	public ChannelForm chainCodeFunctionFieldForServiceRecord(){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
 	}
 
 

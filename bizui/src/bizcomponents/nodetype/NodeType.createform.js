@@ -20,10 +20,6 @@ const testValues = {};
 const testValues = {
   name: 'peer',
   code: 'peer',
-  address: '北京市建国门内大街100号',
-  contactPerson: '张三',
-  contactTelephone: '010-9998880',
-  networkId: 'HN000001',
 }
 */
 

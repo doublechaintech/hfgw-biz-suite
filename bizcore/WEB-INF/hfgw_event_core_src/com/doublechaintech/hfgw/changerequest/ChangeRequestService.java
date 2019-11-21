@@ -19,7 +19,7 @@ public class ChangeRequestService extends CustomHfgwCheckerManager{
 		
 		//request.getRe
 		
-		request.updatePlatform(HyperledgerNetwork.refById("HN000001"));
+		request.updateNetwork(HyperledgerNetwork.refById("HN000001"));
 		
 		checkerOf(userContext).checkAndFixChangeRequest(request);
 		

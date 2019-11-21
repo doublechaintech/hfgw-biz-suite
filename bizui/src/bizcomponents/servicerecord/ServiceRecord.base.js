@@ -52,6 +52,7 @@ const fieldLabels = {
   payLoad: '支付负载',
   channel: '频道',
   chainCode: '链码',
+  chainCodeFunction: '链码功能',
   transactionId: '事务Id',
   blockId: '块Id',
   createTime: '创建时间',
@@ -67,6 +68,7 @@ const displayColumns = [
   { title: fieldLabels.payLoad, debugtype: 'string_longtext', dataIndex: 'payLoad', width: '10',render: (text, record)=>renderTextCell(text,record)},
   { title: fieldLabels.channel, dataIndex: 'channel', render: (text, record) => renderReferenceCell(text, record), sorter:true},
   { title: fieldLabels.chainCode, dataIndex: 'chainCode', render: (text, record) => renderReferenceCell(text, record), sorter:true},
+  { title: fieldLabels.chainCodeFunction, debugtype: 'string', dataIndex: 'chainCodeFunction', width: '12',render: (text, record)=>renderTextCell(text,record)},
   { title: fieldLabels.transactionId, debugtype: 'string', dataIndex: 'transactionId', width: '13',render: (text, record)=>renderTextCell(text,record)},
   { title: fieldLabels.blockId, debugtype: 'string', dataIndex: 'blockId', width: '13',render: (text, record)=>renderTextCell(text,record)},
   { title: fieldLabels.createTime, dataIndex: 'createTime', render: (text, record) =>renderDateTimeCell(text,record), sorter: true},
@@ -89,6 +91,7 @@ const renderItemOfList=(serviceRecord,targetComponent)=>{
         </div></Description>
         <Description term={fieldLabels.chainCode}><div>{serviceRecord.chainCode==null?appLocaleName(userContext,"NotAssigned"):`${serviceRecord.chainCode.displayName}(${serviceRecord.chainCode.id})`}
         </div></Description>
+        <Description term="链码功能">{serviceRecord.chainCodeFunction}</Description> 
         <Description term="事务Id">{serviceRecord.transactionId}</Description> 
         <Description term="块Id">{serviceRecord.blockId}</Description> 
         <Description term="创建时间"><div>{ moment(serviceRecord.createTime).format('YYYY-MM-DD HH:mm')}</div></Description> 
@@ -105,19 +108,19 @@ const renderItemOfList=(serviceRecord,targetComponent)=>{
 }
 	
 const packFormValuesToObject = ( formValuesToPack )=>{
-	const {name, transactionId, blockId, channelId, chainCodeId, networkId, payLoad} = formValuesToPack
+	const {name, chainCodeFunction, transactionId, blockId, channelId, chainCodeId, networkId, payLoad} = formValuesToPack
 	const channel = {id: channelId, version: 2^31}
 	const chainCode = {id: chainCodeId, version: 2^31}
 	const network = {id: networkId, version: 2^31}
-	const data = {name, transactionId, blockId, channel, chainCode, network, payLoad}
+	const data = {name, chainCodeFunction, transactionId, blockId, channel, chainCode, network, payLoad}
 	return data
 }
 const unpackObjectToFormValues = ( objectToUnpack )=>{
-	const {name, transactionId, blockId, channel, chainCode, network, payLoad} = objectToUnpack
+	const {name, chainCodeFunction, transactionId, blockId, channel, chainCode, network, payLoad} = objectToUnpack
 	const channelId = channel ? channel.id : null
 	const chainCodeId = chainCode ? chainCode.id : null
 	const networkId = network ? network.id : null
-	const data = {name, transactionId, blockId, channelId, chainCodeId, networkId, payLoad}
+	const data = {name, chainCodeFunction, transactionId, blockId, channelId, chainCodeId, networkId, payLoad}
 	return data
 }
 const stepOf=(targetComponent, title, content, position, index)=>{

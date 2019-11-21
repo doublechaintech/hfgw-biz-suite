@@ -29,9 +29,9 @@ public interface ApplicationManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String applicationId, String name, String payLoad, String channelId, String chainCodeId, String transactionId, String blockId, String networkId ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String applicationId, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId ,String [] tokensExpr)  throws Exception;
 	
-	public  Application addServiceRecord(HfgwUserContext userContext, String applicationId, String name, String payLoad, String channelId, String chainCodeId, String transactionId, String blockId, String networkId , String [] tokensExpr)  throws Exception;
+	public  Application addServiceRecord(HfgwUserContext userContext, String applicationId, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId , String [] tokensExpr)  throws Exception;
 	public  Application removeServiceRecord(HfgwUserContext userContext, String applicationId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  Application updateServiceRecord(HfgwUserContext userContext, String applicationId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

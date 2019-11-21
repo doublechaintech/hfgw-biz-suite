@@ -194,6 +194,34 @@ public class OrganizationForm extends BaseForm {
 	}
 
 
+	public OrganizationForm networkIdFieldForNode(String parameterName, String initValue){
+		FormField field =  networkIdFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public OrganizationForm networkIdFieldForNode(String initValue){
+		return networkIdFieldForNode("networkId",initValue);
+	}
+	public OrganizationForm networkIdFieldForNode(){
+		return networkIdFieldForNode("networkId","");
+	}
+
+
+	public OrganizationForm tlsCacertFieldForNode(String parameterName, String initValue){
+		FormField field =  tlsCacertFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public OrganizationForm tlsCacertFieldForNode(String initValue){
+		return tlsCacertFieldForNode("tlsCacert",initValue);
+	}
+	public OrganizationForm tlsCacertFieldForNode(){
+		return tlsCacertFieldForNode("tlsCacert","");
+	}
+
+
 	public OrganizationForm typeIdFieldForNode(String parameterName, String initValue){
 		FormField field =  typeIdFromNode(parameterName, initValue);		
 		this.addFormField(field);
@@ -205,6 +233,48 @@ public class OrganizationForm extends BaseForm {
 	}
 	public OrganizationForm typeIdFieldForNode(){
 		return typeIdFieldForNode("typeId","");
+	}
+
+
+	public OrganizationForm addressFieldForNode(String parameterName, String initValue){
+		FormField field =  addressFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public OrganizationForm addressFieldForNode(String initValue){
+		return addressFieldForNode("address",initValue);
+	}
+	public OrganizationForm addressFieldForNode(){
+		return addressFieldForNode("address","");
+	}
+
+
+	public OrganizationForm contactPersonFieldForNode(String parameterName, String initValue){
+		FormField field =  contactPersonFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public OrganizationForm contactPersonFieldForNode(String initValue){
+		return contactPersonFieldForNode("contactPerson",initValue);
+	}
+	public OrganizationForm contactPersonFieldForNode(){
+		return contactPersonFieldForNode("contactPerson","");
+	}
+
+
+	public OrganizationForm contactTelephoneFieldForNode(String parameterName, String initValue){
+		FormField field =  contactTelephoneFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public OrganizationForm contactTelephoneFieldForNode(String initValue){
+		return contactTelephoneFieldForNode("contactTelephone",initValue);
+	}
+	public OrganizationForm contactTelephoneFieldForNode(){
+		return contactTelephoneFieldForNode("contactTelephone","");
 	}
 
 	

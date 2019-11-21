@@ -38,14 +38,14 @@ const transferToAnotherChannel = (id, parameters) => {
 
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}chainCodeManager/addServiceRecord/chainCodeId/name/payLoad/channelId/transactionId/blockId/networkId/tokensExpr/`
+  const url = `${PREFIX}chainCodeManager/addServiceRecord/chainCodeId/name/payLoad/channelId/chainCodeFunction/transactionId/blockId/networkId/tokensExpr/`
   const chainCodeId = targetObjectId
   const requestParameters = { ...parameters, chainCodeId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}chainCodeManager/updateServiceRecordProperties/chainCodeId/id/name/payLoad/transactionId/blockId/tokensExpr/`
+  const url = `${PREFIX}chainCodeManager/updateServiceRecordProperties/chainCodeId/id/name/payLoad/chainCodeFunction/transactionId/blockId/tokensExpr/`
   const chainCodeId = targetObjectId
   const requestParameters = { ...parameters, chainCodeId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})

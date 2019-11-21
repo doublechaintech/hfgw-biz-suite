@@ -13,8 +13,8 @@ import com.doublechaintech.hfgw.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
-import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
@@ -30,7 +30,7 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String ORGANIZATION_LIST                        = "organizationList"  ;
-	public static final String NODE_TYPE_LIST                           = "nodeTypeList"      ;
+	public static final String NODE_LIST                                = "nodeList"          ;
 	public static final String CHANNEL_LIST                             = "channelList"       ;
 	public static final String APPLICATION_LIST                         = "applicationList"   ;
 	public static final String SERVICE_RECORD_LIST                      = "serviceRecordList" ;
@@ -63,7 +63,7 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	
 	
 	protected		SmartList<Organization>	mOrganizationList   ;
-	protected		SmartList<NodeType> 	mNodeTypeList       ;
+	protected		SmartList<Node>     	mNodeList           ;
 	protected		SmartList<Channel>  	mChannelList        ;
 	protected		SmartList<Application>	mApplicationList    ;
 	protected		SmartList<ServiceRecord>	mServiceRecordList  ;
@@ -151,8 +151,8 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			List<BaseEntity> list = getOrganizationList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
-		if(NODE_TYPE_LIST.equals(property)){
-			List<BaseEntity> list = getNodeTypeList().stream().map(item->item).collect(Collectors.toList());
+		if(NODE_LIST.equals(property)){
+			List<BaseEntity> list = getNodeList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 		if(CHANNEL_LIST.equals(property)){
@@ -358,107 +358,107 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	
 
 
-	public  SmartList<NodeType> getNodeTypeList(){
-		if(this.mNodeTypeList == null){
-			this.mNodeTypeList = new SmartList<NodeType>();
-			this.mNodeTypeList.setListInternalName (NODE_TYPE_LIST );
+	public  SmartList<Node> getNodeList(){
+		if(this.mNodeList == null){
+			this.mNodeList = new SmartList<Node>();
+			this.mNodeList.setListInternalName (NODE_LIST );
 			//有名字，便于做权限控制
 		}
 		
-		return this.mNodeTypeList;	
+		return this.mNodeList;	
 	}
-	public  void setNodeTypeList(SmartList<NodeType> nodeTypeList){
-		for( NodeType nodeType:nodeTypeList){
-			nodeType.setNetwork(this);
+	public  void setNodeList(SmartList<Node> nodeList){
+		for( Node node:nodeList){
+			node.setNetwork(this);
 		}
 
-		this.mNodeTypeList = nodeTypeList;
-		this.mNodeTypeList.setListInternalName (NODE_TYPE_LIST );
+		this.mNodeList = nodeList;
+		this.mNodeList.setListInternalName (NODE_LIST );
 		
 	}
 	
-	public  void addNodeType(NodeType nodeType){
-		nodeType.setNetwork(this);
-		getNodeTypeList().add(nodeType);
+	public  void addNode(Node node){
+		node.setNetwork(this);
+		getNodeList().add(node);
 	}
-	public  void addNodeTypeList(SmartList<NodeType> nodeTypeList){
-		for( NodeType nodeType:nodeTypeList){
-			nodeType.setNetwork(this);
+	public  void addNodeList(SmartList<Node> nodeList){
+		for( Node node:nodeList){
+			node.setNetwork(this);
 		}
-		getNodeTypeList().addAll(nodeTypeList);
+		getNodeList().addAll(nodeList);
 	}
-	public  void mergeNodeTypeList(SmartList<NodeType> nodeTypeList){
-		if(nodeTypeList==null){
+	public  void mergeNodeList(SmartList<Node> nodeList){
+		if(nodeList==null){
 			return;
 		}
-		if(nodeTypeList.isEmpty()){
+		if(nodeList.isEmpty()){
 			return;
 		}
-		addNodeTypeList( nodeTypeList );
+		addNodeList( nodeList );
 		
 	}
-	public  NodeType removeNodeType(NodeType nodeTypeIndex){
+	public  Node removeNode(Node nodeIndex){
 		
-		int index = getNodeTypeList().indexOf(nodeTypeIndex);
+		int index = getNodeList().indexOf(nodeIndex);
         if(index < 0){
-        	String message = "NodeType("+nodeTypeIndex.getId()+") with version='"+nodeTypeIndex.getVersion()+"' NOT found!";
+        	String message = "Node("+nodeIndex.getId()+") with version='"+nodeIndex.getVersion()+"' NOT found!";
             throw new IllegalStateException(message);
         }
-        NodeType nodeType = getNodeTypeList().get(index);        
-        // nodeType.clearNetwork(); //disconnect with Network
-        nodeType.clearFromAll(); //disconnect with Network
+        Node node = getNodeList().get(index);        
+        // node.clearNetwork(); //disconnect with Network
+        node.clearFromAll(); //disconnect with Network
 		
-		boolean result = getNodeTypeList().planToRemove(nodeType);
+		boolean result = getNodeList().planToRemove(node);
         if(!result){
-        	String message = "NodeType("+nodeTypeIndex.getId()+") with version='"+nodeTypeIndex.getVersion()+"' NOT found!";
+        	String message = "Node("+nodeIndex.getId()+") with version='"+nodeIndex.getVersion()+"' NOT found!";
             throw new IllegalStateException(message);
         }
-        return nodeType;
+        return node;
         
 	
 	}
 	//断舍离
-	public  void breakWithNodeType(NodeType nodeType){
+	public  void breakWithNode(Node node){
 		
-		if(nodeType == null){
+		if(node == null){
 			return;
 		}
-		nodeType.setNetwork(null);
-		//getNodeTypeList().remove();
+		node.setNetwork(null);
+		//getNodeList().remove();
 	
 	}
 	
-	public  boolean hasNodeType(NodeType nodeType){
+	public  boolean hasNode(Node node){
 	
-		return getNodeTypeList().contains(nodeType);
+		return getNodeList().contains(node);
   
 	}
 	
-	public void copyNodeTypeFrom(NodeType nodeType) {
+	public void copyNodeFrom(Node node) {
 
-		NodeType nodeTypeInList = findTheNodeType(nodeType);
-		NodeType newNodeType = new NodeType();
-		nodeTypeInList.copyTo(newNodeType);
-		newNodeType.setVersion(0);//will trigger copy
-		getNodeTypeList().add(newNodeType);
-		addItemToFlexiableObject(COPIED_CHILD, newNodeType);
+		Node nodeInList = findTheNode(node);
+		Node newNode = new Node();
+		nodeInList.copyTo(newNode);
+		newNode.setVersion(0);//will trigger copy
+		getNodeList().add(newNode);
+		addItemToFlexiableObject(COPIED_CHILD, newNode);
 	}
 	
-	public  NodeType findTheNodeType(NodeType nodeType){
+	public  Node findTheNode(Node node){
 		
-		int index =  getNodeTypeList().indexOf(nodeType);
+		int index =  getNodeList().indexOf(node);
 		//The input parameter must have the same id and version number.
 		if(index < 0){
- 			String message = "NodeType("+nodeType.getId()+") with version='"+nodeType.getVersion()+"' NOT found!";
+ 			String message = "Node("+node.getId()+") with version='"+node.getVersion()+"' NOT found!";
 			throw new IllegalStateException(message);
 		}
 		
-		return  getNodeTypeList().get(index);
+		return  getNodeList().get(index);
 		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
 	}
 	
-	public  void cleanUpNodeTypeList(){
-		getNodeTypeList().clear();
+	public  void cleanUpNodeList(){
+		getNodeList().clear();
 	}
 	
 	
@@ -1010,7 +1010,7 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getOrganizationList(), internalType);
-		collectFromList(this, entityList, getNodeTypeList(), internalType);
+		collectFromList(this, entityList, getNodeList(), internalType);
 		collectFromList(this, entityList, getChannelList(), internalType);
 		collectFromList(this, entityList, getApplicationList(), internalType);
 		collectFromList(this, entityList, getServiceRecordList(), internalType);
@@ -1024,7 +1024,7 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getOrganizationList());
-		listOfList.add( getNodeTypeList());
+		listOfList.add( getNodeList());
 		listOfList.add( getChannelList());
 		listOfList.add( getApplicationList());
 		listOfList.add( getServiceRecordList());
@@ -1048,10 +1048,10 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			appendKeyValuePair(result, "organizationCount", getOrganizationList().getTotalCount());
 			appendKeyValuePair(result, "organizationCurrentPageNumber", getOrganizationList().getCurrentPageNumber());
 		}
-		appendKeyValuePair(result, NODE_TYPE_LIST, getNodeTypeList());
-		if(!getNodeTypeList().isEmpty()){
-			appendKeyValuePair(result, "nodeTypeCount", getNodeTypeList().getTotalCount());
-			appendKeyValuePair(result, "nodeTypeCurrentPageNumber", getNodeTypeList().getCurrentPageNumber());
+		appendKeyValuePair(result, NODE_LIST, getNodeList());
+		if(!getNodeList().isEmpty()){
+			appendKeyValuePair(result, "nodeCount", getNodeList().getTotalCount());
+			appendKeyValuePair(result, "nodeCurrentPageNumber", getNodeList().getCurrentPageNumber());
 		}
 		appendKeyValuePair(result, CHANNEL_LIST, getChannelList());
 		if(!getChannelList().isEmpty()){
@@ -1097,7 +1097,7 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			dest.setDescription(getDescription());
 			dest.setVersion(getVersion());
 			dest.setOrganizationList(getOrganizationList());
-			dest.setNodeTypeList(getNodeTypeList());
+			dest.setNodeList(getNodeList());
 			dest.setChannelList(getChannelList());
 			dest.setApplicationList(getApplicationList());
 			dest.setServiceRecordList(getServiceRecordList());
@@ -1121,7 +1121,7 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			dest.mergeDescription(getDescription());
 			dest.mergeVersion(getVersion());
 			dest.mergeOrganizationList(getOrganizationList());
-			dest.mergeNodeTypeList(getNodeTypeList());
+			dest.mergeNodeList(getNodeList());
 			dest.mergeChannelList(getChannelList());
 			dest.mergeApplicationList(getApplicationList());
 			dest.mergeServiceRecordList(getServiceRecordList());

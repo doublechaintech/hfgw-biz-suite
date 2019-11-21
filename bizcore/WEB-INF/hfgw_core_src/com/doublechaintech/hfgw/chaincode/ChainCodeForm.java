@@ -208,6 +208,20 @@ public class ChainCodeForm extends BaseForm {
 	}
 
 
+	public ChainCodeForm chainCodeFunctionFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  chainCodeFunctionFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm chainCodeFunctionFieldForServiceRecord(String initValue){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction",initValue);
+	}
+	public ChainCodeForm chainCodeFunctionFieldForServiceRecord(){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
+	}
+
+
 	public ChainCodeForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
 		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);

@@ -36,6 +36,7 @@ const renderReferenceCell=defaultRenderReferenceCell
 const menuData = {menuName:"频道", menuFor: "channel",
   		subItems: [
   {name: 'nodeList', displayName:'节点', icon:'node',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
+  {name: 'channelPeerRoleList', displayName:'通道对等的角色', icon:'500px',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'chainCodeList', displayName:'链码', icon:'code',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'applicationList', displayName:'应用程序', icon:'at',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},
   {name: 'serviceRecordList', displayName:'服务记录', icon:'servicestack',readPermission: false,createPermission: false,deletePermission: false,updatePermission: false,executionPermission: false, viewGroup: '__no_group'},

@@ -133,6 +133,7 @@ const internalSummaryOf = (serviceRecord,targetComponent) =>{
 	      ServiceRecordService.transferToAnotherChainCode,"anotherChainCodeId",serviceRecord.chainCode?serviceRecord.chainCode.id:"")} 
   style={{fontSize: 20,color:"red"}} />
 </Description>
+<Description term="链码功能">{serviceRecord.chainCodeFunction}</Description> 
 <Description term="事务Id">{serviceRecord.transactionId}</Description> 
 <Description term="块Id">{serviceRecord.blockId}</Description> 
 <Description term="创建时间">{ moment(serviceRecord.createTime).format('YYYY-MM-DD HH:mm')}</Description> 

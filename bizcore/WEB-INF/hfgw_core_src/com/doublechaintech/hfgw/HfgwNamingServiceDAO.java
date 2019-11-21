@@ -24,8 +24,9 @@ public class HfgwNamingServiceDAO extends CommonJDBCTemplateDAO {
 		namingTableMap.put("NodeType", new String[]{"node_type_data","name"});
 		namingTableMap.put("Node", new String[]{"node_data","name"});
 		namingTableMap.put("GrpcOption", new String[]{"grpc_option_data","parameter_name"});
-		namingTableMap.put("TlsCacert", new String[]{"tls_cacert_data","path"});
 		namingTableMap.put("Channel", new String[]{"channel_data","name"});
+		namingTableMap.put("PeerRole", new String[]{"peer_role_data","name"});
+		namingTableMap.put("ChannelPeerRole", new String[]{"channel_peer_role_data","id"});
 		namingTableMap.put("ChainCode", new String[]{"chain_code_data","name"});
 		namingTableMap.put("Application", new String[]{"application_data","name"});
 		namingTableMap.put("ServiceRecord", new String[]{"service_record_data","name"});

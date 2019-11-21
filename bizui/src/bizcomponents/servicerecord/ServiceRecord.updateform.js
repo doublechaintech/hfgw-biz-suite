@@ -286,6 +286,18 @@ class ServiceRecordUpdateForm extends Component {
               </Col>
 
               <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.chainCodeFunction} {...formItemLayout}>
+                  {getFieldDecorator('chainCodeFunction', {
+                    initialValue: selectedRow.chainCodeFunction,
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                    <Input size="large" placeholder="链码功能" />
+                    
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col lg={24} md={24} sm={24}>
                 <Form.Item label={fieldLabels.transactionId} {...formItemLayout}>
                   {getFieldDecorator('transactionId', {
                     initialValue: selectedRow.transactionId,

@@ -20,16 +20,18 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.organization.Organization;
-import com.doublechaintech.hfgw.tlscacert.TlsCacert;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.grpcoption.GrpcOption;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionDAO;
 import com.doublechaintech.hfgw.organization.OrganizationDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
-import com.doublechaintech.hfgw.tlscacert.TlsCacertDAO;
 import com.doublechaintech.hfgw.nodetype.NodeTypeDAO;
 
 
@@ -48,6 +50,15 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  	}
  	public ChannelDAO getChannelDAO(){
 	 	return this.channelDAO;
+ 	}
+ 
+ 	
+ 	private  HyperledgerNetworkDAO  hyperledgerNetworkDAO;
+ 	public void setHyperledgerNetworkDAO(HyperledgerNetworkDAO hyperledgerNetworkDAO){
+	 	this.hyperledgerNetworkDAO = hyperledgerNetworkDAO;
+ 	}
+ 	public HyperledgerNetworkDAO getHyperledgerNetworkDAO(){
+	 	return this.hyperledgerNetworkDAO;
  	}
  
  	
@@ -91,20 +102,20 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 			
 		
 	
-  	private  TlsCacertDAO  tlsCacertDAO;
- 	public void setTlsCacertDAO(TlsCacertDAO pTlsCacertDAO){
+  	private  ChannelPeerRoleDAO  channelPeerRoleDAO;
+ 	public void setChannelPeerRoleDAO(ChannelPeerRoleDAO pChannelPeerRoleDAO){
  	
- 		if(pTlsCacertDAO == null){
- 			throw new IllegalStateException("Do not try to set tlsCacertDAO to null.");
+ 		if(pChannelPeerRoleDAO == null){
+ 			throw new IllegalStateException("Do not try to set channelPeerRoleDAO to null.");
  		}
-	 	this.tlsCacertDAO = pTlsCacertDAO;
+	 	this.channelPeerRoleDAO = pChannelPeerRoleDAO;
  	}
- 	public TlsCacertDAO getTlsCacertDAO(){
- 		if(this.tlsCacertDAO == null){
- 			throw new IllegalStateException("The tlsCacertDAO is not configured yet, please config it some where.");
+ 	public ChannelPeerRoleDAO getChannelPeerRoleDAO(){
+ 		if(this.channelPeerRoleDAO == null){
+ 			throw new IllegalStateException("The channelPeerRoleDAO is not configured yet, please config it some where.");
  		}
  		
-	 	return this.tlsCacertDAO;
+	 	return this.channelPeerRoleDAO;
  	}	
  	
 			
@@ -166,8 +177,8 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  		}
 		
  		
- 		if(isSaveTlsCacertListEnabled(options)){
- 			for(TlsCacert item: newNode.getTlsCacertList()){
+ 		if(isSaveChannelPeerRoleListEnabled(options)){
+ 			for(ChannelPeerRole item: newNode.getChannelPeerRoleList()){
  				item.setVersion(0);
  			}
  		}
@@ -291,6 +302,20 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  	
   
 
+ 	protected boolean isExtractNetworkEnabled(Map<String,Object> options){
+ 		
+	 	return checkOptions(options, NodeTokens.NETWORK);
+ 	}
+
+ 	protected boolean isSaveNetworkEnabled(Map<String,Object> options){
+	 	
+ 		return checkOptions(options, NodeTokens.NETWORK);
+ 	}
+ 	
+
+ 	
+  
+
  	protected boolean isExtractTypeEnabled(Map<String,Object> options){
  		
 	 	return checkOptions(options, NodeTokens.TYPE);
@@ -320,15 +345,15 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  	
 		
 	
-	protected boolean isExtractTlsCacertListEnabled(Map<String,Object> options){		
- 		return checkOptions(options,NodeTokens.TLS_CACERT_LIST);
+	protected boolean isExtractChannelPeerRoleListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,NodeTokens.CHANNEL_PEER_ROLE_LIST);
  	}
- 	protected boolean isAnalyzeTlsCacertListEnabled(Map<String,Object> options){		 		
- 		return NodeTokens.of(options).analyzeTlsCacertListEnabled();
+ 	protected boolean isAnalyzeChannelPeerRoleListEnabled(Map<String,Object> options){		 		
+ 		return NodeTokens.of(options).analyzeChannelPeerRoleListEnabled();
  	}
 	
-	protected boolean isSaveTlsCacertListEnabled(Map<String,Object> options){
-		return checkOptions(options, NodeTokens.TLS_CACERT_LIST);
+	protected boolean isSaveChannelPeerRoleListEnabled(Map<String,Object> options){
+		return checkOptions(options, NodeTokens.CHANNEL_PEER_ROLE_LIST);
 		
  	}
  	
@@ -367,6 +392,10 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	 		extractChannel(node, loadOptions);
  		}
   	
+ 		if(isExtractNetworkEnabled(loadOptions)){
+	 		extractNetwork(node, loadOptions);
+ 		}
+  	
  		if(isExtractTypeEnabled(loadOptions)){
 	 		extractType(node, loadOptions);
  		}
@@ -380,11 +409,11 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  		}
  		
 		
-		if(isExtractTlsCacertListEnabled(loadOptions)){
-	 		extractTlsCacertList(node, loadOptions);
+		if(isExtractChannelPeerRoleListEnabled(loadOptions)){
+	 		extractChannelPeerRoleList(node, loadOptions);
  		}	
- 		if(isAnalyzeTlsCacertListEnabled(loadOptions)){
-	 		analyzeTlsCacertList(node, loadOptions);
+ 		if(isAnalyzeChannelPeerRoleListEnabled(loadOptions)){
+	 		analyzeChannelPeerRoleList(node, loadOptions);
  		}
  		
 		
@@ -426,6 +455,26 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 		Channel channel = getChannelDAO().load(channelId,options);
 		if(channel != null){
 			node.setChannel(channel);
+		}
+		
+ 		
+ 		return node;
+ 	}
+ 		
+  
+
+ 	protected Node extractNetwork(Node node, Map<String,Object> options) throws Exception{
+
+		if(node.getNetwork() == null){
+			return node;
+		}
+		String networkId = node.getNetwork().getId();
+		if( networkId == null){
+			return node;
+		}
+		HyperledgerNetwork network = getHyperledgerNetworkDAO().load(networkId,options);
+		if(network != null){
+			node.setNetwork(network);
 		}
 		
  		
@@ -504,12 +553,12 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	}	
 	
 		
-	protected void enhanceTlsCacertList(SmartList<TlsCacert> tlsCacertList,Map<String,Object> options){
+	protected void enhanceChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList,Map<String,Object> options){
 		//extract multiple list from difference sources
 		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
 	}
 	
-	protected Node extractTlsCacertList(Node node, Map<String,Object> options){
+	protected Node extractChannelPeerRoleList(Node node, Map<String,Object> options){
 		
 		
 		if(node == null){
@@ -521,17 +570,17 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 
 		
 		
-		SmartList<TlsCacert> tlsCacertList = getTlsCacertDAO().findTlsCacertByNode(node.getId(),options);
-		if(tlsCacertList != null){
-			enhanceTlsCacertList(tlsCacertList,options);
-			node.setTlsCacertList(tlsCacertList);
+		SmartList<ChannelPeerRole> channelPeerRoleList = getChannelPeerRoleDAO().findChannelPeerRoleByNode(node.getId(),options);
+		if(channelPeerRoleList != null){
+			enhanceChannelPeerRoleList(channelPeerRoleList,options);
+			node.setChannelPeerRoleList(channelPeerRoleList);
 		}
 		
 		return node;
 	
 	}	
 	
-	protected Node analyzeTlsCacertList(Node node, Map<String,Object> options){
+	protected Node analyzeChannelPeerRoleList(Node node, Map<String,Object> options){
 		
 		
 		if(node == null){
@@ -543,9 +592,9 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 
 		
 		
-		SmartList<TlsCacert> tlsCacertList = node.getTlsCacertList();
-		if(tlsCacertList != null){
-			getTlsCacertDAO().analyzeTlsCacertByNode(tlsCacertList, node.getId(), options);
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();
+		if(channelPeerRoleList != null){
+			getChannelPeerRoleDAO().analyzeChannelPeerRoleByNode(channelPeerRoleList, node.getId(), options);
 			
 		}
 		
@@ -639,6 +688,49 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  	@Override
 	public Map<String, Integer> countNodeByChannelIds(String[] ids, Map<String, Object> options) {
 		return countWithIds(NodeTable.COLUMN_CHANNEL, ids, options);
+	}
+ 	
+  	
+ 	public SmartList<Node> findNodeByNetwork(String hyperledgerNetworkId,Map<String,Object> options){
+ 	
+  		SmartList<Node> resultList = queryWith(NodeTable.COLUMN_NETWORK, hyperledgerNetworkId, options, getNodeMapper());
+		// analyzeNodeByNetwork(resultList, hyperledgerNetworkId, options);
+		return resultList;
+ 	}
+ 	 
+ 
+ 	public SmartList<Node> findNodeByNetwork(String hyperledgerNetworkId, int start, int count,Map<String,Object> options){
+ 		
+ 		SmartList<Node> resultList =  queryWithRange(NodeTable.COLUMN_NETWORK, hyperledgerNetworkId, options, getNodeMapper(), start, count);
+ 		//analyzeNodeByNetwork(resultList, hyperledgerNetworkId, options);
+ 		return resultList;
+ 		
+ 	}
+ 	public void analyzeNodeByNetwork(SmartList<Node> resultList, String hyperledgerNetworkId, Map<String,Object> options){
+		if(resultList==null){
+			return;//do nothing when the list is null.
+		}
+		
+ 		MultipleAccessKey filterKey = new MultipleAccessKey();
+ 		filterKey.put(Node.NETWORK_PROPERTY, hyperledgerNetworkId);
+ 		Map<String,Object> emptyOptions = new HashMap<String,Object>();
+ 		
+ 		StatsInfo info = new StatsInfo();
+ 		
+ 		
+ 		resultList.setStatsInfo(info);
+
+ 	
+ 		
+ 	}
+ 	@Override
+ 	public int countNodeByNetwork(String hyperledgerNetworkId,Map<String,Object> options){
+
+ 		return countWith(NodeTable.COLUMN_NETWORK, hyperledgerNetworkId, options);
+ 	}
+ 	@Override
+	public Map<String, Integer> countNodeByNetworkIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(NodeTable.COLUMN_NETWORK, ids, options);
 	}
  	
   	
@@ -826,7 +918,7 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  		return prepareNodeCreateParameters(node);
  	}
  	protected Object[] prepareNodeUpdateParameters(Node node){
- 		Object[] parameters = new Object[8];
+ 		Object[] parameters = new Object[13];
  
  		parameters[0] = node.getName();
  		parameters[1] = node.getUrl(); 	
@@ -838,18 +930,26 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  			parameters[3] = node.getChannel().getId();
  		}
   	
- 		if(node.getType() != null){
- 			parameters[4] = node.getType().getId();
+ 		if(node.getNetwork() != null){
+ 			parameters[4] = node.getNetwork().getId();
  		}
- 		
- 		parameters[5] = node.nextVersion();
- 		parameters[6] = node.getId();
- 		parameters[7] = node.getVersion();
+ 
+ 		parameters[5] = node.getTlsCacert(); 	
+ 		if(node.getType() != null){
+ 			parameters[6] = node.getType().getId();
+ 		}
+ 
+ 		parameters[7] = node.getAddress();
+ 		parameters[8] = node.getContactPerson();
+ 		parameters[9] = node.getContactTelephone();		
+ 		parameters[10] = node.nextVersion();
+ 		parameters[11] = node.getId();
+ 		parameters[12] = node.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareNodeCreateParameters(Node node){
-		Object[] parameters = new Object[6];
+		Object[] parameters = new Object[11];
 		String newNodeId=getNextId();
 		node.setId(newNodeId);
 		parameters[0] =  node.getId();
@@ -866,11 +966,20 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  		
  		}
  		 	
- 		if(node.getType() != null){
- 			parameters[5] = node.getType().getId();
+ 		if(node.getNetwork() != null){
+ 			parameters[5] = node.getNetwork().getId();
  		
  		}
- 				
+ 		
+ 		parameters[6] = node.getTlsCacert(); 	
+ 		if(node.getType() != null){
+ 			parameters[7] = node.getType().getId();
+ 		
+ 		}
+ 		
+ 		parameters[8] = node.getAddress();
+ 		parameters[9] = node.getContactPerson();
+ 		parameters[10] = node.getContactTelephone();		
  				
  		return parameters;
  	}
@@ -887,6 +996,10 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	 		saveChannel(node, options);
  		}
   	
+ 		if(isSaveNetworkEnabled(options)){
+	 		saveNetwork(node, options);
+ 		}
+  	
  		if(isSaveTypeEnabled(options)){
 	 		saveType(node, options);
  		}
@@ -899,9 +1012,9 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	 		
  		}		
 		
-		if(isSaveTlsCacertListEnabled(options)){
-	 		saveTlsCacertList(node, options);
-	 		//removeTlsCacertList(node, options);
+		if(isSaveChannelPeerRoleListEnabled(options)){
+	 		saveChannelPeerRoleList(node, options);
+	 		//removeChannelPeerRoleList(node, options);
 	 		//Not delete the record
 	 		
  		}		
@@ -939,6 +1052,23 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
  		}
  		
  		getChannelDAO().save(node.getChannel(),options);
+ 		return node;
+ 		
+ 	}
+ 	
+ 	
+ 	
+ 	 
+	
+  
+ 
+ 	protected Node saveNetwork(Node node, Map<String,Object> options){
+ 		//Call inject DAO to execute this method
+ 		if(node.getNetwork() == null){
+ 			return node;//do nothing when it is null
+ 		}
+ 		
+ 		getHyperledgerNetworkDAO().save(node.getNetwork(),options);
  		return node;
  		
  	}
@@ -995,34 +1125,122 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	}
 
 
-	public Node planToRemoveTlsCacertList(Node node, String tlsCacertIds[], Map<String,Object> options)throws Exception{
+	public Node planToRemoveChannelPeerRoleList(Node node, String channelPeerRoleIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(TlsCacert.NODE_PROPERTY, node.getId());
-		key.put(TlsCacert.ID_PROPERTY, tlsCacertIds);
+		key.put(ChannelPeerRole.NODE_PROPERTY, node.getId());
+		key.put(ChannelPeerRole.ID_PROPERTY, channelPeerRoleIds);
 		
-		SmartList<TlsCacert> externalTlsCacertList = getTlsCacertDAO().
-				findTlsCacertWithKey(key, options);
-		if(externalTlsCacertList == null){
+		SmartList<ChannelPeerRole> externalChannelPeerRoleList = getChannelPeerRoleDAO().
+				findChannelPeerRoleWithKey(key, options);
+		if(externalChannelPeerRoleList == null){
 			return node;
 		}
-		if(externalTlsCacertList.isEmpty()){
+		if(externalChannelPeerRoleList.isEmpty()){
 			return node;
 		}
 		
-		for(TlsCacert tlsCacertItem: externalTlsCacertList){
+		for(ChannelPeerRole channelPeerRoleItem: externalChannelPeerRoleList){
 
-			tlsCacertItem.clearFromAll();
+			channelPeerRoleItem.clearFromAll();
 		}
 		
 		
-		SmartList<TlsCacert> tlsCacertList = node.getTlsCacertList();		
-		tlsCacertList.addAllToRemoveList(externalTlsCacertList);
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();		
+		channelPeerRoleList.addAllToRemoveList(externalChannelPeerRoleList);
 		return node;	
 	
 	}
 
 
+	//disconnect Node with channel in ChannelPeerRole
+	public Node planToRemoveChannelPeerRoleListWithChannel(Node node, String channelId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.NODE_PROPERTY, node.getId());
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channelId);
+		
+		SmartList<ChannelPeerRole> externalChannelPeerRoleList = getChannelPeerRoleDAO().
+				findChannelPeerRoleWithKey(key, options);
+		if(externalChannelPeerRoleList == null){
+			return node;
+		}
+		if(externalChannelPeerRoleList.isEmpty()){
+			return node;
+		}
+		
+		for(ChannelPeerRole channelPeerRoleItem: externalChannelPeerRoleList){
+			channelPeerRoleItem.clearChannel();
+			channelPeerRoleItem.clearNode();
+			
+		}
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();		
+		channelPeerRoleList.addAllToRemoveList(externalChannelPeerRoleList);
+		return node;
+	}
+	
+	public int countChannelPeerRoleListWithChannel(String nodeId, String channelId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.NODE_PROPERTY, nodeId);
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channelId);
+		
+		int count = getChannelPeerRoleDAO().countChannelPeerRoleWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect Node with peer_role in ChannelPeerRole
+	public Node planToRemoveChannelPeerRoleListWithPeerRole(Node node, String peerRoleId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.NODE_PROPERTY, node.getId());
+		key.put(ChannelPeerRole.PEER_ROLE_PROPERTY, peerRoleId);
+		
+		SmartList<ChannelPeerRole> externalChannelPeerRoleList = getChannelPeerRoleDAO().
+				findChannelPeerRoleWithKey(key, options);
+		if(externalChannelPeerRoleList == null){
+			return node;
+		}
+		if(externalChannelPeerRoleList.isEmpty()){
+			return node;
+		}
+		
+		for(ChannelPeerRole channelPeerRoleItem: externalChannelPeerRoleList){
+			channelPeerRoleItem.clearPeerRole();
+			channelPeerRoleItem.clearNode();
+			
+		}
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();		
+		channelPeerRoleList.addAllToRemoveList(externalChannelPeerRoleList);
+		return node;
+	}
+	
+	public int countChannelPeerRoleListWithPeerRole(String nodeId, String peerRoleId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.NODE_PROPERTY, nodeId);
+		key.put(ChannelPeerRole.PEER_ROLE_PROPERTY, peerRoleId);
+		
+		int count = getChannelPeerRoleDAO().countChannelPeerRoleWithKey(key, options);
+		return count;
+	}
+	
 
 		
 	protected Node saveGrpcOptionList(Node node, Map<String,Object> options){
@@ -1091,33 +1309,33 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	
 	
 		
-	protected Node saveTlsCacertList(Node node, Map<String,Object> options){
+	protected Node saveChannelPeerRoleList(Node node, Map<String,Object> options){
 		
 		
 		
 		
-		SmartList<TlsCacert> tlsCacertList = node.getTlsCacertList();
-		if(tlsCacertList == null){
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();
+		if(channelPeerRoleList == null){
 			//null list means nothing
 			return node;
 		}
-		SmartList<TlsCacert> mergedUpdateTlsCacertList = new SmartList<TlsCacert>();
+		SmartList<ChannelPeerRole> mergedUpdateChannelPeerRoleList = new SmartList<ChannelPeerRole>();
 		
 		
-		mergedUpdateTlsCacertList.addAll(tlsCacertList); 
-		if(tlsCacertList.getToRemoveList() != null){
+		mergedUpdateChannelPeerRoleList.addAll(channelPeerRoleList); 
+		if(channelPeerRoleList.getToRemoveList() != null){
 			//ensures the toRemoveList is not null
-			mergedUpdateTlsCacertList.addAll(tlsCacertList.getToRemoveList());
-			tlsCacertList.removeAll(tlsCacertList.getToRemoveList());
+			mergedUpdateChannelPeerRoleList.addAll(channelPeerRoleList.getToRemoveList());
+			channelPeerRoleList.removeAll(channelPeerRoleList.getToRemoveList());
 			//OK for now, need fix later
 		}
 
 		//adding new size can improve performance
 	
-		getTlsCacertDAO().saveTlsCacertList(mergedUpdateTlsCacertList,options);
+		getChannelPeerRoleDAO().saveChannelPeerRoleList(mergedUpdateChannelPeerRoleList,options);
 		
-		if(tlsCacertList.getToRemoveList() != null){
-			tlsCacertList.removeAll(tlsCacertList.getToRemoveList());
+		if(channelPeerRoleList.getToRemoveList() != null){
+			channelPeerRoleList.removeAll(channelPeerRoleList.getToRemoveList());
 		}
 		
 		
@@ -1125,25 +1343,25 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	
 	}
 	
-	protected Node removeTlsCacertList(Node node, Map<String,Object> options){
+	protected Node removeChannelPeerRoleList(Node node, Map<String,Object> options){
 	
 	
-		SmartList<TlsCacert> tlsCacertList = node.getTlsCacertList();
-		if(tlsCacertList == null){
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();
+		if(channelPeerRoleList == null){
 			return node;
 		}	
 	
-		SmartList<TlsCacert> toRemoveTlsCacertList = tlsCacertList.getToRemoveList();
+		SmartList<ChannelPeerRole> toRemoveChannelPeerRoleList = channelPeerRoleList.getToRemoveList();
 		
-		if(toRemoveTlsCacertList == null){
+		if(toRemoveChannelPeerRoleList == null){
 			return node;
 		}
-		if(toRemoveTlsCacertList.isEmpty()){
+		if(toRemoveChannelPeerRoleList.isEmpty()){
 			return node;// Does this mean delete all from the parent object?
 		}
 		//Call DAO to remove the list
 		
-		getTlsCacertDAO().removeTlsCacertList(toRemoveTlsCacertList,options);
+		getChannelPeerRoleDAO().removeChannelPeerRoleList(toRemoveChannelPeerRoleList,options);
 		
 		return node;
 	
@@ -1161,7 +1379,7 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	public Node present(Node node,Map<String, Object> options){
 	
 		presentGrpcOptionList(node,options);
-		presentTlsCacertList(node,options);
+		presentChannelPeerRoleList(node,options);
 
 		return node;
 	
@@ -1188,20 +1406,20 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 	}			
 		
 	//Using java8 feature to reduce the code significantly
- 	protected Node presentTlsCacertList(
+ 	protected Node presentChannelPeerRoleList(
 			Node node,
 			Map<String, Object> options) {
 
-		SmartList<TlsCacert> tlsCacertList = node.getTlsCacertList();		
-				SmartList<TlsCacert> newList= presentSubList(node.getId(),
-				tlsCacertList,
+		SmartList<ChannelPeerRole> channelPeerRoleList = node.getChannelPeerRoleList();		
+				SmartList<ChannelPeerRole> newList= presentSubList(node.getId(),
+				channelPeerRoleList,
 				options,
-				getTlsCacertDAO()::countTlsCacertByNode,
-				getTlsCacertDAO()::findTlsCacertByNode
+				getChannelPeerRoleDAO()::countChannelPeerRoleByNode,
+				getChannelPeerRoleDAO()::findChannelPeerRoleByNode
 				);
 
 		
-		node.setTlsCacertList(newList);
+		node.setChannelPeerRoleList(newList);
 		
 
 		return node;
@@ -1215,7 +1433,7 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 		return findAllCandidateByFilter(NodeTable.COLUMN_NAME, filterKey, pageNo, pageSize, getNodeMapper());
     }
 		
-    public SmartList<Node> requestCandidateNodeForTlsCacert(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+    public SmartList<Node> requestCandidateNodeForChannelPeerRole(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(NodeTable.COLUMN_NAME, filterKey, pageNo, pageSize, getNodeMapper());
@@ -1256,25 +1474,25 @@ public class NodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeDAO{
 		return loadedObjs;
 	}
 	
-	// 需要一个加载引用我的对象的enhance方法:TlsCacert的node的TlsCacertList
-	public SmartList<TlsCacert> loadOurTlsCacertList(HfgwUserContext userContext, List<Node> us, Map<String,Object> options) throws Exception{
+	// 需要一个加载引用我的对象的enhance方法:ChannelPeerRole的node的ChannelPeerRoleList
+	public SmartList<ChannelPeerRole> loadOurChannelPeerRoleList(HfgwUserContext userContext, List<Node> us, Map<String,Object> options) throws Exception{
 		if (us == null || us.isEmpty()){
 			return new SmartList<>();
 		}
 		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(TlsCacert.NODE_PROPERTY, ids.toArray(new String[ids.size()]));
-		SmartList<TlsCacert> loadedObjs = userContext.getDAOGroup().getTlsCacertDAO().findTlsCacertWithKey(key, options);
-		Map<String, List<TlsCacert>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getNode().getId()));
+		key.put(ChannelPeerRole.NODE_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<ChannelPeerRole> loadedObjs = userContext.getDAOGroup().getChannelPeerRoleDAO().findChannelPeerRoleWithKey(key, options);
+		Map<String, List<ChannelPeerRole>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getNode().getId()));
 		us.forEach(it->{
 			String id = it.getId();
-			List<TlsCacert> loadedList = loadedMap.get(id);
+			List<ChannelPeerRole> loadedList = loadedMap.get(id);
 			if (loadedList == null || loadedList.isEmpty()) {
 				return;
 			}
-			SmartList<TlsCacert> loadedSmartList = new SmartList<>();
+			SmartList<ChannelPeerRole> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
-			it.setTlsCacertList(loadedSmartList);
+			it.setChannelPeerRoleList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

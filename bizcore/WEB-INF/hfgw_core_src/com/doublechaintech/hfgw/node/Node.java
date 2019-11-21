@@ -12,11 +12,12 @@ import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.organization.Organization;
-import com.doublechaintech.hfgw.tlscacert.TlsCacert;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.grpcoption.GrpcOption;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 @JsonSerialize(using = NodeSerializer.class)
 public class Node extends BaseEntity implements  java.io.Serializable{
@@ -27,11 +28,16 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 	public static final String URL_PROPERTY                   = "url"               ;
 	public static final String ORGANIZATION_PROPERTY          = "organization"      ;
 	public static final String CHANNEL_PROPERTY               = "channel"           ;
+	public static final String NETWORK_PROPERTY               = "network"           ;
+	public static final String TLS_CACERT_PROPERTY            = "tlsCacert"         ;
 	public static final String TYPE_PROPERTY                  = "type"              ;
+	public static final String ADDRESS_PROPERTY               = "address"           ;
+	public static final String CONTACT_PERSON_PROPERTY        = "contactPerson"     ;
+	public static final String CONTACT_TELEPHONE_PROPERTY     = "contactTelephone"  ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String GRPC_OPTION_LIST                         = "grpcOptionList"    ;
-	public static final String TLS_CACERT_LIST                          = "tlsCacertList"     ;
+	public static final String CHANNEL_PEER_ROLE_LIST                   = "channelPeerRoleList";
 
 	public static final String INTERNAL_TYPE="Node";
 	public String getInternalType(){
@@ -57,12 +63,17 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mUrl                ;
 	protected		Organization        	mOrganization       ;
 	protected		Channel             	mChannel            ;
+	protected		HyperledgerNetwork  	mNetwork            ;
+	protected		String              	mTlsCacert          ;
 	protected		NodeType            	mType               ;
+	protected		String              	mAddress            ;
+	protected		String              	mContactPerson      ;
+	protected		String              	mContactTelephone   ;
 	protected		int                 	mVersion            ;
 	
 	
 	protected		SmartList<GrpcOption>	mGrpcOptionList     ;
-	protected		SmartList<TlsCacert>	mTlsCacertList      ;
+	protected		SmartList<ChannelPeerRole>	mChannelPeerRoleList;
 	
 		
 	public 	Node(){
@@ -82,6 +93,7 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 	public 	void clearFromAll(){
 		setOrganization( null );
 		setChannel( null );
+		setNetwork( null );
 		setType( null );
 
 		this.changed = true;
@@ -97,6 +109,18 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		}
 		if(URL_PROPERTY.equals(property)){
 			changeUrlProperty(newValueExpr);
+		}
+		if(TLS_CACERT_PROPERTY.equals(property)){
+			changeTlsCacertProperty(newValueExpr);
+		}
+		if(ADDRESS_PROPERTY.equals(property)){
+			changeAddressProperty(newValueExpr);
+		}
+		if(CONTACT_PERSON_PROPERTY.equals(property)){
+			changeContactPersonProperty(newValueExpr);
+		}
+		if(CONTACT_TELEPHONE_PROPERTY.equals(property)){
+			changeContactTelephoneProperty(newValueExpr);
 		}
 
       
@@ -133,6 +157,66 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
+	protected void changeTlsCacertProperty(String newValueExpr){
+		String oldValue = getTlsCacert();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateTlsCacert(newValue);
+		this.onChangeProperty(TLS_CACERT_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
+	protected void changeAddressProperty(String newValueExpr){
+		String oldValue = getAddress();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateAddress(newValue);
+		this.onChangeProperty(ADDRESS_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
+	protected void changeContactPersonProperty(String newValueExpr){
+		String oldValue = getContactPerson();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateContactPerson(newValue);
+		this.onChangeProperty(CONTACT_PERSON_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
+	protected void changeContactTelephoneProperty(String newValueExpr){
+		String oldValue = getContactTelephone();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateContactTelephone(newValue);
+		this.onChangeProperty(CONTACT_TELEPHONE_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
 
 
 	
@@ -150,15 +234,30 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		if(CHANNEL_PROPERTY.equals(property)){
 			return getChannel();
 		}
+		if(NETWORK_PROPERTY.equals(property)){
+			return getNetwork();
+		}
+		if(TLS_CACERT_PROPERTY.equals(property)){
+			return getTlsCacert();
+		}
 		if(TYPE_PROPERTY.equals(property)){
 			return getType();
+		}
+		if(ADDRESS_PROPERTY.equals(property)){
+			return getAddress();
+		}
+		if(CONTACT_PERSON_PROPERTY.equals(property)){
+			return getContactPerson();
+		}
+		if(CONTACT_TELEPHONE_PROPERTY.equals(property)){
+			return getContactTelephone();
 		}
 		if(GRPC_OPTION_LIST.equals(property)){
 			List<BaseEntity> list = getGrpcOptionList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
-		if(TLS_CACERT_LIST.equals(property)){
-			List<BaseEntity> list = getTlsCacertList().stream().map(item->item).collect(Collectors.toList());
+		if(CHANNEL_PEER_ROLE_LIST.equals(property)){
+			List<BaseEntity> list = getChannelPeerRoleList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 
@@ -262,6 +361,43 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		this.changed = true;
 	}
 	
+	public void setNetwork(HyperledgerNetwork network){
+		this.mNetwork = network;;
+	}
+	public HyperledgerNetwork getNetwork(){
+		return this.mNetwork;
+	}
+	public Node updateNetwork(HyperledgerNetwork network){
+		this.mNetwork = network;;
+		this.changed = true;
+		return this;
+	}
+	public void mergeNetwork(HyperledgerNetwork network){
+		if(network != null) { setNetwork(network);}
+	}
+	
+	
+	public void clearNetwork(){
+		setNetwork ( null );
+		this.changed = true;
+	}
+	
+	public void setTlsCacert(String tlsCacert){
+		this.mTlsCacert = tlsCacert;;
+	}
+	public String getTlsCacert(){
+		return this.mTlsCacert;
+	}
+	public Node updateTlsCacert(String tlsCacert){
+		this.mTlsCacert = tlsCacert;;
+		this.changed = true;
+		return this;
+	}
+	public void mergeTlsCacert(String tlsCacert){
+		if(tlsCacert != null) { setTlsCacert(tlsCacert);}
+	}
+	
+	
 	public void setType(NodeType type){
 		this.mType = type;;
 	}
@@ -282,6 +418,54 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		setType ( null );
 		this.changed = true;
 	}
+	
+	public void setAddress(String address){
+		this.mAddress = trimString(address);;
+	}
+	public String getAddress(){
+		return this.mAddress;
+	}
+	public Node updateAddress(String address){
+		this.mAddress = trimString(address);;
+		this.changed = true;
+		return this;
+	}
+	public void mergeAddress(String address){
+		if(address != null) { setAddress(address);}
+	}
+	
+	
+	public void setContactPerson(String contactPerson){
+		this.mContactPerson = trimString(contactPerson);;
+	}
+	public String getContactPerson(){
+		return this.mContactPerson;
+	}
+	public Node updateContactPerson(String contactPerson){
+		this.mContactPerson = trimString(contactPerson);;
+		this.changed = true;
+		return this;
+	}
+	public void mergeContactPerson(String contactPerson){
+		if(contactPerson != null) { setContactPerson(contactPerson);}
+	}
+	
+	
+	public void setContactTelephone(String contactTelephone){
+		this.mContactTelephone = trimString(contactTelephone);;
+	}
+	public String getContactTelephone(){
+		return this.mContactTelephone;
+	}
+	public Node updateContactTelephone(String contactTelephone){
+		this.mContactTelephone = trimString(contactTelephone);;
+		this.changed = true;
+		return this;
+	}
+	public void mergeContactTelephone(String contactTelephone){
+		if(contactTelephone != null) { setContactTelephone(contactTelephone);}
+	}
+	
 	
 	public void setVersion(int version){
 		this.mVersion = version;;
@@ -407,107 +591,107 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 	
 
 
-	public  SmartList<TlsCacert> getTlsCacertList(){
-		if(this.mTlsCacertList == null){
-			this.mTlsCacertList = new SmartList<TlsCacert>();
-			this.mTlsCacertList.setListInternalName (TLS_CACERT_LIST );
+	public  SmartList<ChannelPeerRole> getChannelPeerRoleList(){
+		if(this.mChannelPeerRoleList == null){
+			this.mChannelPeerRoleList = new SmartList<ChannelPeerRole>();
+			this.mChannelPeerRoleList.setListInternalName (CHANNEL_PEER_ROLE_LIST );
 			//有名字，便于做权限控制
 		}
 		
-		return this.mTlsCacertList;	
+		return this.mChannelPeerRoleList;	
 	}
-	public  void setTlsCacertList(SmartList<TlsCacert> tlsCacertList){
-		for( TlsCacert tlsCacert:tlsCacertList){
-			tlsCacert.setNode(this);
+	public  void setChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList){
+		for( ChannelPeerRole channelPeerRole:channelPeerRoleList){
+			channelPeerRole.setNode(this);
 		}
 
-		this.mTlsCacertList = tlsCacertList;
-		this.mTlsCacertList.setListInternalName (TLS_CACERT_LIST );
+		this.mChannelPeerRoleList = channelPeerRoleList;
+		this.mChannelPeerRoleList.setListInternalName (CHANNEL_PEER_ROLE_LIST );
 		
 	}
 	
-	public  void addTlsCacert(TlsCacert tlsCacert){
-		tlsCacert.setNode(this);
-		getTlsCacertList().add(tlsCacert);
+	public  void addChannelPeerRole(ChannelPeerRole channelPeerRole){
+		channelPeerRole.setNode(this);
+		getChannelPeerRoleList().add(channelPeerRole);
 	}
-	public  void addTlsCacertList(SmartList<TlsCacert> tlsCacertList){
-		for( TlsCacert tlsCacert:tlsCacertList){
-			tlsCacert.setNode(this);
+	public  void addChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList){
+		for( ChannelPeerRole channelPeerRole:channelPeerRoleList){
+			channelPeerRole.setNode(this);
 		}
-		getTlsCacertList().addAll(tlsCacertList);
+		getChannelPeerRoleList().addAll(channelPeerRoleList);
 	}
-	public  void mergeTlsCacertList(SmartList<TlsCacert> tlsCacertList){
-		if(tlsCacertList==null){
+	public  void mergeChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList){
+		if(channelPeerRoleList==null){
 			return;
 		}
-		if(tlsCacertList.isEmpty()){
+		if(channelPeerRoleList.isEmpty()){
 			return;
 		}
-		addTlsCacertList( tlsCacertList );
+		addChannelPeerRoleList( channelPeerRoleList );
 		
 	}
-	public  TlsCacert removeTlsCacert(TlsCacert tlsCacertIndex){
+	public  ChannelPeerRole removeChannelPeerRole(ChannelPeerRole channelPeerRoleIndex){
 		
-		int index = getTlsCacertList().indexOf(tlsCacertIndex);
+		int index = getChannelPeerRoleList().indexOf(channelPeerRoleIndex);
         if(index < 0){
-        	String message = "TlsCacert("+tlsCacertIndex.getId()+") with version='"+tlsCacertIndex.getVersion()+"' NOT found!";
+        	String message = "ChannelPeerRole("+channelPeerRoleIndex.getId()+") with version='"+channelPeerRoleIndex.getVersion()+"' NOT found!";
             throw new IllegalStateException(message);
         }
-        TlsCacert tlsCacert = getTlsCacertList().get(index);        
-        // tlsCacert.clearNode(); //disconnect with Node
-        tlsCacert.clearFromAll(); //disconnect with Node
+        ChannelPeerRole channelPeerRole = getChannelPeerRoleList().get(index);        
+        // channelPeerRole.clearNode(); //disconnect with Node
+        channelPeerRole.clearFromAll(); //disconnect with Node
 		
-		boolean result = getTlsCacertList().planToRemove(tlsCacert);
+		boolean result = getChannelPeerRoleList().planToRemove(channelPeerRole);
         if(!result){
-        	String message = "TlsCacert("+tlsCacertIndex.getId()+") with version='"+tlsCacertIndex.getVersion()+"' NOT found!";
+        	String message = "ChannelPeerRole("+channelPeerRoleIndex.getId()+") with version='"+channelPeerRoleIndex.getVersion()+"' NOT found!";
             throw new IllegalStateException(message);
         }
-        return tlsCacert;
+        return channelPeerRole;
         
 	
 	}
 	//断舍离
-	public  void breakWithTlsCacert(TlsCacert tlsCacert){
+	public  void breakWithChannelPeerRole(ChannelPeerRole channelPeerRole){
 		
-		if(tlsCacert == null){
+		if(channelPeerRole == null){
 			return;
 		}
-		tlsCacert.setNode(null);
-		//getTlsCacertList().remove();
+		channelPeerRole.setNode(null);
+		//getChannelPeerRoleList().remove();
 	
 	}
 	
-	public  boolean hasTlsCacert(TlsCacert tlsCacert){
+	public  boolean hasChannelPeerRole(ChannelPeerRole channelPeerRole){
 	
-		return getTlsCacertList().contains(tlsCacert);
+		return getChannelPeerRoleList().contains(channelPeerRole);
   
 	}
 	
-	public void copyTlsCacertFrom(TlsCacert tlsCacert) {
+	public void copyChannelPeerRoleFrom(ChannelPeerRole channelPeerRole) {
 
-		TlsCacert tlsCacertInList = findTheTlsCacert(tlsCacert);
-		TlsCacert newTlsCacert = new TlsCacert();
-		tlsCacertInList.copyTo(newTlsCacert);
-		newTlsCacert.setVersion(0);//will trigger copy
-		getTlsCacertList().add(newTlsCacert);
-		addItemToFlexiableObject(COPIED_CHILD, newTlsCacert);
+		ChannelPeerRole channelPeerRoleInList = findTheChannelPeerRole(channelPeerRole);
+		ChannelPeerRole newChannelPeerRole = new ChannelPeerRole();
+		channelPeerRoleInList.copyTo(newChannelPeerRole);
+		newChannelPeerRole.setVersion(0);//will trigger copy
+		getChannelPeerRoleList().add(newChannelPeerRole);
+		addItemToFlexiableObject(COPIED_CHILD, newChannelPeerRole);
 	}
 	
-	public  TlsCacert findTheTlsCacert(TlsCacert tlsCacert){
+	public  ChannelPeerRole findTheChannelPeerRole(ChannelPeerRole channelPeerRole){
 		
-		int index =  getTlsCacertList().indexOf(tlsCacert);
+		int index =  getChannelPeerRoleList().indexOf(channelPeerRole);
 		//The input parameter must have the same id and version number.
 		if(index < 0){
- 			String message = "TlsCacert("+tlsCacert.getId()+") with version='"+tlsCacert.getVersion()+"' NOT found!";
+ 			String message = "ChannelPeerRole("+channelPeerRole.getId()+") with version='"+channelPeerRole.getVersion()+"' NOT found!";
 			throw new IllegalStateException(message);
 		}
 		
-		return  getTlsCacertList().get(index);
+		return  getChannelPeerRoleList().get(index);
 		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
 	}
 	
-	public  void cleanUpTlsCacertList(){
-		getTlsCacertList().clear();
+	public  void cleanUpChannelPeerRoleList(){
+		getChannelPeerRoleList().clear();
 	}
 	
 	
@@ -518,6 +702,7 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 
 		addToEntityList(this, entityList, getOrganization(), internalType);
 		addToEntityList(this, entityList, getChannel(), internalType);
+		addToEntityList(this, entityList, getNetwork(), internalType);
 		addToEntityList(this, entityList, getType(), internalType);
 
 		
@@ -527,7 +712,7 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getGrpcOptionList(), internalType);
-		collectFromList(this, entityList, getTlsCacertList(), internalType);
+		collectFromList(this, entityList, getChannelPeerRoleList(), internalType);
 
 		return entityList;
 	}
@@ -536,7 +721,7 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getGrpcOptionList());
-		listOfList.add( getTlsCacertList());
+		listOfList.add( getChannelPeerRoleList());
 			
 
 		return listOfList;
@@ -551,17 +736,22 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, URL_PROPERTY, getUrl());
 		appendKeyValuePair(result, ORGANIZATION_PROPERTY, getOrganization());
 		appendKeyValuePair(result, CHANNEL_PROPERTY, getChannel());
+		appendKeyValuePair(result, NETWORK_PROPERTY, getNetwork());
+		appendKeyValuePair(result, TLS_CACERT_PROPERTY, getTlsCacert());
 		appendKeyValuePair(result, TYPE_PROPERTY, getType());
+		appendKeyValuePair(result, ADDRESS_PROPERTY, getAddress());
+		appendKeyValuePair(result, CONTACT_PERSON_PROPERTY, getContactPerson());
+		appendKeyValuePair(result, CONTACT_TELEPHONE_PROPERTY, getContactTelephone());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 		appendKeyValuePair(result, GRPC_OPTION_LIST, getGrpcOptionList());
 		if(!getGrpcOptionList().isEmpty()){
 			appendKeyValuePair(result, "grpcOptionCount", getGrpcOptionList().getTotalCount());
 			appendKeyValuePair(result, "grpcOptionCurrentPageNumber", getGrpcOptionList().getCurrentPageNumber());
 		}
-		appendKeyValuePair(result, TLS_CACERT_LIST, getTlsCacertList());
-		if(!getTlsCacertList().isEmpty()){
-			appendKeyValuePair(result, "tlsCacertCount", getTlsCacertList().getTotalCount());
-			appendKeyValuePair(result, "tlsCacertCurrentPageNumber", getTlsCacertList().getCurrentPageNumber());
+		appendKeyValuePair(result, CHANNEL_PEER_ROLE_LIST, getChannelPeerRoleList());
+		if(!getChannelPeerRoleList().isEmpty()){
+			appendKeyValuePair(result, "channelPeerRoleCount", getChannelPeerRoleList().getTotalCount());
+			appendKeyValuePair(result, "channelPeerRoleCurrentPageNumber", getChannelPeerRoleList().getCurrentPageNumber());
 		}
 
 		
@@ -582,10 +772,15 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 			dest.setUrl(getUrl());
 			dest.setOrganization(getOrganization());
 			dest.setChannel(getChannel());
+			dest.setNetwork(getNetwork());
+			dest.setTlsCacert(getTlsCacert());
 			dest.setType(getType());
+			dest.setAddress(getAddress());
+			dest.setContactPerson(getContactPerson());
+			dest.setContactTelephone(getContactTelephone());
 			dest.setVersion(getVersion());
 			dest.setGrpcOptionList(getGrpcOptionList());
-			dest.setTlsCacertList(getTlsCacertList());
+			dest.setChannelPeerRoleList(getChannelPeerRoleList());
 
 		}
 		super.copyTo(baseDest);
@@ -604,10 +799,15 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 			dest.mergeUrl(getUrl());
 			dest.mergeOrganization(getOrganization());
 			dest.mergeChannel(getChannel());
+			dest.mergeNetwork(getNetwork());
+			dest.mergeTlsCacert(getTlsCacert());
 			dest.mergeType(getType());
+			dest.mergeAddress(getAddress());
+			dest.mergeContactPerson(getContactPerson());
+			dest.mergeContactTelephone(getContactTelephone());
 			dest.mergeVersion(getVersion());
 			dest.mergeGrpcOptionList(getGrpcOptionList());
-			dest.mergeTlsCacertList(getTlsCacertList());
+			dest.mergeChannelPeerRoleList(getChannelPeerRoleList());
 
 		}
 		super.copyTo(baseDest);
@@ -625,6 +825,10 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 			dest.mergeId(getId());
 			dest.mergeName(getName());
 			dest.mergeUrl(getUrl());
+			dest.mergeTlsCacert(getTlsCacert());
+			dest.mergeAddress(getAddress());
+			dest.mergeContactPerson(getContactPerson());
+			dest.mergeContactTelephone(getContactTelephone());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -644,9 +848,16 @@ public class Node extends BaseEntity implements  java.io.Serializable{
 		if(getChannel() != null ){
  			stringBuilder.append("\tchannel='Channel("+getChannel().getId()+")';");
  		}
+		if(getNetwork() != null ){
+ 			stringBuilder.append("\tnetwork='HyperledgerNetwork("+getNetwork().getId()+")';");
+ 		}
+		stringBuilder.append("\ttlsCacert='"+getTlsCacert()+"';");
 		if(getType() != null ){
  			stringBuilder.append("\ttype='NodeType("+getType().getId()+")';");
  		}
+		stringBuilder.append("\taddress='"+getAddress()+"';");
+		stringBuilder.append("\tcontactPerson='"+getContactPerson()+"';");
+		stringBuilder.append("\tcontactTelephone='"+getContactTelephone()+"';");
 		stringBuilder.append("\tversion='"+getVersion()+"';");
 		stringBuilder.append("}");
 

@@ -28,9 +28,9 @@ public interface OrganizationManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  NodeManager getNodeManager(HfgwUserContext userContext, String organizationId, String name, String url, String channelId, String typeId ,String [] tokensExpr)  throws Exception;
+	//public  NodeManager getNodeManager(HfgwUserContext userContext, String organizationId, String name, String url, String channelId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone ,String [] tokensExpr)  throws Exception;
 	
-	public  Organization addNode(HfgwUserContext userContext, String organizationId, String name, String url, String channelId, String typeId , String [] tokensExpr)  throws Exception;
+	public  Organization addNode(HfgwUserContext userContext, String organizationId, String name, String url, String channelId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone , String [] tokensExpr)  throws Exception;
 	public  Organization removeNode(HfgwUserContext userContext, String organizationId, String nodeId, int nodeVersion,String [] tokensExpr)  throws Exception;
 	public  Organization updateNode(HfgwUserContext userContext, String organizationId, String nodeId, int nodeVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

@@ -186,13 +186,13 @@ export default {
 
 
 
-    *addNodeType({ payload }, { call, put }) {
+    *addNode({ payload }, { call, put }) {
       const userContext = null
       const {HyperledgerNetworkService} = GlobalComponents;
 
       const { id, role, parameters, continueNext } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(HyperledgerNetworkService.addNodeType, id, parameters)
+      const data = yield call(HyperledgerNetworkService.addNode, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return
@@ -206,15 +206,15 @@ export default {
       }
       const partialList = true
       const newState = {...data, partialList}
-      const location = { pathname: `/hyperledgerNetwork/${id}/list/NodeTypeList/节点类型+${appLocaleName(userContext,'List')}`, state: newState }
+      const location = { pathname: `/hyperledgerNetwork/${id}/list/NodeList/节点+${appLocaleName(userContext,'List')}`, state: newState }
       yield put(routerRedux.push(location))
     },
-    *updateNodeType({ payload }, { call, put }) {
+    *updateNode({ payload }, { call, put }) {
       const userContext = null
       const {HyperledgerNetworkService} = GlobalComponents;      
       const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(HyperledgerNetworkService.updateNodeType, id, parameters)
+      const data = yield call(HyperledgerNetworkService.updateNode, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return
@@ -228,20 +228,20 @@ export default {
       if (continueNext) {
         return
       }
-      const location = { pathname: `/hyperledgerNetwork/${id}/list/NodeTypeList/节点类型列表`, state: newPlayload }
+      const location = { pathname: `/hyperledgerNetwork/${id}/list/NodeList/节点列表`, state: newPlayload }
       yield put(routerRedux.push(location))
     },
-    *gotoNextNodeTypeUpdateRow({ payload }, { call, put }) {
+    *gotoNextNodeUpdateRow({ payload }, { call, put }) {
       const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
       const newPlayload = { ...payload, selectedRows, currentUpdateIndex }
       yield put({ type: 'updateState', payload: newPlayload })
     },
-    *removeNodeTypeList({ payload }, { call, put }) {
+    *removeNodeList({ payload }, { call, put }) {
      const userContext = null
       const {HyperledgerNetworkService} = GlobalComponents; 
       const { id, role, parameters, continueNext } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(HyperledgerNetworkService.removeNodeTypeList, id, parameters)
+      const data = yield call(HyperledgerNetworkService.removeNodeList, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return

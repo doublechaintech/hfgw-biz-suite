@@ -135,6 +135,7 @@ componentDidMount() {
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'payLoad'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'channel'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'chainCode'))
+		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'chainCodeFunction'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'transactionId'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'blockId'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'network'))
@@ -298,6 +299,14 @@ componentDidMount() {
                  
                   )}
                 </Form.Item></Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label="链码功能">
+              {getFieldDecorator('chainCodeFunction')(
+                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
+              )}
+            </FormItem>
+          </Col>
 
           <Col md={8} sm={24}>
             <FormItem label="事务Id">

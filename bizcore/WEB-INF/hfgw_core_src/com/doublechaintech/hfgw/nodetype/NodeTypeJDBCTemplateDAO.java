@@ -21,9 +21,7 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 
 import com.doublechaintech.hfgw.node.Node;
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.node.NodeDAO;
 
 
@@ -34,15 +32,6 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 
 
 public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeTypeDAO{
- 
- 	
- 	private  HyperledgerNetworkDAO  hyperledgerNetworkDAO;
- 	public void setHyperledgerNetworkDAO(HyperledgerNetworkDAO hyperledgerNetworkDAO){
-	 	this.hyperledgerNetworkDAO = hyperledgerNetworkDAO;
- 	}
- 	public HyperledgerNetworkDAO getHyperledgerNetworkDAO(){
-	 	return this.hyperledgerNetworkDAO;
- 	}
 
 
 			
@@ -221,21 +210,7 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 	
 	}
 
- 
 
- 	protected boolean isExtractNetworkEnabled(Map<String,Object> options){
- 		
-	 	return checkOptions(options, NodeTypeTokens.NETWORK);
- 	}
-
- 	protected boolean isSaveNetworkEnabled(Map<String,Object> options){
-	 	
- 		return checkOptions(options, NodeTypeTokens.NETWORK);
- 	}
- 	
-
- 	
- 
 		
 	
 	protected boolean isExtractNodeListEnabled(Map<String,Object> options){		
@@ -276,11 +251,7 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 	protected NodeType loadInternalNodeType(AccessKey accessKey, Map<String,Object> loadOptions) throws Exception{
 		
 		NodeType nodeType = extractNodeType(accessKey, loadOptions);
- 	
- 		if(isExtractNetworkEnabled(loadOptions)){
-	 		extractNetwork(nodeType, loadOptions);
- 		}
- 
+
 		
 		if(isExtractNodeListEnabled(loadOptions)){
 	 		extractNodeList(nodeType, loadOptions);
@@ -294,27 +265,7 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 		
 	}
 
-	 
-
- 	protected NodeType extractNetwork(NodeType nodeType, Map<String,Object> options) throws Exception{
-
-		if(nodeType.getNetwork() == null){
-			return nodeType;
-		}
-		String networkId = nodeType.getNetwork().getId();
-		if( networkId == null){
-			return nodeType;
-		}
-		HyperledgerNetwork network = getHyperledgerNetworkDAO().load(networkId,options);
-		if(network != null){
-			nodeType.setNetwork(network);
-		}
-		
- 		
- 		return nodeType;
- 	}
- 		
- 
+	
 		
 	protected void enhanceNodeList(SmartList<Node> nodeList,Map<String,Object> options){
 		//extract multiple list from difference sources
@@ -367,40 +318,6 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 	
 		
 		
-  	
- 	public SmartList<NodeType> findNodeTypeByNetwork(String hyperledgerNetworkId,Map<String,Object> options){
- 	
-  		SmartList<NodeType> resultList = queryWith(NodeTypeTable.COLUMN_NETWORK, hyperledgerNetworkId, options, getNodeTypeMapper());
-		// analyzeNodeTypeByNetwork(resultList, hyperledgerNetworkId, options);
-		return resultList;
- 	}
- 	 
- 
- 	public SmartList<NodeType> findNodeTypeByNetwork(String hyperledgerNetworkId, int start, int count,Map<String,Object> options){
- 		
- 		SmartList<NodeType> resultList =  queryWithRange(NodeTypeTable.COLUMN_NETWORK, hyperledgerNetworkId, options, getNodeTypeMapper(), start, count);
- 		//analyzeNodeTypeByNetwork(resultList, hyperledgerNetworkId, options);
- 		return resultList;
- 		
- 	}
- 	public void analyzeNodeTypeByNetwork(SmartList<NodeType> resultList, String hyperledgerNetworkId, Map<String,Object> options){
-		if(resultList==null){
-			return;//do nothing when the list is null.
-		}
-
- 	
- 		
- 	}
- 	@Override
- 	public int countNodeTypeByNetwork(String hyperledgerNetworkId,Map<String,Object> options){
-
- 		return countWith(NodeTypeTable.COLUMN_NETWORK, hyperledgerNetworkId, options);
- 	}
- 	@Override
-	public Map<String, Integer> countNodeTypeByNetworkIds(String[] ids, Map<String, Object> options) {
-		return countWithIds(NodeTypeTable.COLUMN_NETWORK, ids, options);
-	}
- 	
  	
 		
 		
@@ -543,39 +460,24 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
  		return prepareNodeTypeCreateParameters(nodeType);
  	}
  	protected Object[] prepareNodeTypeUpdateParameters(NodeType nodeType){
- 		Object[] parameters = new Object[9];
+ 		Object[] parameters = new Object[5];
  
  		parameters[0] = nodeType.getName();
- 		parameters[1] = nodeType.getCode(); 	
- 		if(nodeType.getNetwork() != null){
- 			parameters[2] = nodeType.getNetwork().getId();
- 		}
- 
- 		parameters[3] = nodeType.getAddress();
- 		parameters[4] = nodeType.getContactPerson();
- 		parameters[5] = nodeType.getContactTelephone();		
- 		parameters[6] = nodeType.nextVersion();
- 		parameters[7] = nodeType.getId();
- 		parameters[8] = nodeType.getVersion();
+ 		parameters[1] = nodeType.getCode();		
+ 		parameters[2] = nodeType.nextVersion();
+ 		parameters[3] = nodeType.getId();
+ 		parameters[4] = nodeType.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareNodeTypeCreateParameters(NodeType nodeType){
-		Object[] parameters = new Object[7];
+		Object[] parameters = new Object[3];
 		String newNodeTypeId=getNextId();
 		nodeType.setId(newNodeTypeId);
 		parameters[0] =  nodeType.getId();
  
  		parameters[1] = nodeType.getName();
- 		parameters[2] = nodeType.getCode(); 	
- 		if(nodeType.getNetwork() != null){
- 			parameters[3] = nodeType.getNetwork().getId();
- 		
- 		}
- 		
- 		parameters[4] = nodeType.getAddress();
- 		parameters[5] = nodeType.getContactPerson();
- 		parameters[6] = nodeType.getContactTelephone();		
+ 		parameters[2] = nodeType.getCode();		
  				
  		return parameters;
  	}
@@ -583,11 +485,7 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 	protected NodeType saveInternalNodeType(NodeType nodeType, Map<String,Object> options){
 		
 		saveNodeType(nodeType);
- 	
- 		if(isSaveNetworkEnabled(options)){
-	 		saveNetwork(nodeType, options);
- 		}
- 
+
 		
 		if(isSaveNodeListEnabled(options)){
 	 		saveNodeList(nodeType, options);
@@ -603,24 +501,7 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 	
 	
 	//======================================================================================
-	 
- 
- 	protected NodeType saveNetwork(NodeType nodeType, Map<String,Object> options){
- 		//Call inject DAO to execute this method
- 		if(nodeType.getNetwork() == null){
- 			return nodeType;//do nothing when it is null
- 		}
- 		
- 		getHyperledgerNetworkDAO().save(nodeType.getNetwork(),options);
- 		return nodeType;
- 		
- 	}
- 	
- 	
- 	
- 	 
 	
- 
 
 	
 	public NodeType planToRemoveNodeList(NodeType nodeType, String nodeIds[], Map<String,Object> options)throws Exception{
@@ -734,6 +615,50 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(Node.TYPE_PROPERTY, nodeTypeId);
 		key.put(Node.CHANNEL_PROPERTY, channelId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect NodeType with network in Node
+	public NodeType planToRemoveNodeListWithNetwork(NodeType nodeType, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.TYPE_PROPERTY, nodeType.getId());
+		key.put(Node.NETWORK_PROPERTY, networkId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return nodeType;
+		}
+		if(externalNodeList.isEmpty()){
+			return nodeType;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearNetwork();
+			nodeItem.clearType();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = nodeType.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return nodeType;
+	}
+	
+	public int countNodeListWithNetwork(String nodeTypeId, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.TYPE_PROPERTY, nodeTypeId);
+		key.put(Node.NETWORK_PROPERTY, networkId);
 		
 		int count = getNodeDAO().countNodeWithKey(key, options);
 		return count;
@@ -918,6 +843,86 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 	}
 	
 	
+    
+	public Map<String, Integer> countBySql(String sql, Object[] params) {
+		if (params == null || params.length == 0) {
+			return new HashMap<>();
+		}
+		List<Map<String, Object>> result = this.getJdbcTemplateObject().queryForList(sql, params);
+		if (result == null || result.isEmpty()) {
+			return new HashMap<>();
+		}
+		Map<String, Integer> cntMap = new HashMap<>();
+		for (Map<String, Object> data : result) {
+			String key = (String) data.get("id");
+			Number value = (Number) data.get("count");
+			cntMap.put(key, value.intValue());
+		}
+		this.logSQLAndParameters("countBySql", sql, params, cntMap.size() + " Counts");
+		return cntMap;
+	}
+
+	public Integer singleCountBySql(String sql, Object[] params) {
+		Integer cnt = this.getJdbcTemplateObject().queryForObject(sql, params, Integer.class);
+		logSQLAndParameters("singleCountBySql", sql, params, cnt + "");
+		return cnt;
+	}
+
+	public BigDecimal summaryBySql(String sql, Object[] params) {
+		BigDecimal cnt = this.getJdbcTemplateObject().queryForObject(sql, params, BigDecimal.class);
+		logSQLAndParameters("summaryBySql", sql, params, cnt + "");
+		return cnt == null ? BigDecimal.ZERO : cnt;
+	}
+
+	public <T> List<T> queryForList(String sql, Object[] params, Class<T> claxx) {
+		List<T> result = this.getJdbcTemplateObject().queryForList(sql, params, claxx);
+		logSQLAndParameters("queryForList", sql, params, result.size() + " items");
+		return result;
+	}
+
+	public Map<String, Object> queryForMap(String sql, Object[] params) throws DataAccessException {
+		Map<String, Object> result = null;
+		try {
+			result = this.getJdbcTemplateObject().queryForMap(sql, params);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			// 空结果，返回null
+		}
+		logSQLAndParameters("queryForObject", sql, params, result == null ? "not found" : String.valueOf(result));
+		return result;
+	}
+
+	public <T> T queryForObject(String sql, Object[] params, Class<T> claxx) throws DataAccessException {
+		T result = null;
+		try {
+			result = this.getJdbcTemplateObject().queryForObject(sql, params, claxx);
+		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
+			// 空结果，返回null
+		}
+		logSQLAndParameters("queryForObject", sql, params, result == null ? "not found" : String.valueOf(result));
+		return result;
+	}
+
+	public List<Map<String, Object>> queryAsMapList(String sql, Object[] params) {
+		List<Map<String, Object>> result = getJdbcTemplateObject().queryForList(sql, params);
+		logSQLAndParameters("queryAsMapList", sql, params, result.size() + " items");
+		return result;
+	}
+
+	public synchronized int updateBySql(String sql, Object[] params) {
+		int result = getJdbcTemplateObject().update(sql, params);
+		logSQLAndParameters("updateBySql", sql, params, result + " items");
+		return result;
+	}
+
+	public void execSqlWithRowCallback(String sql, Object[] args, RowCallbackHandler callback) {
+		getJdbcTemplateObject().query(sql, args, callback);
+	}
+
+	public void executeSql(String sql) {
+		logSQLAndParameters("executeSql", sql, new Object[] {}, "");
+		getJdbcTemplateObject().execute(sql);
+	}
+
 
 }
 

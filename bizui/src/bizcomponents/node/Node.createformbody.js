@@ -19,9 +19,14 @@ const testValues = {};
 const testValues = {
   name: 'skynet-peer',
   url: 'grpcs://www.skynet-peer.skynet.com:7051',
+  address: '北京市建国门内大街100号',
+  contactPerson: '张三',
+  contactTelephone: '010-9998880',
   organizationId: 'O000001',
   channelId: 'C000001',
+  networkId: 'HN000001',
   typeId: 'peer',
+  tlsCacert: '    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n',
 }
 */
 
@@ -149,6 +154,36 @@ class NodeCreateFormBody extends Component {
                 </Form.Item>
               </Col>
 
+              <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.address} {...formItemLayout}>
+                  {getFieldDecorator('address', {
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                    <Input size="large" placeholder="地址" />
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.contactPerson} {...formItemLayout}>
+                  {getFieldDecorator('contactPerson', {
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                    <Input size="large" placeholder="联系人" />
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.contactTelephone} {...formItemLayout}>
+                  {getFieldDecorator('contactTelephone', {
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                    <Input size="large" placeholder="联系电话" />
+                  )}
+                </Form.Item>
+              </Col>
+
 
        
  
@@ -191,6 +226,25 @@ class NodeCreateFormBody extends Component {
            
 
               <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.network} {...formItemLayout}>
+                  {getFieldDecorator('networkId', {
+                  	initialValue: tryinit('network'),
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                  
+                  <SelectObject 
+                    disabled={!availableForEdit('network')}
+                    targetType={"network"} 
+                    requestFunction={NodeService.requestCandidateNetwork}/>
+                  
+                 
+                  )}
+                </Form.Item>
+              </Col>
+
+           
+
+              <Col lg={24} md={24} sm={24}>
                 <Form.Item label={fieldLabels.type} {...formItemLayout}>
                   {getFieldDecorator('typeId', {
                   	initialValue: tryinit('type'),
@@ -216,6 +270,23 @@ class NodeCreateFormBody extends Component {
         </Card>
 
 
+
+        <Card title={`Tls Cacert`} className={styles.card} bordered={false}>
+          <Form >
+          	<Row gutter={16}>
+              <Col lg={24} md={24} sm={24}>
+                <Form.Item>
+                  {getFieldDecorator('tlsCacert', {
+                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
+                  })(
+                    <TextArea rows={4} placeholder={appLocaleName(userContext,"PleaseInput")} />
+                  )}
+                </Form.Item>
+              </Col>
+      
+          </Row>
+          </Form>
+        </Card>
 
 
 

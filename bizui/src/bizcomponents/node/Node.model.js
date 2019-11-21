@@ -186,13 +186,13 @@ export default {
 
 
 
-    *addTlsCacert({ payload }, { call, put }) {
+    *addChannelPeerRole({ payload }, { call, put }) {
       const userContext = null
       const {NodeService} = GlobalComponents;
 
       const { id, role, parameters, continueNext } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(NodeService.addTlsCacert, id, parameters)
+      const data = yield call(NodeService.addChannelPeerRole, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return
@@ -206,15 +206,15 @@ export default {
       }
       const partialList = true
       const newState = {...data, partialList}
-      const location = { pathname: `/node/${id}/list/TlsCacertList/Tls Cacert+${appLocaleName(userContext,'List')}`, state: newState }
+      const location = { pathname: `/node/${id}/list/ChannelPeerRoleList/通道对等的角色+${appLocaleName(userContext,'List')}`, state: newState }
       yield put(routerRedux.push(location))
     },
-    *updateTlsCacert({ payload }, { call, put }) {
+    *updateChannelPeerRole({ payload }, { call, put }) {
       const userContext = null
       const {NodeService} = GlobalComponents;      
       const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(NodeService.updateTlsCacert, id, parameters)
+      const data = yield call(NodeService.updateChannelPeerRole, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return
@@ -228,20 +228,20 @@ export default {
       if (continueNext) {
         return
       }
-      const location = { pathname: `/node/${id}/list/TlsCacertList/Tls Cacert列表`, state: newPlayload }
+      const location = { pathname: `/node/${id}/list/ChannelPeerRoleList/通道对等的角色列表`, state: newPlayload }
       yield put(routerRedux.push(location))
     },
-    *gotoNextTlsCacertUpdateRow({ payload }, { call, put }) {
+    *gotoNextChannelPeerRoleUpdateRow({ payload }, { call, put }) {
       const { id, type, parameters, continueNext, selectedRows, currentUpdateIndex } = payload
       const newPlayload = { ...payload, selectedRows, currentUpdateIndex }
       yield put({ type: 'updateState', payload: newPlayload })
     },
-    *removeTlsCacertList({ payload }, { call, put }) {
+    *removeChannelPeerRoleList({ payload }, { call, put }) {
      const userContext = null
       const {NodeService} = GlobalComponents; 
       const { id, role, parameters, continueNext } = payload
       console.log('get form parameters', parameters)
-      const data = yield call(NodeService.removeTlsCacertList, id, parameters)
+      const data = yield call(NodeService.removeChannelPeerRoleList, id, parameters)
       if (hasError(data)) {
         handleServerError(data)
         return

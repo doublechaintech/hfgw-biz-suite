@@ -56,7 +56,6 @@ const showAssociateDialog = (targetComponent) => {
   
   const {selectedRows} = targetComponent.state
   
-  const { HyperledgerNetworkAssociateForm } = GlobalComponents
 
 
   return (
@@ -64,11 +63,7 @@ const showAssociateDialog = (targetComponent) => {
   
    
   
-    <HyperledgerNetworkAssociateForm 
-	visible={currentAssociateModal==='network'} 
-	data={{nodeTypeList:selectedRows}} owner={owner}  
-	onCancel={()=>toggleAssociateModalVisible(targetComponent,'network')} 
-	onCreate={()=>toggleAssociateModalVisible(targetComponent,'network')}/> 
+    
  
 
 

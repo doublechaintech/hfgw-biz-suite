@@ -19,10 +19,6 @@ const testValues = {};
 const testValues = {
   name: 'peer',
   code: 'peer',
-  address: '北京市建国门内大街100号',
-  contactPerson: '张三',
-  contactTelephone: '010-9998880',
-  networkId: 'HN000001',
 }
 */
 
@@ -150,58 +146,9 @@ class NodeTypeCreateFormBody extends Component {
                 </Form.Item>
               </Col>
 
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.address} {...formItemLayout}>
-                  {getFieldDecorator('address', {
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="地址" />
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.contactPerson} {...formItemLayout}>
-                  {getFieldDecorator('contactPerson', {
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="联系人" />
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.contactTelephone} {...formItemLayout}>
-                  {getFieldDecorator('contactTelephone', {
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="联系电话" />
-                  )}
-                </Form.Item>
-              </Col>
-
 
        
  
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.network} {...formItemLayout}>
-                  {getFieldDecorator('networkId', {
-                  	initialValue: tryinit('network'),
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                  
-                  <SelectObject 
-                    disabled={!availableForEdit('network')}
-                    targetType={"network"} 
-                    requestFunction={NodeTypeService.requestCandidateNetwork}/>
-                  
-                 
-                  )}
-                </Form.Item>
-              </Col>
-
-           
-
 
 
 			 </Row>

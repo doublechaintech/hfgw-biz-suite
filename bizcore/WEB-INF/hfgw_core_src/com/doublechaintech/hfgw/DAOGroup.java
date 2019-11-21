@@ -19,12 +19,15 @@ import com.doublechaintech.hfgw.node.NodeTokens;
 import com.doublechaintech.hfgw.grpcoption.GrpcOption;
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionDAO;
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionTokens;
-import com.doublechaintech.hfgw.tlscacert.TlsCacert;
-import com.doublechaintech.hfgw.tlscacert.TlsCacertDAO;
-import com.doublechaintech.hfgw.tlscacert.TlsCacertTokens;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 import com.doublechaintech.hfgw.channel.ChannelTokens;
+import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.peerrole.PeerRoleDAO;
+import com.doublechaintech.hfgw.peerrole.PeerRoleTokens;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleTokens;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
 import com.doublechaintech.hfgw.chaincode.ChainCodeTokens;
@@ -101,9 +104,11 @@ public class DAOGroup {
 
 	protected GrpcOptionDAO grpcOptionDAO;
 
-	protected TlsCacertDAO tlsCacertDAO;
-
 	protected ChannelDAO channelDAO;
+
+	protected PeerRoleDAO peerRoleDAO;
+
+	protected ChannelPeerRoleDAO channelPeerRoleDAO;
 
 	protected ChainCodeDAO chainCodeDAO;
 
@@ -189,19 +194,27 @@ public class DAOGroup {
 	}
 
 
-	public TlsCacertDAO getTlsCacertDAO(){
-		return this.tlsCacertDAO;
-	}
-	public void setTlsCacertDAO(TlsCacertDAO dao){
-		this.tlsCacertDAO = dao;
-	}
-
-
 	public ChannelDAO getChannelDAO(){
 		return this.channelDAO;
 	}
 	public void setChannelDAO(ChannelDAO dao){
 		this.channelDAO = dao;
+	}
+
+
+	public PeerRoleDAO getPeerRoleDAO(){
+		return this.peerRoleDAO;
+	}
+	public void setPeerRoleDAO(PeerRoleDAO dao){
+		this.peerRoleDAO = dao;
+	}
+
+
+	public ChannelPeerRoleDAO getChannelPeerRoleDAO(){
+		return this.channelPeerRoleDAO;
+	}
+	public void setChannelPeerRoleDAO(ChannelPeerRoleDAO dao){
+		this.channelPeerRoleDAO = dao;
 	}
 
 
@@ -478,25 +491,6 @@ public class DAOGroup {
 			}
 		});
 
-		internalLoaderMap.put("TlsCacert", new BasicLoader() {
-			@Override
-			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
-				return daoGoup.getTlsCacertDAO().load(id, TlsCacertTokens.withoutLists());
-			}
-			@Override
-			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
-				daoGoup.getTlsCacertDAO().enhanceList((List<TlsCacert>)list);
-			}
-			@Override
-			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
-				return daoGoup.getTlsCacertDAO().load(id, tokens);
-			}
-			@Override
-			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
-				return daoGoup.getTlsCacertDAO().present((TlsCacert)data, tokens);
-			}
-		});
-
 		internalLoaderMap.put("Channel", new BasicLoader() {
 			@Override
 			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
@@ -513,6 +507,44 @@ public class DAOGroup {
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
 				return daoGoup.getChannelDAO().present((Channel)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("PeerRole", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getPeerRoleDAO().load(id, PeerRoleTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getPeerRoleDAO().enhanceList((List<PeerRole>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getPeerRoleDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getPeerRoleDAO().present((PeerRole)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("ChannelPeerRole", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getChannelPeerRoleDAO().load(id, ChannelPeerRoleTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getChannelPeerRoleDAO().enhanceList((List<ChannelPeerRole>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChannelPeerRoleDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChannelPeerRoleDAO().present((ChannelPeerRole)data, tokens);
 			}
 		});
 

@@ -112,20 +112,17 @@ public class BaseRelation{
 		String [] organizationRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("Organization",organizationRelatedObjectNames);
 
-		String [] nodeTypeRelatedObjectNames = {"network:HyperledgerNetwork"};
-		addRelationIndex("NodeType",nodeTypeRelatedObjectNames);
-
-		String [] nodeRelatedObjectNames = {"organization:Organization","channel:Channel","type:NodeType"};
+		String [] nodeRelatedObjectNames = {"organization:Organization","channel:Channel","network:HyperledgerNetwork","type:NodeType"};
 		addRelationIndex("Node",nodeRelatedObjectNames);
 
 		String [] grpcOptionRelatedObjectNames = {"node:Node"};
 		addRelationIndex("GrpcOption",grpcOptionRelatedObjectNames);
 
-		String [] tlsCacertRelatedObjectNames = {"node:Node"};
-		addRelationIndex("TlsCacert",tlsCacertRelatedObjectNames);
-
 		String [] channelRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("Channel",channelRelatedObjectNames);
+
+		String [] channelPeerRoleRelatedObjectNames = {"channel:Channel","node:Node","peer_role:PeerRole"};
+		addRelationIndex("ChannelPeerRole",channelPeerRoleRelatedObjectNames);
 
 		String [] chainCodeRelatedObjectNames = {"channel:Channel"};
 		addRelationIndex("ChainCode",chainCodeRelatedObjectNames);
@@ -199,13 +196,15 @@ public class BaseRelation{
 	protected void prepareRelation()
 	{
 		addGenericRelation("Organization"                          ,TRUST_CHAIN_READ,"network");
-		addGenericRelation("NodeType"                              ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"organization");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"channel");
+		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"type");
 		addGenericRelation("GrpcOption"                            ,TRUST_CHAIN_READ,"node");
-		addGenericRelation("TlsCacert"                             ,TRUST_CHAIN_READ,"node");
 		addGenericRelation("Channel"                               ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"channel");
+		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"node");
+		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"peerRole");
 		addGenericRelation("ChainCode"                             ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("Application"                           ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("Application"                           ,TRUST_CHAIN_READ,"network");

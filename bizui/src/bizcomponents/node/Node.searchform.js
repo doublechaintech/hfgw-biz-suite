@@ -135,7 +135,12 @@ componentDidMount() {
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'url'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'organization'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'channel'))
+		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'network'))
+		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'tlsCacert'))
 		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'eq', 'type'))
+		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'address'))
+		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'contactPerson'))
+		pushIfNotNull(paramList,this.buildStringSearchParameters(listName, fieldsValue,'contains', 'contactTelephone'))
 
      
       console.log("the final parameter", paramList)
@@ -300,6 +305,26 @@ componentDidMount() {
                   )}
                 </Form.Item></Col>
  <Col md={8} sm={24}>
+                    <Form.Item label="网络">
+                  {getFieldDecorator('network', {initialValue: tryinit('network')})(
+                  
+                  <SelectObject 
+                    disabled={!availableForEdit('network')}
+                    targetType={"network"} 
+                    requestFunction={NodeService.requestCandidateNetwork} useForSearch />
+                  	
+                 
+                  )}
+                </Form.Item></Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label="Tls Cacert">
+              {getFieldDecorator('tlsCacert')(
+                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
+              )}
+            </FormItem>
+          </Col>
+ <Col md={8} sm={24}>
                     <Form.Item label="类型">
                   {getFieldDecorator('type', {initialValue: tryinit('type')})(
                   
@@ -311,6 +336,30 @@ componentDidMount() {
                  
                   )}
                 </Form.Item></Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label="地址">
+              {getFieldDecorator('address')(
+                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
+              )}
+            </FormItem>
+          </Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label="联系人">
+              {getFieldDecorator('contactPerson')(
+                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
+              )}
+            </FormItem>
+          </Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label="联系电话">
+              {getFieldDecorator('contactTelephone')(
+                <Input placeholder={appLocaleName(userContext,"PleaseInput")} />
+              )}
+            </FormItem>
+          </Col>
 
         </Row>
         <div style={{ overflow: 'hidden' }}>

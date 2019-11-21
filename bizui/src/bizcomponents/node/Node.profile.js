@@ -53,7 +53,7 @@ class NodeProfile extends Component {
   render() {
     // eslint-disable-next-line max-len
     const  node = this.props.node;
-    const { id,displayName, grpcOptionCount, tlsCacertCount } = node
+    const { id,displayName, grpcOptionCount, channelPeerRoleCount } = node
     const  returnURL = `/node/${id}/dashboard`
     const cardsData = {cardsName:"节点",cardsFor: "node",cardsSource: node,displayName,returnURL,
   		subItems: [
