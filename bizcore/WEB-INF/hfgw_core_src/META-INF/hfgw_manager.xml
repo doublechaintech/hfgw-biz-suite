@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+
+	<bean id="checker" class="com.doublechaintech.hfgw.HfgwObjectChecker" scope="prototype"></bean>
+
+	<bean id="hyperledgerNetworkManagerBase" class="com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkManagerImpl"/>
+	<bean id="hyperledgerNetworkManager" class="com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkCustomManagerImpl" parent="hyperledgerNetworkManagerBase" ></bean>
+	
+	<bean id="organizationManagerBase" class="com.doublechaintech.hfgw.organization.OrganizationManagerImpl"/>
+	<bean id="organizationManager" class="com.doublechaintech.hfgw.organization.OrganizationManagerImpl" parent="organizationManagerBase" ></bean>
+	
+	<bean id="nodeTypeManagerBase" class="com.doublechaintech.hfgw.nodetype.NodeTypeManagerImpl"/>
+	<bean id="nodeTypeManager" class="com.doublechaintech.hfgw.nodetype.NodeTypeManagerImpl" parent="nodeTypeManagerBase" ></bean>
+	
+	<bean id="nodeManagerBase" class="com.doublechaintech.hfgw.node.NodeManagerImpl"/>
+	<bean id="nodeManager" class="com.doublechaintech.hfgw.node.NodeCustomManagerImpl" parent="nodeManagerBase" ></bean>
+	
+	<bean id="grpcOptionManagerBase" class="com.doublechaintech.hfgw.grpcoption.GrpcOptionManagerImpl"/>
+	<bean id="grpcOptionManager" class="com.doublechaintech.hfgw.grpcoption.GrpcOptionManagerImpl" parent="grpcOptionManagerBase" ></bean>
+	
+	<bean id="tlsCacertManagerBase" class="com.doublechaintech.hfgw.tlscacert.TlsCacertManagerImpl"/>
+	<bean id="tlsCacertManager" class="com.doublechaintech.hfgw.tlscacert.TlsCacertManagerImpl" parent="tlsCacertManagerBase" ></bean>
+	
+	<bean id="channelManagerBase" class="com.doublechaintech.hfgw.channel.ChannelManagerImpl"/>
+	<bean id="channelManager" class="com.doublechaintech.hfgw.channel.ChannelCustomManagerImpl" parent="channelManagerBase" ></bean>
+	
+	<bean id="chainCodeManagerBase" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl"/>
+	<bean id="chainCodeManager" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl" parent="chainCodeManagerBase" ></bean>
+	
+	<bean id="applicationManagerBase" class="com.doublechaintech.hfgw.application.ApplicationManagerImpl"/>
+	<bean id="applicationManager" class="com.doublechaintech.hfgw.application.ApplicationManagerImpl" parent="applicationManagerBase" ></bean>
+	
+	<bean id="serviceRecordManagerBase" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl"/>
+	<bean id="serviceRecordManager" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl" parent="serviceRecordManagerBase" ></bean>
+	
+	<bean id="changeRequestTypeManagerBase" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManagerImpl"/>
+	<bean id="changeRequestTypeManager" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManagerImpl" parent="changeRequestTypeManagerBase" ></bean>
+	
+	<bean id="changeRequestManagerBase" class="com.doublechaintech.hfgw.changerequest.ChangeRequestManagerImpl"/>
+	<bean id="changeRequestManager" class="com.doublechaintech.hfgw.changerequest.ChangeRequestManagerImpl" parent="changeRequestManagerBase" ></bean>
+	
+	<bean id="userDomainManagerBase" class="com.doublechaintech.hfgw.userdomain.UserDomainManagerImpl"/>
+	<bean id="userDomainManager" class="com.doublechaintech.hfgw.userdomain.UserDomainCustomManagerImpl" parent="userDomainManagerBase" ></bean>
+	
+	<bean id="userWhiteListManagerBase" class="com.doublechaintech.hfgw.userwhitelist.UserWhiteListManagerImpl"/>
+	<bean id="userWhiteListManager" class="com.doublechaintech.hfgw.userwhitelist.UserWhiteListManagerImpl" parent="userWhiteListManagerBase" ></bean>
+	
+	<bean id="secUserManagerBase" class="com.doublechaintech.hfgw.secuser.SecUserManagerImpl"/>
+	<bean id="secUserManager" class="com.doublechaintech.hfgw.secuser.SecUserCustomManagerImpl" parent="secUserManagerBase" ></bean>
+	
+	<bean id="secUserBlockingManagerBase" class="com.doublechaintech.hfgw.secuserblocking.SecUserBlockingManagerImpl"/>
+	<bean id="secUserBlockingManager" class="com.doublechaintech.hfgw.secuserblocking.SecUserBlockingManagerImpl" parent="secUserBlockingManagerBase" ></bean>
+	
+	<bean id="userAppManagerBase" class="com.doublechaintech.hfgw.userapp.UserAppManagerImpl"/>
+	<bean id="userAppManager" class="com.doublechaintech.hfgw.userapp.UserAppCustomManagerImpl" parent="userAppManagerBase" ></bean>
+	
+	<bean id="quickLinkManagerBase" class="com.doublechaintech.hfgw.quicklink.QuickLinkManagerImpl"/>
+	<bean id="quickLinkManager" class="com.doublechaintech.hfgw.quicklink.QuickLinkManagerImpl" parent="quickLinkManagerBase" ></bean>
+	
+	<bean id="listAccessManagerBase" class="com.doublechaintech.hfgw.listaccess.ListAccessManagerImpl"/>
+	<bean id="listAccessManager" class="com.doublechaintech.hfgw.listaccess.ListAccessManagerImpl" parent="listAccessManagerBase" ></bean>
+	
+	<bean id="objectAccessManagerBase" class="com.doublechaintech.hfgw.objectaccess.ObjectAccessManagerImpl"/>
+	<bean id="objectAccessManager" class="com.doublechaintech.hfgw.objectaccess.ObjectAccessManagerImpl" parent="objectAccessManagerBase" ></bean>
+	
+	<bean id="loginHistoryManagerBase" class="com.doublechaintech.hfgw.loginhistory.LoginHistoryManagerImpl"/>
+	<bean id="loginHistoryManager" class="com.doublechaintech.hfgw.loginhistory.LoginHistoryManagerImpl" parent="loginHistoryManagerBase" ></bean>
+	
+	<bean id="genericFormManagerBase" class="com.doublechaintech.hfgw.genericform.GenericFormManagerImpl"/>
+	<bean id="genericFormManager" class="com.doublechaintech.hfgw.genericform.GenericFormCustomManagerImpl" parent="genericFormManagerBase" ></bean>
+	
+	<bean id="formMessageManagerBase" class="com.doublechaintech.hfgw.formmessage.FormMessageManagerImpl"/>
+	<bean id="formMessageManager" class="com.doublechaintech.hfgw.formmessage.FormMessageManagerImpl" parent="formMessageManagerBase" ></bean>
+	
+	<bean id="formFieldMessageManagerBase" class="com.doublechaintech.hfgw.formfieldmessage.FormFieldMessageManagerImpl"/>
+	<bean id="formFieldMessageManager" class="com.doublechaintech.hfgw.formfieldmessage.FormFieldMessageManagerImpl" parent="formFieldMessageManagerBase" ></bean>
+	
+	<bean id="formFieldManagerBase" class="com.doublechaintech.hfgw.formfield.FormFieldManagerImpl"/>
+	<bean id="formFieldManager" class="com.doublechaintech.hfgw.formfield.FormFieldManagerImpl" parent="formFieldManagerBase" ></bean>
+	
+	<bean id="formActionManagerBase" class="com.doublechaintech.hfgw.formaction.FormActionManagerImpl"/>
+	<bean id="formActionManager" class="com.doublechaintech.hfgw.formaction.FormActionManagerImpl" parent="formActionManagerBase" ></bean>
+	
+	<bean id="candidateContainerManagerBase" class="com.doublechaintech.hfgw.candidatecontainer.CandidateContainerManagerImpl"/>
+	<bean id="candidateContainerManager" class="com.doublechaintech.hfgw.candidatecontainer.CandidateContainerManagerImpl" parent="candidateContainerManagerBase" ></bean>
+	
+	<bean id="candidateElementManagerBase" class="com.doublechaintech.hfgw.candidateelement.CandidateElementManagerImpl"/>
+	<bean id="candidateElementManager" class="com.doublechaintech.hfgw.candidateelement.CandidateElementManagerImpl" parent="candidateElementManagerBase" ></bean>
+	
+
+	<bean id="managerGroupBase" class="com.doublechaintech.hfgw.ManagerGroup">
+		<property name="hyperledgerNetworkManager" ref="hyperledgerNetworkManager"/>
+		<property name="organizationManager" ref="organizationManager"/>
+		<property name="nodeTypeManager" ref="nodeTypeManager"/>
+		<property name="nodeManager" ref="nodeManager"/>
+		<property name="grpcOptionManager" ref="grpcOptionManager"/>
+		<property name="tlsCacertManager" ref="tlsCacertManager"/>
+		<property name="channelManager" ref="channelManager"/>
+		<property name="chainCodeManager" ref="chainCodeManager"/>
+		<property name="applicationManager" ref="applicationManager"/>
+		<property name="serviceRecordManager" ref="serviceRecordManager"/>
+		<property name="changeRequestTypeManager" ref="changeRequestTypeManager"/>
+		<property name="changeRequestManager" ref="changeRequestManager"/>
+		<property name="userDomainManager" ref="userDomainManager"/>
+		<property name="userWhiteListManager" ref="userWhiteListManager"/>
+		<property name="secUserManager" ref="secUserManager"/>
+		<property name="secUserBlockingManager" ref="secUserBlockingManager"/>
+		<property name="userAppManager" ref="userAppManager"/>
+		<property name="quickLinkManager" ref="quickLinkManager"/>
+		<property name="listAccessManager" ref="listAccessManager"/>
+		<property name="objectAccessManager" ref="objectAccessManager"/>
+		<property name="loginHistoryManager" ref="loginHistoryManager"/>
+		<property name="genericFormManager" ref="genericFormManager"/>
+		<property name="formMessageManager" ref="formMessageManager"/>
+		<property name="formFieldMessageManager" ref="formFieldMessageManager"/>
+		<property name="formFieldManager" ref="formFieldManager"/>
+		<property name="formActionManager" ref="formActionManager"/>
+		<property name="candidateContainerManager" ref="candidateContainerManager"/>
+		<property name="candidateElementManager" ref="candidateElementManager"/>
+	</bean>
+	<bean id="managerGroup" parent="managerGroupBase"></bean>
+	
+
+
+</beans>
+
+
+
+
+

@@ -1,0 +1,106 @@
+<root org="doublechaintech"
+	chinese_name="Hyperledger Fabric 应用网关"
+	english_name="Hyperledger Fabric 应用网关"
+>
+
+	<hyperledger_network
+		name='Hyperledger Fabric 应用网关|[1,200]'
+		description="text()"
+	/>
+
+  <organization name="doublechaintech|[1,50]"
+		mspid="doublechaintech|[1,20]"
+		network="$(hyperledger_network)"
+		/>
+
+	<node_type
+    name="peer|orderer"
+    code="peer|orderer"
+    network="$(hyperledger_network)"
+		address="北京市建国门内大街100号"
+		contact_person="张三"
+		contact_telephone="010-9998880"
+    _features="status"
+    _identified_by="code"
+  />
+
+
+	<node
+		name="skynet-peer|skynet-orderer|[1,50]"
+		url="grpcs://www.skynet-peer.skynet.com:7051|grpcs://www.skynet-orderer.skynet.com:7050|[1,200]"
+		organization="$(organization)"
+		channel="$(channel)"
+		type="$(node_type)"
+	/>
+
+	<grpc_option
+		parameter_name="optionkey|[1,200]"
+		parameter_value="optionValue|[1,200]"
+		node="$(node)"
+		/>
+
+	<tls_cacert
+		path="/catls.pem|[0,200]"
+		cert="text()|[0,1000]"
+		node="$(node)"
+		/>
+
+	<channel
+		name="channelname|[1,20]"
+		network="$(hyperledger_network)"
+		/>
+
+  <chain_code
+		name="sacc:1"
+		code_name="sacc|[1,50]"
+		code_version="1|v1|[1,50]"
+		channel="$(channel)"
+		/>
+
+	<application
+		name="生态环境处应用2|水环境管理处节点应用3|科技与国际合作处应用4|[1,200]"
+		create_time="createTime()"
+		mspid="skynet|doublechaintech|[1,200]"
+		public_key="text()"
+		private_key="text()"
+		channel="$(channel)"
+		network="$(hyperledger_network)"
+	/>
+
+	<service_record
+		name="调用链码|网络管理|[1,200]"
+		pay_load="text()"
+		channel="$(channel)"
+		chain_code="$(chain_code)"
+		transaction_id="a21fe3srw|[1,200]"
+		block_id="a21fe3srw|[1,200]"
+		create_time="createTime()"
+		application="$(application)"
+		network="$(hyperledger_network)"
+	/>
+
+	<change_request_type
+		name="调用链码|网络管理"
+		code="CHAINCODE_INVOKE|NETWORK_MANAGER"
+		icon="upload|edit"
+		display_order="1|2|3|4|5|6"
+		bind_types="text()"
+		step_configuration="text()"
+		network="$(hyperledger_network)"
+		_features="cr_type"
+		_identified_by="code"
+	/>
+
+
+	<!-- PENDING ACTION FROM WHOM -->
+
+	<change_request
+		name="存款|转账|取款|[1,50]"
+		create_time="createTime()"
+		remote_ip="remoteIp()"
+		request_type="$(change_request_type)"
+		network="$(hyperledger_network)"
+		_features="change_request"
+	/>
+
+</root>
