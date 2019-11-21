@@ -55,7 +55,7 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="organizationDAO" ref="organizationDAO" />
 		
-		<property name="nodeTypeDAO" ref="nodeTypeDAO" />
+		<property name="nodeDAO" ref="nodeDAO" />
 		
 		<property name="channelDAO" ref="channelDAO" />
 		
@@ -80,7 +80,7 @@
 	
 
 	<bean id="nodeTypeDAOBase" class="com.doublechaintech.hfgw.nodetype.NodeTypeJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" />
+		<property name="dataSource" ref="dataSource" />
 		<property name="nodeDAO" ref="nodeDAO" />
 		
 	</bean>
@@ -88,10 +88,10 @@
 	
 
 	<bean id="nodeDAOBase" class="com.doublechaintech.hfgw.node.NodeJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="channelDAO" ref="channelDAO" /><property name="organizationDAO" ref="organizationDAO" /><property name="nodeTypeDAO" ref="nodeTypeDAO" />
+		<property name="dataSource" ref="dataSource" /><property name="channelDAO" ref="channelDAO" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" /><property name="organizationDAO" ref="organizationDAO" /><property name="nodeTypeDAO" ref="nodeTypeDAO" />
 		<property name="grpcOptionDAO" ref="grpcOptionDAO" />
 		
-		<property name="tlsCacertDAO" ref="tlsCacertDAO" />
+		<property name="channelPeerRoleDAO" ref="channelPeerRoleDAO" />
 		
 	</bean>
 	<bean id="nodeDAO" parent="nodeDAOBase"></bean>
@@ -103,15 +103,11 @@
 	<bean id="grpcOptionDAO" parent="grpcOptionDAOBase"></bean>
 	
 
-	<bean id="tlsCacertDAOBase" class="com.doublechaintech.hfgw.tlscacert.TlsCacertJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="nodeDAO" ref="nodeDAO" />
-	</bean>
-	<bean id="tlsCacertDAO" parent="tlsCacertDAOBase"></bean>
-	
-
 	<bean id="channelDAOBase" class="com.doublechaintech.hfgw.channel.ChannelJDBCTemplateDAO">
 		<property name="dataSource" ref="dataSource" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" />
 		<property name="nodeDAO" ref="nodeDAO" />
+		
+		<property name="channelPeerRoleDAO" ref="channelPeerRoleDAO" />
 		
 		<property name="chainCodeDAO" ref="chainCodeDAO" />
 		
@@ -121,6 +117,20 @@
 		
 	</bean>
 	<bean id="channelDAO" parent="channelDAOBase"></bean>
+	
+
+	<bean id="peerRoleDAOBase" class="com.doublechaintech.hfgw.peerrole.PeerRoleJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" />
+		<property name="channelPeerRoleDAO" ref="channelPeerRoleDAO" />
+		
+	</bean>
+	<bean id="peerRoleDAO" parent="peerRoleDAOBase"></bean>
+	
+
+	<bean id="channelPeerRoleDAOBase" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="channelDAO" ref="channelDAO" /><property name="nodeDAO" ref="nodeDAO" /><property name="peerRoleDAO" ref="peerRoleDAO" />
+	</bean>
+	<bean id="channelPeerRoleDAO" parent="channelPeerRoleDAOBase"></bean>
 	
 
 	<bean id="chainCodeDAOBase" class="com.doublechaintech.hfgw.chaincode.ChainCodeJDBCTemplateDAO">
@@ -288,8 +298,9 @@
 		<property name="nodeTypeDAO" ref="nodeTypeDAO"/>
 		<property name="nodeDAO" ref="nodeDAO"/>
 		<property name="grpcOptionDAO" ref="grpcOptionDAO"/>
-		<property name="tlsCacertDAO" ref="tlsCacertDAO"/>
 		<property name="channelDAO" ref="channelDAO"/>
+		<property name="peerRoleDAO" ref="peerRoleDAO"/>
+		<property name="channelPeerRoleDAO" ref="channelPeerRoleDAO"/>
 		<property name="chainCodeDAO" ref="chainCodeDAO"/>
 		<property name="applicationDAO" ref="applicationDAO"/>
 		<property name="serviceRecordDAO" ref="serviceRecordDAO"/>

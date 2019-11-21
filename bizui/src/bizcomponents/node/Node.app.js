@@ -233,55 +233,55 @@ class NodeBizApp extends React.PureComponent {
     }))(GrpcOptionUpdateForm)
   }
 
-  getTlsCacertSearch = () => {
-    const {TlsCacertSearch} = GlobalComponents;
+  getChannelPeerRoleSearch = () => {
+    const {ChannelPeerRoleSearch} = GlobalComponents;
     const userContext = null
     return connect(state => ({
       rule: state.rule,
-      name: "Tls Cacert",
-      role: "tlsCacert",
-      data: state._node.tlsCacertList,
-      metaInfo: state._node.tlsCacertListMetaInfo,
-      count: state._node.tlsCacertCount,
+      name: "通道对等的角色",
+      role: "channelPeerRole",
+      data: state._node.channelPeerRoleList,
+      metaInfo: state._node.channelPeerRoleListMetaInfo,
+      count: state._node.channelPeerRoleCount,
       returnURL: `/node/${state._node.id}/dashboard`,
-      currentPage: state._node.tlsCacertCurrentPageNumber,
-      searchFormParameters: state._node.tlsCacertSearchFormParameters,
+      currentPage: state._node.channelPeerRoleCurrentPageNumber,
+      searchFormParameters: state._node.channelPeerRoleSearchFormParameters,
       searchParameters: {...state._node.searchParameters},
       expandForm: state._node.expandForm,
       loading: state._node.loading,
       partialList: state._node.partialList,
       owner: { type: '_node', id: state._node.id, 
       referenceName: 'node', 
-      listName: 'tlsCacertList', ref:state._node, 
+      listName: 'channelPeerRoleList', ref:state._node, 
       listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
-    }))(TlsCacertSearch)
+    }))(ChannelPeerRoleSearch)
   }
-  getTlsCacertCreateForm = () => {
-   	const {TlsCacertCreateForm} = GlobalComponents;
+  getChannelPeerRoleCreateForm = () => {
+   	const {ChannelPeerRoleCreateForm} = GlobalComponents;
    	const userContext = null
     return connect(state => ({
       rule: state.rule,
-      role: "tlsCacert",
-      data: state._node.tlsCacertList,
-      metaInfo: state._node.tlsCacertListMetaInfo,
-      count: state._node.tlsCacertCount,
+      role: "channelPeerRole",
+      data: state._node.channelPeerRoleList,
+      metaInfo: state._node.channelPeerRoleListMetaInfo,
+      count: state._node.channelPeerRoleCount,
       returnURL: `/node/${state._node.id}/list`,
-      currentPage: state._node.tlsCacertCurrentPageNumber,
-      searchFormParameters: state._node.tlsCacertSearchFormParameters,
+      currentPage: state._node.channelPeerRoleCurrentPageNumber,
+      searchFormParameters: state._node.channelPeerRoleSearchFormParameters,
       loading: state._node.loading,
-      owner: { type: '_node', id: state._node.id, referenceName: 'node', listName: 'tlsCacertList', ref:state._node, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
-    }))(TlsCacertCreateForm)
+      owner: { type: '_node', id: state._node.id, referenceName: 'node', listName: 'channelPeerRoleList', ref:state._node, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
+    }))(ChannelPeerRoleCreateForm)
   }
   
-  getTlsCacertUpdateForm = () => {
+  getChannelPeerRoleUpdateForm = () => {
     const userContext = null
-  	const {TlsCacertUpdateForm} = GlobalComponents;
+  	const {ChannelPeerRoleUpdateForm} = GlobalComponents;
     return connect(state => ({
       selectedRows: state._node.selectedRows,
-      role: "tlsCacert",
+      role: "channelPeerRole",
       currentUpdateIndex: state._node.currentUpdateIndex,
-      owner: { type: '_node', id: state._node.id, listName: 'tlsCacertList', ref:state._node, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
-    }))(TlsCacertUpdateForm)
+      owner: { type: '_node', id: state._node.id, listName: 'channelPeerRoleList', ref:state._node, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(ChannelPeerRoleUpdateForm)
   }
 
 
@@ -313,9 +313,9 @@ class NodeBizApp extends React.PureComponent {
   	{path:"/node/:id/list/grpcOptionCreateForm", component: this.getGrpcOptionCreateForm()},
   	{path:"/node/:id/list/grpcOptionUpdateForm", component: this.getGrpcOptionUpdateForm()},
    	
-  	{path:"/node/:id/list/tlsCacertList", component: this.getTlsCacertSearch()},
-  	{path:"/node/:id/list/tlsCacertCreateForm", component: this.getTlsCacertCreateForm()},
-  	{path:"/node/:id/list/tlsCacertUpdateForm", component: this.getTlsCacertUpdateForm()},
+  	{path:"/node/:id/list/channelPeerRoleList", component: this.getChannelPeerRoleSearch()},
+  	{path:"/node/:id/list/channelPeerRoleCreateForm", component: this.getChannelPeerRoleCreateForm()},
+  	{path:"/node/:id/list/channelPeerRoleUpdateForm", component: this.getChannelPeerRoleUpdateForm()},
    	{path:"/node/:id/ChangeRequestType/:code", component: GlobalComponents.ChangeRequestStepForm},
     	
  	 

@@ -13,7 +13,6 @@ import com.doublechaintech.hfgw.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.hfgw.node.Node;
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 @JsonSerialize(using = NodeTypeSerializer.class)
 public class NodeType extends BaseEntity implements  java.io.Serializable{
@@ -31,10 +30,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 	public static final String ID_PROPERTY                    = "id"                ;
 	public static final String NAME_PROPERTY                  = "name"              ;
 	public static final String CODE_PROPERTY                  = "code"              ;
-	public static final String NETWORK_PROPERTY               = "network"           ;
-	public static final String ADDRESS_PROPERTY               = "address"           ;
-	public static final String CONTACT_PERSON_PROPERTY        = "contactPerson"     ;
-	public static final String CONTACT_TELEPHONE_PROPERTY     = "contactTelephone"  ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String NODE_LIST                                = "nodeList"          ;
@@ -61,10 +56,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mId                 ;
 	protected		String              	mName               ;
 	protected		String              	mCode               ;
-	protected		HyperledgerNetwork  	mNetwork            ;
-	protected		String              	mAddress            ;
-	protected		String              	mContactPerson      ;
-	protected		String              	mContactTelephone   ;
 	protected		int                 	mVersion            ;
 	
 	
@@ -86,7 +77,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 	
 	// disconnect from all, 中文就是一了百了，跟所有一切尘世断绝往来藏身于茫茫数据海洋
 	public 	void clearFromAll(){
-		setNetwork( null );
 
 		this.changed = true;
 	}
@@ -101,15 +91,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CODE_PROPERTY.equals(property)){
 			changeCodeProperty(newValueExpr);
-		}
-		if(ADDRESS_PROPERTY.equals(property)){
-			changeAddressProperty(newValueExpr);
-		}
-		if(CONTACT_PERSON_PROPERTY.equals(property)){
-			changeContactPersonProperty(newValueExpr);
-		}
-		if(CONTACT_TELEPHONE_PROPERTY.equals(property)){
-			changeContactTelephoneProperty(newValueExpr);
 		}
 
       
@@ -146,51 +127,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
-	protected void changeAddressProperty(String newValueExpr){
-		String oldValue = getAddress();
-		String newValue = parseString(newValueExpr);
-		if(equalsString(oldValue , newValue)){
-			return;//they can be both null, or exact the same object, this is much faster than equals function
-		}
-		//they are surely different each other
-		updateAddress(newValue);
-		this.onChangeProperty(ADDRESS_PROPERTY, oldValue, newValue);
-		return;
-  
-	}
-			
-			
-			
-	protected void changeContactPersonProperty(String newValueExpr){
-		String oldValue = getContactPerson();
-		String newValue = parseString(newValueExpr);
-		if(equalsString(oldValue , newValue)){
-			return;//they can be both null, or exact the same object, this is much faster than equals function
-		}
-		//they are surely different each other
-		updateContactPerson(newValue);
-		this.onChangeProperty(CONTACT_PERSON_PROPERTY, oldValue, newValue);
-		return;
-  
-	}
-			
-			
-			
-	protected void changeContactTelephoneProperty(String newValueExpr){
-		String oldValue = getContactTelephone();
-		String newValue = parseString(newValueExpr);
-		if(equalsString(oldValue , newValue)){
-			return;//they can be both null, or exact the same object, this is much faster than equals function
-		}
-		//they are surely different each other
-		updateContactTelephone(newValue);
-		this.onChangeProperty(CONTACT_TELEPHONE_PROPERTY, oldValue, newValue);
-		return;
-  
-	}
-			
-			
-			
 
 
 	
@@ -201,18 +137,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CODE_PROPERTY.equals(property)){
 			return getCode();
-		}
-		if(NETWORK_PROPERTY.equals(property)){
-			return getNetwork();
-		}
-		if(ADDRESS_PROPERTY.equals(property)){
-			return getAddress();
-		}
-		if(CONTACT_PERSON_PROPERTY.equals(property)){
-			return getContactPerson();
-		}
-		if(CONTACT_TELEPHONE_PROPERTY.equals(property)){
-			return getContactTelephone();
 		}
 		if(NODE_LIST.equals(property)){
 			List<BaseEntity> list = getNodeList().stream().map(item->item).collect(Collectors.toList());
@@ -274,75 +198,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 	}
 	public void mergeCode(String code){
 		if(code != null) { setCode(code);}
-	}
-	
-	
-	public void setNetwork(HyperledgerNetwork network){
-		this.mNetwork = network;;
-	}
-	public HyperledgerNetwork getNetwork(){
-		return this.mNetwork;
-	}
-	public NodeType updateNetwork(HyperledgerNetwork network){
-		this.mNetwork = network;;
-		this.changed = true;
-		return this;
-	}
-	public void mergeNetwork(HyperledgerNetwork network){
-		if(network != null) { setNetwork(network);}
-	}
-	
-	
-	public void clearNetwork(){
-		setNetwork ( null );
-		this.changed = true;
-	}
-	
-	public void setAddress(String address){
-		this.mAddress = trimString(address);;
-	}
-	public String getAddress(){
-		return this.mAddress;
-	}
-	public NodeType updateAddress(String address){
-		this.mAddress = trimString(address);;
-		this.changed = true;
-		return this;
-	}
-	public void mergeAddress(String address){
-		if(address != null) { setAddress(address);}
-	}
-	
-	
-	public void setContactPerson(String contactPerson){
-		this.mContactPerson = trimString(contactPerson);;
-	}
-	public String getContactPerson(){
-		return this.mContactPerson;
-	}
-	public NodeType updateContactPerson(String contactPerson){
-		this.mContactPerson = trimString(contactPerson);;
-		this.changed = true;
-		return this;
-	}
-	public void mergeContactPerson(String contactPerson){
-		if(contactPerson != null) { setContactPerson(contactPerson);}
-	}
-	
-	
-	public void setContactTelephone(String contactTelephone){
-		this.mContactTelephone = trimString(contactTelephone);;
-	}
-	public String getContactTelephone(){
-		return this.mContactTelephone;
-	}
-	public NodeType updateContactTelephone(String contactTelephone){
-		this.mContactTelephone = trimString(contactTelephone);;
-		this.changed = true;
-		return this;
-	}
-	public void mergeContactTelephone(String contactTelephone){
-		if(contactTelephone != null) { setContactTelephone(contactTelephone);}
 	}
 	
 	
@@ -472,7 +327,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
-		addToEntityList(this, entityList, getNetwork(), internalType);
 
 		
 	}
@@ -501,10 +355,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, ID_PROPERTY, getId());
 		appendKeyValuePair(result, NAME_PROPERTY, getName());
 		appendKeyValuePair(result, CODE_PROPERTY, getCode());
-		appendKeyValuePair(result, NETWORK_PROPERTY, getNetwork());
-		appendKeyValuePair(result, ADDRESS_PROPERTY, getAddress());
-		appendKeyValuePair(result, CONTACT_PERSON_PROPERTY, getContactPerson());
-		appendKeyValuePair(result, CONTACT_TELEPHONE_PROPERTY, getContactTelephone());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 		appendKeyValuePair(result, NODE_LIST, getNodeList());
 		if(!getNodeList().isEmpty()){
@@ -528,10 +378,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 			dest.setId(getId());
 			dest.setName(getName());
 			dest.setCode(getCode());
-			dest.setNetwork(getNetwork());
-			dest.setAddress(getAddress());
-			dest.setContactPerson(getContactPerson());
-			dest.setContactTelephone(getContactTelephone());
 			dest.setVersion(getVersion());
 			dest.setNodeList(getNodeList());
 
@@ -550,10 +396,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 			dest.mergeId(getId());
 			dest.mergeName(getName());
 			dest.mergeCode(getCode());
-			dest.mergeNetwork(getNetwork());
-			dest.mergeAddress(getAddress());
-			dest.mergeContactPerson(getContactPerson());
-			dest.mergeContactTelephone(getContactTelephone());
 			dest.mergeVersion(getVersion());
 			dest.mergeNodeList(getNodeList());
 
@@ -573,9 +415,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 			dest.mergeId(getId());
 			dest.mergeName(getName());
 			dest.mergeCode(getCode());
-			dest.mergeAddress(getAddress());
-			dest.mergeContactPerson(getContactPerson());
-			dest.mergeContactTelephone(getContactTelephone());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -589,12 +428,6 @@ public class NodeType extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("\tid='"+getId()+"';");
 		stringBuilder.append("\tname='"+getName()+"';");
 		stringBuilder.append("\tcode='"+getCode()+"';");
-		if(getNetwork() != null ){
- 			stringBuilder.append("\tnetwork='HyperledgerNetwork("+getNetwork().getId()+")';");
- 		}
-		stringBuilder.append("\taddress='"+getAddress()+"';");
-		stringBuilder.append("\tcontactPerson='"+getContactPerson()+"';");
-		stringBuilder.append("\tcontactTelephone='"+getContactTelephone()+"';");
 		stringBuilder.append("\tversion='"+getVersion()+"';");
 		stringBuilder.append("}");
 

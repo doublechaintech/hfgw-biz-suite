@@ -20,17 +20,21 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.HfgwCheckerManager;
 import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.organization.Organization;
-import com.doublechaintech.hfgw.tlscacert.TlsCacert;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.grpcoption.GrpcOption;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 import com.doublechaintech.hfgw.organization.CandidateOrganization;
 import com.doublechaintech.hfgw.channel.CandidateChannel;
 import com.doublechaintech.hfgw.nodetype.CandidateNodeType;
+import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
+import com.doublechaintech.hfgw.peerrole.PeerRole;
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.channel.Channel;
 
 
 
@@ -157,15 +161,16 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 		
 		addAction(userContext, node, tokens,"node.transfer_to_organization","transferToAnotherOrganization","transferToAnotherOrganization/"+node.getId()+"/","main","primary");
 		addAction(userContext, node, tokens,"node.transfer_to_channel","transferToAnotherChannel","transferToAnotherChannel/"+node.getId()+"/","main","primary");
+		addAction(userContext, node, tokens,"node.transfer_to_network","transferToAnotherNetwork","transferToAnotherNetwork/"+node.getId()+"/","main","primary");
 		addAction(userContext, node, tokens,"node.transfer_to_type","transferToAnotherType","transferToAnotherType/"+node.getId()+"/","main","primary");
 		addAction(userContext, node, tokens,"node.addGrpcOption","addGrpcOption","addGrpcOption/"+node.getId()+"/","grpcOptionList","primary");
 		addAction(userContext, node, tokens,"node.removeGrpcOption","removeGrpcOption","removeGrpcOption/"+node.getId()+"/","grpcOptionList","primary");
 		addAction(userContext, node, tokens,"node.updateGrpcOption","updateGrpcOption","updateGrpcOption/"+node.getId()+"/","grpcOptionList","primary");
 		addAction(userContext, node, tokens,"node.copyGrpcOptionFrom","copyGrpcOptionFrom","copyGrpcOptionFrom/"+node.getId()+"/","grpcOptionList","primary");
-		addAction(userContext, node, tokens,"node.addTlsCacert","addTlsCacert","addTlsCacert/"+node.getId()+"/","tlsCacertList","primary");
-		addAction(userContext, node, tokens,"node.removeTlsCacert","removeTlsCacert","removeTlsCacert/"+node.getId()+"/","tlsCacertList","primary");
-		addAction(userContext, node, tokens,"node.updateTlsCacert","updateTlsCacert","updateTlsCacert/"+node.getId()+"/","tlsCacertList","primary");
-		addAction(userContext, node, tokens,"node.copyTlsCacertFrom","copyTlsCacertFrom","copyTlsCacertFrom/"+node.getId()+"/","tlsCacertList","primary");
+		addAction(userContext, node, tokens,"node.addChannelPeerRole","addChannelPeerRole","addChannelPeerRole/"+node.getId()+"/","channelPeerRoleList","primary");
+		addAction(userContext, node, tokens,"node.removeChannelPeerRole","removeChannelPeerRole","removeChannelPeerRole/"+node.getId()+"/","channelPeerRoleList","primary");
+		addAction(userContext, node, tokens,"node.updateChannelPeerRole","updateChannelPeerRole","updateChannelPeerRole/"+node.getId()+"/","channelPeerRoleList","primary");
+		addAction(userContext, node, tokens,"node.copyChannelPeerRoleFrom","copyChannelPeerRoleFrom","copyChannelPeerRoleFrom/"+node.getId()+"/","channelPeerRoleList","primary");
 	
 		
 		
@@ -177,8 +182,8 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
  	
  	
 
-	public Node createNode(HfgwUserContext userContext, String name,String url,String organizationId,String channelId,String typeId) throws Exception
-	//public Node createNode(HfgwUserContext userContext,String name, String url, String organizationId, String channelId, String typeId) throws Exception
+	public Node createNode(HfgwUserContext userContext, String name,String url,String organizationId,String channelId,String networkId,String tlsCacert,String typeId,String address,String contactPerson,String contactTelephone) throws Exception
+	//public Node createNode(HfgwUserContext userContext,String name, String url, String organizationId, String channelId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone) throws Exception
 	{
 		
 		
@@ -187,6 +192,10 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 
 		checkerOf(userContext).checkNameOfNode(name);
 		checkerOf(userContext).checkUrlOfNode(url);
+		checkerOf(userContext).checkTlsCacertOfNode(tlsCacert);
+		checkerOf(userContext).checkAddressOfNode(address);
+		checkerOf(userContext).checkContactPersonOfNode(contactPerson);
+		checkerOf(userContext).checkContactTelephoneOfNode(contactTelephone);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 
@@ -206,10 +215,19 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 		
 		
 			
+		HyperledgerNetwork network = loadHyperledgerNetwork(userContext, networkId,emptyOptions());
+		node.setNetwork(network);
+		
+		
+		node.setTlsCacert(tlsCacert);
+			
 		NodeType type = loadNodeType(userContext, typeId,emptyOptions());
 		node.setType(type);
 		
 		
+		node.setAddress(address);
+		node.setContactPerson(contactPerson);
+		node.setContactTelephone(contactTelephone);
 
 		node = saveNode(userContext, node, emptyOptions());
 		
@@ -246,6 +264,20 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 				
 
 		
+		if(Node.TLS_CACERT_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTlsCacertOfNode(parseString(newValueExpr));
+		}		
+
+		
+		if(Node.ADDRESS_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAddressOfNode(parseString(newValueExpr));
+		}
+		if(Node.CONTACT_PERSON_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactPersonOfNode(parseString(newValueExpr));
+		}
+		if(Node.CONTACT_TELEPHONE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactTelephoneOfNode(parseString(newValueExpr));
+		}
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 	
@@ -345,7 +377,7 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
 		.sortGrpcOptionListWith("id","desc")
-		.sortTlsCacertListWith("id","desc")
+		.sortChannelPeerRoleListWith("id","desc")
 		.analyzeAllLists().done();
 
 	}
@@ -451,6 +483,55 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 		return result;
 	}
  	
+ 	protected void checkParamsForTransferingAnotherNetwork(HfgwUserContext userContext, String nodeId, String anotherNetworkId) throws Exception
+ 	{
+ 		
+ 		checkerOf(userContext).checkIdOfNode(nodeId);
+ 		checkerOf(userContext).checkIdOfHyperledgerNetwork(anotherNetworkId);//check for optional reference
+ 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
+ 		
+ 	}
+ 	public Node transferToAnotherNetwork(HfgwUserContext userContext, String nodeId, String anotherNetworkId) throws Exception
+ 	{
+ 		checkParamsForTransferingAnotherNetwork(userContext, nodeId,anotherNetworkId);
+ 
+		Node node = loadNode(userContext, nodeId, allTokens());	
+		synchronized(node){
+			//will be good when the node loaded from this JVM process cache.
+			//also good when there is a ram based DAO implementation
+			HyperledgerNetwork network = loadHyperledgerNetwork(userContext, anotherNetworkId, emptyOptions());		
+			node.updateNetwork(network);		
+			node = saveNode(userContext, node, emptyOptions());
+			
+			return present(userContext,node, allTokens());
+			
+		}
+
+ 	}
+ 	
+	 	
+ 	
+ 	
+	public CandidateHyperledgerNetwork requestCandidateNetwork(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+
+		CandidateHyperledgerNetwork result = new CandidateHyperledgerNetwork();
+		result.setOwnerClass(ownerClass);
+		result.setOwnerId(id);
+		result.setFilterKey(filterKey==null?"":filterKey.trim());
+		result.setPageNo(pageNo);
+		result.setValueFieldName("id");
+		result.setDisplayFieldName("name");
+		
+		pageNo = Math.max(1, pageNo);
+		int pageSize = 20;
+		//requestCandidateProductForSkuAsOwner
+		SmartList<HyperledgerNetwork> candidateList = hyperledgerNetworkDaoOf(userContext).requestCandidateHyperledgerNetworkForNode(userContext,ownerClass, id, filterKey, pageNo, pageSize);
+		result.setCandidates(candidateList);
+		int totalCount = candidateList.getTotalCount();
+		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
+		return result;
+	}
+ 	
  	protected void checkParamsForTransferingAnotherType(HfgwUserContext userContext, String nodeId, String anotherTypeId) throws Exception
  	{
  		
@@ -540,6 +621,16 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
  	
 	
 	 	
+ 	protected HyperledgerNetwork loadHyperledgerNetwork(HfgwUserContext userContext, String newNetworkId, Map<String,Object> options) throws Exception
+ 	{
+		
+ 		return hyperledgerNetworkDaoOf(userContext).load(newNetworkId, options);
+ 	}
+ 	
+ 	
+ 	
+	
+	 	
  	protected Organization loadOrganization(HfgwUserContext userContext, String newOrganizationId, Map<String,Object> options) throws Exception
  	{
 		
@@ -606,6 +697,42 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 	}
 
 
+	//disconnect Node with channel in ChannelPeerRole
+	protected Node breakWithChannelPeerRoleByChannel(HfgwUserContext userContext, String nodeId, String channelId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Node node = loadNode(userContext, nodeId, allTokens());
+
+			synchronized(node){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				nodeDaoOf(userContext).planToRemoveChannelPeerRoleListWithChannel(node, channelId, this.emptyOptions());
+
+				node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
+				return node;
+			}
+	}
+	//disconnect Node with peer_role in ChannelPeerRole
+	protected Node breakWithChannelPeerRoleByPeerRole(HfgwUserContext userContext, String nodeId, String peerRoleId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Node node = loadNode(userContext, nodeId, allTokens());
+
+			synchronized(node){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				nodeDaoOf(userContext).planToRemoveChannelPeerRoleListWithPeerRole(node, peerRoleId, this.emptyOptions());
+
+				node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
+				return node;
+			}
+	}
 	
 	
 	
@@ -851,170 +978,170 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 
 
 
-	protected void checkParamsForAddingTlsCacert(HfgwUserContext userContext, String nodeId, String path, String cert,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelId, String peerRoleId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfNode(nodeId);
 
 		
-		checkerOf(userContext).checkPathOfTlsCacert(path);
+		checkerOf(userContext).checkChannelIdOfChannelPeerRole(channelId);
 		
-		checkerOf(userContext).checkCertOfTlsCacert(cert);
+		checkerOf(userContext).checkPeerRoleIdOfChannelPeerRole(peerRoleId);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 
 	
 	}
-	public  Node addTlsCacert(HfgwUserContext userContext, String nodeId, String path, String cert, String [] tokensExpr) throws Exception
+	public  Node addChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelId, String peerRoleId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingTlsCacert(userContext,nodeId,path, cert,tokensExpr);
+		checkParamsForAddingChannelPeerRole(userContext,nodeId,channelId, peerRoleId,tokensExpr);
 		
-		TlsCacert tlsCacert = createTlsCacert(userContext,path, cert);
+		ChannelPeerRole channelPeerRole = createChannelPeerRole(userContext,channelId, peerRoleId);
 		
 		Node node = loadNode(userContext, nodeId, allTokens());
 		synchronized(node){ 
 			//Will be good when the node loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			node.addTlsCacert( tlsCacert );		
-			node = saveNode(userContext, node, tokens().withTlsCacertList().done());
+			node.addChannelPeerRole( channelPeerRole );		
+			node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
 			
-			userContext.getManagerGroup().getTlsCacertManager().onNewInstanceCreated(userContext, tlsCacert);
+			userContext.getManagerGroup().getChannelPeerRoleManager().onNewInstanceCreated(userContext, channelPeerRole);
 			return present(userContext,node, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingTlsCacertProperties(HfgwUserContext userContext, String nodeId,String id,String path,String cert,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingChannelPeerRoleProperties(HfgwUserContext userContext, String nodeId,String id,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfNode(nodeId);
-		checkerOf(userContext).checkIdOfTlsCacert(id);
+		checkerOf(userContext).checkIdOfChannelPeerRole(id);
 		
-		checkerOf(userContext).checkPathOfTlsCacert( path);
-		checkerOf(userContext).checkCertOfTlsCacert( cert);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 		
 	}
-	public  Node updateTlsCacertProperties(HfgwUserContext userContext, String nodeId, String id,String path,String cert, String [] tokensExpr) throws Exception
+	public  Node updateChannelPeerRoleProperties(HfgwUserContext userContext, String nodeId, String id, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingTlsCacertProperties(userContext,nodeId,id,path,cert,tokensExpr);
+		checkParamsForUpdatingChannelPeerRoleProperties(userContext,nodeId,id,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
-				//.withTlsCacertListList()
-				.searchTlsCacertListWith(TlsCacert.ID_PROPERTY, "is", id).done();
+				//.withChannelPeerRoleListList()
+				.searchChannelPeerRoleListWith(ChannelPeerRole.ID_PROPERTY, "is", id).done();
 		
 		Node nodeToUpdate = loadNode(userContext, nodeId, options);
 		
-		if(nodeToUpdate.getTlsCacertList().isEmpty()){
-			throw new NodeManagerException("TlsCacert is NOT FOUND with id: '"+id+"'");
+		if(nodeToUpdate.getChannelPeerRoleList().isEmpty()){
+			throw new NodeManagerException("ChannelPeerRole is NOT FOUND with id: '"+id+"'");
 		}
 		
-		TlsCacert item = nodeToUpdate.getTlsCacertList().first();
+		ChannelPeerRole item = nodeToUpdate.getChannelPeerRoleList().first();
 		
-		item.updatePath( path );
-		item.updateCert( cert );
 
 		
-		//checkParamsForAddingTlsCacert(userContext,nodeId,name, code, used,tokensExpr);
-		Node node = saveNode(userContext, nodeToUpdate, tokens().withTlsCacertList().done());
+		//checkParamsForAddingChannelPeerRole(userContext,nodeId,name, code, used,tokensExpr);
+		Node node = saveNode(userContext, nodeToUpdate, tokens().withChannelPeerRoleList().done());
 		synchronized(node){ 
 			return present(userContext,node, mergedAllTokens(tokensExpr));
 		}
 	}
 	
 	
-	protected TlsCacert createTlsCacert(HfgwUserContext userContext, String path, String cert) throws Exception{
+	protected ChannelPeerRole createChannelPeerRole(HfgwUserContext userContext, String channelId, String peerRoleId) throws Exception{
 
-		TlsCacert tlsCacert = new TlsCacert();
+		ChannelPeerRole channelPeerRole = new ChannelPeerRole();
 		
 		
-		tlsCacert.setPath(path);		
-		tlsCacert.setCert(cert);
+		Channel  channel = new Channel();
+		channel.setId(channelId);		
+		channelPeerRole.setChannel(channel);		
+		PeerRole  peerRole = new PeerRole();
+		peerRole.setId(peerRoleId);		
+		channelPeerRole.setPeerRole(peerRole);
 	
 		
-		return tlsCacert;
+		return channelPeerRole;
 	
 		
 	}
 	
-	protected TlsCacert createIndexedTlsCacert(String id, int version){
+	protected ChannelPeerRole createIndexedChannelPeerRole(String id, int version){
 
-		TlsCacert tlsCacert = new TlsCacert();
-		tlsCacert.setId(id);
-		tlsCacert.setVersion(version);
-		return tlsCacert;			
+		ChannelPeerRole channelPeerRole = new ChannelPeerRole();
+		channelPeerRole.setId(id);
+		channelPeerRole.setVersion(version);
+		return channelPeerRole;			
 		
 	}
 	
-	protected void checkParamsForRemovingTlsCacertList(HfgwUserContext userContext, String nodeId, 
-			String tlsCacertIds[],String [] tokensExpr) throws Exception {
+	protected void checkParamsForRemovingChannelPeerRoleList(HfgwUserContext userContext, String nodeId, 
+			String channelPeerRoleIds[],String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfNode(nodeId);
-		for(String tlsCacertIdItem: tlsCacertIds){
-			checkerOf(userContext).checkIdOfTlsCacert(tlsCacertIdItem);
+		for(String channelPeerRoleIdItem: channelPeerRoleIds){
+			checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleIdItem);
 		}
 		
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 		
 	}
-	public  Node removeTlsCacertList(HfgwUserContext userContext, String nodeId, 
-			String tlsCacertIds[],String [] tokensExpr) throws Exception{
+	public  Node removeChannelPeerRoleList(HfgwUserContext userContext, String nodeId, 
+			String channelPeerRoleIds[],String [] tokensExpr) throws Exception{
 			
-			checkParamsForRemovingTlsCacertList(userContext, nodeId,  tlsCacertIds, tokensExpr);
+			checkParamsForRemovingChannelPeerRoleList(userContext, nodeId,  channelPeerRoleIds, tokensExpr);
 			
 			
 			Node node = loadNode(userContext, nodeId, allTokens());
 			synchronized(node){ 
 				//Will be good when the node loaded from this JVM process cache.
 				//Also good when there is a RAM based DAO implementation
-				nodeDaoOf(userContext).planToRemoveTlsCacertList(node, tlsCacertIds, allTokens());
-				node = saveNode(userContext, node, tokens().withTlsCacertList().done());
-				deleteRelationListInGraph(userContext, node.getTlsCacertList());
+				nodeDaoOf(userContext).planToRemoveChannelPeerRoleList(node, channelPeerRoleIds, allTokens());
+				node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
+				deleteRelationListInGraph(userContext, node.getChannelPeerRoleList());
 				return present(userContext,node, mergedAllTokens(tokensExpr));
 			}
 	}
 	
-	protected void checkParamsForRemovingTlsCacert(HfgwUserContext userContext, String nodeId, 
-		String tlsCacertId, int tlsCacertVersion,String [] tokensExpr) throws Exception{
+	protected void checkParamsForRemovingChannelPeerRole(HfgwUserContext userContext, String nodeId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
 		
 		checkerOf(userContext).checkIdOfNode( nodeId);
-		checkerOf(userContext).checkIdOfTlsCacert(tlsCacertId);
-		checkerOf(userContext).checkVersionOfTlsCacert(tlsCacertVersion);
+		checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleId);
+		checkerOf(userContext).checkVersionOfChannelPeerRole(channelPeerRoleVersion);
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 	
 	}
-	public  Node removeTlsCacert(HfgwUserContext userContext, String nodeId, 
-		String tlsCacertId, int tlsCacertVersion,String [] tokensExpr) throws Exception{
+	public  Node removeChannelPeerRole(HfgwUserContext userContext, String nodeId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
 		
-		checkParamsForRemovingTlsCacert(userContext,nodeId, tlsCacertId, tlsCacertVersion,tokensExpr);
+		checkParamsForRemovingChannelPeerRole(userContext,nodeId, channelPeerRoleId, channelPeerRoleVersion,tokensExpr);
 		
-		TlsCacert tlsCacert = createIndexedTlsCacert(tlsCacertId, tlsCacertVersion);
+		ChannelPeerRole channelPeerRole = createIndexedChannelPeerRole(channelPeerRoleId, channelPeerRoleVersion);
 		Node node = loadNode(userContext, nodeId, allTokens());
 		synchronized(node){ 
 			//Will be good when the node loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			node.removeTlsCacert( tlsCacert );		
-			node = saveNode(userContext, node, tokens().withTlsCacertList().done());
-			deleteRelationInGraph(userContext, tlsCacert);
+			node.removeChannelPeerRole( channelPeerRole );		
+			node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
+			deleteRelationInGraph(userContext, channelPeerRole);
 			return present(userContext,node, mergedAllTokens(tokensExpr));
 		}
 		
 		
 	}
-	protected void checkParamsForCopyingTlsCacert(HfgwUserContext userContext, String nodeId, 
-		String tlsCacertId, int tlsCacertVersion,String [] tokensExpr) throws Exception{
+	protected void checkParamsForCopyingChannelPeerRole(HfgwUserContext userContext, String nodeId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
 		
 		checkerOf(userContext).checkIdOfNode( nodeId);
-		checkerOf(userContext).checkIdOfTlsCacert(tlsCacertId);
-		checkerOf(userContext).checkVersionOfTlsCacert(tlsCacertVersion);
+		checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleId);
+		checkerOf(userContext).checkVersionOfChannelPeerRole(channelPeerRoleVersion);
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 	
 	}
-	public  Node copyTlsCacertFrom(HfgwUserContext userContext, String nodeId, 
-		String tlsCacertId, int tlsCacertVersion,String [] tokensExpr) throws Exception{
+	public  Node copyChannelPeerRoleFrom(HfgwUserContext userContext, String nodeId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
 		
-		checkParamsForCopyingTlsCacert(userContext,nodeId, tlsCacertId, tlsCacertVersion,tokensExpr);
+		checkParamsForCopyingChannelPeerRole(userContext,nodeId, channelPeerRoleId, channelPeerRoleVersion,tokensExpr);
 		
-		TlsCacert tlsCacert = createIndexedTlsCacert(tlsCacertId, tlsCacertVersion);
+		ChannelPeerRole channelPeerRole = createIndexedChannelPeerRole(channelPeerRoleId, channelPeerRoleVersion);
 		Node node = loadNode(userContext, nodeId, allTokens());
 		synchronized(node){ 
 			//Will be good when the node loaded from this JVM process cache.
@@ -1022,43 +1149,35 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 			
 			
 			
-			node.copyTlsCacertFrom( tlsCacert );		
-			node = saveNode(userContext, node, tokens().withTlsCacertList().done());
+			node.copyChannelPeerRoleFrom( channelPeerRole );		
+			node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
 			
-			userContext.getManagerGroup().getTlsCacertManager().onNewInstanceCreated(userContext, (TlsCacert)node.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			userContext.getManagerGroup().getChannelPeerRoleManager().onNewInstanceCreated(userContext, (ChannelPeerRole)node.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
 			return present(userContext,node, mergedAllTokens(tokensExpr));
 		}
 		
 	}
 	
-	protected void checkParamsForUpdatingTlsCacert(HfgwUserContext userContext, String nodeId, String tlsCacertId, int tlsCacertVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+	protected void checkParamsForUpdatingChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelPeerRoleId, int channelPeerRoleVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
 		
 
 		
 		checkerOf(userContext).checkIdOfNode(nodeId);
-		checkerOf(userContext).checkIdOfTlsCacert(tlsCacertId);
-		checkerOf(userContext).checkVersionOfTlsCacert(tlsCacertVersion);
+		checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleId);
+		checkerOf(userContext).checkVersionOfChannelPeerRole(channelPeerRoleVersion);
 		
 
-		if(TlsCacert.PATH_PROPERTY.equals(property)){
-			checkerOf(userContext).checkPathOfTlsCacert(parseString(newValueExpr));
-		}
-		
-		if(TlsCacert.CERT_PROPERTY.equals(property)){
-			checkerOf(userContext).checkCertOfTlsCacert(parseString(newValueExpr));
-		}
-		
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeManagerException.class);
 	
 	}
 	
-	public  Node updateTlsCacert(HfgwUserContext userContext, String nodeId, String tlsCacertId, int tlsCacertVersion, String property, String newValueExpr,String [] tokensExpr)
+	public  Node updateChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelPeerRoleId, int channelPeerRoleVersion, String property, String newValueExpr,String [] tokensExpr)
 			throws Exception{
 		
-		checkParamsForUpdatingTlsCacert(userContext, nodeId, tlsCacertId, tlsCacertVersion, property, newValueExpr,  tokensExpr);
+		checkParamsForUpdatingChannelPeerRole(userContext, nodeId, channelPeerRoleId, channelPeerRoleVersion, property, newValueExpr,  tokensExpr);
 		
-		Map<String,Object> loadTokens = this.tokens().withTlsCacertList().searchTlsCacertListWith(TlsCacert.ID_PROPERTY, "eq", tlsCacertId).done();
+		Map<String,Object> loadTokens = this.tokens().withChannelPeerRoleList().searchChannelPeerRoleListWith(ChannelPeerRole.ID_PROPERTY, "eq", channelPeerRoleId).done();
 		
 		
 		
@@ -1067,18 +1186,18 @@ public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeMan
 		synchronized(node){ 
 			//Will be good when the node loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			//node.removeTlsCacert( tlsCacert );	
+			//node.removeChannelPeerRole( channelPeerRole );	
 			//make changes to AcceleraterAccount.
-			TlsCacert tlsCacertIndex = createIndexedTlsCacert(tlsCacertId, tlsCacertVersion);
+			ChannelPeerRole channelPeerRoleIndex = createIndexedChannelPeerRole(channelPeerRoleId, channelPeerRoleVersion);
 		
-			TlsCacert tlsCacert = node.findTheTlsCacert(tlsCacertIndex);
-			if(tlsCacert == null){
-				throw new NodeManagerException(tlsCacert+" is NOT FOUND" );
+			ChannelPeerRole channelPeerRole = node.findTheChannelPeerRole(channelPeerRoleIndex);
+			if(channelPeerRole == null){
+				throw new NodeManagerException(channelPeerRole+" is NOT FOUND" );
 			}
 			
-			tlsCacert.changeProperty(property, newValueExpr);
+			channelPeerRole.changeProperty(property, newValueExpr);
 			
-			node = saveNode(userContext, node, tokens().withTlsCacertList().done());
+			node = saveNode(userContext, node, tokens().withChannelPeerRoleList().done());
 			return present(userContext,node, mergedAllTokens(tokensExpr));
 		}
 

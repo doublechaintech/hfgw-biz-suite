@@ -72,14 +72,12 @@ public class NodeTypeTokens extends CommonTokens{
 	protected static NodeTypeTokens allTokens(){
 		
 		return start()
-			.withNetwork()
 			.withNodeList();
 	
 	}
 	public static NodeTypeTokens withoutListsTokens(){
 		
-		return start()
-			.withNetwork();
+		return start();
 	
 	}
 	
@@ -98,16 +96,6 @@ public class NodeTypeTokens extends CommonTokens{
 		return this;
 	}
 
-	protected static final String NETWORK = "network";
-	public String getNetwork(){
-		return NETWORK;
-	}
-	public NodeTypeTokens withNetwork(){		
-		addSimpleOptions(NETWORK);
-		return this;
-	}
-	
-	
 	protected static final String NODE_LIST = "nodeList";
 	public String getNodeList(){
 		return NODE_LIST;
@@ -152,7 +140,7 @@ public class NodeTypeTokens extends CommonTokens{
 	
 	
 	public NodeTypeTokens searchAllTextOfNodeList(String verb, String value){	
-		String field = "id|name|url";
+		String field = "id|name|url|tlsCacert|address|contactPerson|contactTelephone";
 		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
 		return this;
 	}

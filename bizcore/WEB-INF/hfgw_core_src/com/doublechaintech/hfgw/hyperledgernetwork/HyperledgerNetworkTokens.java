@@ -73,7 +73,7 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 		
 		return start()
 			.withOrganizationList()
-			.withNodeTypeList()
+			.withNodeList()
 			.withChannelList()
 			.withApplicationList()
 			.withServiceRecordList()
@@ -172,71 +172,71 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	
 	
 		
-	protected static final String NODE_TYPE_LIST = "nodeTypeList";
-	public String getNodeTypeList(){
-		return NODE_TYPE_LIST;
+	protected static final String NODE_LIST = "nodeList";
+	public String getNodeList(){
+		return NODE_LIST;
 	}
-	public HyperledgerNetworkTokens withNodeTypeList(){		
-		addSimpleOptions(NODE_TYPE_LIST);
+	public HyperledgerNetworkTokens withNodeList(){		
+		addSimpleOptions(NODE_LIST);
 		return this;
 	}
-	public HyperledgerNetworkTokens analyzeNodeTypeList(){		
-		addSimpleOptions(NODE_TYPE_LIST+".anaylze");
+	public HyperledgerNetworkTokens analyzeNodeList(){		
+		addSimpleOptions(NODE_LIST+".anaylze");
 		return this;
 	}
-	public boolean analyzeNodeTypeListEnabled(){		
+	public boolean analyzeNodeListEnabled(){		
 		
-		if(checkOptions(this.options(), NODE_TYPE_LIST+".anaylze")){
+		if(checkOptions(this.options(), NODE_LIST+".anaylze")){
 			return true; //most of the case, should call here
 		}
 		//if not true, then query for global setting
 		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
 	}
-	public HyperledgerNetworkTokens extractMoreFromNodeTypeList(String idsSeperatedWithComma){		
-		addSimpleOptions(NODE_TYPE_LIST+".extractIds", idsSeperatedWithComma);
+	public HyperledgerNetworkTokens extractMoreFromNodeList(String idsSeperatedWithComma){		
+		addSimpleOptions(NODE_LIST+".extractIds", idsSeperatedWithComma);
 		return this;
 	}
 	
 	
 	
 	
-	private int nodeTypeListSortCounter = 0;
-	public HyperledgerNetworkTokens sortNodeTypeListWith(String field, String descOrAsc){		
-		addSortMoreOptions(NODE_TYPE_LIST,nodeTypeListSortCounter++, field, descOrAsc);
+	private int nodeListSortCounter = 0;
+	public HyperledgerNetworkTokens sortNodeListWith(String field, String descOrAsc){		
+		addSortMoreOptions(NODE_LIST,nodeListSortCounter++, field, descOrAsc);
 		return this;
 	}
-	private int nodeTypeListSearchCounter = 0;
-	public HyperledgerNetworkTokens searchNodeTypeListWith(String field, String verb, String value){		
+	private int nodeListSearchCounter = 0;
+	public HyperledgerNetworkTokens searchNodeListWith(String field, String verb, String value){		
 		
-		withNodeTypeList();
-		addSearchMoreOptions(NODE_TYPE_LIST,nodeTypeListSearchCounter++, field, verb, value);
+		withNodeList();
+		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
 		return this;
 	}
 	
 	
 	
-	public HyperledgerNetworkTokens searchAllTextOfNodeTypeList(String verb, String value){	
-		String field = "id|name|code|address|contactPerson|contactTelephone";
-		addSearchMoreOptions(NODE_TYPE_LIST,nodeTypeListSearchCounter++, field, verb, value);
+	public HyperledgerNetworkTokens searchAllTextOfNodeList(String verb, String value){	
+		String field = "id|name|url|tlsCacert|address|contactPerson|contactTelephone";
+		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
 		return this;
 	}
 	
 	
 	
-	public HyperledgerNetworkTokens rowsPerPageOfNodeTypeList(int rowsPerPage){		
-		addSimpleOptions(NODE_TYPE_LIST+"RowsPerPage",rowsPerPage);
+	public HyperledgerNetworkTokens rowsPerPageOfNodeList(int rowsPerPage){		
+		addSimpleOptions(NODE_LIST+"RowsPerPage",rowsPerPage);
 		return this;
 	}
-	public HyperledgerNetworkTokens currentPageNumberOfNodeTypeList(int currentPageNumber){		
-		addSimpleOptions(NODE_TYPE_LIST+"CurrentPage",currentPageNumber);
+	public HyperledgerNetworkTokens currentPageNumberOfNodeList(int currentPageNumber){		
+		addSimpleOptions(NODE_LIST+"CurrentPage",currentPageNumber);
 		return this;
 	}
-	public HyperledgerNetworkTokens retainColumnsOfNodeTypeList(String[] columns){		
-		addSimpleOptions(NODE_TYPE_LIST+"RetainColumns",columns);
+	public HyperledgerNetworkTokens retainColumnsOfNodeList(String[] columns){		
+		addSimpleOptions(NODE_LIST+"RetainColumns",columns);
 		return this;
 	}
-	public HyperledgerNetworkTokens excludeColumnsOfNodeTypeList(String[] columns){		
-		addSimpleOptions(NODE_TYPE_LIST+"ExcludeColumns",columns);
+	public HyperledgerNetworkTokens excludeColumnsOfNodeList(String[] columns){		
+		addSimpleOptions(NODE_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -426,7 +426,7 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	
 	
 	public HyperledgerNetworkTokens searchAllTextOfServiceRecordList(String verb, String value){	
-		String field = "id|name|payLoad|transactionId|blockId|currentStatus";
+		String field = "id|name|payLoad|chainCodeFunction|transactionId|blockId|currentStatus";
 		addSearchMoreOptions(SERVICE_RECORD_LIST,serviceRecordListSearchCounter++, field, verb, value);
 		return this;
 	}
@@ -596,7 +596,7 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	public  HyperledgerNetworkTokens searchEntireObjectText(String verb, String value){
 		
 		searchAllTextOfOrganizationList(verb, value);	
-		searchAllTextOfNodeTypeList(verb, value);	
+		searchAllTextOfNodeList(verb, value);	
 		searchAllTextOfChannelList(verb, value);	
 		searchAllTextOfApplicationList(verb, value);	
 		searchAllTextOfServiceRecordList(verb, value);	

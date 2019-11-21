@@ -296,42 +296,6 @@ class NodeTypeUpdateForm extends Component {
                 </Form.Item>
               </Col>
 
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.address} {...formItemLayout}>
-                  {getFieldDecorator('address', {
-                    initialValue: selectedRow.address,
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="地址" />
-                    
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.contactPerson} {...formItemLayout}>
-                  {getFieldDecorator('contactPerson', {
-                    initialValue: selectedRow.contactPerson,
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="联系人" />
-                    
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.contactTelephone} {...formItemLayout}>
-                  {getFieldDecorator('contactTelephone', {
-                    initialValue: selectedRow.contactTelephone,
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="联系电话" />
-                    
-                  )}
-                </Form.Item>
-              </Col>
-
             
        
         

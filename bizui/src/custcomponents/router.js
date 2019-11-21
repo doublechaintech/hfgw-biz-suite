@@ -18,8 +18,9 @@ function RouterConfig({ history }) {
 	const {NodeTypeBizApp} = GlobalComponents
 	const {NodeBizApp} = GlobalComponents
 	const {GrpcOptionBizApp} = GlobalComponents
-	const {TlsCacertBizApp} = GlobalComponents
 	const {ChannelBizApp} = GlobalComponents
+	const {PeerRoleBizApp} = GlobalComponents
+	const {ChannelPeerRoleBizApp} = GlobalComponents
 	const {ChainCodeBizApp} = GlobalComponents
 	const {ApplicationBizApp} = GlobalComponents
 	const {ServiceRecordBizApp} = GlobalComponents
@@ -55,8 +56,9 @@ function RouterConfig({ history }) {
           <Route path="/nodeType/" component={NodeTypeBizApp} />
           <Route path="/node/" component={NodeBizApp} />
           <Route path="/grpcOption/" component={GrpcOptionBizApp} />
-          <Route path="/tlsCacert/" component={TlsCacertBizApp} />
           <Route path="/channel/" component={ChannelBizApp} />
+          <Route path="/peerRole/" component={PeerRoleBizApp} />
+          <Route path="/channelPeerRole/" component={ChannelPeerRoleBizApp} />
           <Route path="/chainCode/" component={ChainCodeBizApp} />
           <Route path="/application/" component={ApplicationBizApp} />
           <Route path="/serviceRecord/" component={ServiceRecordBizApp} />

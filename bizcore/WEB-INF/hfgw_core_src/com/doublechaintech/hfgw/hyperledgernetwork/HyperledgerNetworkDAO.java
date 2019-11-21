@@ -9,19 +9,19 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
-import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 
+import com.doublechaintech.hfgw.node.NodeDAO;
 import com.doublechaintech.hfgw.organization.OrganizationDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 import com.doublechaintech.hfgw.changerequest.ChangeRequestDAO;
 import com.doublechaintech.hfgw.application.ApplicationDAO;
-import com.doublechaintech.hfgw.nodetype.NodeTypeDAO;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeDAO;
 
 
@@ -55,7 +55,7 @@ public interface HyperledgerNetworkDAO{
 
 	public OrganizationDAO getOrganizationDAO();
 		
-	public NodeTypeDAO getNodeTypeDAO();
+	public NodeDAO getNodeDAO();
 		
 	public ChannelDAO getChannelDAO();
 		
@@ -70,7 +70,7 @@ public interface HyperledgerNetworkDAO{
 	
  	public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForOrganization(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
- 	public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForNodeType(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+ 	public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForNode(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForChannel(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
@@ -86,9 +86,21 @@ public interface HyperledgerNetworkDAO{
 	public HyperledgerNetwork planToRemoveOrganizationList(HyperledgerNetwork hyperledgerNetwork, String organizationIds[], Map<String,Object> options)throws Exception;
 
 
-	public HyperledgerNetwork planToRemoveNodeTypeList(HyperledgerNetwork hyperledgerNetwork, String nodeTypeIds[], Map<String,Object> options)throws Exception;
+	public HyperledgerNetwork planToRemoveNodeList(HyperledgerNetwork hyperledgerNetwork, String nodeIds[], Map<String,Object> options)throws Exception;
 
 
+	//disconnect HyperledgerNetwork with organization in Node
+	public HyperledgerNetwork planToRemoveNodeListWithOrganization(HyperledgerNetwork hyperledgerNetwork, String organizationId, Map<String,Object> options)throws Exception;
+	public int countNodeListWithOrganization(String hyperledgerNetworkId, String organizationId, Map<String,Object> options)throws Exception;
+	
+	//disconnect HyperledgerNetwork with channel in Node
+	public HyperledgerNetwork planToRemoveNodeListWithChannel(HyperledgerNetwork hyperledgerNetwork, String channelId, Map<String,Object> options)throws Exception;
+	public int countNodeListWithChannel(String hyperledgerNetworkId, String channelId, Map<String,Object> options)throws Exception;
+	
+	//disconnect HyperledgerNetwork with type in Node
+	public HyperledgerNetwork planToRemoveNodeListWithType(HyperledgerNetwork hyperledgerNetwork, String typeId, Map<String,Object> options)throws Exception;
+	public int countNodeListWithType(String hyperledgerNetworkId, String typeId, Map<String,Object> options)throws Exception;
+	
 	public HyperledgerNetwork planToRemoveChannelList(HyperledgerNetwork hyperledgerNetwork, String channelIds[], Map<String,Object> options)throws Exception;
 
 
@@ -135,8 +147,8 @@ public interface HyperledgerNetworkDAO{
 	// 需要一个加载引用我的对象的enhance方法:Organization的network的OrganizationList
 	public SmartList<Organization> loadOurOrganizationList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception;
 	
-	// 需要一个加载引用我的对象的enhance方法:NodeType的network的NodeTypeList
-	public SmartList<NodeType> loadOurNodeTypeList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception;
+	// 需要一个加载引用我的对象的enhance方法:Node的network的NodeList
+	public SmartList<Node> loadOurNodeList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception;
 	
 	// 需要一个加载引用我的对象的enhance方法:Channel的network的ChannelList
 	public SmartList<Channel> loadOurChannelList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception;

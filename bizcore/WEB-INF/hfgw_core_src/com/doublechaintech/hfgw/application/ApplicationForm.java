@@ -292,6 +292,20 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
+	public ApplicationForm chainCodeFunctionFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  chainCodeFunctionFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm chainCodeFunctionFieldForServiceRecord(String initValue){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction",initValue);
+	}
+	public ApplicationForm chainCodeFunctionFieldForServiceRecord(){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
+	}
+
+
 	public ApplicationForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
 		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);

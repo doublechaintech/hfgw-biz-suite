@@ -56,6 +56,10 @@ public interface OrganizationDAO{
 	public Organization planToRemoveNodeListWithChannel(Organization organization, String channelId, Map<String,Object> options)throws Exception;
 	public int countNodeListWithChannel(String organizationId, String channelId, Map<String,Object> options)throws Exception;
 	
+	//disconnect Organization with network in Node
+	public Organization planToRemoveNodeListWithNetwork(Organization organization, String networkId, Map<String,Object> options)throws Exception;
+	public int countNodeListWithNetwork(String organizationId, String networkId, Map<String,Object> options)throws Exception;
+	
 	//disconnect Organization with type in Node
 	public Organization planToRemoveNodeListWithType(Organization organization, String typeId, Map<String,Object> options)throws Exception;
 	public int countNodeListWithType(String organizationId, String typeId, Map<String,Object> options)throws Exception;

@@ -75,21 +75,6 @@ import GrpcOptionProfile from './grpcoption/GrpcOption.profile';
 import GrpcOptionCreateFormBody from './grpcoption/GrpcOption.createformbody';
 import GrpcOptionService from './grpcoption/GrpcOption.service';
 import GrpcOptionUpdateForm from './grpcoption/GrpcOption.updateform';
-import TlsCacertBase from './tlscacert/TlsCacert.base';
-import TlsCacertBizApp from './tlscacert/TlsCacert.app';
-import TlsCacertModel from './tlscacert/TlsCacert.model';
-import TlsCacertDashboard from './tlscacert/TlsCacert.dashboard';
-import TlsCacertModalTable from './tlscacert/TlsCacert.modaltable';
-import TlsCacertSearch from './tlscacert/TlsCacert.search';
-import TlsCacertSearchForm from './tlscacert/TlsCacert.searchform';
-import TlsCacertCreateForm from './tlscacert/TlsCacert.createform';
-import TlsCacertAssociateForm from './tlscacert/TlsCacert.associateform';
-import TlsCacertTable from './tlscacert/TlsCacert.table';
-import TlsCacertPermission from './tlscacert/TlsCacert.permission';
-import TlsCacertProfile from './tlscacert/TlsCacert.profile';
-import TlsCacertCreateFormBody from './tlscacert/TlsCacert.createformbody';
-import TlsCacertService from './tlscacert/TlsCacert.service';
-import TlsCacertUpdateForm from './tlscacert/TlsCacert.updateform';
 import ChannelBase from './channel/Channel.base';
 import ChannelBizApp from './channel/Channel.app';
 import ChannelModel from './channel/Channel.model';
@@ -105,6 +90,36 @@ import ChannelProfile from './channel/Channel.profile';
 import ChannelCreateFormBody from './channel/Channel.createformbody';
 import ChannelService from './channel/Channel.service';
 import ChannelUpdateForm from './channel/Channel.updateform';
+import PeerRoleBase from './peerrole/PeerRole.base';
+import PeerRoleBizApp from './peerrole/PeerRole.app';
+import PeerRoleModel from './peerrole/PeerRole.model';
+import PeerRoleDashboard from './peerrole/PeerRole.dashboard';
+import PeerRoleModalTable from './peerrole/PeerRole.modaltable';
+import PeerRoleSearch from './peerrole/PeerRole.search';
+import PeerRoleSearchForm from './peerrole/PeerRole.searchform';
+import PeerRoleCreateForm from './peerrole/PeerRole.createform';
+import PeerRoleAssociateForm from './peerrole/PeerRole.associateform';
+import PeerRoleTable from './peerrole/PeerRole.table';
+import PeerRolePermission from './peerrole/PeerRole.permission';
+import PeerRoleProfile from './peerrole/PeerRole.profile';
+import PeerRoleCreateFormBody from './peerrole/PeerRole.createformbody';
+import PeerRoleService from './peerrole/PeerRole.service';
+import PeerRoleUpdateForm from './peerrole/PeerRole.updateform';
+import ChannelPeerRoleBase from './channelpeerrole/ChannelPeerRole.base';
+import ChannelPeerRoleBizApp from './channelpeerrole/ChannelPeerRole.app';
+import ChannelPeerRoleModel from './channelpeerrole/ChannelPeerRole.model';
+import ChannelPeerRoleDashboard from './channelpeerrole/ChannelPeerRole.dashboard';
+import ChannelPeerRoleModalTable from './channelpeerrole/ChannelPeerRole.modaltable';
+import ChannelPeerRoleSearch from './channelpeerrole/ChannelPeerRole.search';
+import ChannelPeerRoleSearchForm from './channelpeerrole/ChannelPeerRole.searchform';
+import ChannelPeerRoleCreateForm from './channelpeerrole/ChannelPeerRole.createform';
+import ChannelPeerRoleAssociateForm from './channelpeerrole/ChannelPeerRole.associateform';
+import ChannelPeerRoleTable from './channelpeerrole/ChannelPeerRole.table';
+import ChannelPeerRolePermission from './channelpeerrole/ChannelPeerRole.permission';
+import ChannelPeerRoleProfile from './channelpeerrole/ChannelPeerRole.profile';
+import ChannelPeerRoleCreateFormBody from './channelpeerrole/ChannelPeerRole.createformbody';
+import ChannelPeerRoleService from './channelpeerrole/ChannelPeerRole.service';
+import ChannelPeerRoleUpdateForm from './channelpeerrole/ChannelPeerRole.updateform';
 import ChainCodeBase from './chaincode/ChainCode.base';
 import ChainCodeBizApp from './chaincode/ChainCode.app';
 import ChainCodeModel from './chaincode/ChainCode.model';
@@ -429,8 +444,9 @@ const BizModels = [
 	NodeTypeModel,
 	NodeModel,
 	GrpcOptionModel,
-	TlsCacertModel,
 	ChannelModel,
+	PeerRoleModel,
+	ChannelPeerRoleModel,
 	ChainCodeModel,
 	ApplicationModel,
 	ServiceRecordModel,
@@ -474,8 +490,9 @@ menuLibrary.organization = OrganizationBase.menuData
 menuLibrary.nodeType = NodeTypeBase.menuData
 menuLibrary.node = NodeBase.menuData
 menuLibrary.grpcOption = GrpcOptionBase.menuData
-menuLibrary.tlsCacert = TlsCacertBase.menuData
 menuLibrary.channel = ChannelBase.menuData
+menuLibrary.peerRole = PeerRoleBase.menuData
+menuLibrary.channelPeerRole = ChannelPeerRoleBase.menuData
 menuLibrary.chainCode = ChainCodeBase.menuData
 menuLibrary.application = ApplicationBase.menuData
 menuLibrary.serviceRecord = ServiceRecordBase.menuData
@@ -522,8 +539,9 @@ const ViewMapping = {
   'com.doublechaintech.hfgw.nodetype.NodeType': {name:'nodeType'},
   'com.doublechaintech.hfgw.node.Node': {name:'node'},
   'com.doublechaintech.hfgw.grpcoption.GrpcOption': {name:'grpcOption'},
-  'com.doublechaintech.hfgw.tlscacert.TlsCacert': {name:'tlsCacert'},
   'com.doublechaintech.hfgw.channel.Channel': {name:'channel'},
+  'com.doublechaintech.hfgw.peerrole.PeerRole': {name:'peerRole'},
+  'com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole': {name:'channelPeerRole'},
   'com.doublechaintech.hfgw.chaincode.ChainCode': {name:'chainCode'},
   'com.doublechaintech.hfgw.application.Application': {name:'application'},
   'com.doublechaintech.hfgw.servicerecord.ServiceRecord': {name:'serviceRecord'},
@@ -665,21 +683,6 @@ const OOTBComponents={
     GrpcOptionCreateFormBody,
     GrpcOptionService,
     GrpcOptionUpdateForm,
-    TlsCacertBase,
-    TlsCacertBizApp,
-    TlsCacertModel,
-    TlsCacertDashboard,
-    TlsCacertModalTable,
-    TlsCacertSearch,
-    TlsCacertSearchForm,
-    TlsCacertCreateForm,
-    TlsCacertAssociateForm,
-    TlsCacertTable,
-    TlsCacertPermission,
-    TlsCacertProfile,
-    TlsCacertCreateFormBody,
-    TlsCacertService,
-    TlsCacertUpdateForm,
     ChannelBase,
     ChannelBizApp,
     ChannelModel,
@@ -695,6 +698,36 @@ const OOTBComponents={
     ChannelCreateFormBody,
     ChannelService,
     ChannelUpdateForm,
+    PeerRoleBase,
+    PeerRoleBizApp,
+    PeerRoleModel,
+    PeerRoleDashboard,
+    PeerRoleModalTable,
+    PeerRoleSearch,
+    PeerRoleSearchForm,
+    PeerRoleCreateForm,
+    PeerRoleAssociateForm,
+    PeerRoleTable,
+    PeerRolePermission,
+    PeerRoleProfile,
+    PeerRoleCreateFormBody,
+    PeerRoleService,
+    PeerRoleUpdateForm,
+    ChannelPeerRoleBase,
+    ChannelPeerRoleBizApp,
+    ChannelPeerRoleModel,
+    ChannelPeerRoleDashboard,
+    ChannelPeerRoleModalTable,
+    ChannelPeerRoleSearch,
+    ChannelPeerRoleSearchForm,
+    ChannelPeerRoleCreateForm,
+    ChannelPeerRoleAssociateForm,
+    ChannelPeerRoleTable,
+    ChannelPeerRolePermission,
+    ChannelPeerRoleProfile,
+    ChannelPeerRoleCreateFormBody,
+    ChannelPeerRoleService,
+    ChannelPeerRoleUpdateForm,
     ChainCodeBase,
     ChainCodeBizApp,
     ChainCodeModel,

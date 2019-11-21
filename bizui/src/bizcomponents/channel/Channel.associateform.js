@@ -74,6 +74,7 @@ class ChannelAssociateForm extends Component {
     const userContext = null
     
  const {NodeModalTable} = GlobalComponents;
+ const {ChannelPeerRoleModalTable} = GlobalComponents;
  const {ChainCodeModalTable} = GlobalComponents;
  const {ApplicationModalTable} = GlobalComponents;
  const {ServiceRecordModalTable} = GlobalComponents;
@@ -191,6 +192,7 @@ class ChannelAssociateForm extends Component {
         </Card>
         
 	<NodeModalTable data={data.nodeList} owner={owner} />
+	<ChannelPeerRoleModalTable data={data.channelPeerRoleList} owner={owner} />
 	<ChainCodeModalTable data={data.chainCodeList} owner={owner} />
 	<ApplicationModalTable data={data.applicationList} owner={owner} />
 	<ServiceRecordModalTable data={data.serviceRecordList} owner={owner} />

@@ -21,8 +21,8 @@ import com.doublechaintech.hfgw.HfgwCheckerManager;
 import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
-import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
@@ -30,7 +30,9 @@ import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.channel.Channel;
+import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -162,10 +164,10 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.removeOrganization","removeOrganization","removeOrganization/"+hyperledgerNetwork.getId()+"/","organizationList","primary");
 		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.updateOrganization","updateOrganization","updateOrganization/"+hyperledgerNetwork.getId()+"/","organizationList","primary");
 		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.copyOrganizationFrom","copyOrganizationFrom","copyOrganizationFrom/"+hyperledgerNetwork.getId()+"/","organizationList","primary");
-		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.addNodeType","addNodeType","addNodeType/"+hyperledgerNetwork.getId()+"/","nodeTypeList","primary");
-		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.removeNodeType","removeNodeType","removeNodeType/"+hyperledgerNetwork.getId()+"/","nodeTypeList","primary");
-		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.updateNodeType","updateNodeType","updateNodeType/"+hyperledgerNetwork.getId()+"/","nodeTypeList","primary");
-		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.copyNodeTypeFrom","copyNodeTypeFrom","copyNodeTypeFrom/"+hyperledgerNetwork.getId()+"/","nodeTypeList","primary");
+		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.addNode","addNode","addNode/"+hyperledgerNetwork.getId()+"/","nodeList","primary");
+		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.removeNode","removeNode","removeNode/"+hyperledgerNetwork.getId()+"/","nodeList","primary");
+		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.updateNode","updateNode","updateNode/"+hyperledgerNetwork.getId()+"/","nodeList","primary");
+		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.copyNodeFrom","copyNodeFrom","copyNodeFrom/"+hyperledgerNetwork.getId()+"/","nodeList","primary");
 		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.addChannel","addChannel","addChannel/"+hyperledgerNetwork.getId()+"/","channelList","primary");
 		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.removeChannel","removeChannel","removeChannel/"+hyperledgerNetwork.getId()+"/","channelList","primary");
 		addAction(userContext, hyperledgerNetwork, tokens,"hyperledger_network.updateChannel","updateChannel","updateChannel/"+hyperledgerNetwork.getId()+"/","channelList","primary");
@@ -344,7 +346,7 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
 		.sortOrganizationListWith("id","desc")
-		.sortNodeTypeListWith("id","desc")
+		.sortNodeListWith("id","desc")
 		.sortChannelListWith("id","desc")
 		.sortApplicationListWith("id","desc")
 		.sortServiceRecordListWith("id","desc")
@@ -399,6 +401,60 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 	}
 
 
+	//disconnect HyperledgerNetwork with organization in Node
+	protected HyperledgerNetwork breakWithNodeByOrganization(HfgwUserContext userContext, String hyperledgerNetworkId, String organizationId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
+
+			synchronized(hyperledgerNetwork){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				hyperledgerNetworkDaoOf(userContext).planToRemoveNodeListWithOrganization(hyperledgerNetwork, organizationId, this.emptyOptions());
+
+				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
+				return hyperledgerNetwork;
+			}
+	}
+	//disconnect HyperledgerNetwork with channel in Node
+	protected HyperledgerNetwork breakWithNodeByChannel(HfgwUserContext userContext, String hyperledgerNetworkId, String channelId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
+
+			synchronized(hyperledgerNetwork){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				hyperledgerNetworkDaoOf(userContext).planToRemoveNodeListWithChannel(hyperledgerNetwork, channelId, this.emptyOptions());
+
+				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
+				return hyperledgerNetwork;
+			}
+	}
+	//disconnect HyperledgerNetwork with type in Node
+	protected HyperledgerNetwork breakWithNodeByType(HfgwUserContext userContext, String hyperledgerNetworkId, String typeId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
+
+			synchronized(hyperledgerNetwork){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				hyperledgerNetworkDaoOf(userContext).planToRemoveNodeListWithType(hyperledgerNetwork, typeId, this.emptyOptions());
+
+				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
+				return hyperledgerNetwork;
+			}
+	}
 	//disconnect HyperledgerNetwork with channel in Application
 	protected HyperledgerNetwork breakWithApplicationByChannel(HfgwUserContext userContext, String hyperledgerNetworkId, String channelId,  String [] tokensExpr)
 		 throws Exception{
@@ -752,185 +808,205 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 
 
 
-	protected void checkParamsForAddingNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code, String address, String contactPerson, String contactTelephone,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingNode(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String url, String organizationId, String channelId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
 
 		
-		checkerOf(userContext).checkNameOfNodeType(name);
+		checkerOf(userContext).checkNameOfNode(name);
 		
-		checkerOf(userContext).checkCodeOfNodeType(code);
+		checkerOf(userContext).checkUrlOfNode(url);
 		
-		checkerOf(userContext).checkAddressOfNodeType(address);
+		checkerOf(userContext).checkOrganizationIdOfNode(organizationId);
 		
-		checkerOf(userContext).checkContactPersonOfNodeType(contactPerson);
+		checkerOf(userContext).checkChannelIdOfNode(channelId);
 		
-		checkerOf(userContext).checkContactTelephoneOfNodeType(contactTelephone);
+		checkerOf(userContext).checkTlsCacertOfNode(tlsCacert);
+		
+		checkerOf(userContext).checkTypeIdOfNode(typeId);
+		
+		checkerOf(userContext).checkAddressOfNode(address);
+		
+		checkerOf(userContext).checkContactPersonOfNode(contactPerson);
+		
+		checkerOf(userContext).checkContactTelephoneOfNode(contactTelephone);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 
 	
 	}
-	public  HyperledgerNetwork addNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code, String address, String contactPerson, String contactTelephone, String [] tokensExpr) throws Exception
+	public  HyperledgerNetwork addNode(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String url, String organizationId, String channelId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingNodeType(userContext,hyperledgerNetworkId,name, code, address, contactPerson, contactTelephone,tokensExpr);
+		checkParamsForAddingNode(userContext,hyperledgerNetworkId,name, url, organizationId, channelId, tlsCacert, typeId, address, contactPerson, contactTelephone,tokensExpr);
 		
-		NodeType nodeType = createNodeType(userContext,name, code, address, contactPerson, contactTelephone);
+		Node node = createNode(userContext,name, url, organizationId, channelId, tlsCacert, typeId, address, contactPerson, contactTelephone);
 		
 		HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
 		synchronized(hyperledgerNetwork){ 
 			//Will be good when the hyperledgerNetwork loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			hyperledgerNetwork.addNodeType( nodeType );		
-			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeTypeList().done());
+			hyperledgerNetwork.addNode( node );		
+			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
 			
-			userContext.getManagerGroup().getNodeTypeManager().onNewInstanceCreated(userContext, nodeType);
+			userContext.getManagerGroup().getNodeManager().onNewInstanceCreated(userContext, node);
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingNodeTypeProperties(HfgwUserContext userContext, String hyperledgerNetworkId,String id,String name,String code,String address,String contactPerson,String contactTelephone,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingNodeProperties(HfgwUserContext userContext, String hyperledgerNetworkId,String id,String name,String url,String tlsCacert,String address,String contactPerson,String contactTelephone,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
-		checkerOf(userContext).checkIdOfNodeType(id);
+		checkerOf(userContext).checkIdOfNode(id);
 		
-		checkerOf(userContext).checkNameOfNodeType( name);
-		checkerOf(userContext).checkCodeOfNodeType( code);
-		checkerOf(userContext).checkAddressOfNodeType( address);
-		checkerOf(userContext).checkContactPersonOfNodeType( contactPerson);
-		checkerOf(userContext).checkContactTelephoneOfNodeType( contactTelephone);
+		checkerOf(userContext).checkNameOfNode( name);
+		checkerOf(userContext).checkUrlOfNode( url);
+		checkerOf(userContext).checkTlsCacertOfNode( tlsCacert);
+		checkerOf(userContext).checkAddressOfNode( address);
+		checkerOf(userContext).checkContactPersonOfNode( contactPerson);
+		checkerOf(userContext).checkContactTelephoneOfNode( contactTelephone);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 		
 	}
-	public  HyperledgerNetwork updateNodeTypeProperties(HfgwUserContext userContext, String hyperledgerNetworkId, String id,String name,String code,String address,String contactPerson,String contactTelephone, String [] tokensExpr) throws Exception
+	public  HyperledgerNetwork updateNodeProperties(HfgwUserContext userContext, String hyperledgerNetworkId, String id,String name,String url,String tlsCacert,String address,String contactPerson,String contactTelephone, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingNodeTypeProperties(userContext,hyperledgerNetworkId,id,name,code,address,contactPerson,contactTelephone,tokensExpr);
+		checkParamsForUpdatingNodeProperties(userContext,hyperledgerNetworkId,id,name,url,tlsCacert,address,contactPerson,contactTelephone,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
-				//.withNodeTypeListList()
-				.searchNodeTypeListWith(NodeType.ID_PROPERTY, "is", id).done();
+				//.withNodeListList()
+				.searchNodeListWith(Node.ID_PROPERTY, "is", id).done();
 		
 		HyperledgerNetwork hyperledgerNetworkToUpdate = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, options);
 		
-		if(hyperledgerNetworkToUpdate.getNodeTypeList().isEmpty()){
-			throw new HyperledgerNetworkManagerException("NodeType is NOT FOUND with id: '"+id+"'");
+		if(hyperledgerNetworkToUpdate.getNodeList().isEmpty()){
+			throw new HyperledgerNetworkManagerException("Node is NOT FOUND with id: '"+id+"'");
 		}
 		
-		NodeType item = hyperledgerNetworkToUpdate.getNodeTypeList().first();
+		Node item = hyperledgerNetworkToUpdate.getNodeList().first();
 		
 		item.updateName( name );
-		item.updateCode( code );
+		item.updateUrl( url );
+		item.updateTlsCacert( tlsCacert );
 		item.updateAddress( address );
 		item.updateContactPerson( contactPerson );
 		item.updateContactTelephone( contactTelephone );
 
 		
-		//checkParamsForAddingNodeType(userContext,hyperledgerNetworkId,name, code, used,tokensExpr);
-		HyperledgerNetwork hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetworkToUpdate, tokens().withNodeTypeList().done());
+		//checkParamsForAddingNode(userContext,hyperledgerNetworkId,name, code, used,tokensExpr);
+		HyperledgerNetwork hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetworkToUpdate, tokens().withNodeList().done());
 		synchronized(hyperledgerNetwork){ 
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 	}
 	
 	
-	protected NodeType createNodeType(HfgwUserContext userContext, String name, String code, String address, String contactPerson, String contactTelephone) throws Exception{
+	protected Node createNode(HfgwUserContext userContext, String name, String url, String organizationId, String channelId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone) throws Exception{
 
-		NodeType nodeType = new NodeType();
+		Node node = new Node();
 		
 		
-		nodeType.setName(name);		
-		nodeType.setCode(code);		
-		nodeType.setAddress(address);		
-		nodeType.setContactPerson(contactPerson);		
-		nodeType.setContactTelephone(contactTelephone);
+		node.setName(name);		
+		node.setUrl(url);		
+		Organization  organization = new Organization();
+		organization.setId(organizationId);		
+		node.setOrganization(organization);		
+		Channel  channel = new Channel();
+		channel.setId(channelId);		
+		node.setChannel(channel);		
+		node.setTlsCacert(tlsCacert);		
+		NodeType  type = new NodeType();
+		type.setId(typeId);		
+		node.setType(type);		
+		node.setAddress(address);		
+		node.setContactPerson(contactPerson);		
+		node.setContactTelephone(contactTelephone);
 	
 		
-		return nodeType;
+		return node;
 	
 		
 	}
 	
-	protected NodeType createIndexedNodeType(String id, int version){
+	protected Node createIndexedNode(String id, int version){
 
-		NodeType nodeType = new NodeType();
-		nodeType.setId(id);
-		nodeType.setVersion(version);
-		return nodeType;			
+		Node node = new Node();
+		node.setId(id);
+		node.setVersion(version);
+		return node;			
 		
 	}
 	
-	protected void checkParamsForRemovingNodeTypeList(HfgwUserContext userContext, String hyperledgerNetworkId, 
-			String nodeTypeIds[],String [] tokensExpr) throws Exception {
+	protected void checkParamsForRemovingNodeList(HfgwUserContext userContext, String hyperledgerNetworkId, 
+			String nodeIds[],String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
-		for(String nodeTypeIdItem: nodeTypeIds){
-			checkerOf(userContext).checkIdOfNodeType(nodeTypeIdItem);
+		for(String nodeIdItem: nodeIds){
+			checkerOf(userContext).checkIdOfNode(nodeIdItem);
 		}
 		
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 		
 	}
-	public  HyperledgerNetwork removeNodeTypeList(HfgwUserContext userContext, String hyperledgerNetworkId, 
-			String nodeTypeIds[],String [] tokensExpr) throws Exception{
+	public  HyperledgerNetwork removeNodeList(HfgwUserContext userContext, String hyperledgerNetworkId, 
+			String nodeIds[],String [] tokensExpr) throws Exception{
 			
-			checkParamsForRemovingNodeTypeList(userContext, hyperledgerNetworkId,  nodeTypeIds, tokensExpr);
+			checkParamsForRemovingNodeList(userContext, hyperledgerNetworkId,  nodeIds, tokensExpr);
 			
 			
 			HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
 			synchronized(hyperledgerNetwork){ 
 				//Will be good when the hyperledgerNetwork loaded from this JVM process cache.
 				//Also good when there is a RAM based DAO implementation
-				hyperledgerNetworkDaoOf(userContext).planToRemoveNodeTypeList(hyperledgerNetwork, nodeTypeIds, allTokens());
-				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeTypeList().done());
-				deleteRelationListInGraph(userContext, hyperledgerNetwork.getNodeTypeList());
+				hyperledgerNetworkDaoOf(userContext).planToRemoveNodeList(hyperledgerNetwork, nodeIds, allTokens());
+				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
+				deleteRelationListInGraph(userContext, hyperledgerNetwork.getNodeList());
 				return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 			}
 	}
 	
-	protected void checkParamsForRemovingNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, 
-		String nodeTypeId, int nodeTypeVersion,String [] tokensExpr) throws Exception{
+	protected void checkParamsForRemovingNode(HfgwUserContext userContext, String hyperledgerNetworkId, 
+		String nodeId, int nodeVersion,String [] tokensExpr) throws Exception{
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork( hyperledgerNetworkId);
-		checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
-		checkerOf(userContext).checkVersionOfNodeType(nodeTypeVersion);
+		checkerOf(userContext).checkIdOfNode(nodeId);
+		checkerOf(userContext).checkVersionOfNode(nodeVersion);
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 	
 	}
-	public  HyperledgerNetwork removeNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, 
-		String nodeTypeId, int nodeTypeVersion,String [] tokensExpr) throws Exception{
+	public  HyperledgerNetwork removeNode(HfgwUserContext userContext, String hyperledgerNetworkId, 
+		String nodeId, int nodeVersion,String [] tokensExpr) throws Exception{
 		
-		checkParamsForRemovingNodeType(userContext,hyperledgerNetworkId, nodeTypeId, nodeTypeVersion,tokensExpr);
+		checkParamsForRemovingNode(userContext,hyperledgerNetworkId, nodeId, nodeVersion,tokensExpr);
 		
-		NodeType nodeType = createIndexedNodeType(nodeTypeId, nodeTypeVersion);
+		Node node = createIndexedNode(nodeId, nodeVersion);
 		HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
 		synchronized(hyperledgerNetwork){ 
 			//Will be good when the hyperledgerNetwork loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			hyperledgerNetwork.removeNodeType( nodeType );		
-			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeTypeList().done());
-			deleteRelationInGraph(userContext, nodeType);
+			hyperledgerNetwork.removeNode( node );		
+			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
+			deleteRelationInGraph(userContext, node);
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 		
 		
 	}
-	protected void checkParamsForCopyingNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, 
-		String nodeTypeId, int nodeTypeVersion,String [] tokensExpr) throws Exception{
+	protected void checkParamsForCopyingNode(HfgwUserContext userContext, String hyperledgerNetworkId, 
+		String nodeId, int nodeVersion,String [] tokensExpr) throws Exception{
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork( hyperledgerNetworkId);
-		checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
-		checkerOf(userContext).checkVersionOfNodeType(nodeTypeVersion);
+		checkerOf(userContext).checkIdOfNode(nodeId);
+		checkerOf(userContext).checkVersionOfNode(nodeVersion);
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 	
 	}
-	public  HyperledgerNetwork copyNodeTypeFrom(HfgwUserContext userContext, String hyperledgerNetworkId, 
-		String nodeTypeId, int nodeTypeVersion,String [] tokensExpr) throws Exception{
+	public  HyperledgerNetwork copyNodeFrom(HfgwUserContext userContext, String hyperledgerNetworkId, 
+		String nodeId, int nodeVersion,String [] tokensExpr) throws Exception{
 		
-		checkParamsForCopyingNodeType(userContext,hyperledgerNetworkId, nodeTypeId, nodeTypeVersion,tokensExpr);
+		checkParamsForCopyingNode(userContext,hyperledgerNetworkId, nodeId, nodeVersion,tokensExpr);
 		
-		NodeType nodeType = createIndexedNodeType(nodeTypeId, nodeTypeVersion);
+		Node node = createIndexedNode(nodeId, nodeVersion);
 		HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
 		synchronized(hyperledgerNetwork){ 
 			//Will be good when the hyperledgerNetwork loaded from this JVM process cache.
@@ -938,42 +1014,46 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 			
 			
 			
-			hyperledgerNetwork.copyNodeTypeFrom( nodeType );		
-			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeTypeList().done());
+			hyperledgerNetwork.copyNodeFrom( node );		
+			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
 			
-			userContext.getManagerGroup().getNodeTypeManager().onNewInstanceCreated(userContext, (NodeType)hyperledgerNetwork.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			userContext.getManagerGroup().getNodeManager().onNewInstanceCreated(userContext, (Node)hyperledgerNetwork.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 		
 	}
 	
-	protected void checkParamsForUpdatingNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String nodeTypeId, int nodeTypeVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+	protected void checkParamsForUpdatingNode(HfgwUserContext userContext, String hyperledgerNetworkId, String nodeId, int nodeVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
 		
 
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
-		checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
-		checkerOf(userContext).checkVersionOfNodeType(nodeTypeVersion);
+		checkerOf(userContext).checkIdOfNode(nodeId);
+		checkerOf(userContext).checkVersionOfNode(nodeVersion);
 		
 
-		if(NodeType.NAME_PROPERTY.equals(property)){
-			checkerOf(userContext).checkNameOfNodeType(parseString(newValueExpr));
+		if(Node.NAME_PROPERTY.equals(property)){
+			checkerOf(userContext).checkNameOfNode(parseString(newValueExpr));
 		}
 		
-		if(NodeType.CODE_PROPERTY.equals(property)){
-			checkerOf(userContext).checkCodeOfNodeType(parseString(newValueExpr));
+		if(Node.URL_PROPERTY.equals(property)){
+			checkerOf(userContext).checkUrlOfNode(parseString(newValueExpr));
 		}
 		
-		if(NodeType.ADDRESS_PROPERTY.equals(property)){
-			checkerOf(userContext).checkAddressOfNodeType(parseString(newValueExpr));
+		if(Node.TLS_CACERT_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTlsCacertOfNode(parseString(newValueExpr));
 		}
 		
-		if(NodeType.CONTACT_PERSON_PROPERTY.equals(property)){
-			checkerOf(userContext).checkContactPersonOfNodeType(parseString(newValueExpr));
+		if(Node.ADDRESS_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAddressOfNode(parseString(newValueExpr));
 		}
 		
-		if(NodeType.CONTACT_TELEPHONE_PROPERTY.equals(property)){
-			checkerOf(userContext).checkContactTelephoneOfNodeType(parseString(newValueExpr));
+		if(Node.CONTACT_PERSON_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactPersonOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.CONTACT_TELEPHONE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactTelephoneOfNode(parseString(newValueExpr));
 		}
 		
 	
@@ -981,12 +1061,12 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 	
 	}
 	
-	public  HyperledgerNetwork updateNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String nodeTypeId, int nodeTypeVersion, String property, String newValueExpr,String [] tokensExpr)
+	public  HyperledgerNetwork updateNode(HfgwUserContext userContext, String hyperledgerNetworkId, String nodeId, int nodeVersion, String property, String newValueExpr,String [] tokensExpr)
 			throws Exception{
 		
-		checkParamsForUpdatingNodeType(userContext, hyperledgerNetworkId, nodeTypeId, nodeTypeVersion, property, newValueExpr,  tokensExpr);
+		checkParamsForUpdatingNode(userContext, hyperledgerNetworkId, nodeId, nodeVersion, property, newValueExpr,  tokensExpr);
 		
-		Map<String,Object> loadTokens = this.tokens().withNodeTypeList().searchNodeTypeListWith(NodeType.ID_PROPERTY, "eq", nodeTypeId).done();
+		Map<String,Object> loadTokens = this.tokens().withNodeList().searchNodeListWith(Node.ID_PROPERTY, "eq", nodeId).done();
 		
 		
 		
@@ -995,18 +1075,18 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		synchronized(hyperledgerNetwork){ 
 			//Will be good when the hyperledgerNetwork loaded from this JVM process cache.
 			//Also good when there is a RAM based DAO implementation
-			//hyperledgerNetwork.removeNodeType( nodeType );	
+			//hyperledgerNetwork.removeNode( node );	
 			//make changes to AcceleraterAccount.
-			NodeType nodeTypeIndex = createIndexedNodeType(nodeTypeId, nodeTypeVersion);
+			Node nodeIndex = createIndexedNode(nodeId, nodeVersion);
 		
-			NodeType nodeType = hyperledgerNetwork.findTheNodeType(nodeTypeIndex);
-			if(nodeType == null){
-				throw new HyperledgerNetworkManagerException(nodeType+" is NOT FOUND" );
+			Node node = hyperledgerNetwork.findTheNode(nodeIndex);
+			if(node == null){
+				throw new HyperledgerNetworkManagerException(node+" is NOT FOUND" );
 			}
 			
-			nodeType.changeProperty(property, newValueExpr);
+			node.changeProperty(property, newValueExpr);
 			
-			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeTypeList().done());
+			hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withNodeList().done());
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 
@@ -1511,7 +1591,7 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 
 
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payLoad, String channelId, String chainCodeId, String transactionId, String blockId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
 
@@ -1524,6 +1604,8 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		
 		checkerOf(userContext).checkChainCodeIdOfServiceRecord(chainCodeId);
 		
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
+		
 		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
@@ -1532,12 +1614,12 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 
 	
 	}
-	public  HyperledgerNetwork addServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payLoad, String channelId, String chainCodeId, String transactionId, String blockId, String [] tokensExpr) throws Exception
+	public  HyperledgerNetwork addServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,hyperledgerNetworkId,name, payLoad, channelId, chainCodeId, transactionId, blockId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,hyperledgerNetworkId,name, payLoad, channelId, chainCodeId, chainCodeFunction, transactionId, blockId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, channelId, chainCodeId, transactionId, blockId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, channelId, chainCodeId, chainCodeFunction, transactionId, blockId);
 		
 		HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
 		synchronized(hyperledgerNetwork){ 
@@ -1550,22 +1632,23 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId,String id,String name,String payLoad,String transactionId,String blockId,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId,String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
 		checkerOf(userContext).checkNameOfServiceRecord( name);
 		checkerOf(userContext).checkPayLoadOfServiceRecord( payLoad);
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
 		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 		
 	}
-	public  HyperledgerNetwork updateServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId, String id,String name,String payLoad,String transactionId,String blockId, String [] tokensExpr) throws Exception
+	public  HyperledgerNetwork updateServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId, String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,hyperledgerNetworkId,id,name,payLoad,transactionId,blockId,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,hyperledgerNetworkId,id,name,payLoad,chainCodeFunction,transactionId,blockId,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1582,6 +1665,7 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		
 		item.updateName( name );
 		item.updatePayLoad( payLoad );
+		item.updateChainCodeFunction( chainCodeFunction );
 		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
 
@@ -1594,7 +1678,7 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String channelId, String chainCodeId, String transactionId, String blockId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
@@ -1607,6 +1691,7 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		ChainCode  chainCode = new ChainCode();
 		chainCode.setId(chainCodeId);		
 		serviceRecord.setChainCode(chainCode);		
+		serviceRecord.setChainCodeFunction(chainCodeFunction);		
 		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
@@ -1728,6 +1813,10 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		
 		if(ServiceRecord.PAY_LOAD_PROPERTY.equals(property)){
 			checkerOf(userContext).checkPayLoadOfServiceRecord(parseString(newValueExpr));
+		}
+		
+		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
+			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){

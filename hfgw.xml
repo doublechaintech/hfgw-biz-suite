@@ -16,10 +16,6 @@
 	<node_type
     name="peer|orderer"
     code="peer|orderer"
-    network="$(hyperledger_network)"
-		address="北京市建国门内大街100号"
-		contact_person="张三"
-		contact_telephone="010-9998880"
     _features="status"
     _identified_by="code"
   />
@@ -30,7 +26,12 @@
 		url="grpcs://www.skynet-peer.skynet.com:7051|grpcs://www.skynet-orderer.skynet.com:7050|[1,200]"
 		organization="$(organization)"
 		channel="$(channel)"
+		network="$(hyperledger_network)"
+		tls_cacert="text()"
 		type="$(node_type)"
+		address="北京市建国门内大街100号"
+		contact_person="张三"
+		contact_telephone="010-9998880"
 	/>
 
 	<grpc_option
@@ -39,16 +40,30 @@
 		node="$(node)"
 		/>
 
-	<tls_cacert
-		path="/catls.pem|[0,200]"
-		cert="text()|[0,1000]"
-		node="$(node)"
-		/>
-
 	<channel
 		name="channelname|[1,20]"
 		network="$(hyperledger_network)"
 		/>
+
+<!--
+		"endorsingPeer": true,
+		"chaincodeQuery": true,
+		"ledgerQuery": true,
+		"eventSource": true,
+		"discover": true
+	-->
+	<peer_role
+    name="endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover"
+    code="endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover"
+    _features="status"
+    _identified_by="code"
+	 />
+
+  <channel_peer_role
+		channel="$(channel)"
+    node="$(node)"
+		peer_role="$(peer_role)"
+	/>
 
   <chain_code
 		name="sacc:1"
@@ -72,6 +87,7 @@
 		pay_load="text()"
 		channel="$(channel)"
 		chain_code="$(chain_code)"
+		chain_code_function="transact|[1,20]"
 		transaction_id="a21fe3srw|[1,200]"
 		block_id="a21fe3srw|[1,200]"
 		create_time="createTime()"

@@ -20,6 +20,7 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
  		setPayLoad(serviceRecord, rs, rowNumber); 		
  		setChannel(serviceRecord, rs, rowNumber); 		
  		setChainCode(serviceRecord, rs, rowNumber); 		
+ 		setChainCodeFunction(serviceRecord, rs, rowNumber); 		
  		setTransactionId(serviceRecord, rs, rowNumber); 		
  		setBlockId(serviceRecord, rs, rowNumber); 		
  		setCreateTime(serviceRecord, rs, rowNumber); 		
@@ -107,6 +108,18 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
  		serviceRecord.setChainCode(createEmptyChainCode(chainCodeId));
  	}
  	
+	protected void setChainCodeFunction(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String chainCodeFunction = rs.getString(ServiceRecordTable.COLUMN_CHAIN_CODE_FUNCTION);
+		if(chainCodeFunction == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		serviceRecord.setChainCodeFunction(chainCodeFunction);
+	}
+		
 	protected void setTransactionId(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long

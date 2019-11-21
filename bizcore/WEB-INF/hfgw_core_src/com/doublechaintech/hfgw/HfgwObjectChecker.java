@@ -134,7 +134,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"description",this::checkDescriptionOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"version",this::checkVersionOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"organizationList",this::checkOrganizationListOfHyperledgerNetwork);
-		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"nodeTypeList",this::checkNodeTypeListOfHyperledgerNetwork);
+		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"nodeList",this::checkNodeListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"channelList",this::checkChannelListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"applicationList",this::checkApplicationListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfHyperledgerNetwork);
@@ -169,10 +169,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"id",this::checkIdOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"name",this::checkNameOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"code",this::checkCodeOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"network",this::checkNetworkOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"address",this::checkAddressOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"contactPerson",this::checkContactPersonOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"contactTelephone",this::checkContactTelephoneOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"version",this::checkVersionOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"nodeList",this::checkNodeListOfNodeType);
 		return this;
@@ -190,10 +186,15 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(nodeAsBaseEntity,"url",this::checkUrlOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"organization",this::checkOrganizationOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"channel",this::checkChannelOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"network",this::checkNetworkOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"tlsCacert",this::checkTlsCacertOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"type",this::checkTypeOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"address",this::checkAddressOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"contactPerson",this::checkContactPersonOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"contactTelephone",this::checkContactTelephoneOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"version",this::checkVersionOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"grpcOptionList",this::checkGrpcOptionListOfNode);
-		commonObjectPropertyCheck(nodeAsBaseEntity,"tlsCacertList",this::checkTlsCacertListOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"channelPeerRoleList",this::checkChannelPeerRoleListOfNode);
 		return this;
 
 	}
@@ -213,21 +214,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 
 	}
 
-	public HfgwObjectChecker checkAndFixTlsCacert(BaseEntity tlsCacertAsBaseEntity){
-
-		if( isChecked(tlsCacertAsBaseEntity) ){
-			return this;
-		}
-		markAsChecked(tlsCacertAsBaseEntity);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"id",this::checkIdOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"path",this::checkPathOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"cert",this::checkCertOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"node",this::checkNodeOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"version",this::checkVersionOfTlsCacert);
-		return this;
-
-	}
-
 	public HfgwObjectChecker checkAndFixChannel(BaseEntity channelAsBaseEntity){
 
 		if( isChecked(channelAsBaseEntity) ){
@@ -239,9 +225,40 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(channelAsBaseEntity,"network",this::checkNetworkOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"version",this::checkVersionOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"nodeList",this::checkNodeListOfChannel);
+		commonObjectPropertyCheck(channelAsBaseEntity,"channelPeerRoleList",this::checkChannelPeerRoleListOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"chainCodeList",this::checkChainCodeListOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"applicationList",this::checkApplicationListOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfChannel);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixPeerRole(BaseEntity peerRoleAsBaseEntity){
+
+		if( isChecked(peerRoleAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(peerRoleAsBaseEntity);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"id",this::checkIdOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"name",this::checkNameOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"code",this::checkCodeOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"version",this::checkVersionOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"channelPeerRoleList",this::checkChannelPeerRoleListOfPeerRole);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixChannelPeerRole(BaseEntity channelPeerRoleAsBaseEntity){
+
+		if( isChecked(channelPeerRoleAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(channelPeerRoleAsBaseEntity);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"id",this::checkIdOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"channel",this::checkChannelOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"node",this::checkNodeOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"peerRole",this::checkPeerRoleOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"version",this::checkVersionOfChannelPeerRole);
 		return this;
 
 	}
@@ -294,6 +311,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"payLoad",this::checkPayLoadOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"channel",this::checkChannelOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"chainCode",this::checkChainCodeOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"chainCodeFunction",this::checkChainCodeFunctionOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"transactionId",this::checkTransactionIdOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"blockId",this::checkBlockIdOfServiceRecord);
 		commonObjectPropertyAssign(serviceRecordAsBaseEntity,"createTime",this::assignCreateTimeOfServiceRecord);
@@ -647,10 +665,10 @@ public class HfgwObjectChecker extends HfgwChecker{
 		return this;
 	}
 
-	public HfgwObjectChecker checkNodeTypeListOfHyperledgerNetwork(List<BaseEntity> nodeTypeList){
+	public HfgwObjectChecker checkNodeListOfHyperledgerNetwork(List<BaseEntity> nodeList){
 		AtomicInteger index = new AtomicInteger();
-		nodeTypeList.stream().forEach(nodeType->
-			commonObjectElementCheck(nodeType,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixNodeType));
+		nodeList.stream().forEach(node->
+			commonObjectElementCheck(node,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixNode));
 		return this;
 	}
 
@@ -717,20 +735,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 		return this;
 	}
 
-	public static final String NETWORK_OF_NODE_TYPE = "node_type.network";
-
-
-	public HfgwObjectChecker checkNetworkOfNodeType(BaseEntity networkAsBaseEntity){
-
-		if(networkAsBaseEntity == null){
-			checkBaseEntityReference(networkAsBaseEntity,true,NETWORK_OF_NODE_TYPE);
-			return this;
-		}
-		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
-		return this;
-	}
-
-
 	public HfgwObjectChecker checkGrpcOptionListOfNode(List<BaseEntity> grpcOptionList){
 		AtomicInteger index = new AtomicInteger();
 		grpcOptionList.stream().forEach(grpcOption->
@@ -738,10 +742,10 @@ public class HfgwObjectChecker extends HfgwChecker{
 		return this;
 	}
 
-	public HfgwObjectChecker checkTlsCacertListOfNode(List<BaseEntity> tlsCacertList){
+	public HfgwObjectChecker checkChannelPeerRoleListOfNode(List<BaseEntity> channelPeerRoleList){
 		AtomicInteger index = new AtomicInteger();
-		tlsCacertList.stream().forEach(tlsCacert->
-			commonObjectElementCheck(tlsCacert,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixTlsCacert));
+		channelPeerRoleList.stream().forEach(channelPeerRole->
+			commonObjectElementCheck(channelPeerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannelPeerRole));
 		return this;
 	}
 
@@ -769,6 +773,20 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		checkAndFixChannel(channelAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String NETWORK_OF_NODE = "node.network";
+
+
+	public HfgwObjectChecker checkNetworkOfNode(BaseEntity networkAsBaseEntity){
+
+		if(networkAsBaseEntity == null){
+			checkBaseEntityReference(networkAsBaseEntity,true,NETWORK_OF_NODE);
+			return this;
+		}
+		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
 		return this;
 	}
 
@@ -801,24 +819,17 @@ public class HfgwObjectChecker extends HfgwChecker{
 	}
 
 
-	public static final String NODE_OF_TLS_CACERT = "tls_cacert.node";
-
-
-	public HfgwObjectChecker checkNodeOfTlsCacert(BaseEntity nodeAsBaseEntity){
-
-		if(nodeAsBaseEntity == null){
-			checkBaseEntityReference(nodeAsBaseEntity,true,NODE_OF_TLS_CACERT);
-			return this;
-		}
-		checkAndFixNode(nodeAsBaseEntity);
-		return this;
-	}
-
-
 	public HfgwObjectChecker checkNodeListOfChannel(List<BaseEntity> nodeList){
 		AtomicInteger index = new AtomicInteger();
 		nodeList.stream().forEach(node->
 			commonObjectElementCheck(node,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixNode));
+		return this;
+	}
+
+	public HfgwObjectChecker checkChannelPeerRoleListOfChannel(List<BaseEntity> channelPeerRoleList){
+		AtomicInteger index = new AtomicInteger();
+		channelPeerRoleList.stream().forEach(channelPeerRole->
+			commonObjectElementCheck(channelPeerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannelPeerRole));
 		return this;
 	}
 
@@ -853,6 +864,55 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
+		return this;
+	}
+
+
+	public HfgwObjectChecker checkChannelPeerRoleListOfPeerRole(List<BaseEntity> channelPeerRoleList){
+		AtomicInteger index = new AtomicInteger();
+		channelPeerRoleList.stream().forEach(channelPeerRole->
+			commonObjectElementCheck(channelPeerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannelPeerRole));
+		return this;
+	}
+
+	public static final String CHANNEL_OF_CHANNEL_PEER_ROLE = "channel_peer_role.channel";
+
+
+	public HfgwObjectChecker checkChannelOfChannelPeerRole(BaseEntity channelAsBaseEntity){
+
+		if(channelAsBaseEntity == null){
+			checkBaseEntityReference(channelAsBaseEntity,true,CHANNEL_OF_CHANNEL_PEER_ROLE);
+			return this;
+		}
+		checkAndFixChannel(channelAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String NODE_OF_CHANNEL_PEER_ROLE = "channel_peer_role.node";
+
+
+	public HfgwObjectChecker checkNodeOfChannelPeerRole(BaseEntity nodeAsBaseEntity){
+
+		if(nodeAsBaseEntity == null){
+			checkBaseEntityReference(nodeAsBaseEntity,true,NODE_OF_CHANNEL_PEER_ROLE);
+			return this;
+		}
+		checkAndFixNode(nodeAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String PEER_ROLE_OF_CHANNEL_PEER_ROLE = "channel_peer_role.peer_role";
+
+
+	public HfgwObjectChecker checkPeerRoleOfChannelPeerRole(BaseEntity peerRoleAsBaseEntity){
+
+		if(peerRoleAsBaseEntity == null){
+			checkBaseEntityReference(peerRoleAsBaseEntity,true,PEER_ROLE_OF_CHANNEL_PEER_ROLE);
+			return this;
+		}
+		checkAndFixPeerRole(peerRoleAsBaseEntity);
 		return this;
 	}
 

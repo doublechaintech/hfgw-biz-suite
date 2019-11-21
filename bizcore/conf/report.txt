@@ -1,13 +1,13 @@
 
 @warning object definition: hyperledger_network: word 'hyperledger' seems not found in library
 @warning organization.mspid: word 'mspid' seems not found in library
+@warning node.tls_cacert: word 'tls' seems not found in library
+@warning node.tls_cacert: word 'cacert' seems not found in library
 @warning object definition: grpc_option: word 'grpc' seems not found in library
-@warning object definition: tls_cacert: word 'tls' seems not found in library
-@warning object definition: tls_cacert: word 'cacert' seems not found in library
 
 
 
-=================Execute Report (Model Time 700101T0800) @Thu Nov 21 11:27:25 CST 2019, 28 objects and 207 fields===========================
+=================Execute Report (Model Time 700101T0800) @Thu Nov 21 17:29:33 CST 2019, 29 objects and 213 fields===========================
 
 
 
@@ -26,12 +26,6 @@ Info: Add virtual field [organizations(es)] to <hyperledger_network>
  processing: node_type
 
 
- processing: node_type.hyperledger_network.network
-
-Info: Add virtual field [node_types(es)] to <hyperledger_network>
-	node_type.network
-
-
  processing: node
 
 
@@ -45,6 +39,12 @@ Info: Add virtual field [nodes(es)] to <organization>
 
 Info: Add virtual field [nodes(es)] to <channel>
 	node.channel
+
+
+ processing: node.hyperledger_network.network
+
+Info: Add virtual field [nodes(es)] to <hyperledger_network>
+	node.network
 
 
  processing: node.node_type.type
@@ -62,15 +62,6 @@ Info: Add virtual field [grpc_options(es)] to <node>
 	grpc_option.node
 
 
- processing: tls_cacert
-
-
- processing: tls_cacert.node.node
-
-Info: Add virtual field [tls_cacerts(es)] to <node>
-	tls_cacert.node
-
-
  processing: channel
 
 
@@ -78,6 +69,30 @@ Info: Add virtual field [tls_cacerts(es)] to <node>
 
 Info: Add virtual field [channels(es)] to <hyperledger_network>
 	channel.network
+
+
+ processing: peer_role
+
+
+ processing: channel_peer_role
+
+
+ processing: channel_peer_role.channel.channel
+
+Info: Add virtual field [channel_peer_roles(es)] to <channel>
+	channel_peer_role.channel
+
+
+ processing: channel_peer_role.node.node
+
+Info: Add virtual field [channel_peer_roles(es)] to <node>
+	channel_peer_role.node
+
+
+ processing: channel_peer_role.peer_role.peer_role
+
+Info: Add virtual field [channel_peer_roles(es)] to <peer_role>
+	channel_peer_role.peer_role
 
 
  processing: chain_code
@@ -166,7 +181,7 @@ hyperledger_network{
 	}
 	references field(7){
 		organizationList	network(__no_group)--network;
-		nodeTypeList	network(__no_group)--network;
+		nodeList	network(__no_group)--network;
 		channelList	network(__no_group)--network;
 		applicationList	network(__no_group)--network;
 		serviceRecordList	network(__no_group)--network;
@@ -189,34 +204,35 @@ organization{
 } depth=1; isRoot = false
 
 node_type{
-	fields(8){
+	fields(4){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('peer|orderer'), verb: false, required: true;
 		string	code('peer|orderer'), verb: false, required: true;
-		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: nodeTypeList;
-		string	address('北京市建国门内大街100号'), verb: false, required: true;
-		string	contact_person('张三'), verb: false, required: true;
-		string	contact_telephone('010-9998880'), verb: false, required: true;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
 		nodeList	type(__no_group)--type;
 	}
-} depth=1; isRoot = false
+} depth=0; isRoot = true
 
 node{
-	fields(7){
+	fields(12){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('skynet-peer|skynet-orderer'), verb: false, required: true;
 		string	url('grpcs://www.skynet-peer.skynet.com:7051|grpcs://www.skynet-orderer.skynet.com:7050'), verb: false, required: true;
 		organization	organization('$(object)'), verb: false, required: true, referenceBy: nodeList;
 		channel	channel('$(object)'), verb: false, required: true, referenceBy: nodeList;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: nodeList;
+		string_longtext	tls_cacert('text()'), verb: false, required: true;
 		node_type	type('$(object)'), verb: false, required: true, referenceBy: nodeList;
+		string	address('北京市建国门内大街100号'), verb: false, required: true;
+		string	contact_person('张三'), verb: false, required: true;
+		string	contact_telephone('010-9998880'), verb: false, required: true;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(2){
 		grpcOptionList	node(__no_group)--node;
-		tlsCacertList	node(__no_group)--node;
+		channelPeerRoleList	node(__no_group)--node;
 	}
 } depth=2; isRoot = false
 
@@ -232,18 +248,6 @@ grpc_option{
 	}
 } depth=3; isRoot = false
 
-tls_cacert{
-	fields(5){
-		string	id('ABCD'), verb: false, required: true;
-		string	path('/catls.pem'), verb: false, required: true;
-		string_longtext	cert('text()'), verb: false, required: true;
-		node	node('$(object)'), verb: false, required: true, referenceBy: tlsCacertList;
-		int	version('2147483647'), verb: false, required: true;
-	}
-	references field(0){
-	}
-} depth=3; isRoot = false
-
 channel{
 	fields(4){
 		string	id('ABCD'), verb: false, required: true;
@@ -251,13 +255,38 @@ channel{
 		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: channelList;
 		int	version('2147483647'), verb: false, required: true;
 	}
-	references field(4){
+	references field(5){
 		nodeList	channel(__no_group)--channel;
+		channelPeerRoleList	channel(__no_group)--channel;
 		chainCodeList	channel(__no_group)--channel;
 		applicationList	channel(__no_group)--channel;
 		serviceRecordList	channel(__no_group)--channel;
 	}
 } depth=1; isRoot = false
+
+peer_role{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
+		string	code('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		channelPeerRoleList	peer_role(__no_group)--peer_role;
+	}
+} depth=0; isRoot = true
+
+channel_peer_role{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		channel	channel('$(object)'), verb: false, required: true, referenceBy: channelPeerRoleList;
+		node	node('$(object)'), verb: false, required: true, referenceBy: channelPeerRoleList;
+		peer_role	peer_role('$(object)'), verb: false, required: true, referenceBy: channelPeerRoleList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
 
 chain_code{
 	fields(6){
@@ -291,12 +320,13 @@ application{
 } depth=2; isRoot = false
 
 service_record{
-	fields(12){
+	fields(13){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('调用链码|网络管理'), verb: false, required: true;
 		string_longtext	pay_load('text()'), verb: false, required: true;
 		channel	channel('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		chain_code	chain_code('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
+		string	chain_code_function('transact'), verb: false, required: true;
 		string	transaction_id('a21fe3srw'), verb: false, required: true;
 		string	block_id('a21fe3srw'), verb: false, required: true;
 		date_time_create	create_time('createTime()'), verb: false, required: true;
@@ -349,7 +379,7 @@ hyperledger_network{
 	}
 	references field(7){
 		organizationList	network(__no_group)--network;
-		nodeTypeList	network(__no_group)--network;
+		nodeList	network(__no_group)--network;
 		channelList	network(__no_group)--network;
 		applicationList	network(__no_group)--network;
 		serviceRecordList	network(__no_group)--network;
@@ -372,34 +402,35 @@ organization{
 } depth=1; isRoot = false
 
 node_type{
-	fields(8){
+	fields(4){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('peer|orderer'), verb: false, required: true;
 		string	code('peer|orderer'), verb: false, required: true;
-		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: nodeTypeList;
-		string	address('北京市建国门内大街100号'), verb: false, required: true;
-		string	contact_person('张三'), verb: false, required: true;
-		string	contact_telephone('010-9998880'), verb: false, required: true;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
 		nodeList	type(__no_group)--type;
 	}
-} depth=1; isRoot = false
+} depth=0; isRoot = true
 
 node{
-	fields(7){
+	fields(12){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('skynet-peer|skynet-orderer'), verb: false, required: true;
 		string	url('grpcs://www.skynet-peer.skynet.com:7051|grpcs://www.skynet-orderer.skynet.com:7050'), verb: false, required: true;
 		organization	organization('$(object)'), verb: false, required: true, referenceBy: nodeList;
 		channel	channel('$(object)'), verb: false, required: true, referenceBy: nodeList;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: nodeList;
+		string_longtext	tls_cacert('text()'), verb: false, required: true;
 		node_type	type('$(object)'), verb: false, required: true, referenceBy: nodeList;
+		string	address('北京市建国门内大街100号'), verb: false, required: true;
+		string	contact_person('张三'), verb: false, required: true;
+		string	contact_telephone('010-9998880'), verb: false, required: true;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(2){
 		grpcOptionList	node(__no_group)--node;
-		tlsCacertList	node(__no_group)--node;
+		channelPeerRoleList	node(__no_group)--node;
 	}
 } depth=2; isRoot = false
 
@@ -415,18 +446,6 @@ grpc_option{
 	}
 } depth=3; isRoot = false
 
-tls_cacert{
-	fields(5){
-		string	id('ABCD'), verb: false, required: true;
-		string	path('/catls.pem'), verb: false, required: true;
-		string_longtext	cert('text()'), verb: false, required: true;
-		node	node('$(object)'), verb: false, required: true, referenceBy: tlsCacertList;
-		int	version('2147483647'), verb: false, required: true;
-	}
-	references field(0){
-	}
-} depth=3; isRoot = false
-
 channel{
 	fields(4){
 		string	id('ABCD'), verb: false, required: true;
@@ -434,13 +453,38 @@ channel{
 		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: channelList;
 		int	version('2147483647'), verb: false, required: true;
 	}
-	references field(4){
+	references field(5){
 		nodeList	channel(__no_group)--channel;
+		channelPeerRoleList	channel(__no_group)--channel;
 		chainCodeList	channel(__no_group)--channel;
 		applicationList	channel(__no_group)--channel;
 		serviceRecordList	channel(__no_group)--channel;
 	}
 } depth=1; isRoot = false
+
+peer_role{
+	fields(4){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
+		string	code('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		channelPeerRoleList	peer_role(__no_group)--peer_role;
+	}
+} depth=0; isRoot = true
+
+channel_peer_role{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		channel	channel('$(object)'), verb: false, required: true, referenceBy: channelPeerRoleList;
+		node	node('$(object)'), verb: false, required: true, referenceBy: channelPeerRoleList;
+		peer_role	peer_role('$(object)'), verb: false, required: true, referenceBy: channelPeerRoleList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(0){
+	}
+} depth=3; isRoot = false
 
 chain_code{
 	fields(6){
@@ -474,12 +518,13 @@ application{
 } depth=2; isRoot = false
 
 service_record{
-	fields(12){
+	fields(13){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('调用链码|网络管理'), verb: false, required: true;
 		string_longtext	pay_load('text()'), verb: false, required: true;
 		channel	channel('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		chain_code	chain_code('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
+		string	chain_code_function('transact'), verb: false, required: true;
 		string	transaction_id('a21fe3srw'), verb: false, required: true;
 		string	block_id('a21fe3srw'), verb: false, required: true;
 		date_time_create	create_time('createTime()'), verb: false, required: true;

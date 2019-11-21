@@ -74,9 +74,10 @@ public class NodeTokens extends CommonTokens{
 		return start()
 			.withOrganization()
 			.withChannel()
+			.withNetwork()
 			.withType()
 			.withGrpcOptionList()
-			.withTlsCacertList();
+			.withChannelPeerRoleList();
 	
 	}
 	public static NodeTokens withoutListsTokens(){
@@ -84,6 +85,7 @@ public class NodeTokens extends CommonTokens{
 		return start()
 			.withOrganization()
 			.withChannel()
+			.withNetwork()
 			.withType();
 	
 	}
@@ -119,6 +121,16 @@ public class NodeTokens extends CommonTokens{
 	}
 	public NodeTokens withChannel(){		
 		addSimpleOptions(CHANNEL);
+		return this;
+	}
+	
+	
+	protected static final String NETWORK = "network";
+	public String getNetwork(){
+		return NETWORK;
+	}
+	public NodeTokens withNetwork(){		
+		addSimpleOptions(NETWORK);
 		return this;
 	}
 	
@@ -203,71 +215,71 @@ public class NodeTokens extends CommonTokens{
 	
 	
 		
-	protected static final String TLS_CACERT_LIST = "tlsCacertList";
-	public String getTlsCacertList(){
-		return TLS_CACERT_LIST;
+	protected static final String CHANNEL_PEER_ROLE_LIST = "channelPeerRoleList";
+	public String getChannelPeerRoleList(){
+		return CHANNEL_PEER_ROLE_LIST;
 	}
-	public NodeTokens withTlsCacertList(){		
-		addSimpleOptions(TLS_CACERT_LIST);
+	public NodeTokens withChannelPeerRoleList(){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST);
 		return this;
 	}
-	public NodeTokens analyzeTlsCacertList(){		
-		addSimpleOptions(TLS_CACERT_LIST+".anaylze");
+	public NodeTokens analyzeChannelPeerRoleList(){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+".anaylze");
 		return this;
 	}
-	public boolean analyzeTlsCacertListEnabled(){		
+	public boolean analyzeChannelPeerRoleListEnabled(){		
 		
-		if(checkOptions(this.options(), TLS_CACERT_LIST+".anaylze")){
+		if(checkOptions(this.options(), CHANNEL_PEER_ROLE_LIST+".anaylze")){
 			return true; //most of the case, should call here
 		}
 		//if not true, then query for global setting
 		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
 	}
-	public NodeTokens extractMoreFromTlsCacertList(String idsSeperatedWithComma){		
-		addSimpleOptions(TLS_CACERT_LIST+".extractIds", idsSeperatedWithComma);
+	public NodeTokens extractMoreFromChannelPeerRoleList(String idsSeperatedWithComma){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+".extractIds", idsSeperatedWithComma);
 		return this;
 	}
 	
 	
 	
 	
-	private int tlsCacertListSortCounter = 0;
-	public NodeTokens sortTlsCacertListWith(String field, String descOrAsc){		
-		addSortMoreOptions(TLS_CACERT_LIST,tlsCacertListSortCounter++, field, descOrAsc);
+	private int channelPeerRoleListSortCounter = 0;
+	public NodeTokens sortChannelPeerRoleListWith(String field, String descOrAsc){		
+		addSortMoreOptions(CHANNEL_PEER_ROLE_LIST,channelPeerRoleListSortCounter++, field, descOrAsc);
 		return this;
 	}
-	private int tlsCacertListSearchCounter = 0;
-	public NodeTokens searchTlsCacertListWith(String field, String verb, String value){		
+	private int channelPeerRoleListSearchCounter = 0;
+	public NodeTokens searchChannelPeerRoleListWith(String field, String verb, String value){		
 		
-		withTlsCacertList();
-		addSearchMoreOptions(TLS_CACERT_LIST,tlsCacertListSearchCounter++, field, verb, value);
+		withChannelPeerRoleList();
+		addSearchMoreOptions(CHANNEL_PEER_ROLE_LIST,channelPeerRoleListSearchCounter++, field, verb, value);
 		return this;
 	}
 	
 	
 	
-	public NodeTokens searchAllTextOfTlsCacertList(String verb, String value){	
-		String field = "id|path|cert";
-		addSearchMoreOptions(TLS_CACERT_LIST,tlsCacertListSearchCounter++, field, verb, value);
+	public NodeTokens searchAllTextOfChannelPeerRoleList(String verb, String value){	
+		String field = "id";
+		addSearchMoreOptions(CHANNEL_PEER_ROLE_LIST,channelPeerRoleListSearchCounter++, field, verb, value);
 		return this;
 	}
 	
 	
 	
-	public NodeTokens rowsPerPageOfTlsCacertList(int rowsPerPage){		
-		addSimpleOptions(TLS_CACERT_LIST+"RowsPerPage",rowsPerPage);
+	public NodeTokens rowsPerPageOfChannelPeerRoleList(int rowsPerPage){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"RowsPerPage",rowsPerPage);
 		return this;
 	}
-	public NodeTokens currentPageNumberOfTlsCacertList(int currentPageNumber){		
-		addSimpleOptions(TLS_CACERT_LIST+"CurrentPage",currentPageNumber);
+	public NodeTokens currentPageNumberOfChannelPeerRoleList(int currentPageNumber){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"CurrentPage",currentPageNumber);
 		return this;
 	}
-	public NodeTokens retainColumnsOfTlsCacertList(String[] columns){		
-		addSimpleOptions(TLS_CACERT_LIST+"RetainColumns",columns);
+	public NodeTokens retainColumnsOfChannelPeerRoleList(String[] columns){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"RetainColumns",columns);
 		return this;
 	}
-	public NodeTokens excludeColumnsOfTlsCacertList(String[] columns){		
-		addSimpleOptions(TLS_CACERT_LIST+"ExcludeColumns",columns);
+	public NodeTokens excludeColumnsOfChannelPeerRoleList(String[] columns){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -277,7 +289,7 @@ public class NodeTokens extends CommonTokens{
 	public  NodeTokens searchEntireObjectText(String verb, String value){
 		
 		searchAllTextOfGrpcOptionList(verb, value);	
-		searchAllTextOfTlsCacertList(verb, value);	
+		searchAllTextOfChannelPeerRoleList(verb, value);	
 		return this;
 	}
 }

@@ -64,6 +64,7 @@ const showAssociateDialog = (targetComponent) => {
   
   const { OrganizationAssociateForm } = GlobalComponents
   const { ChannelAssociateForm } = GlobalComponents
+  const { HyperledgerNetworkAssociateForm } = GlobalComponents
   const { NodeTypeAssociateForm } = GlobalComponents
 
 
@@ -80,7 +81,11 @@ const showAssociateDialog = (targetComponent) => {
 	visible={currentAssociateModal==='channel'} 
 	data={{nodeList:selectedRows}} owner={owner}  
 	onCancel={()=>toggleAssociateModalVisible(targetComponent,'channel')} 
-	onCreate={()=>toggleAssociateModalVisible(targetComponent,'channel')}/> <NodeTypeAssociateForm 
+	onCreate={()=>toggleAssociateModalVisible(targetComponent,'channel')}/> <HyperledgerNetworkAssociateForm 
+	visible={currentAssociateModal==='network'} 
+	data={{nodeList:selectedRows}} owner={owner}  
+	onCancel={()=>toggleAssociateModalVisible(targetComponent,'network')} 
+	onCreate={()=>toggleAssociateModalVisible(targetComponent,'network')}/> <NodeTypeAssociateForm 
 	visible={currentAssociateModal==='type'} 
 	data={{nodeList:selectedRows}} owner={owner}  
 	onCancel={()=>toggleAssociateModalVisible(targetComponent,'type')} 

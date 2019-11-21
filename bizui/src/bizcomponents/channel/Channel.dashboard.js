@@ -149,7 +149,7 @@ class ChannelDashboard extends Component {
 
   render() {
     // eslint-disable-next-line max-len
-    const { id,displayName, nodeListMetaInfo, chainCodeListMetaInfo, applicationListMetaInfo, serviceRecordListMetaInfo, nodeCount, chainCodeCount, applicationCount, serviceRecordCount } = this.props.channel
+    const { id,displayName, nodeListMetaInfo, channelPeerRoleListMetaInfo, chainCodeListMetaInfo, applicationListMetaInfo, serviceRecordListMetaInfo, nodeCount, channelPeerRoleCount, chainCodeCount, applicationCount, serviceRecordCount } = this.props.channel
     if(!this.props.channel.class){
       return null
     }
@@ -159,6 +159,7 @@ class ChannelDashboard extends Component {
     	cardsSource: this.props.channel,returnURL,displayName,
   		subItems: [
 {name: 'nodeList', displayName:'节点',type:'node',count:nodeCount,addFunction: true, role: 'node', metaInfo: nodeListMetaInfo, renderItem: GlobalComponents.NodeBase.renderItemOfList},
+{name: 'channelPeerRoleList', displayName:'通道对等的角色',type:'channelPeerRole',count:channelPeerRoleCount,addFunction: true, role: 'channelPeerRole', metaInfo: channelPeerRoleListMetaInfo, renderItem: GlobalComponents.ChannelPeerRoleBase.renderItemOfList},
 {name: 'chainCodeList', displayName:'链码',type:'chainCode',count:chainCodeCount,addFunction: true, role: 'chainCode', metaInfo: chainCodeListMetaInfo, renderItem: GlobalComponents.ChainCodeBase.renderItemOfList},
 {name: 'applicationList', displayName:'应用程序',type:'application',count:applicationCount,addFunction: true, role: 'application', metaInfo: applicationListMetaInfo, renderItem: GlobalComponents.ApplicationBase.renderItemOfList},
 {name: 'serviceRecordList', displayName:'服务记录',type:'serviceRecord',count:serviceRecordCount,addFunction: true, role: 'serviceRecord', metaInfo: serviceRecordListMetaInfo, renderItem: GlobalComponents.ServiceRecordBase.renderItemOfList},

@@ -12,7 +12,7 @@ public interface NodeManager{
 
 		
 
-	public Node createNode(HfgwUserContext userContext, String name,String url,String organizationId,String channelId,String typeId) throws Exception;	
+	public Node createNode(HfgwUserContext userContext, String name,String url,String organizationId,String channelId,String networkId,String tlsCacert,String typeId,String address,String contactPerson,String contactTelephone) throws Exception;	
 	public Node updateNode(HfgwUserContext userContext,String nodeId, int nodeVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public Node loadNode(HfgwUserContext userContext, String nodeId, String [] tokensExpr) throws Exception;
 	public Node internalSaveNode(HfgwUserContext userContext, Node node) throws Exception;
@@ -20,6 +20,7 @@ public interface NodeManager{
 	
 	public Node transferToAnotherOrganization(HfgwUserContext userContext, String nodeId, String anotherOrganizationId)  throws Exception;
  	public Node transferToAnotherChannel(HfgwUserContext userContext, String nodeId, String anotherChannelId)  throws Exception;
+ 	public Node transferToAnotherNetwork(HfgwUserContext userContext, String nodeId, String anotherNetworkId)  throws Exception;
  	public Node transferToAnotherType(HfgwUserContext userContext, String nodeId, String anotherTypeId)  throws Exception;
  
 
@@ -40,11 +41,11 @@ public interface NodeManager{
 
 	*/
 
-	//public  TlsCacertManager getTlsCacertManager(HfgwUserContext userContext, String nodeId, String path, String cert ,String [] tokensExpr)  throws Exception;
+	//public  ChannelPeerRoleManager getChannelPeerRoleManager(HfgwUserContext userContext, String nodeId, String channelId, String peerRoleId ,String [] tokensExpr)  throws Exception;
 	
-	public  Node addTlsCacert(HfgwUserContext userContext, String nodeId, String path, String cert , String [] tokensExpr)  throws Exception;
-	public  Node removeTlsCacert(HfgwUserContext userContext, String nodeId, String tlsCacertId, int tlsCacertVersion,String [] tokensExpr)  throws Exception;
-	public  Node updateTlsCacert(HfgwUserContext userContext, String nodeId, String tlsCacertId, int tlsCacertVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+	public  Node addChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelId, String peerRoleId , String [] tokensExpr)  throws Exception;
+	public  Node removeChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr)  throws Exception;
+	public  Node updateChannelPeerRole(HfgwUserContext userContext, String nodeId, String channelPeerRoleId, int channelPeerRoleVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
 

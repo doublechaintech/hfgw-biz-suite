@@ -171,8 +171,8 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
  	
  	
 
-	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String name,String payLoad,String channelId,String chainCodeId,String transactionId,String blockId,String networkId) throws Exception
-	//public ServiceRecord createServiceRecord(HfgwUserContext userContext,String name, String payLoad, String channelId, String chainCodeId, String transactionId, String blockId, String networkId) throws Exception
+	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String name,String payLoad,String channelId,String chainCodeId,String chainCodeFunction,String transactionId,String blockId,String networkId) throws Exception
+	//public ServiceRecord createServiceRecord(HfgwUserContext userContext,String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId) throws Exception
 	{
 		
 		
@@ -181,6 +181,7 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 
 		checkerOf(userContext).checkNameOfServiceRecord(name);
 		checkerOf(userContext).checkPayLoadOfServiceRecord(payLoad);
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
 		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
 	
@@ -201,6 +202,7 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		serviceRecord.setChainCode(chainCode);
 		
 		
+		serviceRecord.setChainCodeFunction(chainCodeFunction);
 		serviceRecord.setTransactionId(transactionId);
 		serviceRecord.setBlockId(blockId);
 		serviceRecord.setCreateTime(userContext.now());
@@ -244,6 +246,9 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 				
 
 		
+		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
+			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
+		}
 		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
 			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
 		}

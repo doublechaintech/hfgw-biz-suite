@@ -21,13 +21,12 @@ import com.doublechaintech.hfgw.HfgwCheckerManager;
 import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.node.Node;
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
-import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
 import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.nodetype.NodeType;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 
 
@@ -159,7 +158,6 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		addAction(userContext, nodeType, tokens,"@update","updateNodeType","updateNodeType/"+nodeType.getId()+"/","main","primary");
 		addAction(userContext, nodeType, tokens,"@copy","cloneNodeType","cloneNodeType/"+nodeType.getId()+"/","main","primary");
 		
-		addAction(userContext, nodeType, tokens,"node_type.transfer_to_network","transferToAnotherNetwork","transferToAnotherNetwork/"+nodeType.getId()+"/","main","primary");
 		addAction(userContext, nodeType, tokens,"node_type.addNode","addNode","addNode/"+nodeType.getId()+"/","nodeList","primary");
 		addAction(userContext, nodeType, tokens,"node_type.removeNode","removeNode","removeNode/"+nodeType.getId()+"/","nodeList","primary");
 		addAction(userContext, nodeType, tokens,"node_type.updateNode","updateNode","updateNode/"+nodeType.getId()+"/","nodeList","primary");
@@ -175,8 +173,8 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
  	
  	
 
-	public NodeType createNodeType(HfgwUserContext userContext, String name,String code,String networkId,String address,String contactPerson,String contactTelephone) throws Exception
-	//public NodeType createNodeType(HfgwUserContext userContext,String name, String code, String networkId, String address, String contactPerson, String contactTelephone) throws Exception
+	public NodeType createNodeType(HfgwUserContext userContext, String name,String code) throws Exception
+	//public NodeType createNodeType(HfgwUserContext userContext,String name, String code) throws Exception
 	{
 		
 		
@@ -185,9 +183,6 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 
 		checkerOf(userContext).checkNameOfNodeType(name);
 		checkerOf(userContext).checkCodeOfNodeType(code);
-		checkerOf(userContext).checkAddressOfNodeType(address);
-		checkerOf(userContext).checkContactPersonOfNodeType(contactPerson);
-		checkerOf(userContext).checkContactTelephoneOfNodeType(contactTelephone);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
 
@@ -196,14 +191,6 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 
 		nodeType.setName(name);
 		nodeType.setCode(code);
-			
-		HyperledgerNetwork network = loadHyperledgerNetwork(userContext, networkId,emptyOptions());
-		nodeType.setNetwork(network);
-		
-		
-		nodeType.setAddress(address);
-		nodeType.setContactPerson(contactPerson);
-		nodeType.setContactTelephone(contactTelephone);
 
 		nodeType = saveNodeType(userContext, nodeType, emptyOptions());
 		
@@ -233,17 +220,6 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		}
 		if(NodeType.CODE_PROPERTY.equals(property)){
 			checkerOf(userContext).checkCodeOfNodeType(parseString(newValueExpr));
-		}		
-
-		
-		if(NodeType.ADDRESS_PROPERTY.equals(property)){
-			checkerOf(userContext).checkAddressOfNodeType(parseString(newValueExpr));
-		}
-		if(NodeType.CONTACT_PERSON_PROPERTY.equals(property)){
-			checkerOf(userContext).checkContactPersonOfNodeType(parseString(newValueExpr));
-		}
-		if(NodeType.CONTACT_TELEPHONE_PROPERTY.equals(property)){
-			checkerOf(userContext).checkContactTelephoneOfNodeType(parseString(newValueExpr));
 		}
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
@@ -351,66 +327,7 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		return NodeTypeTokens.mergeAll(tokens).done();
 	}
 	
-	protected void checkParamsForTransferingAnotherNetwork(HfgwUserContext userContext, String nodeTypeId, String anotherNetworkId) throws Exception
- 	{
- 		
- 		checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
- 		checkerOf(userContext).checkIdOfHyperledgerNetwork(anotherNetworkId);//check for optional reference
- 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
- 		
- 	}
- 	public NodeType transferToAnotherNetwork(HfgwUserContext userContext, String nodeTypeId, String anotherNetworkId) throws Exception
- 	{
- 		checkParamsForTransferingAnotherNetwork(userContext, nodeTypeId,anotherNetworkId);
- 
-		NodeType nodeType = loadNodeType(userContext, nodeTypeId, allTokens());	
-		synchronized(nodeType){
-			//will be good when the nodeType loaded from this JVM process cache.
-			//also good when there is a ram based DAO implementation
-			HyperledgerNetwork network = loadHyperledgerNetwork(userContext, anotherNetworkId, emptyOptions());		
-			nodeType.updateNetwork(network);		
-			nodeType = saveNodeType(userContext, nodeType, emptyOptions());
-			
-			return present(userContext,nodeType, allTokens());
-			
-		}
-
- 	}
- 	
-	 	
- 	
- 	
-	public CandidateHyperledgerNetwork requestCandidateNetwork(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
-
-		CandidateHyperledgerNetwork result = new CandidateHyperledgerNetwork();
-		result.setOwnerClass(ownerClass);
-		result.setOwnerId(id);
-		result.setFilterKey(filterKey==null?"":filterKey.trim());
-		result.setPageNo(pageNo);
-		result.setValueFieldName("id");
-		result.setDisplayFieldName("name");
-		
-		pageNo = Math.max(1, pageNo);
-		int pageSize = 20;
-		//requestCandidateProductForSkuAsOwner
-		SmartList<HyperledgerNetwork> candidateList = hyperledgerNetworkDaoOf(userContext).requestCandidateHyperledgerNetworkForNodeType(userContext,ownerClass, id, filterKey, pageNo, pageSize);
-		result.setCandidates(candidateList);
-		int totalCount = candidateList.getTotalCount();
-		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
-		return result;
-	}
- 	
- //--------------------------------------------------------------
-	
-	 	
- 	protected HyperledgerNetwork loadHyperledgerNetwork(HfgwUserContext userContext, String newNetworkId, Map<String,Object> options) throws Exception
- 	{
-		
- 		return hyperledgerNetworkDaoOf(userContext).load(newNetworkId, options);
- 	}
- 	
- 	
- 	
+//--------------------------------------------------------------
 	
 	//--------------------------------------------------------------
 
@@ -488,13 +405,31 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 				return nodeType;
 			}
 	}
+	//disconnect NodeType with network in Node
+	protected NodeType breakWithNodeByNetwork(HfgwUserContext userContext, String nodeTypeId, String networkId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			NodeType nodeType = loadNodeType(userContext, nodeTypeId, allTokens());
+
+			synchronized(nodeType){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				nodeTypeDaoOf(userContext).planToRemoveNodeListWithNetwork(nodeType, networkId, this.emptyOptions());
+
+				nodeType = saveNodeType(userContext, nodeType, tokens().withNodeList().done());
+				return nodeType;
+			}
+	}
 	
 	
 	
 	
 	
 
-	protected void checkParamsForAddingNode(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingNode(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId, String networkId, String tlsCacert, String address, String contactPerson, String contactTelephone,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
 
@@ -506,17 +441,27 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		checkerOf(userContext).checkOrganizationIdOfNode(organizationId);
 		
 		checkerOf(userContext).checkChannelIdOfNode(channelId);
+		
+		checkerOf(userContext).checkNetworkIdOfNode(networkId);
+		
+		checkerOf(userContext).checkTlsCacertOfNode(tlsCacert);
+		
+		checkerOf(userContext).checkAddressOfNode(address);
+		
+		checkerOf(userContext).checkContactPersonOfNode(contactPerson);
+		
+		checkerOf(userContext).checkContactTelephoneOfNode(contactTelephone);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
 
 	
 	}
-	public  NodeType addNode(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId, String [] tokensExpr) throws Exception
+	public  NodeType addNode(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId, String networkId, String tlsCacert, String address, String contactPerson, String contactTelephone, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingNode(userContext,nodeTypeId,name, url, organizationId, channelId,tokensExpr);
+		checkParamsForAddingNode(userContext,nodeTypeId,name, url, organizationId, channelId, networkId, tlsCacert, address, contactPerson, contactTelephone,tokensExpr);
 		
-		Node node = createNode(userContext,name, url, organizationId, channelId);
+		Node node = createNode(userContext,name, url, organizationId, channelId, networkId, tlsCacert, address, contactPerson, contactTelephone);
 		
 		NodeType nodeType = loadNodeType(userContext, nodeTypeId, allTokens());
 		synchronized(nodeType){ 
@@ -529,20 +474,24 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 			return present(userContext,nodeType, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingNodeProperties(HfgwUserContext userContext, String nodeTypeId,String id,String name,String url,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingNodeProperties(HfgwUserContext userContext, String nodeTypeId,String id,String name,String url,String tlsCacert,String address,String contactPerson,String contactTelephone,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
 		checkerOf(userContext).checkIdOfNode(id);
 		
 		checkerOf(userContext).checkNameOfNode( name);
 		checkerOf(userContext).checkUrlOfNode( url);
+		checkerOf(userContext).checkTlsCacertOfNode( tlsCacert);
+		checkerOf(userContext).checkAddressOfNode( address);
+		checkerOf(userContext).checkContactPersonOfNode( contactPerson);
+		checkerOf(userContext).checkContactTelephoneOfNode( contactTelephone);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
 		
 	}
-	public  NodeType updateNodeProperties(HfgwUserContext userContext, String nodeTypeId, String id,String name,String url, String [] tokensExpr) throws Exception
+	public  NodeType updateNodeProperties(HfgwUserContext userContext, String nodeTypeId, String id,String name,String url,String tlsCacert,String address,String contactPerson,String contactTelephone, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingNodeProperties(userContext,nodeTypeId,id,name,url,tokensExpr);
+		checkParamsForUpdatingNodeProperties(userContext,nodeTypeId,id,name,url,tlsCacert,address,contactPerson,contactTelephone,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -559,6 +508,10 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		
 		item.updateName( name );
 		item.updateUrl( url );
+		item.updateTlsCacert( tlsCacert );
+		item.updateAddress( address );
+		item.updateContactPerson( contactPerson );
+		item.updateContactTelephone( contactTelephone );
 
 		
 		//checkParamsForAddingNode(userContext,nodeTypeId,name, code, used,tokensExpr);
@@ -569,7 +522,7 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 	}
 	
 	
-	protected Node createNode(HfgwUserContext userContext, String name, String url, String organizationId, String channelId) throws Exception{
+	protected Node createNode(HfgwUserContext userContext, String name, String url, String organizationId, String channelId, String networkId, String tlsCacert, String address, String contactPerson, String contactTelephone) throws Exception{
 
 		Node node = new Node();
 		
@@ -581,7 +534,14 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		node.setOrganization(organization);		
 		Channel  channel = new Channel();
 		channel.setId(channelId);		
-		node.setChannel(channel);
+		node.setChannel(channel);		
+		HyperledgerNetwork  network = new HyperledgerNetwork();
+		network.setId(networkId);		
+		node.setNetwork(network);		
+		node.setTlsCacert(tlsCacert);		
+		node.setAddress(address);		
+		node.setContactPerson(contactPerson);		
+		node.setContactTelephone(contactTelephone);
 	
 		
 		return node;
@@ -699,6 +659,22 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		
 		if(Node.URL_PROPERTY.equals(property)){
 			checkerOf(userContext).checkUrlOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.TLS_CACERT_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTlsCacertOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.ADDRESS_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAddressOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.CONTACT_PERSON_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactPersonOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.CONTACT_TELEPHONE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactTelephoneOfNode(parseString(newValueExpr));
 		}
 		
 	

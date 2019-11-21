@@ -52,7 +52,10 @@ const internalRenderSubjectList = defaultRenderSubjectList
 const internalSettingListOf = (node) =>defaultSettingListOf(node, optionList)
 const internalLargeTextOf = (node) =>{
 
-	return null
+	return(<div> 
+   <Card title={`Tls Cacert`} ><pre>{node.tlsCacert}</pre></Card>
+</div>)
+
 	
 
 }
@@ -131,12 +134,9 @@ const internalSummaryOf = (node,targetComponent) =>{
 	      NodeService.transferToAnotherChannel,"anotherChannelId",node.channel?node.channel.id:"")} 
   style={{fontSize: 20,color:"red"}} />
 </Description>
-<Description term="类型">{node.type==null?appLocaleName(userContext,"NotAssigned"):`${node.type.displayName}(${node.type.id})`}
- <Icon type="swap" onClick={()=>
-  showTransferModel(targetComponent,"类型","nodeType",NodeService.requestCandidateType,
-	      NodeService.transferToAnotherType,"anotherTypeId",node.type?node.type.id:"")} 
-  style={{fontSize: 20,color:"red"}} />
-</Description>
+<Description term="地址">{node.address}</Description> 
+<Description term="联系人">{node.contactPerson}</Description> 
+<Description term="联系电话">{node.contactTelephone}</Description> 
 	
         {buildTransferModal(node,targetComponent)}
       </DescriptionList>
@@ -168,7 +168,7 @@ class NodeDashboard extends Component {
 
   render() {
     // eslint-disable-next-line max-len
-    const { id,displayName, grpcOptionListMetaInfo, tlsCacertListMetaInfo, grpcOptionCount, tlsCacertCount } = this.props.node
+    const { id,displayName, grpcOptionListMetaInfo, channelPeerRoleListMetaInfo, grpcOptionCount, channelPeerRoleCount } = this.props.node
     if(!this.props.node.class){
       return null
     }
@@ -178,7 +178,7 @@ class NodeDashboard extends Component {
     	cardsSource: this.props.node,returnURL,displayName,
   		subItems: [
 {name: 'grpcOptionList', displayName:'Grpc选项',type:'grpcOption',count:grpcOptionCount,addFunction: true, role: 'grpcOption', metaInfo: grpcOptionListMetaInfo, renderItem: GlobalComponents.GrpcOptionBase.renderItemOfList},
-{name: 'tlsCacertList', displayName:'Tls Cacert',type:'tlsCacert',count:tlsCacertCount,addFunction: true, role: 'tlsCacert', metaInfo: tlsCacertListMetaInfo, renderItem: GlobalComponents.TlsCacertBase.renderItemOfList},
+{name: 'channelPeerRoleList', displayName:'通道对等的角色',type:'channelPeerRole',count:channelPeerRoleCount,addFunction: true, role: 'channelPeerRole', metaInfo: channelPeerRoleListMetaInfo, renderItem: GlobalComponents.ChannelPeerRoleBase.renderItemOfList},
     
       	],
    		subSettingItems: [

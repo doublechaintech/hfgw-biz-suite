@@ -44,22 +44,22 @@ const removeOrganizationList = (targetObjectId, parameters) => {
 
 
 
-const addNodeType = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/addNodeType/hyperledgerNetworkId/name/code/address/contactPerson/contactTelephone/tokensExpr/`
+const addNode = (targetObjectId, parameters) => {
+  const url = `${PREFIX}hyperledgerNetworkManager/addNode/hyperledgerNetworkId/name/url/organizationId/channelId/tlsCacert/typeId/address/contactPerson/contactTelephone/tokensExpr/`
   const hyperledgerNetworkId = targetObjectId
   const requestParameters = { ...parameters, hyperledgerNetworkId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
-const updateNodeType = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/updateNodeTypeProperties/hyperledgerNetworkId/id/name/code/address/contactPerson/contactTelephone/tokensExpr/`
+const updateNode = (targetObjectId, parameters) => {
+  const url = `${PREFIX}hyperledgerNetworkManager/updateNodeProperties/hyperledgerNetworkId/id/name/url/tlsCacert/address/contactPerson/contactTelephone/tokensExpr/`
   const hyperledgerNetworkId = targetObjectId
   const requestParameters = { ...parameters, hyperledgerNetworkId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
-const removeNodeTypeList = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/removeNodeTypeList/hyperledgerNetworkId/nodeTypeIds/tokensExpr/`
+const removeNodeList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}hyperledgerNetworkManager/removeNodeList/hyperledgerNetworkId/nodeIds/tokensExpr/`
   const requestParameters = { ...parameters, hyperledgerNetworkId: targetObjectId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
@@ -111,14 +111,14 @@ const removeApplicationList = (targetObjectId, parameters) => {
 
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/addServiceRecord/hyperledgerNetworkId/name/payLoad/channelId/chainCodeId/transactionId/blockId/tokensExpr/`
+  const url = `${PREFIX}hyperledgerNetworkManager/addServiceRecord/hyperledgerNetworkId/name/payLoad/channelId/chainCodeId/chainCodeFunction/transactionId/blockId/tokensExpr/`
   const hyperledgerNetworkId = targetObjectId
   const requestParameters = { ...parameters, hyperledgerNetworkId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/updateServiceRecordProperties/hyperledgerNetworkId/id/name/payLoad/transactionId/blockId/tokensExpr/`
+  const url = `${PREFIX}hyperledgerNetworkManager/updateServiceRecordProperties/hyperledgerNetworkId/id/name/payLoad/chainCodeFunction/transactionId/blockId/tokensExpr/`
   const hyperledgerNetworkId = targetObjectId
   const requestParameters = { ...parameters, hyperledgerNetworkId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
@@ -205,21 +205,21 @@ const  processRequest = (data) => {
 const HyperledgerNetworkService = { view,
   load,
   addOrganization,
-  addNodeType,
+  addNode,
   addChannel,
   addApplication,
   addServiceRecord,
   addChangeRequestType,
   addChangeRequest,
   updateOrganization,
-  updateNodeType,
+  updateNode,
   updateChannel,
   updateApplication,
   updateServiceRecord,
   updateChangeRequestType,
   updateChangeRequest,
   removeOrganizationList,
-  removeNodeTypeList,
+  removeNodeList,
   removeChannelList,
   removeApplicationList,
   removeServiceRecordList,

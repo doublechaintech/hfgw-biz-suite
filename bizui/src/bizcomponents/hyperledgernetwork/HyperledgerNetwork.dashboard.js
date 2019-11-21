@@ -152,7 +152,7 @@ class HyperledgerNetworkDashboard extends Component {
 
   render() {
     // eslint-disable-next-line max-len
-    const { id,displayName, organizationListMetaInfo, nodeTypeListMetaInfo, channelListMetaInfo, applicationListMetaInfo, serviceRecordListMetaInfo, changeRequestTypeListMetaInfo, changeRequestListMetaInfo, organizationCount, nodeTypeCount, channelCount, applicationCount, serviceRecordCount, changeRequestTypeCount, changeRequestCount } = this.props.hyperledgerNetwork
+    const { id,displayName, organizationListMetaInfo, nodeListMetaInfo, channelListMetaInfo, applicationListMetaInfo, serviceRecordListMetaInfo, changeRequestTypeListMetaInfo, changeRequestListMetaInfo, organizationCount, nodeCount, channelCount, applicationCount, serviceRecordCount, changeRequestTypeCount, changeRequestCount } = this.props.hyperledgerNetwork
     if(!this.props.hyperledgerNetwork.class){
       return null
     }
@@ -162,6 +162,7 @@ class HyperledgerNetworkDashboard extends Component {
     	cardsSource: this.props.hyperledgerNetwork,returnURL,displayName,
   		subItems: [
 {name: 'organizationList', displayName:'组织',type:'organization',count:organizationCount,addFunction: true, role: 'organization', metaInfo: organizationListMetaInfo, renderItem: GlobalComponents.OrganizationBase.renderItemOfList},
+{name: 'nodeList', displayName:'节点',type:'node',count:nodeCount,addFunction: true, role: 'node', metaInfo: nodeListMetaInfo, renderItem: GlobalComponents.NodeBase.renderItemOfList},
 {name: 'channelList', displayName:'频道',type:'channel',count:channelCount,addFunction: true, role: 'channel', metaInfo: channelListMetaInfo, renderItem: GlobalComponents.ChannelBase.renderItemOfList},
 {name: 'applicationList', displayName:'应用程序',type:'application',count:applicationCount,addFunction: true, role: 'application', metaInfo: applicationListMetaInfo, renderItem: GlobalComponents.ApplicationBase.renderItemOfList},
 {name: 'serviceRecordList', displayName:'服务记录',type:'serviceRecord',count:serviceRecordCount,addFunction: true, role: 'serviceRecord', metaInfo: serviceRecordListMetaInfo, renderItem: GlobalComponents.ServiceRecordBase.renderItemOfList},
@@ -169,7 +170,6 @@ class HyperledgerNetworkDashboard extends Component {
     
       	],
    		subSettingItems: [
-{name: 'nodeTypeList', displayName:'节点类型',type:'nodeType',count:nodeTypeCount,addFunction: false, role: 'nodeType', metaInfo: nodeTypeListMetaInfo, renderItem: GlobalComponents.NodeTypeBase.renderItemOfList},
 {name: 'changeRequestTypeList', displayName:'变更请求类型',type:'changeRequestType',count:changeRequestTypeCount,addFunction: false, role: 'changeRequestType', metaInfo: changeRequestTypeListMetaInfo, renderItem: GlobalComponents.ChangeRequestTypeBase.renderItemOfList},
     
       	],     	

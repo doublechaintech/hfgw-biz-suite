@@ -233,55 +233,55 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
     }))(OrganizationUpdateForm)
   }
 
-  getNodeTypeSearch = () => {
-    const {NodeTypeSearch} = GlobalComponents;
+  getNodeSearch = () => {
+    const {NodeSearch} = GlobalComponents;
     const userContext = null
     return connect(state => ({
       rule: state.rule,
-      name: "节点类型",
-      role: "nodeType",
-      data: state._hyperledgerNetwork.nodeTypeList,
-      metaInfo: state._hyperledgerNetwork.nodeTypeListMetaInfo,
-      count: state._hyperledgerNetwork.nodeTypeCount,
+      name: "节点",
+      role: "node",
+      data: state._hyperledgerNetwork.nodeList,
+      metaInfo: state._hyperledgerNetwork.nodeListMetaInfo,
+      count: state._hyperledgerNetwork.nodeCount,
       returnURL: `/hyperledgerNetwork/${state._hyperledgerNetwork.id}/dashboard`,
-      currentPage: state._hyperledgerNetwork.nodeTypeCurrentPageNumber,
-      searchFormParameters: state._hyperledgerNetwork.nodeTypeSearchFormParameters,
+      currentPage: state._hyperledgerNetwork.nodeCurrentPageNumber,
+      searchFormParameters: state._hyperledgerNetwork.nodeSearchFormParameters,
       searchParameters: {...state._hyperledgerNetwork.searchParameters},
       expandForm: state._hyperledgerNetwork.expandForm,
       loading: state._hyperledgerNetwork.loading,
       partialList: state._hyperledgerNetwork.partialList,
       owner: { type: '_hyperledgerNetwork', id: state._hyperledgerNetwork.id, 
       referenceName: 'network', 
-      listName: 'nodeTypeList', ref:state._hyperledgerNetwork, 
+      listName: 'nodeList', ref:state._hyperledgerNetwork, 
       listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
-    }))(NodeTypeSearch)
+    }))(NodeSearch)
   }
-  getNodeTypeCreateForm = () => {
-   	const {NodeTypeCreateForm} = GlobalComponents;
+  getNodeCreateForm = () => {
+   	const {NodeCreateForm} = GlobalComponents;
    	const userContext = null
     return connect(state => ({
       rule: state.rule,
-      role: "nodeType",
-      data: state._hyperledgerNetwork.nodeTypeList,
-      metaInfo: state._hyperledgerNetwork.nodeTypeListMetaInfo,
-      count: state._hyperledgerNetwork.nodeTypeCount,
+      role: "node",
+      data: state._hyperledgerNetwork.nodeList,
+      metaInfo: state._hyperledgerNetwork.nodeListMetaInfo,
+      count: state._hyperledgerNetwork.nodeCount,
       returnURL: `/hyperledgerNetwork/${state._hyperledgerNetwork.id}/list`,
-      currentPage: state._hyperledgerNetwork.nodeTypeCurrentPageNumber,
-      searchFormParameters: state._hyperledgerNetwork.nodeTypeSearchFormParameters,
+      currentPage: state._hyperledgerNetwork.nodeCurrentPageNumber,
+      searchFormParameters: state._hyperledgerNetwork.nodeSearchFormParameters,
       loading: state._hyperledgerNetwork.loading,
-      owner: { type: '_hyperledgerNetwork', id: state._hyperledgerNetwork.id, referenceName: 'network', listName: 'nodeTypeList', ref:state._hyperledgerNetwork, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
-    }))(NodeTypeCreateForm)
+      owner: { type: '_hyperledgerNetwork', id: state._hyperledgerNetwork.id, referenceName: 'network', listName: 'nodeList', ref:state._hyperledgerNetwork, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
+    }))(NodeCreateForm)
   }
   
-  getNodeTypeUpdateForm = () => {
+  getNodeUpdateForm = () => {
     const userContext = null
-  	const {NodeTypeUpdateForm} = GlobalComponents;
+  	const {NodeUpdateForm} = GlobalComponents;
     return connect(state => ({
       selectedRows: state._hyperledgerNetwork.selectedRows,
-      role: "nodeType",
+      role: "node",
       currentUpdateIndex: state._hyperledgerNetwork.currentUpdateIndex,
-      owner: { type: '_hyperledgerNetwork', id: state._hyperledgerNetwork.id, listName: 'nodeTypeList', ref:state._hyperledgerNetwork, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
-    }))(NodeTypeUpdateForm)
+      owner: { type: '_hyperledgerNetwork', id: state._hyperledgerNetwork.id, listName: 'nodeList', ref:state._hyperledgerNetwork, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(NodeUpdateForm)
   }
 
   getChannelSearch = () => {
@@ -568,9 +568,9 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
   	{path:"/hyperledgerNetwork/:id/list/organizationCreateForm", component: this.getOrganizationCreateForm()},
   	{path:"/hyperledgerNetwork/:id/list/organizationUpdateForm", component: this.getOrganizationUpdateForm()},
    	
-  	{path:"/hyperledgerNetwork/:id/list/nodeTypeList", component: this.getNodeTypeSearch()},
-  	{path:"/hyperledgerNetwork/:id/list/nodeTypeCreateForm", component: this.getNodeTypeCreateForm()},
-  	{path:"/hyperledgerNetwork/:id/list/nodeTypeUpdateForm", component: this.getNodeTypeUpdateForm()},
+  	{path:"/hyperledgerNetwork/:id/list/nodeList", component: this.getNodeSearch()},
+  	{path:"/hyperledgerNetwork/:id/list/nodeCreateForm", component: this.getNodeCreateForm()},
+  	{path:"/hyperledgerNetwork/:id/list/nodeUpdateForm", component: this.getNodeUpdateForm()},
    	
   	{path:"/hyperledgerNetwork/:id/list/channelList", component: this.getChannelSearch()},
   	{path:"/hyperledgerNetwork/:id/list/channelCreateForm", component: this.getChannelCreateForm()},

@@ -169,17 +169,23 @@ public class HfgwCheckerManager extends BaseManagerImpl {
 	public com.doublechaintech.hfgw.grpcoption.GrpcOptionDAO grpcOptionDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getGrpcOptionDAO();
 	}
-	public com.doublechaintech.hfgw.tlscacert.TlsCacertManager tlsCacertManagerOf(HfgwUserContext userContext){
-		return userContext.getManagerGroup().getTlsCacertManager();
-	}
-	public com.doublechaintech.hfgw.tlscacert.TlsCacertDAO tlsCacertDaoOf(HfgwUserContext userContext){
-		return userContext.getDAOGroup().getTlsCacertDAO();
-	}
 	public com.doublechaintech.hfgw.channel.ChannelManager channelManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getChannelManager();
 	}
 	public com.doublechaintech.hfgw.channel.ChannelDAO channelDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getChannelDAO();
+	}
+	public com.doublechaintech.hfgw.peerrole.PeerRoleManager peerRoleManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getPeerRoleManager();
+	}
+	public com.doublechaintech.hfgw.peerrole.PeerRoleDAO peerRoleDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getPeerRoleDAO();
+	}
+	public com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManager channelPeerRoleManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getChannelPeerRoleManager();
+	}
+	public com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO channelPeerRoleDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getChannelPeerRoleDAO();
 	}
 	public com.doublechaintech.hfgw.chaincode.ChainCodeManager chainCodeManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getChainCodeManager();

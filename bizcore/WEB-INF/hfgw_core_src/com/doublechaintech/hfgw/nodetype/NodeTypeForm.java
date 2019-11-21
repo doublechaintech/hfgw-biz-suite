@@ -61,106 +61,8 @@ public class NodeTypeForm extends BaseForm {
 		return codeField("code","");
 	}
 
-
-	public NodeTypeForm networkIdField(String parameterName, String initValue){
-		FormField field = networkIdFromNodeType(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public NodeTypeForm networkIdField(String initValue){
-		return networkIdField("networkId",initValue);
-	}
-	public NodeTypeForm networkIdField(){
-		return networkIdField("networkId","");
-	}
-
-
-	public NodeTypeForm addressField(String parameterName, String initValue){
-		FormField field = addressFromNodeType(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public NodeTypeForm addressField(String initValue){
-		return addressField("address",initValue);
-	}
-	public NodeTypeForm addressField(){
-		return addressField("address","");
-	}
-
-
-	public NodeTypeForm contactPersonField(String parameterName, String initValue){
-		FormField field = contactPersonFromNodeType(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public NodeTypeForm contactPersonField(String initValue){
-		return contactPersonField("contactPerson",initValue);
-	}
-	public NodeTypeForm contactPersonField(){
-		return contactPersonField("contactPerson","");
-	}
-
-
-	public NodeTypeForm contactTelephoneField(String parameterName, String initValue){
-		FormField field = contactTelephoneFromNodeType(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public NodeTypeForm contactTelephoneField(String initValue){
-		return contactTelephoneField("contactTelephone",initValue);
-	}
-	public NodeTypeForm contactTelephoneField(){
-		return contactTelephoneField("contactTelephone","");
-	}
-
 	
 	
-
-
-	public NodeTypeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String parameterName, String initValue){
-		FormField field =  idFromHyperledgerNetwork(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public NodeTypeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String initValue){
-		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId",initValue);
-	}
-	public NodeTypeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(){
-		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId","");
-	}
-
-
-	public NodeTypeForm nameFieldOfHyperledgerNetwork(String parameterName, String initValue){
-		FormField field =  nameFromHyperledgerNetwork(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public NodeTypeForm nameFieldOfHyperledgerNetwork(String initValue){
-		return nameFieldOfHyperledgerNetwork("name",initValue);
-	}
-	public NodeTypeForm nameFieldOfHyperledgerNetwork(){
-		return nameFieldOfHyperledgerNetwork("name","");
-	}
-
-
-	public NodeTypeForm descriptionFieldOfHyperledgerNetwork(String parameterName, String initValue){
-		FormField field =  descriptionFromHyperledgerNetwork(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public NodeTypeForm descriptionFieldOfHyperledgerNetwork(String initValue){
-		return descriptionFieldOfHyperledgerNetwork("description",initValue);
-	}
-	public NodeTypeForm descriptionFieldOfHyperledgerNetwork(){
-		return descriptionFieldOfHyperledgerNetwork("description","");
-	}
 
 	
 
@@ -236,6 +138,34 @@ public class NodeTypeForm extends BaseForm {
 	}
 
 
+	public NodeTypeForm networkIdFieldForNode(String parameterName, String initValue){
+		FormField field =  networkIdFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeTypeForm networkIdFieldForNode(String initValue){
+		return networkIdFieldForNode("networkId",initValue);
+	}
+	public NodeTypeForm networkIdFieldForNode(){
+		return networkIdFieldForNode("networkId","");
+	}
+
+
+	public NodeTypeForm tlsCacertFieldForNode(String parameterName, String initValue){
+		FormField field =  tlsCacertFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeTypeForm tlsCacertFieldForNode(String initValue){
+		return tlsCacertFieldForNode("tlsCacert",initValue);
+	}
+	public NodeTypeForm tlsCacertFieldForNode(){
+		return tlsCacertFieldForNode("tlsCacert","");
+	}
+
+
 	public NodeTypeForm typeIdFieldForNode(String parameterName, String initValue){
 		FormField field =  typeIdFromNode(parameterName, initValue);		
 		this.addFormField(field);
@@ -249,19 +179,51 @@ public class NodeTypeForm extends BaseForm {
 		return typeIdFieldForNode("typeId","");
 	}
 
-	
 
-	
- 	public NodeTypeForm transferToAnotherNetworkAction(){
-		FormAction action = new FormAction();
-		action.setLabel("显示");
-		action.setLocaleKey("show");
-		action.setUrl("transferToAnotherNetwork/nodeTypeId/");
-		this.addFormAction(action);
+	public NodeTypeForm addressFieldForNode(String parameterName, String initValue){
+		FormField field =  addressFromNode(parameterName, initValue);		
+		this.addFormField(field);
 		return this;
 	}
+	
+	public NodeTypeForm addressFieldForNode(String initValue){
+		return addressFieldForNode("address",initValue);
+	}
+	public NodeTypeForm addressFieldForNode(){
+		return addressFieldForNode("address","");
+	}
 
- 
+
+	public NodeTypeForm contactPersonFieldForNode(String parameterName, String initValue){
+		FormField field =  contactPersonFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeTypeForm contactPersonFieldForNode(String initValue){
+		return contactPersonFieldForNode("contactPerson",initValue);
+	}
+	public NodeTypeForm contactPersonFieldForNode(){
+		return contactPersonFieldForNode("contactPerson","");
+	}
+
+
+	public NodeTypeForm contactTelephoneFieldForNode(String parameterName, String initValue){
+		FormField field =  contactTelephoneFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeTypeForm contactTelephoneFieldForNode(String initValue){
+		return contactTelephoneFieldForNode("contactTelephone",initValue);
+	}
+	public NodeTypeForm contactTelephoneFieldForNode(){
+		return contactTelephoneFieldForNode("contactTelephone","");
+	}
+
+	
+
+
 
 	public NodeTypeForm showAction(){
 		FormAction action = new FormAction();

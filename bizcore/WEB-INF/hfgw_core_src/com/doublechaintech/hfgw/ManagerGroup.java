@@ -11,9 +11,11 @@ import com.doublechaintech.hfgw.node.NodeManager;
 
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionManager;
 
-import com.doublechaintech.hfgw.tlscacert.TlsCacertManager;
-
 import com.doublechaintech.hfgw.channel.ChannelManager;
+
+import com.doublechaintech.hfgw.peerrole.PeerRoleManager;
+
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManager;
 
 import com.doublechaintech.hfgw.chaincode.ChainCodeManager;
 
@@ -70,9 +72,11 @@ public class ManagerGroup {
 
 	protected GrpcOptionManager grpcOptionManager;
 
-	protected TlsCacertManager tlsCacertManager;
-
 	protected ChannelManager channelManager;
+
+	protected PeerRoleManager peerRoleManager;
+
+	protected ChannelPeerRoleManager channelPeerRoleManager;
 
 	protected ChainCodeManager chainCodeManager;
 
@@ -158,19 +162,27 @@ public class ManagerGroup {
 	}
 
 
-	public TlsCacertManager getTlsCacertManager(){
-		return this.tlsCacertManager;
-	}
-	public void setTlsCacertManager(TlsCacertManager manager){
-		this.tlsCacertManager = manager;
-	}
-
-
 	public ChannelManager getChannelManager(){
 		return this.channelManager;
 	}
 	public void setChannelManager(ChannelManager manager){
 		this.channelManager = manager;
+	}
+
+
+	public PeerRoleManager getPeerRoleManager(){
+		return this.peerRoleManager;
+	}
+	public void setPeerRoleManager(PeerRoleManager manager){
+		this.peerRoleManager = manager;
+	}
+
+
+	public ChannelPeerRoleManager getChannelPeerRoleManager(){
+		return this.channelPeerRoleManager;
+	}
+	public void setChannelPeerRoleManager(ChannelPeerRoleManager manager){
+		this.channelPeerRoleManager = manager;
 	}
 
 

@@ -19,6 +19,7 @@ const testValues = {};
 /*
 const testValues = {
   name: '调用链码',
+  chainCodeFunction: 'transact',
   transactionId: 'a21fe3srw',
   blockId: 'a21fe3srw',
   channelId: 'C000001',

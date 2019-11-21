@@ -53,14 +53,14 @@ const transferToAnotherNetwork = (id, parameters) => {
 
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}applicationManager/addServiceRecord/applicationId/name/payLoad/channelId/chainCodeId/transactionId/blockId/networkId/tokensExpr/`
+  const url = `${PREFIX}applicationManager/addServiceRecord/applicationId/name/payLoad/channelId/chainCodeId/chainCodeFunction/transactionId/blockId/networkId/tokensExpr/`
   const applicationId = targetObjectId
   const requestParameters = { ...parameters, applicationId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}applicationManager/updateServiceRecordProperties/applicationId/id/name/payLoad/transactionId/blockId/tokensExpr/`
+  const url = `${PREFIX}applicationManager/updateServiceRecordProperties/applicationId/id/name/payLoad/chainCodeFunction/transactionId/blockId/tokensExpr/`
   const applicationId = targetObjectId
   const requestParameters = { ...parameters, applicationId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})

@@ -34,9 +34,6 @@ const internalSummaryOf = (nodeType,targetComponent) =>{
 <Description term="ID">{nodeType.id}</Description> 
 <Description term="名称">{nodeType.name}</Description> 
 <Description term="代码">{nodeType.code}</Description> 
-<Description term="地址">{nodeType.address}</Description> 
-<Description term="联系人">{nodeType.contactPerson}</Description> 
-<Description term="联系电话">{nodeType.contactTelephone}</Description> 
 	
       </DescriptionList>
 	)

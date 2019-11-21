@@ -9,9 +9,7 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.node.Node;
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.node.NodeDAO;
 
 
@@ -66,18 +64,14 @@ public interface NodeTypeDAO{
 	public NodeType planToRemoveNodeListWithChannel(NodeType nodeType, String channelId, Map<String,Object> options)throws Exception;
 	public int countNodeListWithChannel(String nodeTypeId, String channelId, Map<String,Object> options)throws Exception;
 	
+	//disconnect NodeType with network in Node
+	public NodeType planToRemoveNodeListWithNetwork(NodeType nodeType, String networkId, Map<String,Object> options)throws Exception;
+	public int countNodeListWithNetwork(String nodeTypeId, String networkId, Map<String,Object> options)throws Exception;
+	
 	
 	public SmartList<NodeType> queryList(String sql, Object ... parmeters);
 	public int count(String sql, Object ... parmeters);
- 
- 	public SmartList<NodeType> findNodeTypeByNetwork(String hyperledgerNetworkId, Map<String,Object> options);
- 	public int countNodeTypeByNetwork(String hyperledgerNetworkId, Map<String,Object> options);
- 	public Map<String, Integer> countNodeTypeByNetworkIds(String[] ids, Map<String,Object> options);
- 	public SmartList<NodeType> findNodeTypeByNetwork(String hyperledgerNetworkId, int start, int count, Map<String,Object> options);
- 	public void analyzeNodeTypeByNetwork(SmartList<NodeType> resultList, String hyperledgerNetworkId, Map<String,Object> options);
 
- 
- 
 	// 需要一个加载引用我的对象的enhance方法:Node的type的NodeList
 	public SmartList<Node> loadOurNodeList(HfgwUserContext userContext, List<NodeType> us, Map<String,Object> options) throws Exception;
 	

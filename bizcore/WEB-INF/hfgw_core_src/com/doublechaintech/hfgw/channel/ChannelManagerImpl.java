@@ -22,6 +22,7 @@ import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -29,6 +30,8 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.nodetype.NodeType;
@@ -163,6 +166,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		addAction(userContext, channel, tokens,"channel.removeNode","removeNode","removeNode/"+channel.getId()+"/","nodeList","primary");
 		addAction(userContext, channel, tokens,"channel.updateNode","updateNode","updateNode/"+channel.getId()+"/","nodeList","primary");
 		addAction(userContext, channel, tokens,"channel.copyNodeFrom","copyNodeFrom","copyNodeFrom/"+channel.getId()+"/","nodeList","primary");
+		addAction(userContext, channel, tokens,"channel.addChannelPeerRole","addChannelPeerRole","addChannelPeerRole/"+channel.getId()+"/","channelPeerRoleList","primary");
+		addAction(userContext, channel, tokens,"channel.removeChannelPeerRole","removeChannelPeerRole","removeChannelPeerRole/"+channel.getId()+"/","channelPeerRoleList","primary");
+		addAction(userContext, channel, tokens,"channel.updateChannelPeerRole","updateChannelPeerRole","updateChannelPeerRole/"+channel.getId()+"/","channelPeerRoleList","primary");
+		addAction(userContext, channel, tokens,"channel.copyChannelPeerRoleFrom","copyChannelPeerRoleFrom","copyChannelPeerRoleFrom/"+channel.getId()+"/","channelPeerRoleList","primary");
 		addAction(userContext, channel, tokens,"channel.addChainCode","addChainCode","addChainCode/"+channel.getId()+"/","chainCodeList","primary");
 		addAction(userContext, channel, tokens,"channel.removeChainCode","removeChainCode","removeChainCode/"+channel.getId()+"/","chainCodeList","primary");
 		addAction(userContext, channel, tokens,"channel.updateChainCode","updateChainCode","updateChainCode/"+channel.getId()+"/","chainCodeList","primary");
@@ -335,6 +342,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
 		.sortNodeListWith("id","desc")
+		.sortChannelPeerRoleListWith("id","desc")
 		.sortChainCodeListWith("id","desc")
 		.sortApplicationListWith("id","desc")
 		.sortServiceRecordListWith("id","desc")
@@ -464,6 +472,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 				return channel;
 			}
 	}
+	//disconnect Channel with network in Node
+	protected Channel breakWithNodeByNetwork(HfgwUserContext userContext, String channelId, String networkId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+
+			synchronized(channel){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				channelDaoOf(userContext).planToRemoveNodeListWithNetwork(channel, networkId, this.emptyOptions());
+
+				channel = saveChannel(userContext, channel, tokens().withNodeList().done());
+				return channel;
+			}
+	}
 	//disconnect Channel with type in Node
 	protected Channel breakWithNodeByType(HfgwUserContext userContext, String channelId, String typeId,  String [] tokensExpr)
 		 throws Exception{
@@ -479,6 +505,42 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 				channelDaoOf(userContext).planToRemoveNodeListWithType(channel, typeId, this.emptyOptions());
 
 				channel = saveChannel(userContext, channel, tokens().withNodeList().done());
+				return channel;
+			}
+	}
+	//disconnect Channel with node in ChannelPeerRole
+	protected Channel breakWithChannelPeerRoleByNode(HfgwUserContext userContext, String channelId, String nodeId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+
+			synchronized(channel){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				channelDaoOf(userContext).planToRemoveChannelPeerRoleListWithNode(channel, nodeId, this.emptyOptions());
+
+				channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
+				return channel;
+			}
+	}
+	//disconnect Channel with peer_role in ChannelPeerRole
+	protected Channel breakWithChannelPeerRoleByPeerRole(HfgwUserContext userContext, String channelId, String peerRoleId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+
+			synchronized(channel){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				channelDaoOf(userContext).planToRemoveChannelPeerRoleListWithPeerRole(channel, peerRoleId, this.emptyOptions());
+
+				channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
 				return channel;
 			}
 	}
@@ -578,7 +640,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 	
 	
 
-	protected void checkParamsForAddingNode(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String typeId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingNode(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChannel(channelId);
 
@@ -589,18 +651,28 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		checkerOf(userContext).checkOrganizationIdOfNode(organizationId);
 		
+		checkerOf(userContext).checkNetworkIdOfNode(networkId);
+		
+		checkerOf(userContext).checkTlsCacertOfNode(tlsCacert);
+		
 		checkerOf(userContext).checkTypeIdOfNode(typeId);
+		
+		checkerOf(userContext).checkAddressOfNode(address);
+		
+		checkerOf(userContext).checkContactPersonOfNode(contactPerson);
+		
+		checkerOf(userContext).checkContactTelephoneOfNode(contactTelephone);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 
 	
 	}
-	public  Channel addNode(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String typeId, String [] tokensExpr) throws Exception
+	public  Channel addNode(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingNode(userContext,channelId,name, url, organizationId, typeId,tokensExpr);
+		checkParamsForAddingNode(userContext,channelId,name, url, organizationId, networkId, tlsCacert, typeId, address, contactPerson, contactTelephone,tokensExpr);
 		
-		Node node = createNode(userContext,name, url, organizationId, typeId);
+		Node node = createNode(userContext,name, url, organizationId, networkId, tlsCacert, typeId, address, contactPerson, contactTelephone);
 		
 		Channel channel = loadChannel(userContext, channelId, allTokens());
 		synchronized(channel){ 
@@ -613,20 +685,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			return present(userContext,channel, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingNodeProperties(HfgwUserContext userContext, String channelId,String id,String name,String url,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingNodeProperties(HfgwUserContext userContext, String channelId,String id,String name,String url,String tlsCacert,String address,String contactPerson,String contactTelephone,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChannel(channelId);
 		checkerOf(userContext).checkIdOfNode(id);
 		
 		checkerOf(userContext).checkNameOfNode( name);
 		checkerOf(userContext).checkUrlOfNode( url);
+		checkerOf(userContext).checkTlsCacertOfNode( tlsCacert);
+		checkerOf(userContext).checkAddressOfNode( address);
+		checkerOf(userContext).checkContactPersonOfNode( contactPerson);
+		checkerOf(userContext).checkContactTelephoneOfNode( contactTelephone);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 		
 	}
-	public  Channel updateNodeProperties(HfgwUserContext userContext, String channelId, String id,String name,String url, String [] tokensExpr) throws Exception
+	public  Channel updateNodeProperties(HfgwUserContext userContext, String channelId, String id,String name,String url,String tlsCacert,String address,String contactPerson,String contactTelephone, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingNodeProperties(userContext,channelId,id,name,url,tokensExpr);
+		checkParamsForUpdatingNodeProperties(userContext,channelId,id,name,url,tlsCacert,address,contactPerson,contactTelephone,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -643,6 +719,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		item.updateName( name );
 		item.updateUrl( url );
+		item.updateTlsCacert( tlsCacert );
+		item.updateAddress( address );
+		item.updateContactPerson( contactPerson );
+		item.updateContactTelephone( contactTelephone );
 
 		
 		//checkParamsForAddingNode(userContext,channelId,name, code, used,tokensExpr);
@@ -653,7 +733,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 	}
 	
 	
-	protected Node createNode(HfgwUserContext userContext, String name, String url, String organizationId, String typeId) throws Exception{
+	protected Node createNode(HfgwUserContext userContext, String name, String url, String organizationId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone) throws Exception{
 
 		Node node = new Node();
 		
@@ -663,9 +743,16 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		Organization  organization = new Organization();
 		organization.setId(organizationId);		
 		node.setOrganization(organization);		
+		HyperledgerNetwork  network = new HyperledgerNetwork();
+		network.setId(networkId);		
+		node.setNetwork(network);		
+		node.setTlsCacert(tlsCacert);		
 		NodeType  type = new NodeType();
 		type.setId(typeId);		
-		node.setType(type);
+		node.setType(type);		
+		node.setAddress(address);		
+		node.setContactPerson(contactPerson);		
+		node.setContactTelephone(contactTelephone);
 	
 		
 		return node;
@@ -785,6 +872,22 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			checkerOf(userContext).checkUrlOfNode(parseString(newValueExpr));
 		}
 		
+		if(Node.TLS_CACERT_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTlsCacertOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.ADDRESS_PROPERTY.equals(property)){
+			checkerOf(userContext).checkAddressOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.CONTACT_PERSON_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactPersonOfNode(parseString(newValueExpr));
+		}
+		
+		if(Node.CONTACT_TELEPHONE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkContactTelephoneOfNode(parseString(newValueExpr));
+		}
+		
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 	
@@ -816,6 +919,237 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			node.changeProperty(property, newValueExpr);
 			
 			channel = saveChannel(userContext, channel, tokens().withNodeList().done());
+			return present(userContext,channel, mergedAllTokens(tokensExpr));
+		}
+
+	}
+	/*
+
+	*/
+	
+
+
+
+	protected void checkParamsForAddingChannelPeerRole(HfgwUserContext userContext, String channelId, String nodeId, String peerRoleId,String [] tokensExpr) throws Exception{
+		
+				checkerOf(userContext).checkIdOfChannel(channelId);
+
+		
+		checkerOf(userContext).checkNodeIdOfChannelPeerRole(nodeId);
+		
+		checkerOf(userContext).checkPeerRoleIdOfChannelPeerRole(peerRoleId);
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
+
+	
+	}
+	public  Channel addChannelPeerRole(HfgwUserContext userContext, String channelId, String nodeId, String peerRoleId, String [] tokensExpr) throws Exception
+	{	
+		
+		checkParamsForAddingChannelPeerRole(userContext,channelId,nodeId, peerRoleId,tokensExpr);
+		
+		ChannelPeerRole channelPeerRole = createChannelPeerRole(userContext,nodeId, peerRoleId);
+		
+		Channel channel = loadChannel(userContext, channelId, allTokens());
+		synchronized(channel){ 
+			//Will be good when the channel loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			channel.addChannelPeerRole( channelPeerRole );		
+			channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
+			
+			userContext.getManagerGroup().getChannelPeerRoleManager().onNewInstanceCreated(userContext, channelPeerRole);
+			return present(userContext,channel, mergedAllTokens(tokensExpr));
+		}
+	}
+	protected void checkParamsForUpdatingChannelPeerRoleProperties(HfgwUserContext userContext, String channelId,String id,String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfChannel(channelId);
+		checkerOf(userContext).checkIdOfChannelPeerRole(id);
+		
+
+		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
+		
+	}
+	public  Channel updateChannelPeerRoleProperties(HfgwUserContext userContext, String channelId, String id, String [] tokensExpr) throws Exception
+	{	
+		checkParamsForUpdatingChannelPeerRoleProperties(userContext,channelId,id,tokensExpr);
+
+		Map<String, Object> options = tokens()
+				.allTokens()
+				//.withChannelPeerRoleListList()
+				.searchChannelPeerRoleListWith(ChannelPeerRole.ID_PROPERTY, "is", id).done();
+		
+		Channel channelToUpdate = loadChannel(userContext, channelId, options);
+		
+		if(channelToUpdate.getChannelPeerRoleList().isEmpty()){
+			throw new ChannelManagerException("ChannelPeerRole is NOT FOUND with id: '"+id+"'");
+		}
+		
+		ChannelPeerRole item = channelToUpdate.getChannelPeerRoleList().first();
+		
+
+		
+		//checkParamsForAddingChannelPeerRole(userContext,channelId,name, code, used,tokensExpr);
+		Channel channel = saveChannel(userContext, channelToUpdate, tokens().withChannelPeerRoleList().done());
+		synchronized(channel){ 
+			return present(userContext,channel, mergedAllTokens(tokensExpr));
+		}
+	}
+	
+	
+	protected ChannelPeerRole createChannelPeerRole(HfgwUserContext userContext, String nodeId, String peerRoleId) throws Exception{
+
+		ChannelPeerRole channelPeerRole = new ChannelPeerRole();
+		
+		
+		Node  node = new Node();
+		node.setId(nodeId);		
+		channelPeerRole.setNode(node);		
+		PeerRole  peerRole = new PeerRole();
+		peerRole.setId(peerRoleId);		
+		channelPeerRole.setPeerRole(peerRole);
+	
+		
+		return channelPeerRole;
+	
+		
+	}
+	
+	protected ChannelPeerRole createIndexedChannelPeerRole(String id, int version){
+
+		ChannelPeerRole channelPeerRole = new ChannelPeerRole();
+		channelPeerRole.setId(id);
+		channelPeerRole.setVersion(version);
+		return channelPeerRole;			
+		
+	}
+	
+	protected void checkParamsForRemovingChannelPeerRoleList(HfgwUserContext userContext, String channelId, 
+			String channelPeerRoleIds[],String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfChannel(channelId);
+		for(String channelPeerRoleIdItem: channelPeerRoleIds){
+			checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleIdItem);
+		}
+		
+		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
+		
+	}
+	public  Channel removeChannelPeerRoleList(HfgwUserContext userContext, String channelId, 
+			String channelPeerRoleIds[],String [] tokensExpr) throws Exception{
+			
+			checkParamsForRemovingChannelPeerRoleList(userContext, channelId,  channelPeerRoleIds, tokensExpr);
+			
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+			synchronized(channel){ 
+				//Will be good when the channel loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				channelDaoOf(userContext).planToRemoveChannelPeerRoleList(channel, channelPeerRoleIds, allTokens());
+				channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
+				deleteRelationListInGraph(userContext, channel.getChannelPeerRoleList());
+				return present(userContext,channel, mergedAllTokens(tokensExpr));
+			}
+	}
+	
+	protected void checkParamsForRemovingChannelPeerRole(HfgwUserContext userContext, String channelId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfChannel( channelId);
+		checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleId);
+		checkerOf(userContext).checkVersionOfChannelPeerRole(channelPeerRoleVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
+	
+	}
+	public  Channel removeChannelPeerRole(HfgwUserContext userContext, String channelId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForRemovingChannelPeerRole(userContext,channelId, channelPeerRoleId, channelPeerRoleVersion,tokensExpr);
+		
+		ChannelPeerRole channelPeerRole = createIndexedChannelPeerRole(channelPeerRoleId, channelPeerRoleVersion);
+		Channel channel = loadChannel(userContext, channelId, allTokens());
+		synchronized(channel){ 
+			//Will be good when the channel loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			channel.removeChannelPeerRole( channelPeerRole );		
+			channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
+			deleteRelationInGraph(userContext, channelPeerRole);
+			return present(userContext,channel, mergedAllTokens(tokensExpr));
+		}
+		
+		
+	}
+	protected void checkParamsForCopyingChannelPeerRole(HfgwUserContext userContext, String channelId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfChannel( channelId);
+		checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleId);
+		checkerOf(userContext).checkVersionOfChannelPeerRole(channelPeerRoleVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
+	
+	}
+	public  Channel copyChannelPeerRoleFrom(HfgwUserContext userContext, String channelId, 
+		String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForCopyingChannelPeerRole(userContext,channelId, channelPeerRoleId, channelPeerRoleVersion,tokensExpr);
+		
+		ChannelPeerRole channelPeerRole = createIndexedChannelPeerRole(channelPeerRoleId, channelPeerRoleVersion);
+		Channel channel = loadChannel(userContext, channelId, allTokens());
+		synchronized(channel){ 
+			//Will be good when the channel loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			
+			
+			
+			channel.copyChannelPeerRoleFrom( channelPeerRole );		
+			channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
+			
+			userContext.getManagerGroup().getChannelPeerRoleManager().onNewInstanceCreated(userContext, (ChannelPeerRole)channel.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			return present(userContext,channel, mergedAllTokens(tokensExpr));
+		}
+		
+	}
+	
+	protected void checkParamsForUpdatingChannelPeerRole(HfgwUserContext userContext, String channelId, String channelPeerRoleId, int channelPeerRoleVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+		
+
+		
+		checkerOf(userContext).checkIdOfChannel(channelId);
+		checkerOf(userContext).checkIdOfChannelPeerRole(channelPeerRoleId);
+		checkerOf(userContext).checkVersionOfChannelPeerRole(channelPeerRoleVersion);
+		
+
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
+	
+	}
+	
+	public  Channel updateChannelPeerRole(HfgwUserContext userContext, String channelId, String channelPeerRoleId, int channelPeerRoleVersion, String property, String newValueExpr,String [] tokensExpr)
+			throws Exception{
+		
+		checkParamsForUpdatingChannelPeerRole(userContext, channelId, channelPeerRoleId, channelPeerRoleVersion, property, newValueExpr,  tokensExpr);
+		
+		Map<String,Object> loadTokens = this.tokens().withChannelPeerRoleList().searchChannelPeerRoleListWith(ChannelPeerRole.ID_PROPERTY, "eq", channelPeerRoleId).done();
+		
+		
+		
+		Channel channel = loadChannel(userContext, channelId, loadTokens);
+		
+		synchronized(channel){ 
+			//Will be good when the channel loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			//channel.removeChannelPeerRole( channelPeerRole );	
+			//make changes to AcceleraterAccount.
+			ChannelPeerRole channelPeerRoleIndex = createIndexedChannelPeerRole(channelPeerRoleId, channelPeerRoleVersion);
+		
+			ChannelPeerRole channelPeerRole = channel.findTheChannelPeerRole(channelPeerRoleIndex);
+			if(channelPeerRole == null){
+				throw new ChannelManagerException(channelPeerRole+" is NOT FOUND" );
+			}
+			
+			channelPeerRole.changeProperty(property, newValueExpr);
+			
+			channel = saveChannel(userContext, channel, tokens().withChannelPeerRoleList().done());
 			return present(userContext,channel, mergedAllTokens(tokensExpr));
 		}
 
@@ -1338,7 +1672,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 
 
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String transactionId, String blockId, String networkId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChannel(channelId);
 
@@ -1348,6 +1682,8 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		checkerOf(userContext).checkPayLoadOfServiceRecord(payLoad);
 		
 		checkerOf(userContext).checkChainCodeIdOfServiceRecord(chainCodeId);
+		
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
 		
 		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
@@ -1359,12 +1695,12 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 
 	
 	}
-	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String transactionId, String blockId, String networkId, String [] tokensExpr) throws Exception
+	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,channelId,name, payLoad, chainCodeId, transactionId, blockId, networkId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,channelId,name, payLoad, chainCodeId, chainCodeFunction, transactionId, blockId, networkId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, chainCodeId, transactionId, blockId, networkId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, chainCodeId, chainCodeFunction, transactionId, blockId, networkId);
 		
 		Channel channel = loadChannel(userContext, channelId, allTokens());
 		synchronized(channel){ 
@@ -1377,22 +1713,23 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			return present(userContext,channel, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String channelId,String id,String name,String payLoad,String transactionId,String blockId,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String channelId,String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChannel(channelId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
 		checkerOf(userContext).checkNameOfServiceRecord( name);
 		checkerOf(userContext).checkPayLoadOfServiceRecord( payLoad);
+		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
 		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 		
 	}
-	public  Channel updateServiceRecordProperties(HfgwUserContext userContext, String channelId, String id,String name,String payLoad,String transactionId,String blockId, String [] tokensExpr) throws Exception
+	public  Channel updateServiceRecordProperties(HfgwUserContext userContext, String channelId, String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,channelId,id,name,payLoad,transactionId,blockId,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,channelId,id,name,payLoad,chainCodeFunction,transactionId,blockId,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1409,6 +1746,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		item.updateName( name );
 		item.updatePayLoad( payLoad );
+		item.updateChainCodeFunction( chainCodeFunction );
 		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
 
@@ -1421,7 +1759,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String chainCodeId, String transactionId, String blockId, String networkId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
@@ -1431,6 +1769,7 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		ChainCode  chainCode = new ChainCode();
 		chainCode.setId(chainCodeId);		
 		serviceRecord.setChainCode(chainCode);		
+		serviceRecord.setChainCodeFunction(chainCodeFunction);		
 		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
@@ -1555,6 +1894,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		if(ServiceRecord.PAY_LOAD_PROPERTY.equals(property)){
 			checkerOf(userContext).checkPayLoadOfServiceRecord(parseString(newValueExpr));
+		}
+		
+		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
+			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){

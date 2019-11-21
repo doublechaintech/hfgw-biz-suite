@@ -17,14 +17,13 @@ public interface NodeTypeManager{
 
 	 
 
-	public NodeType createNodeType(HfgwUserContext userContext, String name,String code,String networkId,String address,String contactPerson,String contactTelephone) throws Exception;	
+	public NodeType createNodeType(HfgwUserContext userContext, String name,String code) throws Exception;	
 	public NodeType updateNodeType(HfgwUserContext userContext,String nodeTypeId, int nodeTypeVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public NodeType loadNodeType(HfgwUserContext userContext, String nodeTypeId, String [] tokensExpr) throws Exception;
 	public NodeType internalSaveNodeType(HfgwUserContext userContext, NodeType nodeType) throws Exception;
 	public NodeType internalSaveNodeType(HfgwUserContext userContext, NodeType nodeType,Map<String,Object>option) throws Exception;
 	
-	public NodeType transferToAnotherNetwork(HfgwUserContext userContext, String nodeTypeId, String anotherNetworkId)  throws Exception;
- 
+
 
 	public void delete(HfgwUserContext userContext, String nodeTypeId, int version) throws Exception;
 	public int deleteAll(HfgwUserContext userContext, String secureCode ) throws Exception;
@@ -33,9 +32,9 @@ public interface NodeTypeManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  NodeManager getNodeManager(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId ,String [] tokensExpr)  throws Exception;
+	//public  NodeManager getNodeManager(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId, String networkId, String tlsCacert, String address, String contactPerson, String contactTelephone ,String [] tokensExpr)  throws Exception;
 	
-	public  NodeType addNode(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId , String [] tokensExpr)  throws Exception;
+	public  NodeType addNode(HfgwUserContext userContext, String nodeTypeId, String name, String url, String organizationId, String channelId, String networkId, String tlsCacert, String address, String contactPerson, String contactTelephone , String [] tokensExpr)  throws Exception;
 	public  NodeType removeNode(HfgwUserContext userContext, String nodeTypeId, String nodeId, int nodeVersion,String [] tokensExpr)  throws Exception;
 	public  NodeType updateNode(HfgwUserContext userContext, String nodeTypeId, String nodeId, int nodeVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

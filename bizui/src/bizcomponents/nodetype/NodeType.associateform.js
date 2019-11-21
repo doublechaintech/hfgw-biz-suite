@@ -20,10 +20,6 @@ const testValues = {};
 const testValues = {
   name: 'peer',
   code: 'peer',
-  address: '北京市建国门内大街100号',
-  contactPerson: '张三',
-  contactTelephone: '010-9998880',
-  networkId: 'HN000001',
 }
 */
 
@@ -158,36 +154,6 @@ class NodeTypeAssociateForm extends Component {
                 </Form.Item>
               </Col>
 
-              <Col lg={12} md={12} sm={12}>
-                <Form.Item label={fieldLabels.address} {...formItemLayout}>
-                  {getFieldDecorator('address', {
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="地址" />
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} md={12} sm={12}>
-                <Form.Item label={fieldLabels.contactPerson} {...formItemLayout}>
-                  {getFieldDecorator('contactPerson', {
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="联系人" />
-                  )}
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} md={12} sm={12}>
-                <Form.Item label={fieldLabels.contactTelephone} {...formItemLayout}>
-                  {getFieldDecorator('contactTelephone', {
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                    <Input size="large" placeholder="联系电话" />
-                  )}
-                </Form.Item>
-              </Col>
-
             </Row>
 
 
@@ -201,28 +167,6 @@ class NodeTypeAssociateForm extends Component {
 
 
 
-
-       
-            <Row gutter={16}>
-
-              <Col lg={12} md={12} sm={24}>
-                <Form.Item label={fieldLabels.network} {...formItemLayout}>
-                  {getFieldDecorator('networkId', {
-                  	initialValue: tryinit('network'),
-                    rules: [{ required: true, message: appLocaleName(userContext,"PleaseInput") }],
-                  })(
-                <SelectObject 
-                    disabled={!availableForEdit('network')}
-                    targetType={"network"} 
-                    requestFunction={NodeTypeService.requestCandidateNetwork}/>
-  
-                  )}
-                </Form.Item>
-              </Col>
-
-            </Row>
-         
-       
 
 			</Form>
 			

@@ -26,6 +26,7 @@ import com.terapico.caf.viewcomponent.ButtonViewComponent;
 import com.terapico.utils.TextUtil;
 
 import com.doublechaintech.hfgw.nodetype.NodeType;
+import com.doublechaintech.hfgw.peerrole.PeerRole;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 
 public class HfgwBaseUtils {
@@ -244,6 +245,18 @@ public class HfgwBaseUtils {
 			return data;
 		}
 		data = userContext.getDAOGroup().getNodeTypeDAO().loadByCode(code, emptyOptions);
+		userContext.putIntoContextLocalStorage(key, data);
+		return data;
+	}
+
+
+	public static PeerRole getPeerRole(HfgwUserContext userContext, String code) throws Exception {
+		String key = "enum:" + PeerRole.INTERNAL_TYPE + ":" + code;
+		PeerRole data = (PeerRole) userContext.getFromContextLocalStorage(key);
+		if (data != null) {
+			return data;
+		}
+		data = userContext.getDAOGroup().getPeerRoleDAO().loadByCode(code, emptyOptions);
 		userContext.putIntoContextLocalStorage(key, data);
 		return data;
 	}

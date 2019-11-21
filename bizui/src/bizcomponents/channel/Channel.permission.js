@@ -57,7 +57,7 @@ class ChannelPermission extends Component {
   render() {
     // eslint-disable-next-line max-len
     const  channel = this.props.channel
-    const { id,displayName, nodeCount, chainCodeCount, applicationCount, serviceRecordCount } = channel
+    const { id,displayName, nodeCount, channelPeerRoleCount, chainCodeCount, applicationCount, serviceRecordCount } = channel
     const  returnURL = `/channel/${id}/dashboard`
     const cardsData = {cardsName:"频道",cardsFor: "channel",cardsSource: channel,displayName,returnURL,
   		subItems: [

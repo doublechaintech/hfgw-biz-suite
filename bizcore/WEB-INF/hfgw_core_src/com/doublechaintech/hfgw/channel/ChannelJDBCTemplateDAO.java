@@ -22,11 +22,13 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
 import com.doublechaintech.hfgw.node.NodeDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
@@ -68,6 +70,25 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
  		}
  		
 	 	return this.nodeDAO;
+ 	}	
+ 	
+			
+		
+	
+  	private  ChannelPeerRoleDAO  channelPeerRoleDAO;
+ 	public void setChannelPeerRoleDAO(ChannelPeerRoleDAO pChannelPeerRoleDAO){
+ 	
+ 		if(pChannelPeerRoleDAO == null){
+ 			throw new IllegalStateException("Do not try to set channelPeerRoleDAO to null.");
+ 		}
+	 	this.channelPeerRoleDAO = pChannelPeerRoleDAO;
+ 	}
+ 	public ChannelPeerRoleDAO getChannelPeerRoleDAO(){
+ 		if(this.channelPeerRoleDAO == null){
+ 			throw new IllegalStateException("The channelPeerRoleDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.channelPeerRoleDAO;
  	}	
  	
 			
@@ -181,6 +202,13 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
  		
  		if(isSaveNodeListEnabled(options)){
  			for(Node item: newChannel.getNodeList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
+ 		if(isSaveChannelPeerRoleListEnabled(options)){
+ 			for(ChannelPeerRole item: newChannel.getChannelPeerRoleList()){
  				item.setVersion(0);
  			}
  		}
@@ -326,6 +354,20 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
  	
 		
 	
+	protected boolean isExtractChannelPeerRoleListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,ChannelTokens.CHANNEL_PEER_ROLE_LIST);
+ 	}
+ 	protected boolean isAnalyzeChannelPeerRoleListEnabled(Map<String,Object> options){		 		
+ 		return ChannelTokens.of(options).analyzeChannelPeerRoleListEnabled();
+ 	}
+	
+	protected boolean isSaveChannelPeerRoleListEnabled(Map<String,Object> options){
+		return checkOptions(options, ChannelTokens.CHANNEL_PEER_ROLE_LIST);
+		
+ 	}
+ 	
+		
+	
 	protected boolean isExtractChainCodeListEnabled(Map<String,Object> options){		
  		return checkOptions(options,ChannelTokens.CHAIN_CODE_LIST);
  	}
@@ -403,6 +445,14 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
  		}	
  		if(isAnalyzeNodeListEnabled(loadOptions)){
 	 		analyzeNodeList(channel, loadOptions);
+ 		}
+ 		
+		
+		if(isExtractChannelPeerRoleListEnabled(loadOptions)){
+	 		extractChannelPeerRoleList(channel, loadOptions);
+ 		}	
+ 		if(isAnalyzeChannelPeerRoleListEnabled(loadOptions)){
+	 		analyzeChannelPeerRoleList(channel, loadOptions);
  		}
  		
 		
@@ -498,6 +548,56 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 		SmartList<Node> nodeList = channel.getNodeList();
 		if(nodeList != null){
 			getNodeDAO().analyzeNodeByChannel(nodeList, channel.getId(), options);
+			
+		}
+		
+		return channel;
+	
+	}	
+	
+		
+	protected void enhanceChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected Channel extractChannelPeerRoleList(Channel channel, Map<String,Object> options){
+		
+		
+		if(channel == null){
+			return null;
+		}
+		if(channel.getId() == null){
+			return channel;
+		}
+
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = getChannelPeerRoleDAO().findChannelPeerRoleByChannel(channel.getId(),options);
+		if(channelPeerRoleList != null){
+			enhanceChannelPeerRoleList(channelPeerRoleList,options);
+			channel.setChannelPeerRoleList(channelPeerRoleList);
+		}
+		
+		return channel;
+	
+	}	
+	
+	protected Channel analyzeChannelPeerRoleList(Channel channel, Map<String,Object> options){
+		
+		
+		if(channel == null){
+			return null;
+		}
+		if(channel.getId() == null){
+			return channel;
+		}
+
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();
+		if(channelPeerRoleList != null){
+			getChannelPeerRoleDAO().analyzeChannelPeerRoleByChannel(channelPeerRoleList, channel.getId(), options);
 			
 		}
 		
@@ -878,6 +978,13 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 	 		
  		}		
 		
+		if(isSaveChannelPeerRoleListEnabled(options)){
+	 		saveChannelPeerRoleList(channel, options);
+	 		//removeChannelPeerRoleList(channel, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
 		if(isSaveChainCodeListEnabled(options)){
 	 		saveChainCodeList(channel, options);
 	 		//removeChainCodeList(channel, options);
@@ -998,6 +1105,50 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 		return count;
 	}
 	
+	//disconnect Channel with network in Node
+	public Channel planToRemoveNodeListWithNetwork(Channel channel, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.CHANNEL_PROPERTY, channel.getId());
+		key.put(Node.NETWORK_PROPERTY, networkId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return channel;
+		}
+		if(externalNodeList.isEmpty()){
+			return channel;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearNetwork();
+			nodeItem.clearChannel();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = channel.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return channel;
+	}
+	
+	public int countNodeListWithNetwork(String channelId, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.CHANNEL_PROPERTY, channelId);
+		key.put(Node.NETWORK_PROPERTY, networkId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect Channel with type in Node
 	public Channel planToRemoveNodeListWithType(Channel channel, String typeId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -1039,6 +1190,122 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 		key.put(Node.TYPE_PROPERTY, typeId);
 		
 		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
+	public Channel planToRemoveChannelPeerRoleList(Channel channel, String channelPeerRoleIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channel.getId());
+		key.put(ChannelPeerRole.ID_PROPERTY, channelPeerRoleIds);
+		
+		SmartList<ChannelPeerRole> externalChannelPeerRoleList = getChannelPeerRoleDAO().
+				findChannelPeerRoleWithKey(key, options);
+		if(externalChannelPeerRoleList == null){
+			return channel;
+		}
+		if(externalChannelPeerRoleList.isEmpty()){
+			return channel;
+		}
+		
+		for(ChannelPeerRole channelPeerRoleItem: externalChannelPeerRoleList){
+
+			channelPeerRoleItem.clearFromAll();
+		}
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();		
+		channelPeerRoleList.addAllToRemoveList(externalChannelPeerRoleList);
+		return channel;	
+	
+	}
+
+
+	//disconnect Channel with node in ChannelPeerRole
+	public Channel planToRemoveChannelPeerRoleListWithNode(Channel channel, String nodeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channel.getId());
+		key.put(ChannelPeerRole.NODE_PROPERTY, nodeId);
+		
+		SmartList<ChannelPeerRole> externalChannelPeerRoleList = getChannelPeerRoleDAO().
+				findChannelPeerRoleWithKey(key, options);
+		if(externalChannelPeerRoleList == null){
+			return channel;
+		}
+		if(externalChannelPeerRoleList.isEmpty()){
+			return channel;
+		}
+		
+		for(ChannelPeerRole channelPeerRoleItem: externalChannelPeerRoleList){
+			channelPeerRoleItem.clearNode();
+			channelPeerRoleItem.clearChannel();
+			
+		}
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();		
+		channelPeerRoleList.addAllToRemoveList(externalChannelPeerRoleList);
+		return channel;
+	}
+	
+	public int countChannelPeerRoleListWithNode(String channelId, String nodeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channelId);
+		key.put(ChannelPeerRole.NODE_PROPERTY, nodeId);
+		
+		int count = getChannelPeerRoleDAO().countChannelPeerRoleWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect Channel with peer_role in ChannelPeerRole
+	public Channel planToRemoveChannelPeerRoleListWithPeerRole(Channel channel, String peerRoleId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channel.getId());
+		key.put(ChannelPeerRole.PEER_ROLE_PROPERTY, peerRoleId);
+		
+		SmartList<ChannelPeerRole> externalChannelPeerRoleList = getChannelPeerRoleDAO().
+				findChannelPeerRoleWithKey(key, options);
+		if(externalChannelPeerRoleList == null){
+			return channel;
+		}
+		if(externalChannelPeerRoleList.isEmpty()){
+			return channel;
+		}
+		
+		for(ChannelPeerRole channelPeerRoleItem: externalChannelPeerRoleList){
+			channelPeerRoleItem.clearPeerRole();
+			channelPeerRoleItem.clearChannel();
+			
+		}
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();		
+		channelPeerRoleList.addAllToRemoveList(externalChannelPeerRoleList);
+		return channel;
+	}
+	
+	public int countChannelPeerRoleListWithPeerRole(String channelId, String peerRoleId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, channelId);
+		key.put(ChannelPeerRole.PEER_ROLE_PROPERTY, peerRoleId);
+		
+		int count = getChannelPeerRoleDAO().countChannelPeerRoleWithKey(key, options);
 		return count;
 	}
 	
@@ -1414,6 +1681,72 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 	
 	
 		
+	protected Channel saveChannelPeerRoleList(Channel channel, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();
+		if(channelPeerRoleList == null){
+			//null list means nothing
+			return channel;
+		}
+		SmartList<ChannelPeerRole> mergedUpdateChannelPeerRoleList = new SmartList<ChannelPeerRole>();
+		
+		
+		mergedUpdateChannelPeerRoleList.addAll(channelPeerRoleList); 
+		if(channelPeerRoleList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateChannelPeerRoleList.addAll(channelPeerRoleList.getToRemoveList());
+			channelPeerRoleList.removeAll(channelPeerRoleList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getChannelPeerRoleDAO().saveChannelPeerRoleList(mergedUpdateChannelPeerRoleList,options);
+		
+		if(channelPeerRoleList.getToRemoveList() != null){
+			channelPeerRoleList.removeAll(channelPeerRoleList.getToRemoveList());
+		}
+		
+		
+		return channel;
+	
+	}
+	
+	protected Channel removeChannelPeerRoleList(Channel channel, Map<String,Object> options){
+	
+	
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();
+		if(channelPeerRoleList == null){
+			return channel;
+		}	
+	
+		SmartList<ChannelPeerRole> toRemoveChannelPeerRoleList = channelPeerRoleList.getToRemoveList();
+		
+		if(toRemoveChannelPeerRoleList == null){
+			return channel;
+		}
+		if(toRemoveChannelPeerRoleList.isEmpty()){
+			return channel;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getChannelPeerRoleDAO().removeChannelPeerRoleList(toRemoveChannelPeerRoleList,options);
+		
+		return channel;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
 	protected Channel saveChainCodeList(Channel channel, Map<String,Object> options){
 		
 		
@@ -1616,6 +1949,7 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 	public Channel present(Channel channel,Map<String, Object> options){
 	
 		presentNodeList(channel,options);
+		presentChannelPeerRoleList(channel,options);
 		presentChainCodeList(channel,options);
 		presentApplicationList(channel,options);
 		presentServiceRecordList(channel,options);
@@ -1639,6 +1973,26 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 
 		
 		channel.setNodeList(newList);
+		
+
+		return channel;
+	}			
+		
+	//Using java8 feature to reduce the code significantly
+ 	protected Channel presentChannelPeerRoleList(
+			Channel channel,
+			Map<String, Object> options) {
+
+		SmartList<ChannelPeerRole> channelPeerRoleList = channel.getChannelPeerRoleList();		
+				SmartList<ChannelPeerRole> newList= presentSubList(channel.getId(),
+				channelPeerRoleList,
+				options,
+				getChannelPeerRoleDAO()::countChannelPeerRoleByChannel,
+				getChannelPeerRoleDAO()::findChannelPeerRoleByChannel
+				);
+
+		
+		channel.setChannelPeerRoleList(newList);
 		
 
 		return channel;
@@ -1712,6 +2066,12 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 		return findAllCandidateByFilter(ChannelTable.COLUMN_NAME, filterKey, pageNo, pageSize, getChannelMapper());
     }
 		
+    public SmartList<Channel> requestCandidateChannelForChannelPeerRole(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(ChannelTable.COLUMN_NAME, filterKey, pageNo, pageSize, getChannelMapper());
+    }
+		
     public SmartList<Channel> requestCandidateChannelForChainCode(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
@@ -1761,6 +2121,29 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 			SmartList<Node> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setNodeList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
+	// 需要一个加载引用我的对象的enhance方法:ChannelPeerRole的channel的ChannelPeerRoleList
+	public SmartList<ChannelPeerRole> loadOurChannelPeerRoleList(HfgwUserContext userContext, List<Channel> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChannelPeerRole.CHANNEL_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<ChannelPeerRole> loadedObjs = userContext.getDAOGroup().getChannelPeerRoleDAO().findChannelPeerRoleWithKey(key, options);
+		Map<String, List<ChannelPeerRole>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getChannel().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<ChannelPeerRole> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<ChannelPeerRole> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setChannelPeerRoleList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

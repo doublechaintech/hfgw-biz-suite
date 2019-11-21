@@ -209,58 +209,6 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField networkIdFromNodeType(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("网络");
-		field.setLocaleKey("node_type.network");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("HyperledgerNetwork");
-		field.setRequired(true);
-		field.setPlaceholder("请填写网络");
-		return field;
-	}
-
-	protected FormField addressFromNodeType(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("地址");
-		field.setLocaleKey("node_type.address");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写地址");
-		return field;
-	}
-
-	protected FormField contactPersonFromNodeType(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("联系人");
-		field.setLocaleKey("node_type.contact_person");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写联系人");
-		return field;
-	}
-
-	protected FormField contactTelephoneFromNodeType(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("联系电话");
-		field.setLocaleKey("node_type.contact_telephone");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写联系电话");
-		return field;
-	}
-
 	protected FormField idFromNode(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("ID");
@@ -326,6 +274,32 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
+	protected FormField networkIdFromNode(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("网络");
+		field.setLocaleKey("node.network");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("HyperledgerNetwork");
+		field.setRequired(true);
+		field.setPlaceholder("请填写网络");
+		return field;
+	}
+
+	protected FormField tlsCacertFromNode(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("Tls Cacert");
+		field.setLocaleKey("node.tls_cacert");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("longtext");
+		field.setRequired(true);
+		field.setPlaceholder("请填写Tls Cacert");
+		return field;
+	}
+
 	protected FormField typeIdFromNode(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("类型");
@@ -336,6 +310,45 @@ public class BaseForm extends GenericForm{
 		field.setType("NodeType");
 		field.setRequired(true);
 		field.setPlaceholder("请填写类型");
+		return field;
+	}
+
+	protected FormField addressFromNode(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("地址");
+		field.setLocaleKey("node.address");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写地址");
+		return field;
+	}
+
+	protected FormField contactPersonFromNode(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("联系人");
+		field.setLocaleKey("node.contact_person");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写联系人");
+		return field;
+	}
+
+	protected FormField contactTelephoneFromNode(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("联系电话");
+		field.setLocaleKey("node.contact_telephone");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写联系电话");
 		return field;
 	}
 
@@ -391,58 +404,6 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField idFromTlsCacert(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("ID");
-		field.setLocaleKey("tls_cacert.id");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写ID");
-		return field;
-	}
-
-	protected FormField pathFromTlsCacert(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("路径");
-		field.setLocaleKey("tls_cacert.path");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写路径");
-		return field;
-	}
-
-	protected FormField certFromTlsCacert(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("Cert");
-		field.setLocaleKey("tls_cacert.cert");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("longtext");
-		field.setRequired(true);
-		field.setPlaceholder("请填写Cert");
-		return field;
-	}
-
-	protected FormField nodeIdFromTlsCacert(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("节点");
-		field.setLocaleKey("tls_cacert.node");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("Node");
-		field.setRequired(true);
-		field.setPlaceholder("请填写节点");
-		return field;
-	}
-
 	protected FormField idFromChannel(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("ID");
@@ -479,6 +440,97 @@ public class BaseForm extends GenericForm{
 		field.setType("HyperledgerNetwork");
 		field.setRequired(true);
 		field.setPlaceholder("请填写网络");
+		return field;
+	}
+
+	protected FormField idFromPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("ID");
+		field.setLocaleKey("peer_role.id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写ID");
+		return field;
+	}
+
+	protected FormField nameFromPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("名称");
+		field.setLocaleKey("peer_role.name");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写名称");
+		return field;
+	}
+
+	protected FormField codeFromPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("代码");
+		field.setLocaleKey("peer_role.code");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写代码");
+		return field;
+	}
+
+	protected FormField idFromChannelPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("ID");
+		field.setLocaleKey("channel_peer_role.id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写ID");
+		return field;
+	}
+
+	protected FormField channelIdFromChannelPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("频道");
+		field.setLocaleKey("channel_peer_role.channel");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("Channel");
+		field.setRequired(true);
+		field.setPlaceholder("请填写频道");
+		return field;
+	}
+
+	protected FormField nodeIdFromChannelPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("节点");
+		field.setLocaleKey("channel_peer_role.node");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("Node");
+		field.setRequired(true);
+		field.setPlaceholder("请填写节点");
+		return field;
+	}
+
+	protected FormField peerRoleIdFromChannelPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("对等的角色");
+		field.setLocaleKey("channel_peer_role.peer_role");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("PeerRole");
+		field.setRequired(true);
+		field.setPlaceholder("请填写对等的角色");
 		return field;
 	}
 
@@ -713,6 +765,19 @@ public class BaseForm extends GenericForm{
 		field.setType("ChainCode");
 		field.setRequired(true);
 		field.setPlaceholder("请填写链码");
+		return field;
+	}
+
+	protected FormField chainCodeFunctionFromServiceRecord(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("链码功能");
+		field.setLocaleKey("service_record.chain_code_function");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写链码功能");
 		return field;
 	}
 

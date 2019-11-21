@@ -233,6 +233,57 @@ class ChannelBizApp extends React.PureComponent {
     }))(NodeUpdateForm)
   }
 
+  getChannelPeerRoleSearch = () => {
+    const {ChannelPeerRoleSearch} = GlobalComponents;
+    const userContext = null
+    return connect(state => ({
+      rule: state.rule,
+      name: "通道对等的角色",
+      role: "channelPeerRole",
+      data: state._channel.channelPeerRoleList,
+      metaInfo: state._channel.channelPeerRoleListMetaInfo,
+      count: state._channel.channelPeerRoleCount,
+      returnURL: `/channel/${state._channel.id}/dashboard`,
+      currentPage: state._channel.channelPeerRoleCurrentPageNumber,
+      searchFormParameters: state._channel.channelPeerRoleSearchFormParameters,
+      searchParameters: {...state._channel.searchParameters},
+      expandForm: state._channel.expandForm,
+      loading: state._channel.loading,
+      partialList: state._channel.partialList,
+      owner: { type: '_channel', id: state._channel.id, 
+      referenceName: 'channel', 
+      listName: 'channelPeerRoleList', ref:state._channel, 
+      listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(ChannelPeerRoleSearch)
+  }
+  getChannelPeerRoleCreateForm = () => {
+   	const {ChannelPeerRoleCreateForm} = GlobalComponents;
+   	const userContext = null
+    return connect(state => ({
+      rule: state.rule,
+      role: "channelPeerRole",
+      data: state._channel.channelPeerRoleList,
+      metaInfo: state._channel.channelPeerRoleListMetaInfo,
+      count: state._channel.channelPeerRoleCount,
+      returnURL: `/channel/${state._channel.id}/list`,
+      currentPage: state._channel.channelPeerRoleCurrentPageNumber,
+      searchFormParameters: state._channel.channelPeerRoleSearchFormParameters,
+      loading: state._channel.loading,
+      owner: { type: '_channel', id: state._channel.id, referenceName: 'channel', listName: 'channelPeerRoleList', ref:state._channel, listDisplayName: appLocaleName(userContext,"List")}, // this is for model namespace and
+    }))(ChannelPeerRoleCreateForm)
+  }
+  
+  getChannelPeerRoleUpdateForm = () => {
+    const userContext = null
+  	const {ChannelPeerRoleUpdateForm} = GlobalComponents;
+    return connect(state => ({
+      selectedRows: state._channel.selectedRows,
+      role: "channelPeerRole",
+      currentUpdateIndex: state._channel.currentUpdateIndex,
+      owner: { type: '_channel', id: state._channel.id, listName: 'channelPeerRoleList', ref:state._channel, listDisplayName: appLocaleName(userContext,"List") }, // this is for model namespace and
+    }))(ChannelPeerRoleUpdateForm)
+  }
+
   getChainCodeSearch = () => {
     const {ChainCodeSearch} = GlobalComponents;
     const userContext = null
@@ -414,6 +465,10 @@ class ChannelBizApp extends React.PureComponent {
   	{path:"/channel/:id/list/nodeList", component: this.getNodeSearch()},
   	{path:"/channel/:id/list/nodeCreateForm", component: this.getNodeCreateForm()},
   	{path:"/channel/:id/list/nodeUpdateForm", component: this.getNodeUpdateForm()},
+   	
+  	{path:"/channel/:id/list/channelPeerRoleList", component: this.getChannelPeerRoleSearch()},
+  	{path:"/channel/:id/list/channelPeerRoleCreateForm", component: this.getChannelPeerRoleCreateForm()},
+  	{path:"/channel/:id/list/channelPeerRoleUpdateForm", component: this.getChannelPeerRoleUpdateForm()},
    	
   	{path:"/channel/:id/list/chainCodeList", component: this.getChainCodeSearch()},
   	{path:"/channel/:id/list/chainCodeCreateForm", component: this.getChainCodeCreateForm()},
