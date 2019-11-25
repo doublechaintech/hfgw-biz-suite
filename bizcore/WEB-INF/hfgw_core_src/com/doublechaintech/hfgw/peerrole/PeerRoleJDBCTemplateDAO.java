@@ -21,7 +21,9 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 
 import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
 
 
@@ -32,6 +34,15 @@ import org.springframework.jdbc.core.RowCallbackHandler;
 
 
 public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRoleDAO{
+ 
+ 	
+ 	private  HyperledgerNetworkDAO  hyperledgerNetworkDAO;
+ 	public void setHyperledgerNetworkDAO(HyperledgerNetworkDAO hyperledgerNetworkDAO){
+	 	this.hyperledgerNetworkDAO = hyperledgerNetworkDAO;
+ 	}
+ 	public HyperledgerNetworkDAO getHyperledgerNetworkDAO(){
+	 	return this.hyperledgerNetworkDAO;
+ 	}
 
 
 			
@@ -210,7 +221,21 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 	
 	}
 
+ 
 
+ 	protected boolean isExtractNetworkEnabled(Map<String,Object> options){
+ 		
+	 	return checkOptions(options, PeerRoleTokens.NETWORK);
+ 	}
+
+ 	protected boolean isSaveNetworkEnabled(Map<String,Object> options){
+	 	
+ 		return checkOptions(options, PeerRoleTokens.NETWORK);
+ 	}
+ 	
+
+ 	
+ 
 		
 	
 	protected boolean isExtractChannelPeerRoleListEnabled(Map<String,Object> options){		
@@ -251,7 +276,11 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 	protected PeerRole loadInternalPeerRole(AccessKey accessKey, Map<String,Object> loadOptions) throws Exception{
 		
 		PeerRole peerRole = extractPeerRole(accessKey, loadOptions);
-
+ 	
+ 		if(isExtractNetworkEnabled(loadOptions)){
+	 		extractNetwork(peerRole, loadOptions);
+ 		}
+ 
 		
 		if(isExtractChannelPeerRoleListEnabled(loadOptions)){
 	 		extractChannelPeerRoleList(peerRole, loadOptions);
@@ -265,7 +294,27 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 		
 	}
 
-	
+	 
+
+ 	protected PeerRole extractNetwork(PeerRole peerRole, Map<String,Object> options) throws Exception{
+
+		if(peerRole.getNetwork() == null){
+			return peerRole;
+		}
+		String networkId = peerRole.getNetwork().getId();
+		if( networkId == null){
+			return peerRole;
+		}
+		HyperledgerNetwork network = getHyperledgerNetworkDAO().load(networkId,options);
+		if(network != null){
+			peerRole.setNetwork(network);
+		}
+		
+ 		
+ 		return peerRole;
+ 	}
+ 		
+ 
 		
 	protected void enhanceChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList,Map<String,Object> options){
 		//extract multiple list from difference sources
@@ -318,6 +367,40 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 	
 		
 		
+  	
+ 	public SmartList<PeerRole> findPeerRoleByNetwork(String hyperledgerNetworkId,Map<String,Object> options){
+ 	
+  		SmartList<PeerRole> resultList = queryWith(PeerRoleTable.COLUMN_NETWORK, hyperledgerNetworkId, options, getPeerRoleMapper());
+		// analyzePeerRoleByNetwork(resultList, hyperledgerNetworkId, options);
+		return resultList;
+ 	}
+ 	 
+ 
+ 	public SmartList<PeerRole> findPeerRoleByNetwork(String hyperledgerNetworkId, int start, int count,Map<String,Object> options){
+ 		
+ 		SmartList<PeerRole> resultList =  queryWithRange(PeerRoleTable.COLUMN_NETWORK, hyperledgerNetworkId, options, getPeerRoleMapper(), start, count);
+ 		//analyzePeerRoleByNetwork(resultList, hyperledgerNetworkId, options);
+ 		return resultList;
+ 		
+ 	}
+ 	public void analyzePeerRoleByNetwork(SmartList<PeerRole> resultList, String hyperledgerNetworkId, Map<String,Object> options){
+		if(resultList==null){
+			return;//do nothing when the list is null.
+		}
+
+ 	
+ 		
+ 	}
+ 	@Override
+ 	public int countPeerRoleByNetwork(String hyperledgerNetworkId,Map<String,Object> options){
+
+ 		return countWith(PeerRoleTable.COLUMN_NETWORK, hyperledgerNetworkId, options);
+ 	}
+ 	@Override
+	public Map<String, Integer> countPeerRoleByNetworkIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(PeerRoleTable.COLUMN_NETWORK, ids, options);
+	}
+ 	
  	
 		
 		
@@ -460,24 +543,33 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
  		return preparePeerRoleCreateParameters(peerRole);
  	}
  	protected Object[] preparePeerRoleUpdateParameters(PeerRole peerRole){
- 		Object[] parameters = new Object[5];
+ 		Object[] parameters = new Object[6];
  
  		parameters[0] = peerRole.getName();
- 		parameters[1] = peerRole.getCode();		
- 		parameters[2] = peerRole.nextVersion();
- 		parameters[3] = peerRole.getId();
- 		parameters[4] = peerRole.getVersion();
+ 		parameters[1] = peerRole.getCode(); 	
+ 		if(peerRole.getNetwork() != null){
+ 			parameters[2] = peerRole.getNetwork().getId();
+ 		}
+ 		
+ 		parameters[3] = peerRole.nextVersion();
+ 		parameters[4] = peerRole.getId();
+ 		parameters[5] = peerRole.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] preparePeerRoleCreateParameters(PeerRole peerRole){
-		Object[] parameters = new Object[3];
+		Object[] parameters = new Object[4];
 		String newPeerRoleId=getNextId();
 		peerRole.setId(newPeerRoleId);
 		parameters[0] =  peerRole.getId();
  
  		parameters[1] = peerRole.getName();
- 		parameters[2] = peerRole.getCode();		
+ 		parameters[2] = peerRole.getCode(); 	
+ 		if(peerRole.getNetwork() != null){
+ 			parameters[3] = peerRole.getNetwork().getId();
+ 		
+ 		}
+ 				
  				
  		return parameters;
  	}
@@ -485,7 +577,11 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 	protected PeerRole saveInternalPeerRole(PeerRole peerRole, Map<String,Object> options){
 		
 		savePeerRole(peerRole);
-
+ 	
+ 		if(isSaveNetworkEnabled(options)){
+	 		saveNetwork(peerRole, options);
+ 		}
+ 
 		
 		if(isSaveChannelPeerRoleListEnabled(options)){
 	 		saveChannelPeerRoleList(peerRole, options);
@@ -501,7 +597,24 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 	
 	
 	//======================================================================================
+	 
+ 
+ 	protected PeerRole saveNetwork(PeerRole peerRole, Map<String,Object> options){
+ 		//Call inject DAO to execute this method
+ 		if(peerRole.getNetwork() == null){
+ 			return peerRole;//do nothing when it is null
+ 		}
+ 		
+ 		getHyperledgerNetworkDAO().save(peerRole.getNetwork(),options);
+ 		return peerRole;
+ 		
+ 	}
+ 	
+ 	
+ 	
+ 	 
 	
+ 
 
 	
 	public PeerRole planToRemoveChannelPeerRoleList(PeerRole peerRole, String channelPeerRoleIds[], Map<String,Object> options)throws Exception{
@@ -799,86 +912,6 @@ public class PeerRoleJDBCTemplateDAO extends HfgwBaseDAOImpl implements PeerRole
 	}
 	
 	
-    
-	public Map<String, Integer> countBySql(String sql, Object[] params) {
-		if (params == null || params.length == 0) {
-			return new HashMap<>();
-		}
-		List<Map<String, Object>> result = this.getJdbcTemplateObject().queryForList(sql, params);
-		if (result == null || result.isEmpty()) {
-			return new HashMap<>();
-		}
-		Map<String, Integer> cntMap = new HashMap<>();
-		for (Map<String, Object> data : result) {
-			String key = (String) data.get("id");
-			Number value = (Number) data.get("count");
-			cntMap.put(key, value.intValue());
-		}
-		this.logSQLAndParameters("countBySql", sql, params, cntMap.size() + " Counts");
-		return cntMap;
-	}
-
-	public Integer singleCountBySql(String sql, Object[] params) {
-		Integer cnt = this.getJdbcTemplateObject().queryForObject(sql, params, Integer.class);
-		logSQLAndParameters("singleCountBySql", sql, params, cnt + "");
-		return cnt;
-	}
-
-	public BigDecimal summaryBySql(String sql, Object[] params) {
-		BigDecimal cnt = this.getJdbcTemplateObject().queryForObject(sql, params, BigDecimal.class);
-		logSQLAndParameters("summaryBySql", sql, params, cnt + "");
-		return cnt == null ? BigDecimal.ZERO : cnt;
-	}
-
-	public <T> List<T> queryForList(String sql, Object[] params, Class<T> claxx) {
-		List<T> result = this.getJdbcTemplateObject().queryForList(sql, params, claxx);
-		logSQLAndParameters("queryForList", sql, params, result.size() + " items");
-		return result;
-	}
-
-	public Map<String, Object> queryForMap(String sql, Object[] params) throws DataAccessException {
-		Map<String, Object> result = null;
-		try {
-			result = this.getJdbcTemplateObject().queryForMap(sql, params);
-		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
-			// 空结果，返回null
-		}
-		logSQLAndParameters("queryForObject", sql, params, result == null ? "not found" : String.valueOf(result));
-		return result;
-	}
-
-	public <T> T queryForObject(String sql, Object[] params, Class<T> claxx) throws DataAccessException {
-		T result = null;
-		try {
-			result = this.getJdbcTemplateObject().queryForObject(sql, params, claxx);
-		} catch (org.springframework.dao.EmptyResultDataAccessException e) {
-			// 空结果，返回null
-		}
-		logSQLAndParameters("queryForObject", sql, params, result == null ? "not found" : String.valueOf(result));
-		return result;
-	}
-
-	public List<Map<String, Object>> queryAsMapList(String sql, Object[] params) {
-		List<Map<String, Object>> result = getJdbcTemplateObject().queryForList(sql, params);
-		logSQLAndParameters("queryAsMapList", sql, params, result.size() + " items");
-		return result;
-	}
-
-	public synchronized int updateBySql(String sql, Object[] params) {
-		int result = getJdbcTemplateObject().update(sql, params);
-		logSQLAndParameters("updateBySql", sql, params, result + " items");
-		return result;
-	}
-
-	public void execSqlWithRowCallback(String sql, Object[] args, RowCallbackHandler callback) {
-		getJdbcTemplateObject().query(sql, args, callback);
-	}
-
-	public void executeSql(String sql) {
-		logSQLAndParameters("executeSql", sql, new Object[] {}, "");
-		getJdbcTemplateObject().execute(sql);
-	}
-
 
 }
 

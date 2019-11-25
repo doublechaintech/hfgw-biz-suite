@@ -21,6 +21,7 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -28,6 +29,7 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO;
 import com.doublechaintech.hfgw.application.ApplicationDAO;
 
 
@@ -49,6 +51,24 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  	}
  
  	
+ 	private  ApplicationDAO  applicationDAO;
+ 	public void setApplicationDAO(ApplicationDAO applicationDAO){
+	 	this.applicationDAO = applicationDAO;
+ 	}
+ 	public ApplicationDAO getApplicationDAO(){
+	 	return this.applicationDAO;
+ 	}
+ 
+ 	
+ 	private  TransactionStatusDAO  transactionStatusDAO;
+ 	public void setTransactionStatusDAO(TransactionStatusDAO transactionStatusDAO){
+	 	this.transactionStatusDAO = transactionStatusDAO;
+ 	}
+ 	public TransactionStatusDAO getTransactionStatusDAO(){
+	 	return this.transactionStatusDAO;
+ 	}
+ 
+ 	
  	private  ChainCodeDAO  chainCodeDAO;
  	public void setChainCodeDAO(ChainCodeDAO chainCodeDAO){
 	 	this.chainCodeDAO = chainCodeDAO;
@@ -64,15 +84,6 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  	}
  	public HyperledgerNetworkDAO getHyperledgerNetworkDAO(){
 	 	return this.hyperledgerNetworkDAO;
- 	}
- 
- 	
- 	private  ApplicationDAO  applicationDAO;
- 	public void setApplicationDAO(ApplicationDAO applicationDAO){
-	 	this.applicationDAO = applicationDAO;
- 	}
- 	public ApplicationDAO getApplicationDAO(){
-	 	return this.applicationDAO;
  	}
 
 
@@ -246,14 +257,14 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  	
   
 
- 	protected boolean isExtractApplicationEnabled(Map<String,Object> options){
+ 	protected boolean isExtractAppClientEnabled(Map<String,Object> options){
  		
-	 	return checkOptions(options, ServiceRecordTokens.APPLICATION);
+	 	return checkOptions(options, ServiceRecordTokens.APPCLIENT);
  	}
 
- 	protected boolean isSaveApplicationEnabled(Map<String,Object> options){
+ 	protected boolean isSaveAppClientEnabled(Map<String,Object> options){
 	 	
- 		return checkOptions(options, ServiceRecordTokens.APPLICATION);
+ 		return checkOptions(options, ServiceRecordTokens.APPCLIENT);
  	}
  	
 
@@ -268,6 +279,20 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  	protected boolean isSaveNetworkEnabled(Map<String,Object> options){
 	 	
  		return checkOptions(options, ServiceRecordTokens.NETWORK);
+ 	}
+ 	
+
+ 	
+  
+
+ 	protected boolean isExtractStatusEnabled(Map<String,Object> options){
+ 		
+	 	return checkOptions(options, ServiceRecordTokens.STATUS);
+ 	}
+
+ 	protected boolean isSaveStatusEnabled(Map<String,Object> options){
+	 	
+ 		return checkOptions(options, ServiceRecordTokens.STATUS);
  	}
  	
 
@@ -308,12 +333,16 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
 	 		extractChainCode(serviceRecord, loadOptions);
  		}
   	
- 		if(isExtractApplicationEnabled(loadOptions)){
-	 		extractApplication(serviceRecord, loadOptions);
+ 		if(isExtractAppClientEnabled(loadOptions)){
+	 		extractAppClient(serviceRecord, loadOptions);
  		}
   	
  		if(isExtractNetworkEnabled(loadOptions)){
 	 		extractNetwork(serviceRecord, loadOptions);
+ 		}
+  	
+ 		if(isExtractStatusEnabled(loadOptions)){
+	 		extractStatus(serviceRecord, loadOptions);
  		}
  
 		
@@ -363,18 +392,18 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		
   
 
- 	protected ServiceRecord extractApplication(ServiceRecord serviceRecord, Map<String,Object> options) throws Exception{
+ 	protected ServiceRecord extractAppClient(ServiceRecord serviceRecord, Map<String,Object> options) throws Exception{
 
-		if(serviceRecord.getApplication() == null){
+		if(serviceRecord.getAppClient() == null){
 			return serviceRecord;
 		}
-		String applicationId = serviceRecord.getApplication().getId();
-		if( applicationId == null){
+		String appClientId = serviceRecord.getAppClient().getId();
+		if( appClientId == null){
 			return serviceRecord;
 		}
-		Application application = getApplicationDAO().load(applicationId,options);
-		if(application != null){
-			serviceRecord.setApplication(application);
+		Application appClient = getApplicationDAO().load(appClientId,options);
+		if(appClient != null){
+			serviceRecord.setAppClient(appClient);
 		}
 		
  		
@@ -395,6 +424,26 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
 		HyperledgerNetwork network = getHyperledgerNetworkDAO().load(networkId,options);
 		if(network != null){
 			serviceRecord.setNetwork(network);
+		}
+		
+ 		
+ 		return serviceRecord;
+ 	}
+ 		
+  
+
+ 	protected ServiceRecord extractStatus(ServiceRecord serviceRecord, Map<String,Object> options) throws Exception{
+
+		if(serviceRecord.getStatus() == null){
+			return serviceRecord;
+		}
+		String statusId = serviceRecord.getStatus().getId();
+		if( statusId == null){
+			return serviceRecord;
+		}
+		TransactionStatus status = getTransactionStatusDAO().load(statusId,options);
+		if(status != null){
+			serviceRecord.setStatus(status);
 		}
 		
  		
@@ -505,28 +554,28 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
 	}
  	
   	
- 	public SmartList<ServiceRecord> findServiceRecordByApplication(String applicationId,Map<String,Object> options){
+ 	public SmartList<ServiceRecord> findServiceRecordByAppClient(String applicationId,Map<String,Object> options){
  	
-  		SmartList<ServiceRecord> resultList = queryWith(ServiceRecordTable.COLUMN_APPLICATION, applicationId, options, getServiceRecordMapper());
-		// analyzeServiceRecordByApplication(resultList, applicationId, options);
+  		SmartList<ServiceRecord> resultList = queryWith(ServiceRecordTable.COLUMN_APP_CLIENT, applicationId, options, getServiceRecordMapper());
+		// analyzeServiceRecordByAppClient(resultList, applicationId, options);
 		return resultList;
  	}
  	 
  
- 	public SmartList<ServiceRecord> findServiceRecordByApplication(String applicationId, int start, int count,Map<String,Object> options){
+ 	public SmartList<ServiceRecord> findServiceRecordByAppClient(String applicationId, int start, int count,Map<String,Object> options){
  		
- 		SmartList<ServiceRecord> resultList =  queryWithRange(ServiceRecordTable.COLUMN_APPLICATION, applicationId, options, getServiceRecordMapper(), start, count);
- 		//analyzeServiceRecordByApplication(resultList, applicationId, options);
+ 		SmartList<ServiceRecord> resultList =  queryWithRange(ServiceRecordTable.COLUMN_APP_CLIENT, applicationId, options, getServiceRecordMapper(), start, count);
+ 		//analyzeServiceRecordByAppClient(resultList, applicationId, options);
  		return resultList;
  		
  	}
- 	public void analyzeServiceRecordByApplication(SmartList<ServiceRecord> resultList, String applicationId, Map<String,Object> options){
+ 	public void analyzeServiceRecordByAppClient(SmartList<ServiceRecord> resultList, String applicationId, Map<String,Object> options){
 		if(resultList==null){
 			return;//do nothing when the list is null.
 		}
 		
  		MultipleAccessKey filterKey = new MultipleAccessKey();
- 		filterKey.put(ServiceRecord.APPLICATION_PROPERTY, applicationId);
+ 		filterKey.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
  		Map<String,Object> emptyOptions = new HashMap<String,Object>();
  		
  		StatsInfo info = new StatsInfo();
@@ -545,13 +594,13 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		
  	}
  	@Override
- 	public int countServiceRecordByApplication(String applicationId,Map<String,Object> options){
+ 	public int countServiceRecordByAppClient(String applicationId,Map<String,Object> options){
 
- 		return countWith(ServiceRecordTable.COLUMN_APPLICATION, applicationId, options);
+ 		return countWith(ServiceRecordTable.COLUMN_APP_CLIENT, applicationId, options);
  	}
  	@Override
-	public Map<String, Integer> countServiceRecordByApplicationIds(String[] ids, Map<String, Object> options) {
-		return countWithIds(ServiceRecordTable.COLUMN_APPLICATION, ids, options);
+	public Map<String, Integer> countServiceRecordByAppClientIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(ServiceRecordTable.COLUMN_APP_CLIENT, ids, options);
 	}
  	
   	
@@ -602,6 +651,56 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  	@Override
 	public Map<String, Integer> countServiceRecordByNetworkIds(String[] ids, Map<String, Object> options) {
 		return countWithIds(ServiceRecordTable.COLUMN_NETWORK, ids, options);
+	}
+ 	
+  	
+ 	public SmartList<ServiceRecord> findServiceRecordByStatus(String transactionStatusId,Map<String,Object> options){
+ 	
+  		SmartList<ServiceRecord> resultList = queryWith(ServiceRecordTable.COLUMN_STATUS, transactionStatusId, options, getServiceRecordMapper());
+		// analyzeServiceRecordByStatus(resultList, transactionStatusId, options);
+		return resultList;
+ 	}
+ 	 
+ 
+ 	public SmartList<ServiceRecord> findServiceRecordByStatus(String transactionStatusId, int start, int count,Map<String,Object> options){
+ 		
+ 		SmartList<ServiceRecord> resultList =  queryWithRange(ServiceRecordTable.COLUMN_STATUS, transactionStatusId, options, getServiceRecordMapper(), start, count);
+ 		//analyzeServiceRecordByStatus(resultList, transactionStatusId, options);
+ 		return resultList;
+ 		
+ 	}
+ 	public void analyzeServiceRecordByStatus(SmartList<ServiceRecord> resultList, String transactionStatusId, Map<String,Object> options){
+		if(resultList==null){
+			return;//do nothing when the list is null.
+		}
+		
+ 		MultipleAccessKey filterKey = new MultipleAccessKey();
+ 		filterKey.put(ServiceRecord.STATUS_PROPERTY, transactionStatusId);
+ 		Map<String,Object> emptyOptions = new HashMap<String,Object>();
+ 		
+ 		StatsInfo info = new StatsInfo();
+ 		
+ 
+		StatsItem createTimeStatsItem = new StatsItem();
+		//ServiceRecord.CREATE_TIME_PROPERTY
+		createTimeStatsItem.setDisplayName("服务记录");
+		createTimeStatsItem.setInternalName(formatKeyForDateLine(ServiceRecord.CREATE_TIME_PROPERTY));
+		createTimeStatsItem.setResult(statsWithGroup(DateKey.class,wrapWithDate(ServiceRecord.CREATE_TIME_PROPERTY),filterKey,emptyOptions));
+		info.addItem(createTimeStatsItem);
+ 				
+ 		resultList.setStatsInfo(info);
+
+ 	
+ 		
+ 	}
+ 	@Override
+ 	public int countServiceRecordByStatus(String transactionStatusId,Map<String,Object> options){
+
+ 		return countWith(ServiceRecordTable.COLUMN_STATUS, transactionStatusId, options);
+ 	}
+ 	@Override
+	public Map<String, Integer> countServiceRecordByStatusIds(String[] ids, Map<String, Object> options) {
+		return countWithIds(ServiceRecordTable.COLUMN_STATUS, ids, options);
 	}
  	
  	
@@ -746,10 +845,10 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		return prepareServiceRecordCreateParameters(serviceRecord);
  	}
  	protected Object[] prepareServiceRecordUpdateParameters(ServiceRecord serviceRecord){
- 		Object[] parameters = new Object[14];
+ 		Object[] parameters = new Object[15];
  
  		parameters[0] = serviceRecord.getName();
- 		parameters[1] = serviceRecord.getPayLoad(); 	
+ 		parameters[1] = serviceRecord.getPayload(); 	
  		if(serviceRecord.getChannel() != null){
  			parameters[2] = serviceRecord.getChannel().getId();
  		}
@@ -762,29 +861,33 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		parameters[5] = serviceRecord.getTransactionId();
  		parameters[6] = serviceRecord.getBlockId();
  		parameters[7] = serviceRecord.getCreateTime(); 	
- 		if(serviceRecord.getApplication() != null){
- 			parameters[8] = serviceRecord.getApplication().getId();
+ 		if(serviceRecord.getAppClient() != null){
+ 			parameters[8] = serviceRecord.getAppClient().getId();
  		}
   	
  		if(serviceRecord.getNetwork() != null){
  			parameters[9] = serviceRecord.getNetwork().getId();
  		}
  
- 		parameters[10] = serviceRecord.getCurrentStatus();		
- 		parameters[11] = serviceRecord.nextVersion();
- 		parameters[12] = serviceRecord.getId();
- 		parameters[13] = serviceRecord.getVersion();
+ 		parameters[10] = serviceRecord.getResponse(); 	
+ 		if(serviceRecord.getStatus() != null){
+ 			parameters[11] = serviceRecord.getStatus().getId();
+ 		}
+ 		
+ 		parameters[12] = serviceRecord.nextVersion();
+ 		parameters[13] = serviceRecord.getId();
+ 		parameters[14] = serviceRecord.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareServiceRecordCreateParameters(ServiceRecord serviceRecord){
-		Object[] parameters = new Object[12];
+		Object[] parameters = new Object[13];
 		String newServiceRecordId=getNextId();
 		serviceRecord.setId(newServiceRecordId);
 		parameters[0] =  serviceRecord.getId();
  
  		parameters[1] = serviceRecord.getName();
- 		parameters[2] = serviceRecord.getPayLoad(); 	
+ 		parameters[2] = serviceRecord.getPayload(); 	
  		if(serviceRecord.getChannel() != null){
  			parameters[3] = serviceRecord.getChannel().getId();
  		
@@ -799,8 +902,8 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		parameters[6] = serviceRecord.getTransactionId();
  		parameters[7] = serviceRecord.getBlockId();
  		parameters[8] = serviceRecord.getCreateTime(); 	
- 		if(serviceRecord.getApplication() != null){
- 			parameters[9] = serviceRecord.getApplication().getId();
+ 		if(serviceRecord.getAppClient() != null){
+ 			parameters[9] = serviceRecord.getAppClient().getId();
  		
  		}
  		 	
@@ -809,7 +912,12 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		
  		}
  		
- 		parameters[11] = serviceRecord.getCurrentStatus();		
+ 		parameters[11] = serviceRecord.getResponse(); 	
+ 		if(serviceRecord.getStatus() != null){
+ 			parameters[12] = serviceRecord.getStatus().getId();
+ 		
+ 		}
+ 				
  				
  		return parameters;
  	}
@@ -826,12 +934,16 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
 	 		saveChainCode(serviceRecord, options);
  		}
   	
- 		if(isSaveApplicationEnabled(options)){
-	 		saveApplication(serviceRecord, options);
+ 		if(isSaveAppClientEnabled(options)){
+	 		saveAppClient(serviceRecord, options);
  		}
   	
  		if(isSaveNetworkEnabled(options)){
 	 		saveNetwork(serviceRecord, options);
+ 		}
+  	
+ 		if(isSaveStatusEnabled(options)){
+	 		saveStatus(serviceRecord, options);
  		}
  
 		
@@ -878,13 +990,13 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
 	
   
  
- 	protected ServiceRecord saveApplication(ServiceRecord serviceRecord, Map<String,Object> options){
+ 	protected ServiceRecord saveAppClient(ServiceRecord serviceRecord, Map<String,Object> options){
  		//Call inject DAO to execute this method
- 		if(serviceRecord.getApplication() == null){
+ 		if(serviceRecord.getAppClient() == null){
  			return serviceRecord;//do nothing when it is null
  		}
  		
- 		getApplicationDAO().save(serviceRecord.getApplication(),options);
+ 		getApplicationDAO().save(serviceRecord.getAppClient(),options);
  		return serviceRecord;
  		
  	}
@@ -902,6 +1014,23 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  		}
  		
  		getHyperledgerNetworkDAO().save(serviceRecord.getNetwork(),options);
+ 		return serviceRecord;
+ 		
+ 	}
+ 	
+ 	
+ 	
+ 	 
+	
+  
+ 
+ 	protected ServiceRecord saveStatus(ServiceRecord serviceRecord, Map<String,Object> options){
+ 		//Call inject DAO to execute this method
+ 		if(serviceRecord.getStatus() == null){
+ 			return serviceRecord;//do nothing when it is null
+ 		}
+ 		
+ 		getTransactionStatusDAO().save(serviceRecord.getStatus(),options);
  		return serviceRecord;
  		
  	}

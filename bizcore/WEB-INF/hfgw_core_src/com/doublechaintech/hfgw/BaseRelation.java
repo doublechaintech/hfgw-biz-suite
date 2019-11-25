@@ -112,6 +112,9 @@ public class BaseRelation{
 		String [] organizationRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("Organization",organizationRelatedObjectNames);
 
+		String [] nodeTypeRelatedObjectNames = {"network:HyperledgerNetwork"};
+		addRelationIndex("NodeType",nodeTypeRelatedObjectNames);
+
 		String [] nodeRelatedObjectNames = {"organization:Organization","channel:Channel","network:HyperledgerNetwork","type:NodeType"};
 		addRelationIndex("Node",nodeRelatedObjectNames);
 
@@ -120,6 +123,9 @@ public class BaseRelation{
 
 		String [] channelRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("Channel",channelRelatedObjectNames);
+
+		String [] peerRoleRelatedObjectNames = {"network:HyperledgerNetwork"};
+		addRelationIndex("PeerRole",peerRoleRelatedObjectNames);
 
 		String [] channelPeerRoleRelatedObjectNames = {"channel:Channel","node:Node","peer_role:PeerRole"};
 		addRelationIndex("ChannelPeerRole",channelPeerRoleRelatedObjectNames);
@@ -130,8 +136,11 @@ public class BaseRelation{
 		String [] applicationRelatedObjectNames = {"channel:Channel","network:HyperledgerNetwork"};
 		addRelationIndex("Application",applicationRelatedObjectNames);
 
-		String [] serviceRecordRelatedObjectNames = {"channel:Channel","chain_code:ChainCode","network:HyperledgerNetwork"};
+		String [] serviceRecordRelatedObjectNames = {"channel:Channel","chain_code:ChainCode","app_client:Application","network:HyperledgerNetwork","status:TransactionStatus"};
 		addRelationIndex("ServiceRecord",serviceRecordRelatedObjectNames);
+
+		String [] transactionStatusRelatedObjectNames = {"network:HyperledgerNetwork"};
+		addRelationIndex("TransactionStatus",transactionStatusRelatedObjectNames);
 
 		String [] changeRequestTypeRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("ChangeRequestType",changeRequestTypeRelatedObjectNames);
@@ -196,12 +205,14 @@ public class BaseRelation{
 	protected void prepareRelation()
 	{
 		addGenericRelation("Organization"                          ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("NodeType"                              ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"organization");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"type");
 		addGenericRelation("GrpcOption"                            ,TRUST_CHAIN_READ,"node");
 		addGenericRelation("Channel"                               ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("PeerRole"                              ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"node");
 		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"peerRole");
@@ -210,7 +221,10 @@ public class BaseRelation{
 		addGenericRelation("Application"                           ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"chainCode");
+		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"appClient");
 		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"status");
+		addGenericRelation("TransactionStatus"                     ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ChangeRequestType"                     ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"requestType");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"network");

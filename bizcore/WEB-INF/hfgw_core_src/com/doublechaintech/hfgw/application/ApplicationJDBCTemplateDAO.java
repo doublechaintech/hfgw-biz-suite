@@ -372,7 +372,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 
 		
 		
-		SmartList<ServiceRecord> serviceRecordList = getServiceRecordDAO().findServiceRecordByApplication(application.getId(),options);
+		SmartList<ServiceRecord> serviceRecordList = getServiceRecordDAO().findServiceRecordByAppClient(application.getId(),options);
 		if(serviceRecordList != null){
 			enhanceServiceRecordList(serviceRecordList,options);
 			application.setServiceRecordList(serviceRecordList);
@@ -396,7 +396,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		
 		SmartList<ServiceRecord> serviceRecordList = application.getServiceRecordList();
 		if(serviceRecordList != null){
-			getServiceRecordDAO().analyzeServiceRecordByApplication(serviceRecordList, application.getId(), options);
+			getServiceRecordDAO().analyzeServiceRecordByAppClient(serviceRecordList, application.getId(), options);
 			
 		}
 		
@@ -761,7 +761,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 	public Application planToRemoveServiceRecordList(Application application, String serviceRecordIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, application.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
 		key.put(ServiceRecord.ID_PROPERTY, serviceRecordIds);
 		
 		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
@@ -793,7 +793,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, application.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
 		key.put(ServiceRecord.CHANNEL_PROPERTY, channelId);
 		
 		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
@@ -807,7 +807,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		
 		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
 			serviceRecordItem.clearChannel();
-			serviceRecordItem.clearApplication();
+			serviceRecordItem.clearAppClient();
 			
 		}
 		
@@ -823,7 +823,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, applicationId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
 		key.put(ServiceRecord.CHANNEL_PROPERTY, channelId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
@@ -837,7 +837,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, application.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
 		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
 		
 		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
@@ -851,7 +851,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		
 		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
 			serviceRecordItem.clearChainCode();
-			serviceRecordItem.clearApplication();
+			serviceRecordItem.clearAppClient();
 			
 		}
 		
@@ -867,7 +867,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, applicationId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
 		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
@@ -881,7 +881,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, application.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
 		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
 		
 		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
@@ -895,7 +895,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		
 		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
 			serviceRecordItem.clearTransactionId();
-			serviceRecordItem.clearApplication();
+			serviceRecordItem.clearAppClient();
 			
 		}
 		
@@ -911,7 +911,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, applicationId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
 		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
@@ -925,7 +925,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, application.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
 		key.put(ServiceRecord.BLOCK_ID_PROPERTY, blockIdId);
 		
 		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
@@ -939,7 +939,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		
 		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
 			serviceRecordItem.clearBlockId();
-			serviceRecordItem.clearApplication();
+			serviceRecordItem.clearAppClient();
 			
 		}
 		
@@ -955,7 +955,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, applicationId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
 		key.put(ServiceRecord.BLOCK_ID_PROPERTY, blockIdId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
@@ -969,7 +969,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 		
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, application.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
 		key.put(ServiceRecord.NETWORK_PROPERTY, networkId);
 		
 		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
@@ -983,7 +983,7 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		
 		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
 			serviceRecordItem.clearNetwork();
-			serviceRecordItem.clearApplication();
+			serviceRecordItem.clearAppClient();
 			
 		}
 		
@@ -999,8 +999,52 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
 
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, applicationId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
 		key.put(ServiceRecord.NETWORK_PROPERTY, networkId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect Application with status in ServiceRecord
+	public Application planToRemoveServiceRecordListWithStatus(Application application, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return application;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return application;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearStatus();
+			serviceRecordItem.clearAppClient();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = application.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return application;
+	}
+	
+	public int countServiceRecordListWithStatus(String applicationId, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
 		return count;
@@ -1092,8 +1136,8 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 				SmartList<ServiceRecord> newList= presentSubList(application.getId(),
 				serviceRecordList,
 				options,
-				getServiceRecordDAO()::countServiceRecordByApplication,
-				getServiceRecordDAO()::findServiceRecordByApplication
+				getServiceRecordDAO()::countServiceRecordByAppClient,
+				getServiceRecordDAO()::findServiceRecordByAppClient
 				);
 
 		
@@ -1123,16 +1167,16 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 	}
 	
 	
-	// 需要一个加载引用我的对象的enhance方法:ServiceRecord的application的ServiceRecordList
+	// 需要一个加载引用我的对象的enhance方法:ServiceRecord的appClient的ServiceRecordList
 	public SmartList<ServiceRecord> loadOurServiceRecordList(HfgwUserContext userContext, List<Application> us, Map<String,Object> options) throws Exception{
 		if (us == null || us.isEmpty()){
 			return new SmartList<>();
 		}
 		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
 		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APPLICATION_PROPERTY, ids.toArray(new String[ids.size()]));
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, ids.toArray(new String[ids.size()]));
 		SmartList<ServiceRecord> loadedObjs = userContext.getDAOGroup().getServiceRecordDAO().findServiceRecordWithKey(key, options);
-		Map<String, List<ServiceRecord>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getApplication().getId()));
+		Map<String, List<ServiceRecord>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getAppClient().getId()));
 		us.forEach(it->{
 			String id = it.getId();
 			List<ServiceRecord> loadedList = loadedMap.get(id);

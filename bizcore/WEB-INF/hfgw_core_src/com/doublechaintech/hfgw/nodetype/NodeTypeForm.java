@@ -61,8 +61,64 @@ public class NodeTypeForm extends BaseForm {
 		return codeField("code","");
 	}
 
+
+	public NodeTypeForm networkIdField(String parameterName, String initValue){
+		FormField field = networkIdFromNodeType(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeTypeForm networkIdField(String initValue){
+		return networkIdField("networkId",initValue);
+	}
+	public NodeTypeForm networkIdField(){
+		return networkIdField("networkId","");
+	}
+
 	
 	
+
+
+	public NodeTypeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  idFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeTypeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String initValue){
+		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId",initValue);
+	}
+	public NodeTypeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(){
+		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId","");
+	}
+
+
+	public NodeTypeForm nameFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  nameFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeTypeForm nameFieldOfHyperledgerNetwork(String initValue){
+		return nameFieldOfHyperledgerNetwork("name",initValue);
+	}
+	public NodeTypeForm nameFieldOfHyperledgerNetwork(){
+		return nameFieldOfHyperledgerNetwork("name","");
+	}
+
+
+	public NodeTypeForm descriptionFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  descriptionFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeTypeForm descriptionFieldOfHyperledgerNetwork(String initValue){
+		return descriptionFieldOfHyperledgerNetwork("description",initValue);
+	}
+	public NodeTypeForm descriptionFieldOfHyperledgerNetwork(){
+		return descriptionFieldOfHyperledgerNetwork("description","");
+	}
 
 	
 
@@ -223,7 +279,17 @@ public class NodeTypeForm extends BaseForm {
 
 	
 
+	
+ 	public NodeTypeForm transferToAnotherNetworkAction(){
+		FormAction action = new FormAction();
+		action.setLabel("显示");
+		action.setLocaleKey("show");
+		action.setUrl("transferToAnotherNetwork/nodeTypeId/");
+		this.addFormAction(action);
+		return this;
+	}
 
+ 
 
 	public NodeTypeForm showAction(){
 		FormAction action = new FormAction();

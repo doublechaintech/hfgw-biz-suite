@@ -13,6 +13,7 @@ import com.doublechaintech.hfgw.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -23,16 +24,17 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 	
 	public static final String ID_PROPERTY                    = "id"                ;
 	public static final String NAME_PROPERTY                  = "name"              ;
-	public static final String PAY_LOAD_PROPERTY              = "payLoad"           ;
+	public static final String PAYLOAD_PROPERTY               = "payload"           ;
 	public static final String CHANNEL_PROPERTY               = "channel"           ;
 	public static final String CHAIN_CODE_PROPERTY            = "chainCode"         ;
 	public static final String CHAIN_CODE_FUNCTION_PROPERTY   = "chainCodeFunction" ;
 	public static final String TRANSACTION_ID_PROPERTY        = "transactionId"     ;
 	public static final String BLOCK_ID_PROPERTY              = "blockId"           ;
 	public static final String CREATE_TIME_PROPERTY           = "createTime"        ;
-	public static final String APPLICATION_PROPERTY           = "application"       ;
+	public static final String APP_CLIENT_PROPERTY            = "appClient"         ;
 	public static final String NETWORK_PROPERTY               = "network"           ;
-	public static final String CURRENT_STATUS_PROPERTY        = "currentStatus"     ;
+	public static final String RESPONSE_PROPERTY              = "response"          ;
+	public static final String STATUS_PROPERTY                = "status"            ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 
@@ -57,16 +59,17 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 
 	protected		String              	mId                 ;
 	protected		String              	mName               ;
-	protected		String              	mPayLoad            ;
+	protected		String              	mPayload            ;
 	protected		Channel             	mChannel            ;
 	protected		ChainCode           	mChainCode          ;
 	protected		String              	mChainCodeFunction  ;
 	protected		String              	mTransactionId      ;
 	protected		String              	mBlockId            ;
 	protected		DateTime            	mCreateTime         ;
-	protected		Application         	mApplication        ;
+	protected		Application         	mAppClient          ;
 	protected		HyperledgerNetwork  	mNetwork            ;
-	protected		String              	mCurrentStatus      ;
+	protected		String              	mResponse           ;
+	protected		TransactionStatus   	mStatus             ;
 	protected		int                 	mVersion            ;
 	
 	
@@ -89,8 +92,9 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 	public 	void clearFromAll(){
 		setChannel( null );
 		setChainCode( null );
-		setApplication( null );
+		setAppClient( null );
 		setNetwork( null );
+		setStatus( null );
 
 		this.changed = true;
 	}
@@ -103,8 +107,8 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		if(NAME_PROPERTY.equals(property)){
 			changeNameProperty(newValueExpr);
 		}
-		if(PAY_LOAD_PROPERTY.equals(property)){
-			changePayLoadProperty(newValueExpr);
+		if(PAYLOAD_PROPERTY.equals(property)){
+			changePayloadProperty(newValueExpr);
 		}
 		if(CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
 			changeChainCodeFunctionProperty(newValueExpr);
@@ -117,6 +121,9 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CREATE_TIME_PROPERTY.equals(property)){
 			changeCreateTimeProperty(newValueExpr);
+		}
+		if(RESPONSE_PROPERTY.equals(property)){
+			changeResponseProperty(newValueExpr);
 		}
 
       
@@ -138,15 +145,15 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
-	protected void changePayLoadProperty(String newValueExpr){
-		String oldValue = getPayLoad();
+	protected void changePayloadProperty(String newValueExpr){
+		String oldValue = getPayload();
 		String newValue = parseString(newValueExpr);
 		if(equalsString(oldValue , newValue)){
 			return;//they can be both null, or exact the same object, this is much faster than equals function
 		}
 		//they are surely different each other
-		updatePayLoad(newValue);
-		this.onChangeProperty(PAY_LOAD_PROPERTY, oldValue, newValue);
+		updatePayload(newValue);
+		this.onChangeProperty(PAYLOAD_PROPERTY, oldValue, newValue);
 		return;
   
 	}
@@ -213,6 +220,21 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 			
 			
 			
+	protected void changeResponseProperty(String newValueExpr){
+		String oldValue = getResponse();
+		String newValue = parseString(newValueExpr);
+		if(equalsString(oldValue , newValue)){
+			return;//they can be both null, or exact the same object, this is much faster than equals function
+		}
+		//they are surely different each other
+		updateResponse(newValue);
+		this.onChangeProperty(RESPONSE_PROPERTY, oldValue, newValue);
+		return;
+  
+	}
+			
+			
+			
 
 
 	
@@ -221,8 +243,8 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		if(NAME_PROPERTY.equals(property)){
 			return getName();
 		}
-		if(PAY_LOAD_PROPERTY.equals(property)){
-			return getPayLoad();
+		if(PAYLOAD_PROPERTY.equals(property)){
+			return getPayload();
 		}
 		if(CHANNEL_PROPERTY.equals(property)){
 			return getChannel();
@@ -242,14 +264,17 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		if(CREATE_TIME_PROPERTY.equals(property)){
 			return getCreateTime();
 		}
-		if(APPLICATION_PROPERTY.equals(property)){
-			return getApplication();
+		if(APP_CLIENT_PROPERTY.equals(property)){
+			return getAppClient();
 		}
 		if(NETWORK_PROPERTY.equals(property)){
 			return getNetwork();
 		}
-		if(CURRENT_STATUS_PROPERTY.equals(property)){
-			return getCurrentStatus();
+		if(RESPONSE_PROPERTY.equals(property)){
+			return getResponse();
+		}
+		if(STATUS_PROPERTY.equals(property)){
+			return getStatus();
 		}
 
     		//other property not include here
@@ -294,19 +319,19 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
-	public void setPayLoad(String payLoad){
-		this.mPayLoad = payLoad;;
+	public void setPayload(String payload){
+		this.mPayload = payload;;
 	}
-	public String getPayLoad(){
-		return this.mPayLoad;
+	public String getPayload(){
+		return this.mPayload;
 	}
-	public ServiceRecord updatePayLoad(String payLoad){
-		this.mPayLoad = payLoad;;
+	public ServiceRecord updatePayload(String payload){
+		this.mPayload = payload;;
 		this.changed = true;
 		return this;
 	}
-	public void mergePayLoad(String payLoad){
-		if(payLoad != null) { setPayLoad(payLoad);}
+	public void mergePayload(String payload){
+		if(payload != null) { setPayload(payload);}
 	}
 	
 	
@@ -426,24 +451,24 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	
-	public void setApplication(Application application){
-		this.mApplication = application;;
+	public void setAppClient(Application appClient){
+		this.mAppClient = appClient;;
 	}
-	public Application getApplication(){
-		return this.mApplication;
+	public Application getAppClient(){
+		return this.mAppClient;
 	}
-	public ServiceRecord updateApplication(Application application){
-		this.mApplication = application;;
+	public ServiceRecord updateAppClient(Application appClient){
+		this.mAppClient = appClient;;
 		this.changed = true;
 		return this;
 	}
-	public void mergeApplication(Application application){
-		if(application != null) { setApplication(application);}
+	public void mergeAppClient(Application appClient){
+		if(appClient != null) { setAppClient(appClient);}
 	}
 	
 	
-	public void clearApplication(){
-		setApplication ( null );
+	public void clearAppClient(){
+		setAppClient ( null );
 		this.changed = true;
 	}
 	
@@ -468,21 +493,42 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		this.changed = true;
 	}
 	
-	public void setCurrentStatus(String currentStatus){
-		this.mCurrentStatus = trimString(currentStatus);;
+	public void setResponse(String response){
+		this.mResponse = response;;
 	}
-	public String getCurrentStatus(){
-		return this.mCurrentStatus;
+	public String getResponse(){
+		return this.mResponse;
 	}
-	public ServiceRecord updateCurrentStatus(String currentStatus){
-		this.mCurrentStatus = trimString(currentStatus);;
+	public ServiceRecord updateResponse(String response){
+		this.mResponse = response;;
 		this.changed = true;
 		return this;
 	}
-	public void mergeCurrentStatus(String currentStatus){
-		if(currentStatus != null) { setCurrentStatus(currentStatus);}
+	public void mergeResponse(String response){
+		if(response != null) { setResponse(response);}
 	}
 	
+	
+	public void setStatus(TransactionStatus status){
+		this.mStatus = status;;
+	}
+	public TransactionStatus getStatus(){
+		return this.mStatus;
+	}
+	public ServiceRecord updateStatus(TransactionStatus status){
+		this.mStatus = status;;
+		this.changed = true;
+		return this;
+	}
+	public void mergeStatus(TransactionStatus status){
+		if(status != null) { setStatus(status);}
+	}
+	
+	
+	public void clearStatus(){
+		setStatus ( null );
+		this.changed = true;
+	}
 	
 	public void setVersion(int version){
 		this.mVersion = version;;
@@ -505,8 +551,9 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 
 		addToEntityList(this, entityList, getChannel(), internalType);
 		addToEntityList(this, entityList, getChainCode(), internalType);
-		addToEntityList(this, entityList, getApplication(), internalType);
+		addToEntityList(this, entityList, getAppClient(), internalType);
 		addToEntityList(this, entityList, getNetwork(), internalType);
+		addToEntityList(this, entityList, getStatus(), internalType);
 
 		
 	}
@@ -532,16 +579,17 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 
 		appendKeyValuePair(result, ID_PROPERTY, getId());
 		appendKeyValuePair(result, NAME_PROPERTY, getName());
-		appendKeyValuePair(result, PAY_LOAD_PROPERTY, getPayLoad());
+		appendKeyValuePair(result, PAYLOAD_PROPERTY, getPayload());
 		appendKeyValuePair(result, CHANNEL_PROPERTY, getChannel());
 		appendKeyValuePair(result, CHAIN_CODE_PROPERTY, getChainCode());
 		appendKeyValuePair(result, CHAIN_CODE_FUNCTION_PROPERTY, getChainCodeFunction());
 		appendKeyValuePair(result, TRANSACTION_ID_PROPERTY, getTransactionId());
 		appendKeyValuePair(result, BLOCK_ID_PROPERTY, getBlockId());
 		appendKeyValuePair(result, CREATE_TIME_PROPERTY, getCreateTime());
-		appendKeyValuePair(result, APPLICATION_PROPERTY, getApplication());
+		appendKeyValuePair(result, APP_CLIENT_PROPERTY, getAppClient());
 		appendKeyValuePair(result, NETWORK_PROPERTY, getNetwork());
-		appendKeyValuePair(result, CURRENT_STATUS_PROPERTY, getCurrentStatus());
+		appendKeyValuePair(result, RESPONSE_PROPERTY, getResponse());
+		appendKeyValuePair(result, STATUS_PROPERTY, getStatus());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 
 		
@@ -559,16 +607,17 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		
 			dest.setId(getId());
 			dest.setName(getName());
-			dest.setPayLoad(getPayLoad());
+			dest.setPayload(getPayload());
 			dest.setChannel(getChannel());
 			dest.setChainCode(getChainCode());
 			dest.setChainCodeFunction(getChainCodeFunction());
 			dest.setTransactionId(getTransactionId());
 			dest.setBlockId(getBlockId());
 			dest.setCreateTime(getCreateTime());
-			dest.setApplication(getApplication());
+			dest.setAppClient(getAppClient());
 			dest.setNetwork(getNetwork());
-			dest.setCurrentStatus(getCurrentStatus());
+			dest.setResponse(getResponse());
+			dest.setStatus(getStatus());
 			dest.setVersion(getVersion());
 
 		}
@@ -585,16 +634,17 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		
 			dest.mergeId(getId());
 			dest.mergeName(getName());
-			dest.mergePayLoad(getPayLoad());
+			dest.mergePayload(getPayload());
 			dest.mergeChannel(getChannel());
 			dest.mergeChainCode(getChainCode());
 			dest.mergeChainCodeFunction(getChainCodeFunction());
 			dest.mergeTransactionId(getTransactionId());
 			dest.mergeBlockId(getBlockId());
 			dest.mergeCreateTime(getCreateTime());
-			dest.mergeApplication(getApplication());
+			dest.mergeAppClient(getAppClient());
 			dest.mergeNetwork(getNetwork());
-			dest.mergeCurrentStatus(getCurrentStatus());
+			dest.mergeResponse(getResponse());
+			dest.mergeStatus(getStatus());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -612,12 +662,12 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		
 			dest.mergeId(getId());
 			dest.mergeName(getName());
-			dest.mergePayLoad(getPayLoad());
+			dest.mergePayload(getPayload());
 			dest.mergeChainCodeFunction(getChainCodeFunction());
 			dest.mergeTransactionId(getTransactionId());
 			dest.mergeBlockId(getBlockId());
 			dest.mergeCreateTime(getCreateTime());
-			dest.mergeCurrentStatus(getCurrentStatus());
+			dest.mergeResponse(getResponse());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -630,7 +680,7 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("ServiceRecord{");
 		stringBuilder.append("\tid='"+getId()+"';");
 		stringBuilder.append("\tname='"+getName()+"';");
-		stringBuilder.append("\tpayLoad='"+getPayLoad()+"';");
+		stringBuilder.append("\tpayload='"+getPayload()+"';");
 		if(getChannel() != null ){
  			stringBuilder.append("\tchannel='Channel("+getChannel().getId()+")';");
  		}
@@ -641,13 +691,16 @@ public class ServiceRecord extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("\ttransactionId='"+getTransactionId()+"';");
 		stringBuilder.append("\tblockId='"+getBlockId()+"';");
 		stringBuilder.append("\tcreateTime='"+getCreateTime()+"';");
-		if(getApplication() != null ){
- 			stringBuilder.append("\tapplication='Application("+getApplication().getId()+")';");
+		if(getAppClient() != null ){
+ 			stringBuilder.append("\tappClient='Application("+getAppClient().getId()+")';");
  		}
 		if(getNetwork() != null ){
  			stringBuilder.append("\tnetwork='HyperledgerNetwork("+getNetwork().getId()+")';");
  		}
-		stringBuilder.append("\tcurrentStatus='"+getCurrentStatus()+"';");
+		stringBuilder.append("\tresponse='"+getResponse()+"';");
+		if(getStatus() != null ){
+ 			stringBuilder.append("\tstatus='TransactionStatus("+getStatus().getId()+")';");
+ 		}
 		stringBuilder.append("\tversion='"+getVersion()+"';");
 		stringBuilder.append("}");
 

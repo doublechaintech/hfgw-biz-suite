@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.hfgw.BaseRowMapper;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 public class PeerRoleMapper extends BaseRowMapper<PeerRole>{
 	
@@ -14,6 +15,7 @@ public class PeerRoleMapper extends BaseRowMapper<PeerRole>{
  		setId(peerRole, rs, rowNumber); 		
  		setName(peerRole, rs, rowNumber); 		
  		setCode(peerRole, rs, rowNumber); 		
+ 		setNetwork(peerRole, rs, rowNumber); 		
  		setVersion(peerRole, rs, rowNumber);
 
 		return peerRole;
@@ -58,7 +60,25 @@ public class PeerRoleMapper extends BaseRowMapper<PeerRole>{
 		
 		peerRole.setCode(code);
 	}
-		
+		 		
+ 	protected void setNetwork(PeerRole peerRole, ResultSet rs, int rowNumber) throws SQLException{
+ 		String hyperledgerNetworkId = rs.getString(PeerRoleTable.COLUMN_NETWORK);
+ 		if( hyperledgerNetworkId == null){
+ 			return;
+ 		}
+ 		if( hyperledgerNetworkId.isEmpty()){
+ 			return;
+ 		}
+ 		HyperledgerNetwork hyperledgerNetwork = peerRole.getNetwork();
+ 		if( hyperledgerNetwork != null ){
+ 			//if the root object 'peerRole' already have the property, just set the id for it;
+ 			hyperledgerNetwork.setId(hyperledgerNetworkId);
+ 			
+ 			return;
+ 		}
+ 		peerRole.setNetwork(createEmptyNetwork(hyperledgerNetworkId));
+ 	}
+ 	
 	protected void setVersion(PeerRole peerRole, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
@@ -73,6 +93,13 @@ public class PeerRoleMapper extends BaseRowMapper<PeerRole>{
 		
 		
 
+ 	protected HyperledgerNetwork  createEmptyNetwork(String hyperledgerNetworkId){
+ 		HyperledgerNetwork hyperledgerNetwork = new HyperledgerNetwork();
+ 		hyperledgerNetwork.setId(hyperledgerNetworkId);
+ 		hyperledgerNetwork.setVersion(Integer.MAX_VALUE);
+ 		return hyperledgerNetwork;
+ 	}
+ 	
 }
 
 

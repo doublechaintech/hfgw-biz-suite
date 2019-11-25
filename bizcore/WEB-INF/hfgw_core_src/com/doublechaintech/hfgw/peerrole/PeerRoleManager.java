@@ -17,13 +17,14 @@ public interface PeerRoleManager{
 
 	 
 
-	public PeerRole createPeerRole(HfgwUserContext userContext, String name,String code) throws Exception;	
+	public PeerRole createPeerRole(HfgwUserContext userContext, String name,String code,String networkId) throws Exception;	
 	public PeerRole updatePeerRole(HfgwUserContext userContext,String peerRoleId, int peerRoleVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public PeerRole loadPeerRole(HfgwUserContext userContext, String peerRoleId, String [] tokensExpr) throws Exception;
 	public PeerRole internalSavePeerRole(HfgwUserContext userContext, PeerRole peerRole) throws Exception;
 	public PeerRole internalSavePeerRole(HfgwUserContext userContext, PeerRole peerRole,Map<String,Object>option) throws Exception;
 	
-
+	public PeerRole transferToAnotherNetwork(HfgwUserContext userContext, String peerRoleId, String anotherNetworkId)  throws Exception;
+ 
 
 	public void delete(HfgwUserContext userContext, String peerRoleId, int version) throws Exception;
 	public int deleteAll(HfgwUserContext userContext, String secureCode ) throws Exception;

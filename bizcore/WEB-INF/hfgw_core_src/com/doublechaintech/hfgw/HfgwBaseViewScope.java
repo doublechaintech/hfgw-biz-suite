@@ -14,6 +14,7 @@ import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
@@ -155,16 +156,27 @@ public class HfgwBaseViewScope {
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
-		.field(ServiceRecord.PAY_LOAD_PROPERTY)
+		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
 		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
-		.field(ServiceRecord.CURRENT_STATUS_PROPERTY)
+		.field(ServiceRecord.RESPONSE_PROPERTY)
 		;
 	/** 用于ServiceRecord的子对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getServiceRecordSummaryScope() {
 		return ServiceRecordBaseSummaryScope;
+	}
+
+	protected static SerializeScope TransactionStatusBaseSummaryScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(TransactionStatus.ID_PROPERTY)
+		.field(TransactionStatus.NAME_PROPERTY)
+		.field(TransactionStatus.CODE_PROPERTY)
+		;
+	/** 用于TransactionStatus的子对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getTransactionStatusSummaryScope() {
+		return TransactionStatusBaseSummaryScope;
 	}
 
 	protected static SerializeScope ChangeRequestTypeBaseSummaryScope = SerializeScope.INCLUDE()
@@ -538,16 +550,27 @@ public class HfgwBaseViewScope {
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
-		.field(ServiceRecord.PAY_LOAD_PROPERTY)
+		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
 		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
-		.field(ServiceRecord.CURRENT_STATUS_PROPERTY)
+		.field(ServiceRecord.RESPONSE_PROPERTY)
 		;
 	/** 用于ServiceRecord的父对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getServiceRecordSecondaryListItemScope() {
 		return ServiceRecordBaseSecondaryListItemScope;
+	}
+
+	protected static SerializeScope TransactionStatusBaseSecondaryListItemScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(TransactionStatus.ID_PROPERTY)
+		.field(TransactionStatus.NAME_PROPERTY)
+		.field(TransactionStatus.CODE_PROPERTY)
+		;
+	/** 用于TransactionStatus的父对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getTransactionStatusSecondaryListItemScope() {
+		return TransactionStatusBaseSecondaryListItemScope;
 	}
 
 	protected static SerializeScope ChangeRequestTypeBaseSecondaryListItemScope = SerializeScope.INCLUDE()
@@ -808,10 +831,13 @@ public class HfgwBaseViewScope {
 		.field(HyperledgerNetwork.NAME_PROPERTY)
 		.field(HyperledgerNetwork.DESCRIPTION_PROPERTY)
 		.field(HyperledgerNetwork.ORGANIZATION_LIST, getOrganizationSecondaryListItemScope())
+		.field(HyperledgerNetwork.NODE_TYPE_LIST, getNodeTypeSecondaryListItemScope())
 		.field(HyperledgerNetwork.NODE_LIST, getNodeSecondaryListItemScope())
 		.field(HyperledgerNetwork.CHANNEL_LIST, getChannelSecondaryListItemScope())
+		.field(HyperledgerNetwork.PEER_ROLE_LIST, getPeerRoleSecondaryListItemScope())
 		.field(HyperledgerNetwork.APPLICATION_LIST, getApplicationSecondaryListItemScope())
 		.field(HyperledgerNetwork.SERVICE_RECORD_LIST, getServiceRecordSecondaryListItemScope())
+		.field(HyperledgerNetwork.TRANSACTION_STATUS_LIST, getTransactionStatusSecondaryListItemScope())
 		.field(HyperledgerNetwork.CHANGE_REQUEST_TYPE_LIST, getChangeRequestTypeSecondaryListItemScope())
 		.field(HyperledgerNetwork.CHANGE_REQUEST_LIST, getChangeRequestSecondaryListItemScope())
 		;
@@ -838,6 +864,7 @@ public class HfgwBaseViewScope {
 		.field(NodeType.ID_PROPERTY)
 		.field(NodeType.NAME_PROPERTY)
 		.field(NodeType.CODE_PROPERTY)
+		.field(NodeType.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
 		.field(NodeType.NODE_LIST, getNodeSecondaryListItemScope())
 		;
 	/** 用于NodeType对象的列表时需要序列化的属性列表 */
@@ -899,6 +926,7 @@ public class HfgwBaseViewScope {
 		.field(PeerRole.ID_PROPERTY)
 		.field(PeerRole.NAME_PROPERTY)
 		.field(PeerRole.CODE_PROPERTY)
+		.field(PeerRole.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
 		.field(PeerRole.CHANNEL_PEER_ROLE_LIST, getChannelPeerRoleSecondaryListItemScope())
 		;
 	/** 用于PeerRole对象的列表时需要序列化的属性列表 */
@@ -953,20 +981,34 @@ public class HfgwBaseViewScope {
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
-		.field(ServiceRecord.PAY_LOAD_PROPERTY)
+		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_PROPERTY, getChainCodeSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
 		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
-		.field(ServiceRecord.APPLICATION_PROPERTY, getApplicationSummaryScope())
+		.field(ServiceRecord.APP_CLIENT_PROPERTY, getApplicationSummaryScope())
 		.field(ServiceRecord.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
-		.field(ServiceRecord.CURRENT_STATUS_PROPERTY)
+		.field(ServiceRecord.RESPONSE_PROPERTY)
+		.field(ServiceRecord.STATUS_PROPERTY, getTransactionStatusSummaryScope())
 		;
 	/** 用于ServiceRecord对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getServiceRecordListItemScope() {
 		return ServiceRecordBaseListItemScope;
+	}
+
+	protected static SerializeScope TransactionStatusBaseListItemScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(TransactionStatus.ID_PROPERTY)
+		.field(TransactionStatus.NAME_PROPERTY)
+		.field(TransactionStatus.CODE_PROPERTY)
+		.field(TransactionStatus.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
+		.field(TransactionStatus.SERVICE_RECORD_LIST, getServiceRecordSecondaryListItemScope())
+		;
+	/** 用于TransactionStatus对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getTransactionStatusListItemScope() {
+		return TransactionStatusBaseListItemScope;
 	}
 
 	protected static SerializeScope ChangeRequestTypeBaseListItemScope = SerializeScope.INCLUDE()
@@ -1257,10 +1299,13 @@ public class HfgwBaseViewScope {
 		.field(HyperledgerNetwork.NAME_PROPERTY)
 		.field(HyperledgerNetwork.DESCRIPTION_PROPERTY)
 		.field(HyperledgerNetwork.ORGANIZATION_LIST, getOrganizationListItemScope())
+		.field(HyperledgerNetwork.NODE_TYPE_LIST, getNodeTypeListItemScope())
 		.field(HyperledgerNetwork.NODE_LIST, getNodeListItemScope())
 		.field(HyperledgerNetwork.CHANNEL_LIST, getChannelListItemScope())
+		.field(HyperledgerNetwork.PEER_ROLE_LIST, getPeerRoleListItemScope())
 		.field(HyperledgerNetwork.APPLICATION_LIST, getApplicationListItemScope())
 		.field(HyperledgerNetwork.SERVICE_RECORD_LIST, getServiceRecordListItemScope())
+		.field(HyperledgerNetwork.TRANSACTION_STATUS_LIST, getTransactionStatusListItemScope())
 		.field(HyperledgerNetwork.CHANGE_REQUEST_TYPE_LIST, getChangeRequestTypeListItemScope())
 		.field(HyperledgerNetwork.CHANGE_REQUEST_LIST, getChangeRequestListItemScope())
 		;
@@ -1287,6 +1332,7 @@ public class HfgwBaseViewScope {
 		.field(NodeType.ID_PROPERTY)
 		.field(NodeType.NAME_PROPERTY)
 		.field(NodeType.CODE_PROPERTY)
+		.field(NodeType.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
 		.field(NodeType.NODE_LIST, getNodeListItemScope())
 		;
 	/** 用于NodeType对象的详情页时需要序列化的属性列表 */
@@ -1348,6 +1394,7 @@ public class HfgwBaseViewScope {
 		.field(PeerRole.ID_PROPERTY)
 		.field(PeerRole.NAME_PROPERTY)
 		.field(PeerRole.CODE_PROPERTY)
+		.field(PeerRole.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
 		.field(PeerRole.CHANNEL_PEER_ROLE_LIST, getChannelPeerRoleListItemScope())
 		;
 	/** 用于PeerRole对象的详情页时需要序列化的属性列表 */
@@ -1402,20 +1449,34 @@ public class HfgwBaseViewScope {
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
-		.field(ServiceRecord.PAY_LOAD_PROPERTY)
+		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_PROPERTY, getChainCodeSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
 		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
-		.field(ServiceRecord.APPLICATION_PROPERTY, getApplicationSummaryScope())
+		.field(ServiceRecord.APP_CLIENT_PROPERTY, getApplicationSummaryScope())
 		.field(ServiceRecord.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
-		.field(ServiceRecord.CURRENT_STATUS_PROPERTY)
+		.field(ServiceRecord.RESPONSE_PROPERTY)
+		.field(ServiceRecord.STATUS_PROPERTY, getTransactionStatusSummaryScope())
 		;
 	/** 用于ServiceRecord对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getServiceRecordDetailScope() {
 		return ServiceRecordBaseDetailScope;
+	}
+
+	protected static SerializeScope TransactionStatusBaseDetailScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(TransactionStatus.ID_PROPERTY)
+		.field(TransactionStatus.NAME_PROPERTY)
+		.field(TransactionStatus.CODE_PROPERTY)
+		.field(TransactionStatus.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
+		.field(TransactionStatus.SERVICE_RECORD_LIST, getServiceRecordListItemScope())
+		;
+	/** 用于TransactionStatus对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getTransactionStatusDetailScope() {
+		return TransactionStatusBaseDetailScope;
 	}
 
 	protected static SerializeScope ChangeRequestTypeBaseDetailScope = SerializeScope.INCLUDE()

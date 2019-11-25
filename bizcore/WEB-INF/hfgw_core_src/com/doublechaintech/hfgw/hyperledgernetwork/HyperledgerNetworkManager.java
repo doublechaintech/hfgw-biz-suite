@@ -37,6 +37,16 @@ public interface HyperledgerNetworkManager{
 
 	*/
 
+	//public  NodeTypeManager getNodeTypeManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code ,String [] tokensExpr)  throws Exception;
+	
+	public  HyperledgerNetwork addNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code , String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork removeNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String nodeTypeId, int nodeTypeVersion,String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork updateNodeType(HfgwUserContext userContext, String hyperledgerNetworkId, String nodeTypeId, int nodeTypeVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
 	//public  NodeManager getNodeManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String url, String organizationId, String channelId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone ,String [] tokensExpr)  throws Exception;
 	
 	public  HyperledgerNetwork addNode(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String url, String organizationId, String channelId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone , String [] tokensExpr)  throws Exception;
@@ -57,6 +67,16 @@ public interface HyperledgerNetworkManager{
 
 	*/
 
+	//public  PeerRoleManager getPeerRoleManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code ,String [] tokensExpr)  throws Exception;
+	
+	public  HyperledgerNetwork addPeerRole(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code , String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork removePeerRole(HfgwUserContext userContext, String hyperledgerNetworkId, String peerRoleId, int peerRoleVersion,String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork updatePeerRole(HfgwUserContext userContext, String hyperledgerNetworkId, String peerRoleId, int peerRoleVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
 	//public  ApplicationManager getApplicationManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String mspid, String publicKey, String privateKey, String channelId ,String [] tokensExpr)  throws Exception;
 	
 	public  HyperledgerNetwork addApplication(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String mspid, String publicKey, String privateKey, String channelId , String [] tokensExpr)  throws Exception;
@@ -67,15 +87,23 @@ public interface HyperledgerNetworkManager{
 
 	*/
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String response, String statusId ,String [] tokensExpr)  throws Exception;
 	
-	public  HyperledgerNetwork addServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId , String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork addServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String response, String statusId , String [] tokensExpr)  throws Exception;
 	public  HyperledgerNetwork removeServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  HyperledgerNetwork updateServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
-	public  HyperledgerNetwork associateServiceRecordListToNewApplication(HfgwUserContext userContext, String hyperledgerNetworkId, String  serviceRecordIds[], String name, String mspid, String publicKey, String privateKey, String channelId, String networkId, String [] tokensExpr) throws Exception ;
-	public  HyperledgerNetwork associateServiceRecordListToApplication(HfgwUserContext userContext, String hyperledgerNetworkId, String  serviceRecordIds[],String applicationId, String [] tokensExpr) throws Exception ;
+
+	*/
+
+	//public  TransactionStatusManager getTransactionStatusManager(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code ,String [] tokensExpr)  throws Exception;
+	
+	public  HyperledgerNetwork addTransactionStatus(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String code , String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork removeTransactionStatus(HfgwUserContext userContext, String hyperledgerNetworkId, String transactionStatusId, int transactionStatusVersion,String [] tokensExpr)  throws Exception;
+	public  HyperledgerNetwork updateTransactionStatus(HfgwUserContext userContext, String hyperledgerNetworkId, String transactionStatusId, int transactionStatusVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
 
 	*/
 

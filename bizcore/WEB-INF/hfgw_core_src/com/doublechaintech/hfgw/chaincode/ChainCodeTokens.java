@@ -152,7 +152,7 @@ public class ChainCodeTokens extends CommonTokens{
 	
 	
 	public ChainCodeTokens searchAllTextOfServiceRecordList(String verb, String value){	
-		String field = "id|name|payLoad|chainCodeFunction|transactionId|blockId|currentStatus";
+		String field = "id|name|payload|chainCodeFunction|transactionId|blockId|response";
 		addSearchMoreOptions(SERVICE_RECORD_LIST,serviceRecordListSearchCounter++, field, verb, value);
 		return this;
 	}

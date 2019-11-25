@@ -530,17 +530,17 @@ public class ChannelForm extends BaseForm {
 	}
 
 
-	public ChannelForm payLoadFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  payLoadFromServiceRecord(parameterName, initValue);		
+	public ChannelForm payloadFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  payloadFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChannelForm payLoadFieldForServiceRecord(String initValue){
-		return payLoadFieldForServiceRecord("payLoad",initValue);
+	public ChannelForm payloadFieldForServiceRecord(String initValue){
+		return payloadFieldForServiceRecord("payload",initValue);
 	}
-	public ChannelForm payLoadFieldForServiceRecord(){
-		return payLoadFieldForServiceRecord("payLoad","");
+	public ChannelForm payloadFieldForServiceRecord(){
+		return payloadFieldForServiceRecord("payload","");
 	}
 
 
@@ -628,17 +628,17 @@ public class ChannelForm extends BaseForm {
 	}
 
 
-	public ChannelForm applicationIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  applicationIdFromServiceRecord(parameterName, initValue);		
+	public ChannelForm appClientIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  appClientIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChannelForm applicationIdFieldForServiceRecord(String initValue){
-		return applicationIdFieldForServiceRecord("applicationId",initValue);
+	public ChannelForm appClientIdFieldForServiceRecord(String initValue){
+		return appClientIdFieldForServiceRecord("appClientId",initValue);
 	}
-	public ChannelForm applicationIdFieldForServiceRecord(){
-		return applicationIdFieldForServiceRecord("applicationId","");
+	public ChannelForm appClientIdFieldForServiceRecord(){
+		return appClientIdFieldForServiceRecord("appClientId","");
 	}
 
 
@@ -656,17 +656,31 @@ public class ChannelForm extends BaseForm {
 	}
 
 
-	public ChannelForm currentStatusFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  currentStatusFromServiceRecord(parameterName, initValue);		
+	public ChannelForm responseFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  responseFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChannelForm currentStatusFieldForServiceRecord(String initValue){
-		return currentStatusFieldForServiceRecord("currentStatus",initValue);
+	public ChannelForm responseFieldForServiceRecord(String initValue){
+		return responseFieldForServiceRecord("response",initValue);
 	}
-	public ChannelForm currentStatusFieldForServiceRecord(){
-		return currentStatusFieldForServiceRecord("currentStatus","");
+	public ChannelForm responseFieldForServiceRecord(){
+		return responseFieldForServiceRecord("response","");
+	}
+
+
+	public ChannelForm statusIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  statusIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChannelForm statusIdFieldForServiceRecord(String initValue){
+		return statusIdFieldForServiceRecord("statusId",initValue);
+	}
+	public ChannelForm statusIdFieldForServiceRecord(){
+		return statusIdFieldForServiceRecord("statusId","");
 	}
 
 	

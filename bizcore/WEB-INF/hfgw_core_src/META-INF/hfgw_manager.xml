@@ -15,7 +15,7 @@
 	<bean id="organizationManager" class="com.doublechaintech.hfgw.organization.OrganizationManagerImpl" parent="organizationManagerBase" ></bean>
 	
 	<bean id="nodeTypeManagerBase" class="com.doublechaintech.hfgw.nodetype.NodeTypeManagerImpl"/>
-	<bean id="nodeTypeManager" class="com.doublechaintech.hfgw.nodetype.NodeTypeCustomManagerImpl" parent="nodeTypeManagerBase" ></bean>
+	<bean id="nodeTypeManager" class="com.doublechaintech.hfgw.nodetype.NodeTypeManagerImpl" parent="nodeTypeManagerBase" ></bean>
 	
 	<bean id="nodeManagerBase" class="com.doublechaintech.hfgw.node.NodeManagerImpl"/>
 	<bean id="nodeManager" class="com.doublechaintech.hfgw.node.NodeCustomManagerImpl" parent="nodeManagerBase" ></bean>
@@ -27,7 +27,7 @@
 	<bean id="channelManager" class="com.doublechaintech.hfgw.channel.ChannelCustomManagerImpl" parent="channelManagerBase" ></bean>
 	
 	<bean id="peerRoleManagerBase" class="com.doublechaintech.hfgw.peerrole.PeerRoleManagerImpl"/>
-	<bean id="peerRoleManager" class="com.doublechaintech.hfgw.peerrole.PeerRoleCustomManagerImpl" parent="peerRoleManagerBase" ></bean>
+	<bean id="peerRoleManager" class="com.doublechaintech.hfgw.peerrole.PeerRoleManagerImpl" parent="peerRoleManagerBase" ></bean>
 	
 	<bean id="channelPeerRoleManagerBase" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl"/>
 	<bean id="channelPeerRoleManager" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl" parent="channelPeerRoleManagerBase" ></bean>
@@ -40,6 +40,9 @@
 	
 	<bean id="serviceRecordManagerBase" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl"/>
 	<bean id="serviceRecordManager" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl" parent="serviceRecordManagerBase" ></bean>
+	
+	<bean id="transactionStatusManagerBase" class="com.doublechaintech.hfgw.transactionstatus.TransactionStatusManagerImpl"/>
+	<bean id="transactionStatusManager" class="com.doublechaintech.hfgw.transactionstatus.TransactionStatusManagerImpl" parent="transactionStatusManagerBase" ></bean>
 	
 	<bean id="changeRequestTypeManagerBase" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManagerImpl"/>
 	<bean id="changeRequestTypeManager" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManagerImpl" parent="changeRequestTypeManagerBase" ></bean>
@@ -108,6 +111,7 @@
 		<property name="chainCodeManager" ref="chainCodeManager"/>
 		<property name="applicationManager" ref="applicationManager"/>
 		<property name="serviceRecordManager" ref="serviceRecordManager"/>
+		<property name="transactionStatusManager" ref="transactionStatusManager"/>
 		<property name="changeRequestTypeManager" ref="changeRequestTypeManager"/>
 		<property name="changeRequestManager" ref="changeRequestManager"/>
 		<property name="userDomainManager" ref="userDomainManager"/>

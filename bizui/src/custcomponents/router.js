@@ -1,49 +1,44 @@
-
-
-import React from 'react'
-import { Router, Route, Switch } from 'dva/router'
-import { LocaleProvider } from 'antd'
-import zhCN from 'antd/lib/locale-provider/zh_CN'
+import React from 'react';
+import { Router, Route, Switch } from 'dva/router';
+import { LocaleProvider } from 'antd';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
 // import enUS from 'antd/lib/locale-provider/en_US'
-import Launcher from '../launcher/Launcher'
-import ForgetPasswordForm from '../launcher/ForgetPasswordForm'
+import Launcher from '../launcher/Launcher';
+import ForgetPasswordForm from '../launcher/ForgetPasswordForm';
 
-import GlobalComponents from './'
-
+import GlobalComponents from './';
 
 function RouterConfig({ history }) {
-
-	const {HyperledgerNetworkBizApp} = GlobalComponents
-	const {OrganizationBizApp} = GlobalComponents
-	const {NodeTypeBizApp} = GlobalComponents
-	const {NodeBizApp} = GlobalComponents
-	const {GrpcOptionBizApp} = GlobalComponents
-	const {ChannelBizApp} = GlobalComponents
-	const {PeerRoleBizApp} = GlobalComponents
-	const {ChannelPeerRoleBizApp} = GlobalComponents
-	const {ChainCodeBizApp} = GlobalComponents
-	const {ApplicationBizApp} = GlobalComponents
-	const {ServiceRecordBizApp} = GlobalComponents
-	const {ChangeRequestTypeBizApp} = GlobalComponents
-	const {ChangeRequestBizApp} = GlobalComponents
-	const {UserDomainBizApp} = GlobalComponents
-	const {UserWhiteListBizApp} = GlobalComponents
-	const {SecUserBizApp} = GlobalComponents
-	const {SecUserBlockingBizApp} = GlobalComponents
-	const {UserAppBizApp} = GlobalComponents
-	const {QuickLinkBizApp} = GlobalComponents
-	const {ListAccessBizApp} = GlobalComponents
-	const {ObjectAccessBizApp} = GlobalComponents
-	const {LoginHistoryBizApp} = GlobalComponents
-	const {GenericFormBizApp} = GlobalComponents
-	const {FormMessageBizApp} = GlobalComponents
-	const {FormFieldMessageBizApp} = GlobalComponents
-	const {FormFieldBizApp} = GlobalComponents
-	const {FormActionBizApp} = GlobalComponents
-	const {CandidateContainerBizApp} = GlobalComponents
-	const {CandidateElementBizApp} = GlobalComponents
-
-
+  const { HyperledgerNetworkBizApp } = GlobalComponents;
+  const { OrganizationBizApp } = GlobalComponents;
+  const { NodeTypeBizApp } = GlobalComponents;
+  const { NodeBizApp } = GlobalComponents;
+  const { GrpcOptionBizApp } = GlobalComponents;
+  const { ChannelBizApp } = GlobalComponents;
+  const { PeerRoleBizApp } = GlobalComponents;
+  const { ChannelPeerRoleBizApp } = GlobalComponents;
+  const { ChainCodeBizApp } = GlobalComponents;
+  const { ApplicationBizApp } = GlobalComponents;
+  const { ServiceRecordBizApp } = GlobalComponents;
+  const { TransactionStatusBizApp } = GlobalComponents;
+  const { ChangeRequestTypeBizApp } = GlobalComponents;
+  const { ChangeRequestBizApp } = GlobalComponents;
+  const { UserDomainBizApp } = GlobalComponents;
+  const { UserWhiteListBizApp } = GlobalComponents;
+  const { SecUserBizApp } = GlobalComponents;
+  const { SecUserBlockingBizApp } = GlobalComponents;
+  const { UserAppBizApp } = GlobalComponents;
+  const { QuickLinkBizApp } = GlobalComponents;
+  const { ListAccessBizApp } = GlobalComponents;
+  const { ObjectAccessBizApp } = GlobalComponents;
+  const { LoginHistoryBizApp } = GlobalComponents;
+  const { GenericFormBizApp } = GlobalComponents;
+  const { FormMessageBizApp } = GlobalComponents;
+  const { FormFieldMessageBizApp } = GlobalComponents;
+  const { FormFieldBizApp } = GlobalComponents;
+  const { FormActionBizApp } = GlobalComponents;
+  const { CandidateContainerBizApp } = GlobalComponents;
+  const { CandidateElementBizApp } = GlobalComponents;
 
   return (
     <LocaleProvider locale={zhCN}>
@@ -62,6 +57,7 @@ function RouterConfig({ history }) {
           <Route path="/chainCode/" component={ChainCodeBizApp} />
           <Route path="/application/" component={ApplicationBizApp} />
           <Route path="/serviceRecord/" component={ServiceRecordBizApp} />
+          <Route path="/transactionStatus/" component={TransactionStatusBizApp} />
           <Route path="/changeRequestType/" component={ChangeRequestTypeBizApp} />
           <Route path="/changeRequest/" component={ChangeRequestBizApp} />
           <Route path="/userDomain/" component={UserDomainBizApp} />
@@ -84,17 +80,7 @@ function RouterConfig({ history }) {
         </Switch>
       </Router>
     </LocaleProvider>
-  )
+  );
 }
 
-export default RouterConfig
-
-
-
-
-
-
-
-
-
-
+export default RouterConfig;

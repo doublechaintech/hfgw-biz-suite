@@ -358,6 +358,20 @@ public class NodeForm extends BaseForm {
 		return codeFieldOfNodeType("code","");
 	}
 
+
+	public NodeForm networkIdFieldOfNodeType(String parameterName, String initValue){
+		FormField field =  networkIdFromNodeType(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeForm networkIdFieldOfNodeType(String initValue){
+		return networkIdFieldOfNodeType("networkId",initValue);
+	}
+	public NodeForm networkIdFieldOfNodeType(){
+		return networkIdFieldOfNodeType("networkId","");
+	}
+
 	
 
 

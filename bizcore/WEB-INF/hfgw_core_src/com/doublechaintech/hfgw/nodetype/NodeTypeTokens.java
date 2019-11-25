@@ -72,12 +72,14 @@ public class NodeTypeTokens extends CommonTokens{
 	protected static NodeTypeTokens allTokens(){
 		
 		return start()
+			.withNetwork()
 			.withNodeList();
 	
 	}
 	public static NodeTypeTokens withoutListsTokens(){
 		
-		return start();
+		return start()
+			.withNetwork();
 	
 	}
 	
@@ -96,6 +98,16 @@ public class NodeTypeTokens extends CommonTokens{
 		return this;
 	}
 
+	protected static final String NETWORK = "network";
+	public String getNetwork(){
+		return NETWORK;
+	}
+	public NodeTypeTokens withNetwork(){		
+		addSimpleOptions(NETWORK);
+		return this;
+	}
+	
+	
 	protected static final String NODE_LIST = "nodeList";
 	public String getNodeList(){
 		return NODE_LIST;

@@ -13,6 +13,7 @@ import com.doublechaintech.hfgw.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 @JsonSerialize(using = PeerRoleSerializer.class)
 public class PeerRole extends BaseEntity implements  java.io.Serializable{
@@ -36,6 +37,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 	public static final String ID_PROPERTY                    = "id"                ;
 	public static final String NAME_PROPERTY                  = "name"              ;
 	public static final String CODE_PROPERTY                  = "code"              ;
+	public static final String NETWORK_PROPERTY               = "network"           ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String CHANNEL_PEER_ROLE_LIST                   = "channelPeerRoleList";
@@ -62,6 +64,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 	protected		String              	mId                 ;
 	protected		String              	mName               ;
 	protected		String              	mCode               ;
+	protected		HyperledgerNetwork  	mNetwork            ;
 	protected		int                 	mVersion            ;
 	
 	
@@ -83,6 +86,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 	
 	// disconnect from all, 中文就是一了百了，跟所有一切尘世断绝往来藏身于茫茫数据海洋
 	public 	void clearFromAll(){
+		setNetwork( null );
 
 		this.changed = true;
 	}
@@ -143,6 +147,9 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 		}
 		if(CODE_PROPERTY.equals(property)){
 			return getCode();
+		}
+		if(NETWORK_PROPERTY.equals(property)){
+			return getNetwork();
 		}
 		if(CHANNEL_PEER_ROLE_LIST.equals(property)){
 			List<BaseEntity> list = getChannelPeerRoleList().stream().map(item->item).collect(Collectors.toList());
@@ -206,6 +213,27 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 		if(code != null) { setCode(code);}
 	}
 	
+	
+	public void setNetwork(HyperledgerNetwork network){
+		this.mNetwork = network;;
+	}
+	public HyperledgerNetwork getNetwork(){
+		return this.mNetwork;
+	}
+	public PeerRole updateNetwork(HyperledgerNetwork network){
+		this.mNetwork = network;;
+		this.changed = true;
+		return this;
+	}
+	public void mergeNetwork(HyperledgerNetwork network){
+		if(network != null) { setNetwork(network);}
+	}
+	
+	
+	public void clearNetwork(){
+		setNetwork ( null );
+		this.changed = true;
+	}
 	
 	public void setVersion(int version){
 		this.mVersion = version;;
@@ -333,6 +361,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
+		addToEntityList(this, entityList, getNetwork(), internalType);
 
 		
 	}
@@ -361,6 +390,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, ID_PROPERTY, getId());
 		appendKeyValuePair(result, NAME_PROPERTY, getName());
 		appendKeyValuePair(result, CODE_PROPERTY, getCode());
+		appendKeyValuePair(result, NETWORK_PROPERTY, getNetwork());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 		appendKeyValuePair(result, CHANNEL_PEER_ROLE_LIST, getChannelPeerRoleList());
 		if(!getChannelPeerRoleList().isEmpty()){
@@ -384,6 +414,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 			dest.setId(getId());
 			dest.setName(getName());
 			dest.setCode(getCode());
+			dest.setNetwork(getNetwork());
 			dest.setVersion(getVersion());
 			dest.setChannelPeerRoleList(getChannelPeerRoleList());
 
@@ -402,6 +433,7 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 			dest.mergeId(getId());
 			dest.mergeName(getName());
 			dest.mergeCode(getCode());
+			dest.mergeNetwork(getNetwork());
 			dest.mergeVersion(getVersion());
 			dest.mergeChannelPeerRoleList(getChannelPeerRoleList());
 
@@ -434,6 +466,9 @@ public class PeerRole extends BaseEntity implements  java.io.Serializable{
 		stringBuilder.append("\tid='"+getId()+"';");
 		stringBuilder.append("\tname='"+getName()+"';");
 		stringBuilder.append("\tcode='"+getCode()+"';");
+		if(getNetwork() != null ){
+ 			stringBuilder.append("\tnetwork='HyperledgerNetwork("+getNetwork().getId()+")';");
+ 		}
 		stringBuilder.append("\tversion='"+getVersion()+"';");
 		stringBuilder.append("}");
 

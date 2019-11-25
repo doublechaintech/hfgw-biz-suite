@@ -166,17 +166,17 @@ public class ChainCodeForm extends BaseForm {
 	}
 
 
-	public ChainCodeForm payLoadFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  payLoadFromServiceRecord(parameterName, initValue);		
+	public ChainCodeForm payloadFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  payloadFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChainCodeForm payLoadFieldForServiceRecord(String initValue){
-		return payLoadFieldForServiceRecord("payLoad",initValue);
+	public ChainCodeForm payloadFieldForServiceRecord(String initValue){
+		return payloadFieldForServiceRecord("payload",initValue);
 	}
-	public ChainCodeForm payLoadFieldForServiceRecord(){
-		return payLoadFieldForServiceRecord("payLoad","");
+	public ChainCodeForm payloadFieldForServiceRecord(){
+		return payloadFieldForServiceRecord("payload","");
 	}
 
 
@@ -264,17 +264,17 @@ public class ChainCodeForm extends BaseForm {
 	}
 
 
-	public ChainCodeForm applicationIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  applicationIdFromServiceRecord(parameterName, initValue);		
+	public ChainCodeForm appClientIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  appClientIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChainCodeForm applicationIdFieldForServiceRecord(String initValue){
-		return applicationIdFieldForServiceRecord("applicationId",initValue);
+	public ChainCodeForm appClientIdFieldForServiceRecord(String initValue){
+		return appClientIdFieldForServiceRecord("appClientId",initValue);
 	}
-	public ChainCodeForm applicationIdFieldForServiceRecord(){
-		return applicationIdFieldForServiceRecord("applicationId","");
+	public ChainCodeForm appClientIdFieldForServiceRecord(){
+		return appClientIdFieldForServiceRecord("appClientId","");
 	}
 
 
@@ -292,17 +292,31 @@ public class ChainCodeForm extends BaseForm {
 	}
 
 
-	public ChainCodeForm currentStatusFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  currentStatusFromServiceRecord(parameterName, initValue);		
+	public ChainCodeForm responseFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  responseFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ChainCodeForm currentStatusFieldForServiceRecord(String initValue){
-		return currentStatusFieldForServiceRecord("currentStatus",initValue);
+	public ChainCodeForm responseFieldForServiceRecord(String initValue){
+		return responseFieldForServiceRecord("response",initValue);
 	}
-	public ChainCodeForm currentStatusFieldForServiceRecord(){
-		return currentStatusFieldForServiceRecord("currentStatus","");
+	public ChainCodeForm responseFieldForServiceRecord(){
+		return responseFieldForServiceRecord("response","");
+	}
+
+
+	public ChainCodeForm statusIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  statusIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm statusIdFieldForServiceRecord(String initValue){
+		return statusIdFieldForServiceRecord("statusId",initValue);
+	}
+	public ChainCodeForm statusIdFieldForServiceRecord(){
+		return statusIdFieldForServiceRecord("statusId","");
 	}
 
 	

@@ -769,6 +769,50 @@ public class ChainCodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChainCo
 		return count;
 	}
 	
+	//disconnect ChainCode with app_client in ServiceRecord
+	public ChainCode planToRemoveServiceRecordListWithAppClient(ChainCode chainCode, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCode.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, appClientId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return chainCode;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return chainCode;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearAppClient();
+			serviceRecordItem.clearChainCode();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = chainCode.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return chainCode;
+	}
+	
+	public int countServiceRecordListWithAppClient(String chainCodeId, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, appClientId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect ChainCode with network in ServiceRecord
 	public ChainCode planToRemoveServiceRecordListWithNetwork(ChainCode chainCode, String networkId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -808,6 +852,50 @@ public class ChainCodeJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChainCo
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
 		key.put(ServiceRecord.NETWORK_PROPERTY, networkId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect ChainCode with status in ServiceRecord
+	public ChainCode planToRemoveServiceRecordListWithStatus(ChainCode chainCode, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCode.getId());
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return chainCode;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return chainCode;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearStatus();
+			serviceRecordItem.clearChainCode();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = chainCode.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return chainCode;
+	}
+	
+	public int countServiceRecordListWithStatus(String chainCodeId, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
 		return count;

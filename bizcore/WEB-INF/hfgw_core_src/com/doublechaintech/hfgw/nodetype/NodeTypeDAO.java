@@ -9,7 +9,9 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.node.NodeDAO;
 
 
@@ -71,7 +73,15 @@ public interface NodeTypeDAO{
 	
 	public SmartList<NodeType> queryList(String sql, Object ... parmeters);
 	public int count(String sql, Object ... parmeters);
+ 
+ 	public SmartList<NodeType> findNodeTypeByNetwork(String hyperledgerNetworkId, Map<String,Object> options);
+ 	public int countNodeTypeByNetwork(String hyperledgerNetworkId, Map<String,Object> options);
+ 	public Map<String, Integer> countNodeTypeByNetworkIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<NodeType> findNodeTypeByNetwork(String hyperledgerNetworkId, int start, int count, Map<String,Object> options);
+ 	public void analyzeNodeTypeByNetwork(SmartList<NodeType> resultList, String hyperledgerNetworkId, Map<String,Object> options);
 
+ 
+ 
 	// 需要一个加载引用我的对象的enhance方法:Node的type的NodeList
 	public SmartList<Node> loadOurNodeList(HfgwUserContext userContext, List<NodeType> us, Map<String,Object> options) throws Exception;
 	

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.hfgw.BaseRowMapper;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -17,16 +18,17 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
 		 		
  		setId(serviceRecord, rs, rowNumber); 		
  		setName(serviceRecord, rs, rowNumber); 		
- 		setPayLoad(serviceRecord, rs, rowNumber); 		
+ 		setPayload(serviceRecord, rs, rowNumber); 		
  		setChannel(serviceRecord, rs, rowNumber); 		
  		setChainCode(serviceRecord, rs, rowNumber); 		
  		setChainCodeFunction(serviceRecord, rs, rowNumber); 		
  		setTransactionId(serviceRecord, rs, rowNumber); 		
  		setBlockId(serviceRecord, rs, rowNumber); 		
  		setCreateTime(serviceRecord, rs, rowNumber); 		
- 		setApplication(serviceRecord, rs, rowNumber); 		
+ 		setAppClient(serviceRecord, rs, rowNumber); 		
  		setNetwork(serviceRecord, rs, rowNumber); 		
- 		setCurrentStatus(serviceRecord, rs, rowNumber); 		
+ 		setResponse(serviceRecord, rs, rowNumber); 		
+ 		setStatus(serviceRecord, rs, rowNumber); 		
  		setVersion(serviceRecord, rs, rowNumber);
 
 		return serviceRecord;
@@ -60,16 +62,16 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
 		serviceRecord.setName(name);
 	}
 		
-	protected void setPayLoad(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
+	protected void setPayload(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
-		String payLoad = rs.getString(ServiceRecordTable.COLUMN_PAY_LOAD);
-		if(payLoad == null){
+		String payload = rs.getString(ServiceRecordTable.COLUMN_PAYLOAD);
+		if(payload == null){
 			//do nothing when nothing found in database
 			return;
 		}
 		
-		serviceRecord.setPayLoad(payLoad);
+		serviceRecord.setPayload(payload);
 	}
 		 		
  	protected void setChannel(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
@@ -156,22 +158,22 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
 		serviceRecord.setCreateTime(convertToDateTime(createTime));
 	}
 		 		
- 	protected void setApplication(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
- 		String applicationId = rs.getString(ServiceRecordTable.COLUMN_APPLICATION);
+ 	protected void setAppClient(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
+ 		String applicationId = rs.getString(ServiceRecordTable.COLUMN_APP_CLIENT);
  		if( applicationId == null){
  			return;
  		}
  		if( applicationId.isEmpty()){
  			return;
  		}
- 		Application application = serviceRecord.getApplication();
+ 		Application application = serviceRecord.getAppClient();
  		if( application != null ){
  			//if the root object 'serviceRecord' already have the property, just set the id for it;
  			application.setId(applicationId);
  			
  			return;
  		}
- 		serviceRecord.setApplication(createEmptyApplication(applicationId));
+ 		serviceRecord.setAppClient(createEmptyAppClient(applicationId));
  	}
  	 		
  	protected void setNetwork(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
@@ -192,18 +194,36 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
  		serviceRecord.setNetwork(createEmptyNetwork(hyperledgerNetworkId));
  	}
  	
-	protected void setCurrentStatus(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
+	protected void setResponse(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
-		String currentStatus = rs.getString(ServiceRecordTable.COLUMN_CURRENT_STATUS);
-		if(currentStatus == null){
+		String response = rs.getString(ServiceRecordTable.COLUMN_RESPONSE);
+		if(response == null){
 			//do nothing when nothing found in database
 			return;
 		}
 		
-		serviceRecord.setCurrentStatus(currentStatus);
+		serviceRecord.setResponse(response);
 	}
-		
+		 		
+ 	protected void setStatus(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
+ 		String transactionStatusId = rs.getString(ServiceRecordTable.COLUMN_STATUS);
+ 		if( transactionStatusId == null){
+ 			return;
+ 		}
+ 		if( transactionStatusId.isEmpty()){
+ 			return;
+ 		}
+ 		TransactionStatus transactionStatus = serviceRecord.getStatus();
+ 		if( transactionStatus != null ){
+ 			//if the root object 'serviceRecord' already have the property, just set the id for it;
+ 			transactionStatus.setId(transactionStatusId);
+ 			
+ 			return;
+ 		}
+ 		serviceRecord.setStatus(createEmptyStatus(transactionStatusId));
+ 	}
+ 	
 	protected void setVersion(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
@@ -232,7 +252,7 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
  		return chainCode;
  	}
  	
- 	protected Application  createEmptyApplication(String applicationId){
+ 	protected Application  createEmptyAppClient(String applicationId){
  		Application application = new Application();
  		application.setId(applicationId);
  		application.setVersion(Integer.MAX_VALUE);
@@ -244,6 +264,13 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
  		hyperledgerNetwork.setId(hyperledgerNetworkId);
  		hyperledgerNetwork.setVersion(Integer.MAX_VALUE);
  		return hyperledgerNetwork;
+ 	}
+ 	
+ 	protected TransactionStatus  createEmptyStatus(String transactionStatusId){
+ 		TransactionStatus transactionStatus = new TransactionStatus();
+ 		transactionStatus.setId(transactionStatusId);
+ 		transactionStatus.setVersion(Integer.MAX_VALUE);
+ 		return transactionStatus;
  	}
  	
 }

@@ -209,6 +209,19 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
+	protected FormField networkIdFromNodeType(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("网络");
+		field.setLocaleKey("node_type.network");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("HyperledgerNetwork");
+		field.setRequired(true);
+		field.setPlaceholder("请填写网络");
+		return field;
+	}
+
 	protected FormField idFromNode(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("ID");
@@ -482,6 +495,19 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
+	protected FormField networkIdFromPeerRole(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("网络");
+		field.setLocaleKey("peer_role.network");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("HyperledgerNetwork");
+		field.setRequired(true);
+		field.setPlaceholder("请填写网络");
+		return field;
+	}
+
 	protected FormField idFromChannelPeerRole(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("ID");
@@ -729,16 +755,16 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField payLoadFromServiceRecord(String parameterName, String initValue){
+	protected FormField payloadFromServiceRecord(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("支付负载");
-		field.setLocaleKey("service_record.pay_load");
+		field.setLabel("有效载荷");
+		field.setLocaleKey("service_record.payload");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
 		field.setType("longtext");
 		field.setRequired(true);
-		field.setPlaceholder("请填写支付负载");
+		field.setPlaceholder("请填写有效载荷");
 		return field;
 	}
 
@@ -820,16 +846,16 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField applicationIdFromServiceRecord(String parameterName, String initValue){
+	protected FormField appClientIdFromServiceRecord(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("应用程序");
-		field.setLocaleKey("service_record.application");
+		field.setLabel("应用客户端");
+		field.setLocaleKey("service_record.app_client");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
 		field.setType("Application");
 		field.setRequired(true);
-		field.setPlaceholder("请填写应用程序");
+		field.setPlaceholder("请填写应用客户端");
 		return field;
 	}
 
@@ -846,16 +872,81 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
-	protected FormField currentStatusFromServiceRecord(String parameterName, String initValue){
+	protected FormField responseFromServiceRecord(String parameterName, String initValue){
 		FormField field = new FormField();
-		field.setLabel("当前状态");
-		field.setLocaleKey("service_record.current_status");
+		field.setLabel("响应");
+		field.setLocaleKey("service_record.response");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("longtext");
+		field.setRequired(true);
+		field.setPlaceholder("请填写响应");
+		return field;
+	}
+
+	protected FormField statusIdFromServiceRecord(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("状态");
+		field.setLocaleKey("service_record.status");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("TransactionStatus");
+		field.setRequired(true);
+		field.setPlaceholder("请填写状态");
+		return field;
+	}
+
+	protected FormField idFromTransactionStatus(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("ID");
+		field.setLocaleKey("transaction_status.id");
 		field.setParameterName(parameterName);
 		field.setDefaultValue(initValue);
 		field.setFieldGroup("基本信息");
 		field.setType("text");
 		field.setRequired(true);
-		field.setPlaceholder("请填写当前状态");
+		field.setPlaceholder("请填写ID");
+		return field;
+	}
+
+	protected FormField nameFromTransactionStatus(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("名称");
+		field.setLocaleKey("transaction_status.name");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写名称");
+		return field;
+	}
+
+	protected FormField codeFromTransactionStatus(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("代码");
+		field.setLocaleKey("transaction_status.code");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写代码");
+		return field;
+	}
+
+	protected FormField networkIdFromTransactionStatus(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("网络");
+		field.setLocaleKey("transaction_status.network");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("HyperledgerNetwork");
+		field.setRequired(true);
+		field.setPlaceholder("请填写网络");
 		return field;
 	}
 

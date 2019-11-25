@@ -74,8 +74,9 @@ public class ServiceRecordTokens extends CommonTokens{
 		return start()
 			.withChannel()
 			.withChainCode()
-			.withApplication()
-			.withNetwork();
+			.withAppClient()
+			.withNetwork()
+			.withStatus();
 	
 	}
 	public static ServiceRecordTokens withoutListsTokens(){
@@ -83,8 +84,9 @@ public class ServiceRecordTokens extends CommonTokens{
 		return start()
 			.withChannel()
 			.withChainCode()
-			.withApplication()
-			.withNetwork();
+			.withAppClient()
+			.withNetwork()
+			.withStatus();
 	
 	}
 	
@@ -123,12 +125,12 @@ public class ServiceRecordTokens extends CommonTokens{
 	}
 	
 	
-	protected static final String APPLICATION = "application";
-	public String getApplication(){
-		return APPLICATION;
+	protected static final String APPCLIENT = "appClient";
+	public String getAppClient(){
+		return APPCLIENT;
 	}
-	public ServiceRecordTokens withApplication(){		
-		addSimpleOptions(APPLICATION);
+	public ServiceRecordTokens withAppClient(){		
+		addSimpleOptions(APPCLIENT);
 		return this;
 	}
 	
@@ -139,6 +141,16 @@ public class ServiceRecordTokens extends CommonTokens{
 	}
 	public ServiceRecordTokens withNetwork(){		
 		addSimpleOptions(NETWORK);
+		return this;
+	}
+	
+	
+	protected static final String STATUS = "status";
+	public String getStatus(){
+		return STATUS;
+	}
+	public ServiceRecordTokens withStatus(){		
+		addSimpleOptions(STATUS);
 		return this;
 	}
 	

@@ -124,9 +124,17 @@ public interface ChannelDAO{
 	public Channel planToRemoveServiceRecordListWithBlockId(Channel channel, String blockIdId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithBlockId(String channelId, String blockIdId, Map<String,Object> options)throws Exception;
 	
+	//disconnect Channel with app_client in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithAppClient(Channel channel, String appClientId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithAppClient(String channelId, String appClientId, Map<String,Object> options)throws Exception;
+	
 	//disconnect Channel with network in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithNetwork(Channel channel, String networkId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithNetwork(String channelId, String networkId, Map<String,Object> options)throws Exception;
+	
+	//disconnect Channel with status in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithStatus(Channel channel, String statusId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithStatus(String channelId, String statusId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<Channel> queryList(String sql, Object ... parmeters);

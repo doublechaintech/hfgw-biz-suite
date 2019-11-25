@@ -393,7 +393,7 @@ public class Application extends BaseEntity implements  java.io.Serializable{
 	}
 	public  void setServiceRecordList(SmartList<ServiceRecord> serviceRecordList){
 		for( ServiceRecord serviceRecord:serviceRecordList){
-			serviceRecord.setApplication(this);
+			serviceRecord.setAppClient(this);
 		}
 
 		this.mServiceRecordList = serviceRecordList;
@@ -402,12 +402,12 @@ public class Application extends BaseEntity implements  java.io.Serializable{
 	}
 	
 	public  void addServiceRecord(ServiceRecord serviceRecord){
-		serviceRecord.setApplication(this);
+		serviceRecord.setAppClient(this);
 		getServiceRecordList().add(serviceRecord);
 	}
 	public  void addServiceRecordList(SmartList<ServiceRecord> serviceRecordList){
 		for( ServiceRecord serviceRecord:serviceRecordList){
-			serviceRecord.setApplication(this);
+			serviceRecord.setAppClient(this);
 		}
 		getServiceRecordList().addAll(serviceRecordList);
 	}
@@ -429,8 +429,8 @@ public class Application extends BaseEntity implements  java.io.Serializable{
             throw new IllegalStateException(message);
         }
         ServiceRecord serviceRecord = getServiceRecordList().get(index);        
-        // serviceRecord.clearApplication(); //disconnect with Application
-        serviceRecord.clearFromAll(); //disconnect with Application
+        // serviceRecord.clearAppClient(); //disconnect with AppClient
+        serviceRecord.clearFromAll(); //disconnect with AppClient
 		
 		boolean result = getServiceRecordList().planToRemove(serviceRecord);
         if(!result){
@@ -447,7 +447,7 @@ public class Application extends BaseEntity implements  java.io.Serializable{
 		if(serviceRecord == null){
 			return;
 		}
-		serviceRecord.setApplication(null);
+		serviceRecord.setAppClient(null);
 		//getServiceRecordList().remove();
 	
 	}

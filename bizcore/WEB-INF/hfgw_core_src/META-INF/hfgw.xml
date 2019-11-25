@@ -55,13 +55,19 @@
 		<property name="dataSource" ref="dataSource" />
 		<property name="organizationDAO" ref="organizationDAO" />
 		
+		<property name="nodeTypeDAO" ref="nodeTypeDAO" />
+		
 		<property name="nodeDAO" ref="nodeDAO" />
 		
 		<property name="channelDAO" ref="channelDAO" />
 		
+		<property name="peerRoleDAO" ref="peerRoleDAO" />
+		
 		<property name="applicationDAO" ref="applicationDAO" />
 		
 		<property name="serviceRecordDAO" ref="serviceRecordDAO" />
+		
+		<property name="transactionStatusDAO" ref="transactionStatusDAO" />
 		
 		<property name="changeRequestTypeDAO" ref="changeRequestTypeDAO" />
 		
@@ -80,7 +86,7 @@
 	
 
 	<bean id="nodeTypeDAOBase" class="com.doublechaintech.hfgw.nodetype.NodeTypeJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="dataSource" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" />
 		<property name="nodeDAO" ref="nodeDAO" />
 		
 	</bean>
@@ -120,7 +126,7 @@
 	
 
 	<bean id="peerRoleDAOBase" class="com.doublechaintech.hfgw.peerrole.PeerRoleJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" />
+		<property name="dataSource" ref="dataSource" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" />
 		<property name="channelPeerRoleDAO" ref="channelPeerRoleDAO" />
 		
 	</bean>
@@ -150,9 +156,17 @@
 	
 
 	<bean id="serviceRecordDAOBase" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordJDBCTemplateDAO">
-		<property name="dataSource" ref="dataSource" /><property name="channelDAO" ref="channelDAO" /><property name="chainCodeDAO" ref="chainCodeDAO" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" /><property name="applicationDAO" ref="applicationDAO" />
+		<property name="dataSource" ref="dataSource" /><property name="channelDAO" ref="channelDAO" /><property name="applicationDAO" ref="applicationDAO" /><property name="transactionStatusDAO" ref="transactionStatusDAO" /><property name="chainCodeDAO" ref="chainCodeDAO" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" />
 	</bean>
 	<bean id="serviceRecordDAO" parent="serviceRecordDAOBase"></bean>
+	
+
+	<bean id="transactionStatusDAOBase" class="com.doublechaintech.hfgw.transactionstatus.TransactionStatusJDBCTemplateDAO">
+		<property name="dataSource" ref="dataSource" /><property name="hyperledgerNetworkDAO" ref="hyperledgerNetworkDAO" />
+		<property name="serviceRecordDAO" ref="serviceRecordDAO" />
+		
+	</bean>
+	<bean id="transactionStatusDAO" parent="transactionStatusDAOBase"></bean>
 	
 
 	<bean id="changeRequestTypeDAOBase" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeJDBCTemplateDAO">
@@ -304,6 +318,7 @@
 		<property name="chainCodeDAO" ref="chainCodeDAO"/>
 		<property name="applicationDAO" ref="applicationDAO"/>
 		<property name="serviceRecordDAO" ref="serviceRecordDAO"/>
+		<property name="transactionStatusDAO" ref="transactionStatusDAO"/>
 		<property name="changeRequestTypeDAO" ref="changeRequestTypeDAO"/>
 		<property name="changeRequestDAO" ref="changeRequestDAO"/>
 		<property name="userDomainDAO" ref="userDomainDAO"/>

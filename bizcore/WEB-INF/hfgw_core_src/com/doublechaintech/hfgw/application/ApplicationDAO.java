@@ -74,6 +74,10 @@ public interface ApplicationDAO{
 	public Application planToRemoveServiceRecordListWithNetwork(Application application, String networkId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithNetwork(String applicationId, String networkId, Map<String,Object> options)throws Exception;
 	
+	//disconnect Application with status in ServiceRecord
+	public Application planToRemoveServiceRecordListWithStatus(Application application, String statusId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithStatus(String applicationId, String statusId, Map<String,Object> options)throws Exception;
+	
 	
 	public SmartList<Application> queryList(String sql, Object ... parmeters);
 	public int count(String sql, Object ... parmeters);
@@ -94,7 +98,7 @@ public interface ApplicationDAO{
 
  
  
-	// 需要一个加载引用我的对象的enhance方法:ServiceRecord的application的ServiceRecordList
+	// 需要一个加载引用我的对象的enhance方法:ServiceRecord的appClient的ServiceRecordList
 	public SmartList<ServiceRecord> loadOurServiceRecordList(HfgwUserContext userContext, List<Application> us, Map<String,Object> options) throws Exception;
 	
 }

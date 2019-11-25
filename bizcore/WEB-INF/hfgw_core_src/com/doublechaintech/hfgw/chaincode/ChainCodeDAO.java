@@ -64,9 +64,17 @@ public interface ChainCodeDAO{
 	public ChainCode planToRemoveServiceRecordListWithBlockId(ChainCode chainCode, String blockIdId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithBlockId(String chainCodeId, String blockIdId, Map<String,Object> options)throws Exception;
 	
+	//disconnect ChainCode with app_client in ServiceRecord
+	public ChainCode planToRemoveServiceRecordListWithAppClient(ChainCode chainCode, String appClientId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithAppClient(String chainCodeId, String appClientId, Map<String,Object> options)throws Exception;
+	
 	//disconnect ChainCode with network in ServiceRecord
 	public ChainCode planToRemoveServiceRecordListWithNetwork(ChainCode chainCode, String networkId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithNetwork(String chainCodeId, String networkId, Map<String,Object> options)throws Exception;
+	
+	//disconnect ChainCode with status in ServiceRecord
+	public ChainCode planToRemoveServiceRecordListWithStatus(ChainCode chainCode, String statusId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithStatus(String chainCodeId, String statusId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<ChainCode> queryList(String sql, Object ... parmeters);
