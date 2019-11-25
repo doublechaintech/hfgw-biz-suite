@@ -61,8 +61,64 @@ public class PeerRoleForm extends BaseForm {
 		return codeField("code","");
 	}
 
+
+	public PeerRoleForm networkIdField(String parameterName, String initValue){
+		FormField field = networkIdFromPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public PeerRoleForm networkIdField(String initValue){
+		return networkIdField("networkId",initValue);
+	}
+	public PeerRoleForm networkIdField(){
+		return networkIdField("networkId","");
+	}
+
 	
 	
+
+
+	public PeerRoleForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  idFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public PeerRoleForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String initValue){
+		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId",initValue);
+	}
+	public PeerRoleForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(){
+		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId","");
+	}
+
+
+	public PeerRoleForm nameFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  nameFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public PeerRoleForm nameFieldOfHyperledgerNetwork(String initValue){
+		return nameFieldOfHyperledgerNetwork("name",initValue);
+	}
+	public PeerRoleForm nameFieldOfHyperledgerNetwork(){
+		return nameFieldOfHyperledgerNetwork("name","");
+	}
+
+
+	public PeerRoleForm descriptionFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  descriptionFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public PeerRoleForm descriptionFieldOfHyperledgerNetwork(String initValue){
+		return descriptionFieldOfHyperledgerNetwork("description",initValue);
+	}
+	public PeerRoleForm descriptionFieldOfHyperledgerNetwork(){
+		return descriptionFieldOfHyperledgerNetwork("description","");
+	}
 
 	
 
@@ -125,7 +181,17 @@ public class PeerRoleForm extends BaseForm {
 
 	
 
+	
+ 	public PeerRoleForm transferToAnotherNetworkAction(){
+		FormAction action = new FormAction();
+		action.setLabel("显示");
+		action.setLocaleKey("show");
+		action.setUrl("transferToAnotherNetwork/peerRoleId/");
+		this.addFormAction(action);
+		return this;
+	}
 
+ 
 
 	public PeerRoleForm showAction(){
 		FormAction action = new FormAction();

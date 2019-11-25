@@ -1569,6 +1569,50 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 		return count;
 	}
 	
+	//disconnect Channel with app_client in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithAppClient(Channel channel, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHANNEL_PROPERTY, channel.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, appClientId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return channel;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return channel;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearAppClient();
+			serviceRecordItem.clearChannel();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = channel.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return channel;
+	}
+	
+	public int countServiceRecordListWithAppClient(String channelId, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHANNEL_PROPERTY, channelId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, appClientId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect Channel with network in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithNetwork(Channel channel, String networkId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -1608,6 +1652,50 @@ public class ChannelJDBCTemplateDAO extends HfgwBaseDAOImpl implements ChannelDA
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(ServiceRecord.CHANNEL_PROPERTY, channelId);
 		key.put(ServiceRecord.NETWORK_PROPERTY, networkId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect Channel with status in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithStatus(Channel channel, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHANNEL_PROPERTY, channel.getId());
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return channel;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return channel;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearStatus();
+			serviceRecordItem.clearChannel();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = channel.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return channel;
+	}
+	
+	public int countServiceRecordListWithStatus(String channelId, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.CHANNEL_PROPERTY, channelId);
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
 		return count;

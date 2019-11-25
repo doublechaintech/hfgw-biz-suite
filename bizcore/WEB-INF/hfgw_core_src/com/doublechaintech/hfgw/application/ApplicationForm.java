@@ -250,17 +250,17 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm payLoadFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  payLoadFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm payloadFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  payloadFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm payLoadFieldForServiceRecord(String initValue){
-		return payLoadFieldForServiceRecord("payLoad",initValue);
+	public ApplicationForm payloadFieldForServiceRecord(String initValue){
+		return payloadFieldForServiceRecord("payload",initValue);
 	}
-	public ApplicationForm payLoadFieldForServiceRecord(){
-		return payLoadFieldForServiceRecord("payLoad","");
+	public ApplicationForm payloadFieldForServiceRecord(){
+		return payloadFieldForServiceRecord("payload","");
 	}
 
 
@@ -348,17 +348,17 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm applicationIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  applicationIdFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm appClientIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  appClientIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm applicationIdFieldForServiceRecord(String initValue){
-		return applicationIdFieldForServiceRecord("applicationId",initValue);
+	public ApplicationForm appClientIdFieldForServiceRecord(String initValue){
+		return appClientIdFieldForServiceRecord("appClientId",initValue);
 	}
-	public ApplicationForm applicationIdFieldForServiceRecord(){
-		return applicationIdFieldForServiceRecord("applicationId","");
+	public ApplicationForm appClientIdFieldForServiceRecord(){
+		return appClientIdFieldForServiceRecord("appClientId","");
 	}
 
 
@@ -376,17 +376,31 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm currentStatusFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  currentStatusFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm responseFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  responseFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm currentStatusFieldForServiceRecord(String initValue){
-		return currentStatusFieldForServiceRecord("currentStatus",initValue);
+	public ApplicationForm responseFieldForServiceRecord(String initValue){
+		return responseFieldForServiceRecord("response",initValue);
 	}
-	public ApplicationForm currentStatusFieldForServiceRecord(){
-		return currentStatusFieldForServiceRecord("currentStatus","");
+	public ApplicationForm responseFieldForServiceRecord(){
+		return responseFieldForServiceRecord("response","");
+	}
+
+
+	public ApplicationForm statusIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  statusIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm statusIdFieldForServiceRecord(String initValue){
+		return statusIdFieldForServiceRecord("statusId",initValue);
+	}
+	public ApplicationForm statusIdFieldForServiceRecord(){
+		return statusIdFieldForServiceRecord("statusId","");
 	}
 
 	

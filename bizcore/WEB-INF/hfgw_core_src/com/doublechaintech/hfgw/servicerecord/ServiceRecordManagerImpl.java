@@ -21,18 +21,18 @@ import com.doublechaintech.hfgw.HfgwCheckerManager;
 import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 import com.doublechaintech.hfgw.chaincode.CandidateChainCode;
+import com.doublechaintech.hfgw.transactionstatus.CandidateTransactionStatus;
 import com.doublechaintech.hfgw.channel.CandidateChannel;
 import com.doublechaintech.hfgw.application.CandidateApplication;
 import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
 
-import com.doublechaintech.hfgw.channel.Channel;
-import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 
 
@@ -158,8 +158,9 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		
 		addAction(userContext, serviceRecord, tokens,"service_record.transfer_to_channel","transferToAnotherChannel","transferToAnotherChannel/"+serviceRecord.getId()+"/","main","primary");
 		addAction(userContext, serviceRecord, tokens,"service_record.transfer_to_chain_code","transferToAnotherChainCode","transferToAnotherChainCode/"+serviceRecord.getId()+"/","main","primary");
+		addAction(userContext, serviceRecord, tokens,"service_record.transfer_to_app_client","transferToAnotherAppClient","transferToAnotherAppClient/"+serviceRecord.getId()+"/","main","primary");
 		addAction(userContext, serviceRecord, tokens,"service_record.transfer_to_network","transferToAnotherNetwork","transferToAnotherNetwork/"+serviceRecord.getId()+"/","main","primary");
-		addAction(userContext, serviceRecord, tokens,"service_record.apply","apply","applyActionForm/"+serviceRecord.getId()+"/","main","info");
+		addAction(userContext, serviceRecord, tokens,"service_record.transfer_to_status","transferToAnotherStatus","transferToAnotherStatus/"+serviceRecord.getId()+"/","main","primary");
 	
 		
 		
@@ -171,8 +172,8 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
  	
  	
 
-	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String name,String payLoad,String channelId,String chainCodeId,String chainCodeFunction,String transactionId,String blockId,String networkId) throws Exception
-	//public ServiceRecord createServiceRecord(HfgwUserContext userContext,String name, String payLoad, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId) throws Exception
+	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String name,String payload,String channelId,String chainCodeId,String chainCodeFunction,String transactionId,String blockId,String appClientId,String networkId,String response,String statusId) throws Exception
+	//public ServiceRecord createServiceRecord(HfgwUserContext userContext,String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception
 	{
 		
 		
@@ -180,10 +181,11 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		
 
 		checkerOf(userContext).checkNameOfServiceRecord(name);
-		checkerOf(userContext).checkPayLoadOfServiceRecord(payLoad);
+		checkerOf(userContext).checkPayloadOfServiceRecord(payload);
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
 		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
+		checkerOf(userContext).checkResponseOfServiceRecord(response);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ServiceRecordManagerException.class);
 
@@ -191,7 +193,7 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		ServiceRecord serviceRecord=createNewServiceRecord();	
 
 		serviceRecord.setName(name);
-		serviceRecord.setPayLoad(payLoad);
+		serviceRecord.setPayload(payload);
 			
 		Channel channel = loadChannel(userContext, channelId,emptyOptions());
 		serviceRecord.setChannel(channel);
@@ -207,11 +209,21 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		serviceRecord.setBlockId(blockId);
 		serviceRecord.setCreateTime(userContext.now());
 			
+		Application appClient = loadApplication(userContext, appClientId,emptyOptions());
+		serviceRecord.setAppClient(appClient);
+		
+		
+			
 		HyperledgerNetwork network = loadHyperledgerNetwork(userContext, networkId,emptyOptions());
 		serviceRecord.setNetwork(network);
 		
 		
-		serviceRecord.setCurrentStatus("INIT");
+		serviceRecord.setResponse(response);
+			
+		TransactionStatus status = loadTransactionStatus(userContext, statusId,emptyOptions());
+		serviceRecord.setStatus(status);
+		
+		
 
 		serviceRecord = saveServiceRecord(userContext, serviceRecord, emptyOptions());
 		
@@ -239,8 +251,8 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		if(ServiceRecord.NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNameOfServiceRecord(parseString(newValueExpr));
 		}
-		if(ServiceRecord.PAY_LOAD_PROPERTY.equals(property)){
-			checkerOf(userContext).checkPayLoadOfServiceRecord(parseString(newValueExpr));
+		if(ServiceRecord.PAYLOAD_PROPERTY.equals(property)){
+			checkerOf(userContext).checkPayloadOfServiceRecord(parseString(newValueExpr));
 		}		
 
 				
@@ -254,6 +266,13 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		}
 		if(ServiceRecord.BLOCK_ID_PROPERTY.equals(property)){
 			checkerOf(userContext).checkBlockIdOfServiceRecord(parseString(newValueExpr));
+		}		
+
+				
+
+		
+		if(ServiceRecord.RESPONSE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkResponseOfServiceRecord(parseString(newValueExpr));
 		}		
 
 		
@@ -362,47 +381,6 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		return ServiceRecordTokens.mergeAll(tokens).done();
 	}
 	
-	private static final String [] STATUS_SEQUENCE={"APPLIED"};
- 	protected String[] getNextCandidateStatus(HfgwUserContext userContext, String currentStatus) throws Exception{
- 	
- 		if("INIT".equals(currentStatus)){
- 			//if current status is null, just return the first status as the next status
- 			//code makes sure not throwing ArrayOutOfIndexException here.
- 			return STATUS_SEQUENCE;
- 		}
- 		/*
- 		List<String> statusList = Arrays.asList(STATUS_SEQUENCE);
- 		int index = statusList.indexOf(currentStatus);
- 		if(index < 0){
- 			throwExceptionWithMessage("The status '"+currentStatus+"' is not found from status list: "+ statusList );
- 		}
- 		if(index + 1 == statusList.size()){
- 			//this is the last status code; no next status any more
- 			return null;
- 		}
- 		
- 		//this is not the last one, just return it.
- 		*/
- 		return STATUS_SEQUENCE;
- 	
- 	}/**/
- 	protected void ensureStatus(HfgwUserContext userContext, ServiceRecord serviceRecord, String expectedNextStatus) throws Exception{
-		String currentStatus = serviceRecord.getCurrentStatus();
-		//'null' is fine for function getNextStatus
-		String candidateStatus[] = getNextCandidateStatus(userContext, currentStatus);
-		
-		if(candidateStatus == null){
-			//no more next status
-			String message = "No next status for '"+currentStatus+"', but you want to put the status to 'HIDDEN'";
-			throwExceptionWithMessage(message);
-		}
-		int index = Arrays.asList(candidateStatus).indexOf(expectedNextStatus);
-		if(index<0){
-			String message = "The current status '"+currentStatus+"' next candidate status should be one of '"+candidateStatus+"', but you want to transit the status to '"+expectedNextStatus+"'";
-			throwExceptionWithMessage(message);
-		}
-	}
-	
 	protected void checkParamsForTransferingAnotherChannel(HfgwUserContext userContext, String serviceRecordId, String anotherChannelId) throws Exception
  	{
  		
@@ -501,24 +479,24 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		return result;
 	}
  	
- 	protected void checkParamsForTransferingAnotherApplication(HfgwUserContext userContext, String serviceRecordId, String anotherApplicationId) throws Exception
+ 	protected void checkParamsForTransferingAnotherAppClient(HfgwUserContext userContext, String serviceRecordId, String anotherAppClientId) throws Exception
  	{
  		
  		checkerOf(userContext).checkIdOfServiceRecord(serviceRecordId);
- 		checkerOf(userContext).checkIdOfApplication(anotherApplicationId);//check for optional reference
+ 		checkerOf(userContext).checkIdOfApplication(anotherAppClientId);//check for optional reference
  		checkerOf(userContext).throwExceptionIfHasErrors(ServiceRecordManagerException.class);
  		
  	}
- 	public ServiceRecord transferToAnotherApplication(HfgwUserContext userContext, String serviceRecordId, String anotherApplicationId) throws Exception
+ 	public ServiceRecord transferToAnotherAppClient(HfgwUserContext userContext, String serviceRecordId, String anotherAppClientId) throws Exception
  	{
- 		checkParamsForTransferingAnotherApplication(userContext, serviceRecordId,anotherApplicationId);
+ 		checkParamsForTransferingAnotherAppClient(userContext, serviceRecordId,anotherAppClientId);
  
 		ServiceRecord serviceRecord = loadServiceRecord(userContext, serviceRecordId, allTokens());	
 		synchronized(serviceRecord){
 			//will be good when the serviceRecord loaded from this JVM process cache.
 			//also good when there is a ram based DAO implementation
-			Application application = loadApplication(userContext, anotherApplicationId, emptyOptions());		
-			serviceRecord.updateApplication(application);		
+			Application appClient = loadApplication(userContext, anotherAppClientId, emptyOptions());		
+			serviceRecord.updateAppClient(appClient);		
 			serviceRecord = saveServiceRecord(userContext, serviceRecord, emptyOptions());
 			
 			return present(userContext,serviceRecord, allTokens());
@@ -530,7 +508,7 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 	 	
  	
  	
-	public CandidateApplication requestCandidateApplication(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+	public CandidateApplication requestCandidateAppClient(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
 
 		CandidateApplication result = new CandidateApplication();
 		result.setOwnerClass(ownerClass);
@@ -550,108 +528,7 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		return result;
 	}
  	
- 	
-	public static final String APPLIED_STATUS = "APPLIED";
- 	protected void checkParamsForApplication(HfgwUserContext userContext, String serviceRecordId, String name, String mspid, String publicKey, String privateKey, String channelId, String networkId
-) throws Exception
- 	{
- 				checkerOf(userContext).checkIdOfServiceRecord(serviceRecordId);
-		checkerOf(userContext).checkNameOfApplication(name);
-		checkerOf(userContext).checkMspidOfApplication(mspid);
-		checkerOf(userContext).checkPublicKeyOfApplication(publicKey);
-		checkerOf(userContext).checkPrivateKeyOfApplication(privateKey);
-		checkerOf(userContext).checkIdOfChannel(channelId);
-		checkerOf(userContext).checkIdOfHyperledgerNetwork(networkId);
-
-	
-		checkerOf(userContext).throwExceptionIfHasErrors(ServiceRecordManagerException.class);
-
- 	}
- 	public ServiceRecord apply(HfgwUserContext userContext, String serviceRecordId, String name, String mspid, String publicKey, String privateKey, String channelId, String networkId
-) throws Exception
- 	{
-		checkParamsForApplication(userContext, serviceRecordId, name, mspid, publicKey, privateKey, channelId, networkId);
-		ServiceRecord serviceRecord = loadServiceRecord(userContext, serviceRecordId, allTokens());	
-		synchronized(serviceRecord){
-			//will be good when the serviceRecord loaded from this JVM process cache.
-			//also good when there is a ram based DAO implementation
-			
-			checkIfEligibleForApplication(userContext,serviceRecord);
- 		
-
-			serviceRecord.updateCurrentStatus(APPLIED_STATUS);
-			//set the new status, it will be good if add constant to the bean definition
-			
-			//extract all referenced objects, load them respectively
-			Channel channel = loadChannel(userContext, channelId, emptyOptions());
-			HyperledgerNetwork network = loadHyperledgerNetwork(userContext, networkId, emptyOptions());
-
-
-			Application application = createApplication(userContext, name, mspid, publicKey, privateKey, channel, network);		
-			serviceRecord.updateApplication(application);		
-			
-			
-			serviceRecord = saveServiceRecord(userContext, serviceRecord, tokens().withApplication().done());
-			return present(userContext,serviceRecord, allTokens());
-			
-		}
-
- 	}
- 	
- 	
- 	
- 	
- 	public ServiceRecordForm applyActionForm(HfgwUserContext userContext, String serviceRecordId) throws Exception
- 	{
-		return new ServiceRecordForm()
-			.withTitle("apply")
-			.serviceRecordIdField(serviceRecordId)
-			.nameFieldOfApplication()
-			.mspidFieldOfApplication()
-			.publicKeyFieldOfApplication()
-			.privateKeyFieldOfApplication()
-			.channelIdFieldOfApplication()
-			.networkIdFieldOfApplication()
-			.applyAction();
- 	}
-	
- 	
- 	protected Application createApplication(HfgwUserContext userContext, String name, String mspid, String publicKey, String privateKey, Channel channel, HyperledgerNetwork network){
- 		Application application = new Application();
- 		//name, mspid, publicKey, privateKey, channel, network
- 		
-		application.setName(name);
-		application.setCreateTime(userContext.now());
-		application.setMspid(mspid);
-		application.setPublicKey(publicKey);
-		application.setPrivateKey(privateKey);
-		application.setChannel(channel);
-		application.setNetwork(network);
-
- 		
- 		
- 		
- 		return applicationDaoOf(userContext).save(application,emptyOptions());
- 	}
- 	protected void checkIfEligibleForApplication(HfgwUserContext userContext, ServiceRecord serviceRecord) throws Exception{
- 
- 		ensureStatus(userContext,serviceRecord, APPLIED_STATUS);
- 		
- 		Application application = serviceRecord.getApplication();
- 		//check the current status equals to the status
- 		//String expectedCurrentStatus = application 		
- 		//if the previous is the expected status?
- 		
- 		
- 		//if already transited to this status?
- 		
- 		if( application != null){
-				throwExceptionWithMessage("The ServiceRecord("+serviceRecord.getId()+") has already been "+ APPLIED_STATUS+".");
-		}
- 		
- 		
- 	}
-	protected void checkParamsForTransferingAnotherNetwork(HfgwUserContext userContext, String serviceRecordId, String anotherNetworkId) throws Exception
+ 	protected void checkParamsForTransferingAnotherNetwork(HfgwUserContext userContext, String serviceRecordId, String anotherNetworkId) throws Exception
  	{
  		
  		checkerOf(userContext).checkIdOfServiceRecord(serviceRecordId);
@@ -700,6 +577,82 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		return result;
 	}
  	
+ 	protected void checkParamsForTransferingAnotherStatus(HfgwUserContext userContext, String serviceRecordId, String anotherStatusId) throws Exception
+ 	{
+ 		
+ 		checkerOf(userContext).checkIdOfServiceRecord(serviceRecordId);
+ 		checkerOf(userContext).checkIdOfTransactionStatus(anotherStatusId);//check for optional reference
+ 		checkerOf(userContext).throwExceptionIfHasErrors(ServiceRecordManagerException.class);
+ 		
+ 	}
+ 	public ServiceRecord transferToAnotherStatus(HfgwUserContext userContext, String serviceRecordId, String anotherStatusId) throws Exception
+ 	{
+ 		checkParamsForTransferingAnotherStatus(userContext, serviceRecordId,anotherStatusId);
+ 
+		ServiceRecord serviceRecord = loadServiceRecord(userContext, serviceRecordId, allTokens());	
+		synchronized(serviceRecord){
+			//will be good when the serviceRecord loaded from this JVM process cache.
+			//also good when there is a ram based DAO implementation
+			TransactionStatus status = loadTransactionStatus(userContext, anotherStatusId, emptyOptions());		
+			serviceRecord.updateStatus(status);		
+			serviceRecord = saveServiceRecord(userContext, serviceRecord, emptyOptions());
+			
+			return present(userContext,serviceRecord, allTokens());
+			
+		}
+
+ 	}
+ 	
+	
+
+	protected void checkParamsForTransferingAnotherStatusWithCode(HfgwUserContext userContext, String serviceRecordId, String anotherCode) throws Exception
+ 	{
+ 		
+ 		checkerOf(userContext).checkIdOfServiceRecord(serviceRecordId);
+ 		checkerOf(userContext).checkCodeOfTransactionStatus( anotherCode);
+ 		checkerOf(userContext).throwExceptionIfHasErrors(ServiceRecordManagerException.class);
+ 		
+ 	}
+
+ 	public ServiceRecord transferToAnotherStatusWithCode(HfgwUserContext userContext, String serviceRecordId, String anotherCode) throws Exception
+ 	{
+ 		checkParamsForTransferingAnotherStatusWithCode(userContext, serviceRecordId,anotherCode);
+ 		ServiceRecord serviceRecord = loadServiceRecord(userContext, serviceRecordId, allTokens());	
+		synchronized(serviceRecord){
+			//will be good when the serviceRecord loaded from this JVM process cache.
+			//also good when there is a ram based DAO implementation
+			TransactionStatus status = loadTransactionStatusWithCode(userContext, anotherCode, emptyOptions());		
+			serviceRecord.updateStatus(status);		
+			serviceRecord = saveServiceRecord(userContext, serviceRecord, emptyOptions());
+			
+			return present(userContext,serviceRecord, allTokens());
+			
+		}
+ 	}	
+
+	  	
+ 	
+ 	
+	public CandidateTransactionStatus requestCandidateStatus(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+
+		CandidateTransactionStatus result = new CandidateTransactionStatus();
+		result.setOwnerClass(ownerClass);
+		result.setOwnerId(id);
+		result.setFilterKey(filterKey==null?"":filterKey.trim());
+		result.setPageNo(pageNo);
+		result.setValueFieldName("id");
+		result.setDisplayFieldName("name");
+		
+		pageNo = Math.max(1, pageNo);
+		int pageSize = 20;
+		//requestCandidateProductForSkuAsOwner
+		SmartList<TransactionStatus> candidateList = transactionStatusDaoOf(userContext).requestCandidateTransactionStatusForServiceRecord(userContext,ownerClass, id, filterKey, pageNo, pageSize);
+		result.setCandidates(candidateList);
+		int totalCount = candidateList.getTotalCount();
+		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
+		return result;
+	}
+ 	
  //--------------------------------------------------------------
 	
 	 	
@@ -708,6 +661,33 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		
  		return channelDaoOf(userContext).load(newChannelId, options);
  	}
+ 	
+ 	
+ 	
+	
+	 	
+ 	protected Application loadApplication(HfgwUserContext userContext, String newAppClientId, Map<String,Object> options) throws Exception
+ 	{
+		
+ 		return applicationDaoOf(userContext).load(newAppClientId, options);
+ 	}
+ 	
+ 	
+ 	
+	
+	 	
+ 	protected TransactionStatus loadTransactionStatus(HfgwUserContext userContext, String newStatusId, Map<String,Object> options) throws Exception
+ 	{
+		
+ 		return transactionStatusDaoOf(userContext).load(newStatusId, options);
+ 	}
+ 	
+ 	protected TransactionStatus loadTransactionStatusWithCode(HfgwUserContext userContext, String newCode, Map<String,Object> options) throws Exception
+ 	{
+		
+ 		return transactionStatusDaoOf(userContext).loadByCode(newCode, options);
+ 	}
+ 	
  	
  	
  	
@@ -727,16 +707,6 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
  	{
 		
  		return hyperledgerNetworkDaoOf(userContext).load(newNetworkId, options);
- 	}
- 	
- 	
- 	
-	
-	 	
- 	protected Application loadApplication(HfgwUserContext userContext, String newApplicationId, Map<String,Object> options) throws Exception
- 	{
-		
- 		return applicationDaoOf(userContext).load(newApplicationId, options);
  	}
  	
  	

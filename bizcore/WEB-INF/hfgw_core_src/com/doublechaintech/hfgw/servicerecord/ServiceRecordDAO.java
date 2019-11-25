@@ -9,6 +9,7 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -16,6 +17,7 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO;
 import com.doublechaintech.hfgw.application.ApplicationDAO;
 
 
@@ -69,11 +71,11 @@ public interface ServiceRecordDAO{
 
  
   
- 	public SmartList<ServiceRecord> findServiceRecordByApplication(String applicationId, Map<String,Object> options);
- 	public int countServiceRecordByApplication(String applicationId, Map<String,Object> options);
- 	public Map<String, Integer> countServiceRecordByApplicationIds(String[] ids, Map<String,Object> options);
- 	public SmartList<ServiceRecord> findServiceRecordByApplication(String applicationId, int start, int count, Map<String,Object> options);
- 	public void analyzeServiceRecordByApplication(SmartList<ServiceRecord> resultList, String applicationId, Map<String,Object> options);
+ 	public SmartList<ServiceRecord> findServiceRecordByAppClient(String applicationId, Map<String,Object> options);
+ 	public int countServiceRecordByAppClient(String applicationId, Map<String,Object> options);
+ 	public Map<String, Integer> countServiceRecordByAppClientIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<ServiceRecord> findServiceRecordByAppClient(String applicationId, int start, int count, Map<String,Object> options);
+ 	public void analyzeServiceRecordByAppClient(SmartList<ServiceRecord> resultList, String applicationId, Map<String,Object> options);
 
  
   
@@ -82,6 +84,14 @@ public interface ServiceRecordDAO{
  	public Map<String, Integer> countServiceRecordByNetworkIds(String[] ids, Map<String,Object> options);
  	public SmartList<ServiceRecord> findServiceRecordByNetwork(String hyperledgerNetworkId, int start, int count, Map<String,Object> options);
  	public void analyzeServiceRecordByNetwork(SmartList<ServiceRecord> resultList, String hyperledgerNetworkId, Map<String,Object> options);
+
+ 
+  
+ 	public SmartList<ServiceRecord> findServiceRecordByStatus(String transactionStatusId, Map<String,Object> options);
+ 	public int countServiceRecordByStatus(String transactionStatusId, Map<String,Object> options);
+ 	public Map<String, Integer> countServiceRecordByStatusIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<ServiceRecord> findServiceRecordByStatus(String transactionStatusId, int start, int count, Map<String,Object> options);
+ 	public void analyzeServiceRecordByStatus(SmartList<ServiceRecord> resultList, String transactionStatusId, Map<String,Object> options);
 
  
  

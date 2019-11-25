@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.math.BigDecimal;
 import com.doublechaintech.hfgw.BaseRowMapper;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 public class NodeTypeMapper extends BaseRowMapper<NodeType>{
 	
@@ -14,6 +15,7 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
  		setId(nodeType, rs, rowNumber); 		
  		setName(nodeType, rs, rowNumber); 		
  		setCode(nodeType, rs, rowNumber); 		
+ 		setNetwork(nodeType, rs, rowNumber); 		
  		setVersion(nodeType, rs, rowNumber);
 
 		return nodeType;
@@ -58,7 +60,25 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
 		
 		nodeType.setCode(code);
 	}
-		
+		 		
+ 	protected void setNetwork(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
+ 		String hyperledgerNetworkId = rs.getString(NodeTypeTable.COLUMN_NETWORK);
+ 		if( hyperledgerNetworkId == null){
+ 			return;
+ 		}
+ 		if( hyperledgerNetworkId.isEmpty()){
+ 			return;
+ 		}
+ 		HyperledgerNetwork hyperledgerNetwork = nodeType.getNetwork();
+ 		if( hyperledgerNetwork != null ){
+ 			//if the root object 'nodeType' already have the property, just set the id for it;
+ 			hyperledgerNetwork.setId(hyperledgerNetworkId);
+ 			
+ 			return;
+ 		}
+ 		nodeType.setNetwork(createEmptyNetwork(hyperledgerNetworkId));
+ 	}
+ 	
 	protected void setVersion(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
@@ -73,6 +93,13 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
 		
 		
 
+ 	protected HyperledgerNetwork  createEmptyNetwork(String hyperledgerNetworkId){
+ 		HyperledgerNetwork hyperledgerNetwork = new HyperledgerNetwork();
+ 		hyperledgerNetwork.setId(hyperledgerNetworkId);
+ 		hyperledgerNetwork.setVersion(Integer.MAX_VALUE);
+ 		return hyperledgerNetwork;
+ 	}
+ 	
 }
 
 

@@ -37,6 +37,9 @@ import com.doublechaintech.hfgw.application.ApplicationTokens;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordTokens;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusTokens;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeDAO;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeTokens;
@@ -115,6 +118,8 @@ public class DAOGroup {
 	protected ApplicationDAO applicationDAO;
 
 	protected ServiceRecordDAO serviceRecordDAO;
+
+	protected TransactionStatusDAO transactionStatusDAO;
 
 	protected ChangeRequestTypeDAO changeRequestTypeDAO;
 
@@ -239,6 +244,14 @@ public class DAOGroup {
 	}
 	public void setServiceRecordDAO(ServiceRecordDAO dao){
 		this.serviceRecordDAO = dao;
+	}
+
+
+	public TransactionStatusDAO getTransactionStatusDAO(){
+		return this.transactionStatusDAO;
+	}
+	public void setTransactionStatusDAO(TransactionStatusDAO dao){
+		this.transactionStatusDAO = dao;
 	}
 
 
@@ -602,6 +615,25 @@ public class DAOGroup {
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
 				return daoGoup.getServiceRecordDAO().present((ServiceRecord)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("TransactionStatus", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getTransactionStatusDAO().load(id, TransactionStatusTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getTransactionStatusDAO().enhanceList((List<TransactionStatus>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getTransactionStatusDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getTransactionStatusDAO().present((TransactionStatus)data, tokens);
 			}
 		});
 

@@ -205,6 +205,12 @@ public class HfgwCheckerManager extends BaseManagerImpl {
 	public com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO serviceRecordDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getServiceRecordDAO();
 	}
+	public com.doublechaintech.hfgw.transactionstatus.TransactionStatusManager transactionStatusManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getTransactionStatusManager();
+	}
+	public com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO transactionStatusDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getTransactionStatusDAO();
+	}
 	public com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManager changeRequestTypeManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getChangeRequestTypeManager();
 	}

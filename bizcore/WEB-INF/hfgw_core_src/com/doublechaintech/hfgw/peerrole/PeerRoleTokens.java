@@ -72,12 +72,14 @@ public class PeerRoleTokens extends CommonTokens{
 	protected static PeerRoleTokens allTokens(){
 		
 		return start()
+			.withNetwork()
 			.withChannelPeerRoleList();
 	
 	}
 	public static PeerRoleTokens withoutListsTokens(){
 		
-		return start();
+		return start()
+			.withNetwork();
 	
 	}
 	
@@ -96,6 +98,16 @@ public class PeerRoleTokens extends CommonTokens{
 		return this;
 	}
 
+	protected static final String NETWORK = "network";
+	public String getNetwork(){
+		return NETWORK;
+	}
+	public PeerRoleTokens withNetwork(){		
+		addSimpleOptions(NETWORK);
+		return this;
+	}
+	
+	
 	protected static final String CHANNEL_PEER_ROLE_LIST = "channelPeerRoleList";
 	public String getChannelPeerRoleList(){
 		return CHANNEL_PEER_ROLE_LIST;

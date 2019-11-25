@@ -13,6 +13,7 @@ import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
@@ -87,6 +88,11 @@ public class BeanFactoryImpl{
 
 	public ServiceRecord createServiceRecord(Map<String,Object> options){
 		return new ServiceRecord();
+	}
+
+
+	public TransactionStatus createTransactionStatus(Map<String,Object> options){
+		return new TransactionStatus();
 	}
 
 

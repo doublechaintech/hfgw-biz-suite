@@ -316,6 +316,20 @@ public class ChannelPeerRoleForm extends BaseForm {
 		return codeFieldOfPeerRole("code","");
 	}
 
+
+	public ChannelPeerRoleForm networkIdFieldOfPeerRole(String parameterName, String initValue){
+		FormField field =  networkIdFromPeerRole(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public ChannelPeerRoleForm networkIdFieldOfPeerRole(String initValue){
+		return networkIdFieldOfPeerRole("networkId",initValue);
+	}
+	public ChannelPeerRoleForm networkIdFieldOfPeerRole(){
+		return networkIdFieldOfPeerRole("networkId","");
+	}
+
 	
 
 

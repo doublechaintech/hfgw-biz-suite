@@ -28,15 +28,13 @@ public interface ChainCodeManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String chainCodeId, String name, String payLoad, String channelId, String chainCodeFunction, String transactionId, String blockId, String networkId ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String chainCodeId, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId ,String [] tokensExpr)  throws Exception;
 	
-	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payLoad, String channelId, String chainCodeFunction, String transactionId, String blockId, String networkId , String [] tokensExpr)  throws Exception;
+	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId , String [] tokensExpr)  throws Exception;
 	public  ChainCode removeServiceRecord(HfgwUserContext userContext, String chainCodeId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  ChainCode updateServiceRecord(HfgwUserContext userContext, String chainCodeId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
-	public  ChainCode associateServiceRecordListToNewApplication(HfgwUserContext userContext, String chainCodeId, String  serviceRecordIds[], String name, String mspid, String publicKey, String privateKey, String channelId, String networkId, String [] tokensExpr) throws Exception ;
-	public  ChainCode associateServiceRecordListToApplication(HfgwUserContext userContext, String chainCodeId, String  serviceRecordIds[],String applicationId, String [] tokensExpr) throws Exception ;
 
 	*/
 

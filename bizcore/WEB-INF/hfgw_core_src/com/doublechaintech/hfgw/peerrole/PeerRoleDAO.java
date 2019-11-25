@@ -9,7 +9,9 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
 
 
@@ -67,7 +69,15 @@ public interface PeerRoleDAO{
 	
 	public SmartList<PeerRole> queryList(String sql, Object ... parmeters);
 	public int count(String sql, Object ... parmeters);
+ 
+ 	public SmartList<PeerRole> findPeerRoleByNetwork(String hyperledgerNetworkId, Map<String,Object> options);
+ 	public int countPeerRoleByNetwork(String hyperledgerNetworkId, Map<String,Object> options);
+ 	public Map<String, Integer> countPeerRoleByNetworkIds(String[] ids, Map<String,Object> options);
+ 	public SmartList<PeerRole> findPeerRoleByNetwork(String hyperledgerNetworkId, int start, int count, Map<String,Object> options);
+ 	public void analyzePeerRoleByNetwork(SmartList<PeerRole> resultList, String hyperledgerNetworkId, Map<String,Object> options);
 
+ 
+ 
 	// 需要一个加载引用我的对象的enhance方法:ChannelPeerRole的peerRole的ChannelPeerRoleList
 	public SmartList<ChannelPeerRole> loadOurChannelPeerRoleList(HfgwUserContext userContext, List<PeerRole> us, Map<String,Object> options) throws Exception;
 	

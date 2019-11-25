@@ -27,6 +27,7 @@ import com.terapico.utils.TextUtil;
 
 import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 
 public class HfgwBaseUtils {
@@ -257,6 +258,18 @@ public class HfgwBaseUtils {
 			return data;
 		}
 		data = userContext.getDAOGroup().getPeerRoleDAO().loadByCode(code, emptyOptions);
+		userContext.putIntoContextLocalStorage(key, data);
+		return data;
+	}
+
+
+	public static TransactionStatus getTransactionStatus(HfgwUserContext userContext, String code) throws Exception {
+		String key = "enum:" + TransactionStatus.INTERNAL_TYPE + ":" + code;
+		TransactionStatus data = (TransactionStatus) userContext.getFromContextLocalStorage(key);
+		if (data != null) {
+			return data;
+		}
+		data = userContext.getDAOGroup().getTransactionStatusDAO().loadByCode(code, emptyOptions);
 		userContext.putIntoContextLocalStorage(key, data);
 		return data;
 	}

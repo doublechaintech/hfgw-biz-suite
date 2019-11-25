@@ -122,6 +122,15 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  NETWORK_OF_NODE_TYPE ="node_type.network";
+	public HfgwChecker checkNetworkIdOfNodeType(String networkId)
+	{
+		
+	 	checkIdOfNodeType(networkId ); 		
+		
+		return this;
+	}	
+
 	public static final String  VERSION_OF_NODE_TYPE ="node_type.version";
 	public HfgwChecker checkVersionOfNodeType(int version)
 	{
@@ -347,6 +356,15 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  NETWORK_OF_PEER_ROLE ="peer_role.network";
+	public HfgwChecker checkNetworkIdOfPeerRole(String networkId)
+	{
+		
+	 	checkIdOfPeerRole(networkId ); 		
+		
+		return this;
+	}	
+
 	public static final String  VERSION_OF_PEER_ROLE ="peer_role.version";
 	public HfgwChecker checkVersionOfPeerRole(int version)
 	{
@@ -545,11 +563,11 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  PAY_LOAD_OF_SERVICE_RECORD ="service_record.pay_load";
-	public HfgwChecker checkPayLoadOfServiceRecord(String payLoad)
+	public static final String  PAYLOAD_OF_SERVICE_RECORD ="service_record.payload";
+	public HfgwChecker checkPayloadOfServiceRecord(String payload)
 	{
 		
-	 	checkLongtext(payLoad,0, 1048576,PAY_LOAD_OF_SERVICE_RECORD ); 		
+	 	checkLongtext(payload,0, 1048576,PAYLOAD_OF_SERVICE_RECORD ); 		
 		
 		return this;
 	}	
@@ -585,7 +603,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkTransactionIdOfServiceRecord(String transactionId)
 	{
 		
-	 	checkStringLengthRange(transactionId,1, 200,TRANSACTION_ID_OF_SERVICE_RECORD ); 		
+	 	checkStringLengthRange(transactionId,0, 200,TRANSACTION_ID_OF_SERVICE_RECORD ); 		
 		
 		return this;
 	}	
@@ -594,7 +612,16 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkBlockIdOfServiceRecord(String blockId)
 	{
 		
-	 	checkStringLengthRange(blockId,1, 200,BLOCK_ID_OF_SERVICE_RECORD ); 		
+	 	checkStringLengthRange(blockId,0, 200,BLOCK_ID_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
+	public static final String  APP_CLIENT_OF_SERVICE_RECORD ="service_record.app_client";
+	public HfgwChecker checkAppClientIdOfServiceRecord(String appClientId)
+	{
+		
+	 	checkIdOfServiceRecord(appClientId ); 		
 		
 		return this;
 	}	
@@ -608,11 +635,74 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  RESPONSE_OF_SERVICE_RECORD ="service_record.response";
+	public HfgwChecker checkResponseOfServiceRecord(String response)
+	{
+		
+	 	checkLongtext(response,0, 1048576,RESPONSE_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
+	public static final String  STATUS_OF_SERVICE_RECORD ="service_record.status";
+	public HfgwChecker checkStatusIdOfServiceRecord(String statusId)
+	{
+		
+	 	checkIdOfServiceRecord(statusId ); 		
+		
+		return this;
+	}	
+
 	public static final String  VERSION_OF_SERVICE_RECORD ="service_record.version";
 	public HfgwChecker checkVersionOfServiceRecord(int version)
 	{
 		
 	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_TRANSACTION_STATUS ="transaction_status.id";
+	public HfgwChecker checkIdOfTransactionStatus(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_TRANSACTION_STATUS ); 		
+		
+		return this;
+	}	
+
+	public static final String  NAME_OF_TRANSACTION_STATUS ="transaction_status.name";
+	public HfgwChecker checkNameOfTransactionStatus(String name)
+	{
+		
+	 	checkStringLengthRange(name,1, 36,NAME_OF_TRANSACTION_STATUS ); 		
+		
+		return this;
+	}	
+
+	public static final String  CODE_OF_TRANSACTION_STATUS ="transaction_status.code";
+	public HfgwChecker checkCodeOfTransactionStatus(String code)
+	{
+		
+	 	checkStringLengthRange(code,1, 36,CODE_OF_TRANSACTION_STATUS ); 		
+		
+		return this;
+	}	
+
+	public static final String  NETWORK_OF_TRANSACTION_STATUS ="transaction_status.network";
+	public HfgwChecker checkNetworkIdOfTransactionStatus(String networkId)
+	{
+		
+	 	checkIdOfTransactionStatus(networkId ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_TRANSACTION_STATUS ="transaction_status.version";
+	public HfgwChecker checkVersionOfTransactionStatus(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_TRANSACTION_STATUS ); 		
 		
 		return this;
 	}	

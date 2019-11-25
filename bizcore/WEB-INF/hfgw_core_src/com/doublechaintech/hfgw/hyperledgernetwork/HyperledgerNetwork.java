@@ -12,9 +12,12 @@ import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.KeyValuePair;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
+import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
@@ -30,10 +33,13 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String ORGANIZATION_LIST                        = "organizationList"  ;
+	public static final String NODE_TYPE_LIST                           = "nodeTypeList"      ;
 	public static final String NODE_LIST                                = "nodeList"          ;
 	public static final String CHANNEL_LIST                             = "channelList"       ;
+	public static final String PEER_ROLE_LIST                           = "peerRoleList"      ;
 	public static final String APPLICATION_LIST                         = "applicationList"   ;
 	public static final String SERVICE_RECORD_LIST                      = "serviceRecordList" ;
+	public static final String TRANSACTION_STATUS_LIST                  = "transactionStatusList";
 	public static final String CHANGE_REQUEST_TYPE_LIST                 = "changeRequestTypeList";
 	public static final String CHANGE_REQUEST_LIST                      = "changeRequestList" ;
 
@@ -63,10 +69,13 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	
 	
 	protected		SmartList<Organization>	mOrganizationList   ;
+	protected		SmartList<NodeType> 	mNodeTypeList       ;
 	protected		SmartList<Node>     	mNodeList           ;
 	protected		SmartList<Channel>  	mChannelList        ;
+	protected		SmartList<PeerRole> 	mPeerRoleList       ;
 	protected		SmartList<Application>	mApplicationList    ;
 	protected		SmartList<ServiceRecord>	mServiceRecordList  ;
+	protected		SmartList<TransactionStatus>	mTransactionStatusList;
 	protected		SmartList<ChangeRequestType>	mChangeRequestTypeList;
 	protected		SmartList<ChangeRequest>	mChangeRequestList  ;
 	
@@ -151,6 +160,10 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			List<BaseEntity> list = getOrganizationList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
+		if(NODE_TYPE_LIST.equals(property)){
+			List<BaseEntity> list = getNodeTypeList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
 		if(NODE_LIST.equals(property)){
 			List<BaseEntity> list = getNodeList().stream().map(item->item).collect(Collectors.toList());
 			return list;
@@ -159,12 +172,20 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			List<BaseEntity> list = getChannelList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
+		if(PEER_ROLE_LIST.equals(property)){
+			List<BaseEntity> list = getPeerRoleList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
 		if(APPLICATION_LIST.equals(property)){
 			List<BaseEntity> list = getApplicationList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 		if(SERVICE_RECORD_LIST.equals(property)){
 			List<BaseEntity> list = getServiceRecordList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
+		if(TRANSACTION_STATUS_LIST.equals(property)){
+			List<BaseEntity> list = getTransactionStatusList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 		if(CHANGE_REQUEST_TYPE_LIST.equals(property)){
@@ -352,6 +373,113 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	
 	public  void cleanUpOrganizationList(){
 		getOrganizationList().clear();
+	}
+	
+	
+	
+
+
+	public  SmartList<NodeType> getNodeTypeList(){
+		if(this.mNodeTypeList == null){
+			this.mNodeTypeList = new SmartList<NodeType>();
+			this.mNodeTypeList.setListInternalName (NODE_TYPE_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mNodeTypeList;	
+	}
+	public  void setNodeTypeList(SmartList<NodeType> nodeTypeList){
+		for( NodeType nodeType:nodeTypeList){
+			nodeType.setNetwork(this);
+		}
+
+		this.mNodeTypeList = nodeTypeList;
+		this.mNodeTypeList.setListInternalName (NODE_TYPE_LIST );
+		
+	}
+	
+	public  void addNodeType(NodeType nodeType){
+		nodeType.setNetwork(this);
+		getNodeTypeList().add(nodeType);
+	}
+	public  void addNodeTypeList(SmartList<NodeType> nodeTypeList){
+		for( NodeType nodeType:nodeTypeList){
+			nodeType.setNetwork(this);
+		}
+		getNodeTypeList().addAll(nodeTypeList);
+	}
+	public  void mergeNodeTypeList(SmartList<NodeType> nodeTypeList){
+		if(nodeTypeList==null){
+			return;
+		}
+		if(nodeTypeList.isEmpty()){
+			return;
+		}
+		addNodeTypeList( nodeTypeList );
+		
+	}
+	public  NodeType removeNodeType(NodeType nodeTypeIndex){
+		
+		int index = getNodeTypeList().indexOf(nodeTypeIndex);
+        if(index < 0){
+        	String message = "NodeType("+nodeTypeIndex.getId()+") with version='"+nodeTypeIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        NodeType nodeType = getNodeTypeList().get(index);        
+        // nodeType.clearNetwork(); //disconnect with Network
+        nodeType.clearFromAll(); //disconnect with Network
+		
+		boolean result = getNodeTypeList().planToRemove(nodeType);
+        if(!result){
+        	String message = "NodeType("+nodeTypeIndex.getId()+") with version='"+nodeTypeIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return nodeType;
+        
+	
+	}
+	//断舍离
+	public  void breakWithNodeType(NodeType nodeType){
+		
+		if(nodeType == null){
+			return;
+		}
+		nodeType.setNetwork(null);
+		//getNodeTypeList().remove();
+	
+	}
+	
+	public  boolean hasNodeType(NodeType nodeType){
+	
+		return getNodeTypeList().contains(nodeType);
+  
+	}
+	
+	public void copyNodeTypeFrom(NodeType nodeType) {
+
+		NodeType nodeTypeInList = findTheNodeType(nodeType);
+		NodeType newNodeType = new NodeType();
+		nodeTypeInList.copyTo(newNodeType);
+		newNodeType.setVersion(0);//will trigger copy
+		getNodeTypeList().add(newNodeType);
+		addItemToFlexiableObject(COPIED_CHILD, newNodeType);
+	}
+	
+	public  NodeType findTheNodeType(NodeType nodeType){
+		
+		int index =  getNodeTypeList().indexOf(nodeType);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "NodeType("+nodeType.getId()+") with version='"+nodeType.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getNodeTypeList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpNodeTypeList(){
+		getNodeTypeList().clear();
 	}
 	
 	
@@ -572,6 +700,113 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	
 
 
+	public  SmartList<PeerRole> getPeerRoleList(){
+		if(this.mPeerRoleList == null){
+			this.mPeerRoleList = new SmartList<PeerRole>();
+			this.mPeerRoleList.setListInternalName (PEER_ROLE_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mPeerRoleList;	
+	}
+	public  void setPeerRoleList(SmartList<PeerRole> peerRoleList){
+		for( PeerRole peerRole:peerRoleList){
+			peerRole.setNetwork(this);
+		}
+
+		this.mPeerRoleList = peerRoleList;
+		this.mPeerRoleList.setListInternalName (PEER_ROLE_LIST );
+		
+	}
+	
+	public  void addPeerRole(PeerRole peerRole){
+		peerRole.setNetwork(this);
+		getPeerRoleList().add(peerRole);
+	}
+	public  void addPeerRoleList(SmartList<PeerRole> peerRoleList){
+		for( PeerRole peerRole:peerRoleList){
+			peerRole.setNetwork(this);
+		}
+		getPeerRoleList().addAll(peerRoleList);
+	}
+	public  void mergePeerRoleList(SmartList<PeerRole> peerRoleList){
+		if(peerRoleList==null){
+			return;
+		}
+		if(peerRoleList.isEmpty()){
+			return;
+		}
+		addPeerRoleList( peerRoleList );
+		
+	}
+	public  PeerRole removePeerRole(PeerRole peerRoleIndex){
+		
+		int index = getPeerRoleList().indexOf(peerRoleIndex);
+        if(index < 0){
+        	String message = "PeerRole("+peerRoleIndex.getId()+") with version='"+peerRoleIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        PeerRole peerRole = getPeerRoleList().get(index);        
+        // peerRole.clearNetwork(); //disconnect with Network
+        peerRole.clearFromAll(); //disconnect with Network
+		
+		boolean result = getPeerRoleList().planToRemove(peerRole);
+        if(!result){
+        	String message = "PeerRole("+peerRoleIndex.getId()+") with version='"+peerRoleIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return peerRole;
+        
+	
+	}
+	//断舍离
+	public  void breakWithPeerRole(PeerRole peerRole){
+		
+		if(peerRole == null){
+			return;
+		}
+		peerRole.setNetwork(null);
+		//getPeerRoleList().remove();
+	
+	}
+	
+	public  boolean hasPeerRole(PeerRole peerRole){
+	
+		return getPeerRoleList().contains(peerRole);
+  
+	}
+	
+	public void copyPeerRoleFrom(PeerRole peerRole) {
+
+		PeerRole peerRoleInList = findThePeerRole(peerRole);
+		PeerRole newPeerRole = new PeerRole();
+		peerRoleInList.copyTo(newPeerRole);
+		newPeerRole.setVersion(0);//will trigger copy
+		getPeerRoleList().add(newPeerRole);
+		addItemToFlexiableObject(COPIED_CHILD, newPeerRole);
+	}
+	
+	public  PeerRole findThePeerRole(PeerRole peerRole){
+		
+		int index =  getPeerRoleList().indexOf(peerRole);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "PeerRole("+peerRole.getId()+") with version='"+peerRole.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getPeerRoleList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpPeerRoleList(){
+		getPeerRoleList().clear();
+	}
+	
+	
+	
+
+
 	public  SmartList<Application> getApplicationList(){
 		if(this.mApplicationList == null){
 			this.mApplicationList = new SmartList<Application>();
@@ -780,6 +1015,113 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 	
 	public  void cleanUpServiceRecordList(){
 		getServiceRecordList().clear();
+	}
+	
+	
+	
+
+
+	public  SmartList<TransactionStatus> getTransactionStatusList(){
+		if(this.mTransactionStatusList == null){
+			this.mTransactionStatusList = new SmartList<TransactionStatus>();
+			this.mTransactionStatusList.setListInternalName (TRANSACTION_STATUS_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mTransactionStatusList;	
+	}
+	public  void setTransactionStatusList(SmartList<TransactionStatus> transactionStatusList){
+		for( TransactionStatus transactionStatus:transactionStatusList){
+			transactionStatus.setNetwork(this);
+		}
+
+		this.mTransactionStatusList = transactionStatusList;
+		this.mTransactionStatusList.setListInternalName (TRANSACTION_STATUS_LIST );
+		
+	}
+	
+	public  void addTransactionStatus(TransactionStatus transactionStatus){
+		transactionStatus.setNetwork(this);
+		getTransactionStatusList().add(transactionStatus);
+	}
+	public  void addTransactionStatusList(SmartList<TransactionStatus> transactionStatusList){
+		for( TransactionStatus transactionStatus:transactionStatusList){
+			transactionStatus.setNetwork(this);
+		}
+		getTransactionStatusList().addAll(transactionStatusList);
+	}
+	public  void mergeTransactionStatusList(SmartList<TransactionStatus> transactionStatusList){
+		if(transactionStatusList==null){
+			return;
+		}
+		if(transactionStatusList.isEmpty()){
+			return;
+		}
+		addTransactionStatusList( transactionStatusList );
+		
+	}
+	public  TransactionStatus removeTransactionStatus(TransactionStatus transactionStatusIndex){
+		
+		int index = getTransactionStatusList().indexOf(transactionStatusIndex);
+        if(index < 0){
+        	String message = "TransactionStatus("+transactionStatusIndex.getId()+") with version='"+transactionStatusIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        TransactionStatus transactionStatus = getTransactionStatusList().get(index);        
+        // transactionStatus.clearNetwork(); //disconnect with Network
+        transactionStatus.clearFromAll(); //disconnect with Network
+		
+		boolean result = getTransactionStatusList().planToRemove(transactionStatus);
+        if(!result){
+        	String message = "TransactionStatus("+transactionStatusIndex.getId()+") with version='"+transactionStatusIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return transactionStatus;
+        
+	
+	}
+	//断舍离
+	public  void breakWithTransactionStatus(TransactionStatus transactionStatus){
+		
+		if(transactionStatus == null){
+			return;
+		}
+		transactionStatus.setNetwork(null);
+		//getTransactionStatusList().remove();
+	
+	}
+	
+	public  boolean hasTransactionStatus(TransactionStatus transactionStatus){
+	
+		return getTransactionStatusList().contains(transactionStatus);
+  
+	}
+	
+	public void copyTransactionStatusFrom(TransactionStatus transactionStatus) {
+
+		TransactionStatus transactionStatusInList = findTheTransactionStatus(transactionStatus);
+		TransactionStatus newTransactionStatus = new TransactionStatus();
+		transactionStatusInList.copyTo(newTransactionStatus);
+		newTransactionStatus.setVersion(0);//will trigger copy
+		getTransactionStatusList().add(newTransactionStatus);
+		addItemToFlexiableObject(COPIED_CHILD, newTransactionStatus);
+	}
+	
+	public  TransactionStatus findTheTransactionStatus(TransactionStatus transactionStatus){
+		
+		int index =  getTransactionStatusList().indexOf(transactionStatus);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "TransactionStatus("+transactionStatus.getId()+") with version='"+transactionStatus.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getTransactionStatusList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpTransactionStatusList(){
+		getTransactionStatusList().clear();
 	}
 	
 	
@@ -1010,10 +1352,13 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getOrganizationList(), internalType);
+		collectFromList(this, entityList, getNodeTypeList(), internalType);
 		collectFromList(this, entityList, getNodeList(), internalType);
 		collectFromList(this, entityList, getChannelList(), internalType);
+		collectFromList(this, entityList, getPeerRoleList(), internalType);
 		collectFromList(this, entityList, getApplicationList(), internalType);
 		collectFromList(this, entityList, getServiceRecordList(), internalType);
+		collectFromList(this, entityList, getTransactionStatusList(), internalType);
 		collectFromList(this, entityList, getChangeRequestTypeList(), internalType);
 		collectFromList(this, entityList, getChangeRequestList(), internalType);
 
@@ -1024,10 +1369,13 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getOrganizationList());
+		listOfList.add( getNodeTypeList());
 		listOfList.add( getNodeList());
 		listOfList.add( getChannelList());
+		listOfList.add( getPeerRoleList());
 		listOfList.add( getApplicationList());
 		listOfList.add( getServiceRecordList());
+		listOfList.add( getTransactionStatusList());
 		listOfList.add( getChangeRequestTypeList());
 		listOfList.add( getChangeRequestList());
 			
@@ -1048,6 +1396,11 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			appendKeyValuePair(result, "organizationCount", getOrganizationList().getTotalCount());
 			appendKeyValuePair(result, "organizationCurrentPageNumber", getOrganizationList().getCurrentPageNumber());
 		}
+		appendKeyValuePair(result, NODE_TYPE_LIST, getNodeTypeList());
+		if(!getNodeTypeList().isEmpty()){
+			appendKeyValuePair(result, "nodeTypeCount", getNodeTypeList().getTotalCount());
+			appendKeyValuePair(result, "nodeTypeCurrentPageNumber", getNodeTypeList().getCurrentPageNumber());
+		}
 		appendKeyValuePair(result, NODE_LIST, getNodeList());
 		if(!getNodeList().isEmpty()){
 			appendKeyValuePair(result, "nodeCount", getNodeList().getTotalCount());
@@ -1058,6 +1411,11 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			appendKeyValuePair(result, "channelCount", getChannelList().getTotalCount());
 			appendKeyValuePair(result, "channelCurrentPageNumber", getChannelList().getCurrentPageNumber());
 		}
+		appendKeyValuePair(result, PEER_ROLE_LIST, getPeerRoleList());
+		if(!getPeerRoleList().isEmpty()){
+			appendKeyValuePair(result, "peerRoleCount", getPeerRoleList().getTotalCount());
+			appendKeyValuePair(result, "peerRoleCurrentPageNumber", getPeerRoleList().getCurrentPageNumber());
+		}
 		appendKeyValuePair(result, APPLICATION_LIST, getApplicationList());
 		if(!getApplicationList().isEmpty()){
 			appendKeyValuePair(result, "applicationCount", getApplicationList().getTotalCount());
@@ -1067,6 +1425,11 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 		if(!getServiceRecordList().isEmpty()){
 			appendKeyValuePair(result, "serviceRecordCount", getServiceRecordList().getTotalCount());
 			appendKeyValuePair(result, "serviceRecordCurrentPageNumber", getServiceRecordList().getCurrentPageNumber());
+		}
+		appendKeyValuePair(result, TRANSACTION_STATUS_LIST, getTransactionStatusList());
+		if(!getTransactionStatusList().isEmpty()){
+			appendKeyValuePair(result, "transactionStatusCount", getTransactionStatusList().getTotalCount());
+			appendKeyValuePair(result, "transactionStatusCurrentPageNumber", getTransactionStatusList().getCurrentPageNumber());
 		}
 		appendKeyValuePair(result, CHANGE_REQUEST_TYPE_LIST, getChangeRequestTypeList());
 		if(!getChangeRequestTypeList().isEmpty()){
@@ -1097,10 +1460,13 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			dest.setDescription(getDescription());
 			dest.setVersion(getVersion());
 			dest.setOrganizationList(getOrganizationList());
+			dest.setNodeTypeList(getNodeTypeList());
 			dest.setNodeList(getNodeList());
 			dest.setChannelList(getChannelList());
+			dest.setPeerRoleList(getPeerRoleList());
 			dest.setApplicationList(getApplicationList());
 			dest.setServiceRecordList(getServiceRecordList());
+			dest.setTransactionStatusList(getTransactionStatusList());
 			dest.setChangeRequestTypeList(getChangeRequestTypeList());
 			dest.setChangeRequestList(getChangeRequestList());
 
@@ -1121,10 +1487,13 @@ public class HyperledgerNetwork extends BaseEntity implements  java.io.Serializa
 			dest.mergeDescription(getDescription());
 			dest.mergeVersion(getVersion());
 			dest.mergeOrganizationList(getOrganizationList());
+			dest.mergeNodeTypeList(getNodeTypeList());
 			dest.mergeNodeList(getNodeList());
 			dest.mergeChannelList(getChannelList());
+			dest.mergePeerRoleList(getPeerRoleList());
 			dest.mergeApplicationList(getApplicationList());
 			dest.mergeServiceRecordList(getServiceRecordList());
+			dest.mergeTransactionStatusList(getTransactionStatusList());
 			dest.mergeChangeRequestTypeList(getChangeRequestTypeList());
 			dest.mergeChangeRequestList(getChangeRequestList());
 

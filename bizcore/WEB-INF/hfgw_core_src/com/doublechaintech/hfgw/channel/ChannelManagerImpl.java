@@ -31,6 +31,7 @@ import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.channel.Channel;
@@ -616,6 +617,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 				return channel;
 			}
 	}
+	//disconnect Channel with app_client in ServiceRecord
+	protected Channel breakWithServiceRecordByAppClient(HfgwUserContext userContext, String channelId, String appClientId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+
+			synchronized(channel){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				channelDaoOf(userContext).planToRemoveServiceRecordListWithAppClient(channel, appClientId, this.emptyOptions());
+
+				channel = saveChannel(userContext, channel, tokens().withServiceRecordList().done());
+				return channel;
+			}
+	}
 	//disconnect Channel with network in ServiceRecord
 	protected Channel breakWithServiceRecordByNetwork(HfgwUserContext userContext, String channelId, String networkId,  String [] tokensExpr)
 		 throws Exception{
@@ -629,6 +648,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 				//Also good when there is a RAM based DAO implementation
 				
 				channelDaoOf(userContext).planToRemoveServiceRecordListWithNetwork(channel, networkId, this.emptyOptions());
+
+				channel = saveChannel(userContext, channel, tokens().withServiceRecordList().done());
+				return channel;
+			}
+	}
+	//disconnect Channel with status in ServiceRecord
+	protected Channel breakWithServiceRecordByStatus(HfgwUserContext userContext, String channelId, String statusId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+
+			synchronized(channel){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				channelDaoOf(userContext).planToRemoveServiceRecordListWithStatus(channel, statusId, this.emptyOptions());
 
 				channel = saveChannel(userContext, channel, tokens().withServiceRecordList().done());
 				return channel;
@@ -1672,14 +1709,14 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 
 
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String channelId, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChannel(channelId);
 
 		
 		checkerOf(userContext).checkNameOfServiceRecord(name);
 		
-		checkerOf(userContext).checkPayLoadOfServiceRecord(payLoad);
+		checkerOf(userContext).checkPayloadOfServiceRecord(payload);
 		
 		checkerOf(userContext).checkChainCodeIdOfServiceRecord(chainCodeId);
 		
@@ -1689,18 +1726,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
 		
+		checkerOf(userContext).checkAppClientIdOfServiceRecord(appClientId);
+		
 		checkerOf(userContext).checkNetworkIdOfServiceRecord(networkId);
+		
+		checkerOf(userContext).checkResponseOfServiceRecord(response);
+		
+		checkerOf(userContext).checkStatusIdOfServiceRecord(statusId);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 
 	
 	}
-	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId, String [] tokensExpr) throws Exception
+	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,channelId,name, payLoad, chainCodeId, chainCodeFunction, transactionId, blockId, networkId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,channelId,name, payload, chainCodeId, chainCodeFunction, transactionId, blockId, appClientId, networkId, response, statusId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payLoad, chainCodeId, chainCodeFunction, transactionId, blockId, networkId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payload, chainCodeId, chainCodeFunction, transactionId, blockId, appClientId, networkId, response, statusId);
 		
 		Channel channel = loadChannel(userContext, channelId, allTokens());
 		synchronized(channel){ 
@@ -1713,23 +1756,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			return present(userContext,channel, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String channelId,String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String channelId,String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChannel(channelId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
 		checkerOf(userContext).checkNameOfServiceRecord( name);
-		checkerOf(userContext).checkPayLoadOfServiceRecord( payLoad);
+		checkerOf(userContext).checkPayloadOfServiceRecord( payload);
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
 		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
+		checkerOf(userContext).checkResponseOfServiceRecord( response);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 		
 	}
-	public  Channel updateServiceRecordProperties(HfgwUserContext userContext, String channelId, String id,String name,String payLoad,String chainCodeFunction,String transactionId,String blockId, String [] tokensExpr) throws Exception
+	public  Channel updateServiceRecordProperties(HfgwUserContext userContext, String channelId, String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,channelId,id,name,payLoad,chainCodeFunction,transactionId,blockId,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,channelId,id,name,payload,chainCodeFunction,transactionId,blockId,response,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1745,10 +1789,11 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		ServiceRecord item = channelToUpdate.getServiceRecordList().first();
 		
 		item.updateName( name );
-		item.updatePayLoad( payLoad );
+		item.updatePayload( payload );
 		item.updateChainCodeFunction( chainCodeFunction );
 		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
+		item.updateResponse( response );
 
 		
 		//checkParamsForAddingServiceRecord(userContext,channelId,name, code, used,tokensExpr);
@@ -1759,13 +1804,13 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payLoad, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String networkId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
 		
 		serviceRecord.setName(name);		
-		serviceRecord.setPayLoad(payLoad);		
+		serviceRecord.setPayload(payload);		
 		ChainCode  chainCode = new ChainCode();
 		chainCode.setId(chainCodeId);		
 		serviceRecord.setChainCode(chainCode);		
@@ -1773,10 +1818,16 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
+		Application  appClient = new Application();
+		appClient.setId(appClientId);		
+		serviceRecord.setAppClient(appClient);		
 		HyperledgerNetwork  network = new HyperledgerNetwork();
 		network.setId(networkId);		
 		serviceRecord.setNetwork(network);		
-		serviceRecord.setCurrentStatus("INIT");
+		serviceRecord.setResponse(response);		
+		TransactionStatus  status = new TransactionStatus();
+		status.setId(statusId);		
+		serviceRecord.setStatus(status);
 	
 		
 		return serviceRecord;
@@ -1892,8 +1943,8 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			checkerOf(userContext).checkNameOfServiceRecord(parseString(newValueExpr));
 		}
 		
-		if(ServiceRecord.PAY_LOAD_PROPERTY.equals(property)){
-			checkerOf(userContext).checkPayLoadOfServiceRecord(parseString(newValueExpr));
+		if(ServiceRecord.PAYLOAD_PROPERTY.equals(property)){
+			checkerOf(userContext).checkPayloadOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
@@ -1906,6 +1957,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		if(ServiceRecord.BLOCK_ID_PROPERTY.equals(property)){
 			checkerOf(userContext).checkBlockIdOfServiceRecord(parseString(newValueExpr));
+		}
+		
+		if(ServiceRecord.RESPONSE_PROPERTY.equals(property)){
+			checkerOf(userContext).checkResponseOfServiceRecord(parseString(newValueExpr));
 		}
 		
 	
@@ -1944,44 +1999,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 
 	}
 	/*
-	public  Channel associateServiceRecordListToNewApplication(HfgwUserContext userContext, String channelId, String  serviceRecordIds[], String name, String mspid, String publicKey, String privateKey, String channelId, String networkId, String [] tokensExpr) throws Exception {
 
-		
-		
-		Map<String, Object> options = tokens()
-				.allTokens()
-				.searchServiceRecordListWith(ServiceRecord.ID_PROPERTY, "oneof", this.joinArray("|", serviceRecordIds)).done();
-		
-		Channel channel = loadChannel(userContext, channelId, options);
-		
-		Application application = applicationManagerOf(userContext).createApplication(userContext,  name,  mspid,  publicKey,  privateKey, channelId, networkId);
-		
-		for(ServiceRecord serviceRecord: channel.getServiceRecordList()) {
-			//TODO: need to check if already associated
-			serviceRecord.updateApplication(application);
-		}
-		return this.internalSaveChannel(userContext, channel);
-	}
 	*/
 	
-	public  Channel associateServiceRecordListToApplication(HfgwUserContext userContext, String channelId, String  serviceRecordIds[], String applicationId, String [] tokensExpr) throws Exception {
 
-		
-		
-		Map<String, Object> options = tokens()
-				.allTokens()
-				.searchServiceRecordListWith(ServiceRecord.ID_PROPERTY, "oneof", this.joinArray("|", serviceRecordIds)).done();
-		
-		Channel channel = loadChannel(userContext, channelId, options);
-		
-		Application application = applicationManagerOf(userContext).loadApplication(userContext,applicationId,new String[]{"none"} );
-		
-		for(ServiceRecord serviceRecord: channel.getServiceRecordList()) {
-			//TODO: need to check if already associated
-			serviceRecord.updateApplication(application);
-		}
-		return this.internalSaveChannel(userContext, channel);
-	}
 
 
 	public void onNewInstanceCreated(HfgwUserContext userContext, Channel newCreated) throws Exception{

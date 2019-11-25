@@ -30,6 +30,7 @@ public class HfgwNamingServiceDAO extends CommonJDBCTemplateDAO {
 		namingTableMap.put("ChainCode", new String[]{"chain_code_data","name"});
 		namingTableMap.put("Application", new String[]{"application_data","name"});
 		namingTableMap.put("ServiceRecord", new String[]{"service_record_data","name"});
+		namingTableMap.put("TransactionStatus", new String[]{"transaction_status_data","name"});
 		namingTableMap.put("ChangeRequestType", new String[]{"change_request_type_data","name"});
 		namingTableMap.put("ChangeRequest", new String[]{"change_request_data","name"});
 		namingTableMap.put("UserDomain", new String[]{"user_domain_data","name"});

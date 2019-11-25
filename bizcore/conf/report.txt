@@ -7,7 +7,7 @@
 
 
 
-=================Execute Report (Model Time 700101T0800) @Thu Nov 21 17:29:33 CST 2019, 29 objects and 213 fields===========================
+=================Execute Report (Model Time 700101T0800) @Fri Nov 22 17:00:02 CST 2019, 30 objects and 221 fields===========================
 
 
 
@@ -24,6 +24,12 @@ Info: Add virtual field [organizations(es)] to <hyperledger_network>
 
 
  processing: node_type
+
+
+ processing: node_type.hyperledger_network.network
+
+Info: Add virtual field [node_types(es)] to <hyperledger_network>
+	node_type.network
 
 
  processing: node
@@ -72,6 +78,12 @@ Info: Add virtual field [channels(es)] to <hyperledger_network>
 
 
  processing: peer_role
+
+
+ processing: peer_role.hyperledger_network.network
+
+Info: Add virtual field [peer_roles(es)] to <hyperledger_network>
+	peer_role.network
 
 
  processing: channel_peer_role
@@ -134,16 +146,31 @@ Info: Add virtual field [service_records(es)] to <chain_code>
 	service_record.chain_code
 
 
- processing: service_record.application.application
+ processing: service_record.application.app_client
 
 Info: Add virtual field [service_records(es)] to <application>
-	service_record.application
+	service_record.app_client
 
 
  processing: service_record.hyperledger_network.network
 
 Info: Add virtual field [service_records(es)] to <hyperledger_network>
 	service_record.network
+
+
+ processing: service_record.transaction_status.status
+
+Info: Add virtual field [service_records(es)] to <transaction_status>
+	service_record.status
+
+
+ processing: transaction_status
+
+
+ processing: transaction_status.hyperledger_network.network
+
+Info: Add virtual field [transaction_statuss(es)] to <hyperledger_network>
+	transaction_status.network
 
 
  processing: change_request_type
@@ -179,12 +206,15 @@ hyperledger_network{
 		string_longtext	description('text()'), verb: false, required: true;
 		int	version('2147483647'), verb: false, required: true;
 	}
-	references field(7){
+	references field(10){
 		organizationList	network(__no_group)--network;
+		nodeTypeList	network(__no_group)--network;
 		nodeList	network(__no_group)--network;
 		channelList	network(__no_group)--network;
+		peerRoleList	network(__no_group)--network;
 		applicationList	network(__no_group)--network;
 		serviceRecordList	network(__no_group)--network;
+		transactionStatusList	network(__no_group)--network;
 		changeRequestTypeList	network(__no_group)--network;
 		changeRequestList	network(__no_group)--network;
 	}
@@ -204,16 +234,17 @@ organization{
 } depth=1; isRoot = false
 
 node_type{
-	fields(4){
+	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('peer|orderer'), verb: false, required: true;
 		string	code('peer|orderer'), verb: false, required: true;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: nodeTypeList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
 		nodeList	type(__no_group)--type;
 	}
-} depth=0; isRoot = true
+} depth=1; isRoot = false
 
 node{
 	fields(12){
@@ -265,16 +296,17 @@ channel{
 } depth=1; isRoot = false
 
 peer_role{
-	fields(4){
+	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
 		string	code('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: peerRoleList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
 		channelPeerRoleList	peer_role(__no_group)--peer_role;
 	}
-} depth=0; isRoot = true
+} depth=1; isRoot = false
 
 channel_peer_role{
 	fields(5){
@@ -315,29 +347,43 @@ application{
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
-		serviceRecordList	application(__no_group)--application;
+		serviceRecordList	app_client(__no_group)--app_client;
 	}
 } depth=2; isRoot = false
 
 service_record{
-	fields(13){
+	fields(14){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('调用链码|网络管理'), verb: false, required: true;
-		string_longtext	pay_load('text()'), verb: false, required: true;
+		string_longtext	payload('text()'), verb: false, required: true;
 		channel	channel('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		chain_code	chain_code('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		string	chain_code_function('transact'), verb: false, required: true;
 		string	transaction_id('a21fe3srw'), verb: false, required: true;
 		string	block_id('a21fe3srw'), verb: false, required: true;
 		date_time_create	create_time('createTime()'), verb: false, required: true;
-		application	application('$(object)'), verb: true, required: true, referenceBy: serviceRecordList;
+		application	app_client('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
-		string	current_status('APPLIED'), verb: false, required: true;
+		string_longtext	response('text()'), verb: false, required: true;
+		transaction_status	status('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(0){
 	}
 } depth=3; isRoot = false
+
+transaction_status{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('new|endorsed|committed|rejected'), verb: false, required: true;
+		string	code('new|endorsed|committed|rejected'), verb: false, required: true;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: transactionStatusList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		serviceRecordList	status(__no_group)--status;
+	}
+} depth=1; isRoot = false
 
 change_request_type{
 	fields(9){
@@ -377,12 +423,15 @@ hyperledger_network{
 		string_longtext	description('text()'), verb: false, required: true;
 		int	version('2147483647'), verb: false, required: true;
 	}
-	references field(7){
+	references field(10){
 		organizationList	network(__no_group)--network;
+		nodeTypeList	network(__no_group)--network;
 		nodeList	network(__no_group)--network;
 		channelList	network(__no_group)--network;
+		peerRoleList	network(__no_group)--network;
 		applicationList	network(__no_group)--network;
 		serviceRecordList	network(__no_group)--network;
+		transactionStatusList	network(__no_group)--network;
 		changeRequestTypeList	network(__no_group)--network;
 		changeRequestList	network(__no_group)--network;
 	}
@@ -402,16 +451,17 @@ organization{
 } depth=1; isRoot = false
 
 node_type{
-	fields(4){
+	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('peer|orderer'), verb: false, required: true;
 		string	code('peer|orderer'), verb: false, required: true;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: nodeTypeList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
 		nodeList	type(__no_group)--type;
 	}
-} depth=0; isRoot = true
+} depth=1; isRoot = false
 
 node{
 	fields(12){
@@ -463,16 +513,17 @@ channel{
 } depth=1; isRoot = false
 
 peer_role{
-	fields(4){
+	fields(5){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
 		string	code('endorsingPeer|chaincodeQuery|ledgerQuery|eventSource|discover'), verb: false, required: true;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: peerRoleList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
 		channelPeerRoleList	peer_role(__no_group)--peer_role;
 	}
-} depth=0; isRoot = true
+} depth=1; isRoot = false
 
 channel_peer_role{
 	fields(5){
@@ -513,29 +564,43 @@ application{
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(1){
-		serviceRecordList	application(__no_group)--application;
+		serviceRecordList	app_client(__no_group)--app_client;
 	}
 } depth=2; isRoot = false
 
 service_record{
-	fields(13){
+	fields(14){
 		string	id('ABCD'), verb: false, required: true;
 		string	name('调用链码|网络管理'), verb: false, required: true;
-		string_longtext	pay_load('text()'), verb: false, required: true;
+		string_longtext	payload('text()'), verb: false, required: true;
 		channel	channel('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		chain_code	chain_code('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		string	chain_code_function('transact'), verb: false, required: true;
 		string	transaction_id('a21fe3srw'), verb: false, required: true;
 		string	block_id('a21fe3srw'), verb: false, required: true;
 		date_time_create	create_time('createTime()'), verb: false, required: true;
-		application	application('$(object)'), verb: true, required: true, referenceBy: serviceRecordList;
+		application	app_client('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
-		string	current_status('APPLIED'), verb: false, required: true;
+		string_longtext	response('text()'), verb: false, required: true;
+		transaction_status	status('$(object)'), verb: false, required: true, referenceBy: serviceRecordList;
 		int	version('2147483647'), verb: false, required: true;
 	}
 	references field(0){
 	}
 } depth=3; isRoot = false
+
+transaction_status{
+	fields(5){
+		string	id('ABCD'), verb: false, required: true;
+		string	name('new|endorsed|committed|rejected'), verb: false, required: true;
+		string	code('new|endorsed|committed|rejected'), verb: false, required: true;
+		hyperledger_network	network('$(object)'), verb: false, required: true, referenceBy: transactionStatusList;
+		int	version('2147483647'), verb: false, required: true;
+	}
+	references field(1){
+		serviceRecordList	status(__no_group)--status;
+	}
+} depth=1; isRoot = false
 
 change_request_type{
 	fields(9){

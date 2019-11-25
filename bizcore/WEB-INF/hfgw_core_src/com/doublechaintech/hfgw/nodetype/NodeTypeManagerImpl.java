@@ -21,7 +21,9 @@ import com.doublechaintech.hfgw.HfgwCheckerManager;
 import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
+import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
 import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.channel.Channel;
@@ -158,6 +160,7 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		addAction(userContext, nodeType, tokens,"@update","updateNodeType","updateNodeType/"+nodeType.getId()+"/","main","primary");
 		addAction(userContext, nodeType, tokens,"@copy","cloneNodeType","cloneNodeType/"+nodeType.getId()+"/","main","primary");
 		
+		addAction(userContext, nodeType, tokens,"node_type.transfer_to_network","transferToAnotherNetwork","transferToAnotherNetwork/"+nodeType.getId()+"/","main","primary");
 		addAction(userContext, nodeType, tokens,"node_type.addNode","addNode","addNode/"+nodeType.getId()+"/","nodeList","primary");
 		addAction(userContext, nodeType, tokens,"node_type.removeNode","removeNode","removeNode/"+nodeType.getId()+"/","nodeList","primary");
 		addAction(userContext, nodeType, tokens,"node_type.updateNode","updateNode","updateNode/"+nodeType.getId()+"/","nodeList","primary");
@@ -173,8 +176,8 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
  	
  	
 
-	public NodeType createNodeType(HfgwUserContext userContext, String name,String code) throws Exception
-	//public NodeType createNodeType(HfgwUserContext userContext,String name, String code) throws Exception
+	public NodeType createNodeType(HfgwUserContext userContext, String name,String code,String networkId) throws Exception
+	//public NodeType createNodeType(HfgwUserContext userContext,String name, String code, String networkId) throws Exception
 	{
 		
 		
@@ -191,6 +194,11 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 
 		nodeType.setName(name);
 		nodeType.setCode(code);
+			
+		HyperledgerNetwork network = loadHyperledgerNetwork(userContext, networkId,emptyOptions());
+		nodeType.setNetwork(network);
+		
+		
 
 		nodeType = saveNodeType(userContext, nodeType, emptyOptions());
 		
@@ -220,7 +228,9 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		}
 		if(NodeType.CODE_PROPERTY.equals(property)){
 			checkerOf(userContext).checkCodeOfNodeType(parseString(newValueExpr));
-		}
+		}		
+
+		
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
 	
@@ -327,7 +337,66 @@ public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements Nod
 		return NodeTypeTokens.mergeAll(tokens).done();
 	}
 	
-//--------------------------------------------------------------
+	protected void checkParamsForTransferingAnotherNetwork(HfgwUserContext userContext, String nodeTypeId, String anotherNetworkId) throws Exception
+ 	{
+ 		
+ 		checkerOf(userContext).checkIdOfNodeType(nodeTypeId);
+ 		checkerOf(userContext).checkIdOfHyperledgerNetwork(anotherNetworkId);//check for optional reference
+ 		checkerOf(userContext).throwExceptionIfHasErrors(NodeTypeManagerException.class);
+ 		
+ 	}
+ 	public NodeType transferToAnotherNetwork(HfgwUserContext userContext, String nodeTypeId, String anotherNetworkId) throws Exception
+ 	{
+ 		checkParamsForTransferingAnotherNetwork(userContext, nodeTypeId,anotherNetworkId);
+ 
+		NodeType nodeType = loadNodeType(userContext, nodeTypeId, allTokens());	
+		synchronized(nodeType){
+			//will be good when the nodeType loaded from this JVM process cache.
+			//also good when there is a ram based DAO implementation
+			HyperledgerNetwork network = loadHyperledgerNetwork(userContext, anotherNetworkId, emptyOptions());		
+			nodeType.updateNetwork(network);		
+			nodeType = saveNodeType(userContext, nodeType, emptyOptions());
+			
+			return present(userContext,nodeType, allTokens());
+			
+		}
+
+ 	}
+ 	
+	 	
+ 	
+ 	
+	public CandidateHyperledgerNetwork requestCandidateNetwork(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo) throws Exception {
+
+		CandidateHyperledgerNetwork result = new CandidateHyperledgerNetwork();
+		result.setOwnerClass(ownerClass);
+		result.setOwnerId(id);
+		result.setFilterKey(filterKey==null?"":filterKey.trim());
+		result.setPageNo(pageNo);
+		result.setValueFieldName("id");
+		result.setDisplayFieldName("name");
+		
+		pageNo = Math.max(1, pageNo);
+		int pageSize = 20;
+		//requestCandidateProductForSkuAsOwner
+		SmartList<HyperledgerNetwork> candidateList = hyperledgerNetworkDaoOf(userContext).requestCandidateHyperledgerNetworkForNodeType(userContext,ownerClass, id, filterKey, pageNo, pageSize);
+		result.setCandidates(candidateList);
+		int totalCount = candidateList.getTotalCount();
+		result.setTotalPage(Math.max(1, (totalCount + pageSize -1)/pageSize ));
+		return result;
+	}
+ 	
+ //--------------------------------------------------------------
+	
+	 	
+ 	protected HyperledgerNetwork loadHyperledgerNetwork(HfgwUserContext userContext, String newNetworkId, Map<String,Object> options) throws Exception
+ 	{
+		
+ 		return hyperledgerNetworkDaoOf(userContext).load(newNetworkId, options);
+ 	}
+ 	
+ 	
+ 	
 	
 	//--------------------------------------------------------------
 

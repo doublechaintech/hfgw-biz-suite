@@ -48,17 +48,17 @@ public class ServiceRecordForm extends BaseForm {
 	}
 
 
-	public ServiceRecordForm payLoadField(String parameterName, String initValue){
-		FormField field = payLoadFromServiceRecord(parameterName, initValue);		
+	public ServiceRecordForm payloadField(String parameterName, String initValue){
+		FormField field = payloadFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ServiceRecordForm payLoadField(String initValue){
-		return payLoadField("payLoad",initValue);
+	public ServiceRecordForm payloadField(String initValue){
+		return payloadField("payload",initValue);
 	}
-	public ServiceRecordForm payLoadField(){
-		return payLoadField("payLoad","");
+	public ServiceRecordForm payloadField(){
+		return payloadField("payload","");
 	}
 
 
@@ -146,17 +146,17 @@ public class ServiceRecordForm extends BaseForm {
 	}
 
 
-	public ServiceRecordForm applicationIdField(String parameterName, String initValue){
-		FormField field = applicationIdFromServiceRecord(parameterName, initValue);		
+	public ServiceRecordForm appClientIdField(String parameterName, String initValue){
+		FormField field = appClientIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ServiceRecordForm applicationIdField(String initValue){
-		return applicationIdField("applicationId",initValue);
+	public ServiceRecordForm appClientIdField(String initValue){
+		return appClientIdField("appClientId",initValue);
 	}
-	public ServiceRecordForm applicationIdField(){
-		return applicationIdField("applicationId","");
+	public ServiceRecordForm appClientIdField(){
+		return appClientIdField("appClientId","");
 	}
 
 
@@ -174,17 +174,31 @@ public class ServiceRecordForm extends BaseForm {
 	}
 
 
-	public ServiceRecordForm currentStatusField(String parameterName, String initValue){
-		FormField field = currentStatusFromServiceRecord(parameterName, initValue);		
+	public ServiceRecordForm responseField(String parameterName, String initValue){
+		FormField field = responseFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ServiceRecordForm currentStatusField(String initValue){
-		return currentStatusField("currentStatus",initValue);
+	public ServiceRecordForm responseField(String initValue){
+		return responseField("response",initValue);
 	}
-	public ServiceRecordForm currentStatusField(){
-		return currentStatusField("currentStatus","");
+	public ServiceRecordForm responseField(){
+		return responseField("response","");
+	}
+
+
+	public ServiceRecordForm statusIdField(String parameterName, String initValue){
+		FormField field = statusIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ServiceRecordForm statusIdField(String initValue){
+		return statusIdField("statusId",initValue);
+	}
+	public ServiceRecordForm statusIdField(){
+		return statusIdField("statusId","");
 	}
 
 	
@@ -456,6 +470,62 @@ public class ServiceRecordForm extends BaseForm {
 		return descriptionFieldOfHyperledgerNetwork("description","");
 	}
 
+
+	public ServiceRecordForm transactionStatusIdFieldOfTransactionStatus(String parameterName, String initValue){
+		FormField field =  idFromTransactionStatus(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public ServiceRecordForm transactionStatusIdFieldOfTransactionStatus(String initValue){
+		return transactionStatusIdFieldOfTransactionStatus("transactionStatusId",initValue);
+	}
+	public ServiceRecordForm transactionStatusIdFieldOfTransactionStatus(){
+		return transactionStatusIdFieldOfTransactionStatus("transactionStatusId","");
+	}
+
+
+	public ServiceRecordForm nameFieldOfTransactionStatus(String parameterName, String initValue){
+		FormField field =  nameFromTransactionStatus(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public ServiceRecordForm nameFieldOfTransactionStatus(String initValue){
+		return nameFieldOfTransactionStatus("name",initValue);
+	}
+	public ServiceRecordForm nameFieldOfTransactionStatus(){
+		return nameFieldOfTransactionStatus("name","");
+	}
+
+
+	public ServiceRecordForm codeFieldOfTransactionStatus(String parameterName, String initValue){
+		FormField field =  codeFromTransactionStatus(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public ServiceRecordForm codeFieldOfTransactionStatus(String initValue){
+		return codeFieldOfTransactionStatus("code",initValue);
+	}
+	public ServiceRecordForm codeFieldOfTransactionStatus(){
+		return codeFieldOfTransactionStatus("code","");
+	}
+
+
+	public ServiceRecordForm networkIdFieldOfTransactionStatus(String parameterName, String initValue){
+		FormField field =  networkIdFromTransactionStatus(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public ServiceRecordForm networkIdFieldOfTransactionStatus(String initValue){
+		return networkIdFieldOfTransactionStatus("networkId",initValue);
+	}
+	public ServiceRecordForm networkIdFieldOfTransactionStatus(){
+		return networkIdFieldOfTransactionStatus("networkId","");
+	}
+
 	
 
 
@@ -482,19 +552,31 @@ public class ServiceRecordForm extends BaseForm {
 	}
 
  	
- 	public ServiceRecordForm  applyAction(){
+ 	public ServiceRecordForm transferToAnotherAppClientAction(){
 		FormAction action = new FormAction();
-		action.setLabel("应用程序");
-		action.setLocaleKey("service_record.apply");
-		action.setUrl("serviceRecordManager/apply/serviceRecordId/name/mspid/publicKey/privateKey/channelIdnetworkId");
+		action.setLabel("显示");
+		action.setLocaleKey("show");
+		action.setUrl("transferToAnotherAppClient/serviceRecordId/");
 		this.addFormAction(action);
 		return this;
-	}	
+	}
+
+ 	
  	public ServiceRecordForm transferToAnotherNetworkAction(){
 		FormAction action = new FormAction();
 		action.setLabel("显示");
 		action.setLocaleKey("show");
 		action.setUrl("transferToAnotherNetwork/serviceRecordId/");
+		this.addFormAction(action);
+		return this;
+	}
+
+ 	
+ 	public ServiceRecordForm transferToAnotherStatusAction(){
+		FormAction action = new FormAction();
+		action.setLabel("显示");
+		action.setLocaleKey("show");
+		action.setUrl("transferToAnotherStatus/serviceRecordId/");
 		this.addFormAction(action);
 		return this;
 	}

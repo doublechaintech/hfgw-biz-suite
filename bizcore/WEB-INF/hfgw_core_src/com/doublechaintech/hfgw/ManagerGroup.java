@@ -23,6 +23,8 @@ import com.doublechaintech.hfgw.application.ApplicationManager;
 
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordManager;
 
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusManager;
+
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManager;
 
 import com.doublechaintech.hfgw.changerequest.ChangeRequestManager;
@@ -83,6 +85,8 @@ public class ManagerGroup {
 	protected ApplicationManager applicationManager;
 
 	protected ServiceRecordManager serviceRecordManager;
+
+	protected TransactionStatusManager transactionStatusManager;
 
 	protected ChangeRequestTypeManager changeRequestTypeManager;
 
@@ -207,6 +211,14 @@ public class ManagerGroup {
 	}
 	public void setServiceRecordManager(ServiceRecordManager manager){
 		this.serviceRecordManager = manager;
+	}
+
+
+	public TransactionStatusManager getTransactionStatusManager(){
+		return this.transactionStatusManager;
+	}
+	public void setTransactionStatusManager(TransactionStatusManager manager){
+		this.transactionStatusManager = manager;
 	}
 
 

@@ -124,6 +124,62 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 
 
+	public HyperledgerNetworkForm nodeTypeIdFieldForNodeType(String parameterName, String initValue){
+		FormField field =  idFromNodeType(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm nodeTypeIdFieldForNodeType(String initValue){
+		return nodeTypeIdFieldForNodeType("nodeTypeId",initValue);
+	}
+	public HyperledgerNetworkForm nodeTypeIdFieldForNodeType(){
+		return nodeTypeIdFieldForNodeType("nodeTypeId","");
+	}
+
+
+	public HyperledgerNetworkForm nameFieldForNodeType(String parameterName, String initValue){
+		FormField field =  nameFromNodeType(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm nameFieldForNodeType(String initValue){
+		return nameFieldForNodeType("name",initValue);
+	}
+	public HyperledgerNetworkForm nameFieldForNodeType(){
+		return nameFieldForNodeType("name","");
+	}
+
+
+	public HyperledgerNetworkForm codeFieldForNodeType(String parameterName, String initValue){
+		FormField field =  codeFromNodeType(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm codeFieldForNodeType(String initValue){
+		return codeFieldForNodeType("code",initValue);
+	}
+	public HyperledgerNetworkForm codeFieldForNodeType(){
+		return codeFieldForNodeType("code","");
+	}
+
+
+	public HyperledgerNetworkForm networkIdFieldForNodeType(String parameterName, String initValue){
+		FormField field =  networkIdFromNodeType(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm networkIdFieldForNodeType(String initValue){
+		return networkIdFieldForNodeType("networkId",initValue);
+	}
+	public HyperledgerNetworkForm networkIdFieldForNodeType(){
+		return networkIdFieldForNodeType("networkId","");
+	}
+
+
 	public HyperledgerNetworkForm nodeIdFieldForNode(String parameterName, String initValue){
 		FormField field =  idFromNode(parameterName, initValue);		
 		this.addFormField(field);
@@ -320,6 +376,62 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 
 
+	public HyperledgerNetworkForm peerRoleIdFieldForPeerRole(String parameterName, String initValue){
+		FormField field =  idFromPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm peerRoleIdFieldForPeerRole(String initValue){
+		return peerRoleIdFieldForPeerRole("peerRoleId",initValue);
+	}
+	public HyperledgerNetworkForm peerRoleIdFieldForPeerRole(){
+		return peerRoleIdFieldForPeerRole("peerRoleId","");
+	}
+
+
+	public HyperledgerNetworkForm nameFieldForPeerRole(String parameterName, String initValue){
+		FormField field =  nameFromPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm nameFieldForPeerRole(String initValue){
+		return nameFieldForPeerRole("name",initValue);
+	}
+	public HyperledgerNetworkForm nameFieldForPeerRole(){
+		return nameFieldForPeerRole("name","");
+	}
+
+
+	public HyperledgerNetworkForm codeFieldForPeerRole(String parameterName, String initValue){
+		FormField field =  codeFromPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm codeFieldForPeerRole(String initValue){
+		return codeFieldForPeerRole("code",initValue);
+	}
+	public HyperledgerNetworkForm codeFieldForPeerRole(){
+		return codeFieldForPeerRole("code","");
+	}
+
+
+	public HyperledgerNetworkForm networkIdFieldForPeerRole(String parameterName, String initValue){
+		FormField field =  networkIdFromPeerRole(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm networkIdFieldForPeerRole(String initValue){
+		return networkIdFieldForPeerRole("networkId",initValue);
+	}
+	public HyperledgerNetworkForm networkIdFieldForPeerRole(){
+		return networkIdFieldForPeerRole("networkId","");
+	}
+
+
 	public HyperledgerNetworkForm applicationIdFieldForApplication(String parameterName, String initValue){
 		FormField field =  idFromApplication(parameterName, initValue);		
 		this.addFormField(field);
@@ -460,17 +572,17 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 
 
-	public HyperledgerNetworkForm payLoadFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  payLoadFromServiceRecord(parameterName, initValue);		
+	public HyperledgerNetworkForm payloadFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  payloadFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public HyperledgerNetworkForm payLoadFieldForServiceRecord(String initValue){
-		return payLoadFieldForServiceRecord("payLoad",initValue);
+	public HyperledgerNetworkForm payloadFieldForServiceRecord(String initValue){
+		return payloadFieldForServiceRecord("payload",initValue);
 	}
-	public HyperledgerNetworkForm payLoadFieldForServiceRecord(){
-		return payLoadFieldForServiceRecord("payLoad","");
+	public HyperledgerNetworkForm payloadFieldForServiceRecord(){
+		return payloadFieldForServiceRecord("payload","");
 	}
 
 
@@ -558,17 +670,17 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 
 
-	public HyperledgerNetworkForm applicationIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  applicationIdFromServiceRecord(parameterName, initValue);		
+	public HyperledgerNetworkForm appClientIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  appClientIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public HyperledgerNetworkForm applicationIdFieldForServiceRecord(String initValue){
-		return applicationIdFieldForServiceRecord("applicationId",initValue);
+	public HyperledgerNetworkForm appClientIdFieldForServiceRecord(String initValue){
+		return appClientIdFieldForServiceRecord("appClientId",initValue);
 	}
-	public HyperledgerNetworkForm applicationIdFieldForServiceRecord(){
-		return applicationIdFieldForServiceRecord("applicationId","");
+	public HyperledgerNetworkForm appClientIdFieldForServiceRecord(){
+		return appClientIdFieldForServiceRecord("appClientId","");
 	}
 
 
@@ -586,17 +698,87 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 
 
-	public HyperledgerNetworkForm currentStatusFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  currentStatusFromServiceRecord(parameterName, initValue);		
+	public HyperledgerNetworkForm responseFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  responseFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public HyperledgerNetworkForm currentStatusFieldForServiceRecord(String initValue){
-		return currentStatusFieldForServiceRecord("currentStatus",initValue);
+	public HyperledgerNetworkForm responseFieldForServiceRecord(String initValue){
+		return responseFieldForServiceRecord("response",initValue);
 	}
-	public HyperledgerNetworkForm currentStatusFieldForServiceRecord(){
-		return currentStatusFieldForServiceRecord("currentStatus","");
+	public HyperledgerNetworkForm responseFieldForServiceRecord(){
+		return responseFieldForServiceRecord("response","");
+	}
+
+
+	public HyperledgerNetworkForm statusIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  statusIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm statusIdFieldForServiceRecord(String initValue){
+		return statusIdFieldForServiceRecord("statusId",initValue);
+	}
+	public HyperledgerNetworkForm statusIdFieldForServiceRecord(){
+		return statusIdFieldForServiceRecord("statusId","");
+	}
+
+
+	public HyperledgerNetworkForm transactionStatusIdFieldForTransactionStatus(String parameterName, String initValue){
+		FormField field =  idFromTransactionStatus(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm transactionStatusIdFieldForTransactionStatus(String initValue){
+		return transactionStatusIdFieldForTransactionStatus("transactionStatusId",initValue);
+	}
+	public HyperledgerNetworkForm transactionStatusIdFieldForTransactionStatus(){
+		return transactionStatusIdFieldForTransactionStatus("transactionStatusId","");
+	}
+
+
+	public HyperledgerNetworkForm nameFieldForTransactionStatus(String parameterName, String initValue){
+		FormField field =  nameFromTransactionStatus(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm nameFieldForTransactionStatus(String initValue){
+		return nameFieldForTransactionStatus("name",initValue);
+	}
+	public HyperledgerNetworkForm nameFieldForTransactionStatus(){
+		return nameFieldForTransactionStatus("name","");
+	}
+
+
+	public HyperledgerNetworkForm codeFieldForTransactionStatus(String parameterName, String initValue){
+		FormField field =  codeFromTransactionStatus(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm codeFieldForTransactionStatus(String initValue){
+		return codeFieldForTransactionStatus("code",initValue);
+	}
+	public HyperledgerNetworkForm codeFieldForTransactionStatus(){
+		return codeFieldForTransactionStatus("code","");
+	}
+
+
+	public HyperledgerNetworkForm networkIdFieldForTransactionStatus(String parameterName, String initValue){
+		FormField field =  networkIdFromTransactionStatus(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm networkIdFieldForTransactionStatus(String initValue){
+		return networkIdFieldForTransactionStatus("networkId",initValue);
+	}
+	public HyperledgerNetworkForm networkIdFieldForTransactionStatus(){
+		return networkIdFieldForTransactionStatus("networkId","");
 	}
 
 
