@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.node;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -23,7 +24,7 @@ import com.doublechaintech.hfgw.channel.ChannelDAO;
 import com.doublechaintech.hfgw.nodetype.NodeTypeDAO;
 
 
-public interface NodeDAO{
+public interface NodeDAO extends BaseDAO{
 
 	public SmartList<Node> loadAll();
 	public Node load(String id, Map<String,Object> options) throws Exception;

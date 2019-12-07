@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface ChainCodeManager{
+public interface ChainCodeManager extends BaseManager{
 
 		
 
@@ -28,11 +29,21 @@ public interface ChainCodeManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String chainCodeId, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String chainCodeId, String transactionId, String name, String payload, String channelId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId ,String [] tokensExpr)  throws Exception;
 	
-	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId , String [] tokensExpr)  throws Exception;
+	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String transactionId, String name, String payload, String channelId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId , String [] tokensExpr)  throws Exception;
 	public  ChainCode removeServiceRecord(HfgwUserContext userContext, String chainCodeId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  ChainCode updateServiceRecord(HfgwUserContext userContext, String chainCodeId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
+	//public  ChainCodeInvokerManager getChainCodeInvokerManager(HfgwUserContext userContext, String chainCodeId, String appClientId, String parameters, String changeRequestId ,String [] tokensExpr)  throws Exception;
+	
+	public  ChainCode addChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String appClientId, String parameters, String changeRequestId , String [] tokensExpr)  throws Exception;
+	public  ChainCode removeChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr)  throws Exception;
+	public  ChainCode updateChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String chainCodeInvokerId, int chainCodeInvokerVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
 

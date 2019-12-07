@@ -39,7 +39,7 @@ class ServiceRecordModalTable extends PureComponent {
           dataSource={data}
           columns={displayColumns}
           size="small"
-          scroll={{ x: 1575 }}
+          scroll={{ x: 1500 }}
         />
       </div>
     );

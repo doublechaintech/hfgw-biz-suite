@@ -6,13 +6,14 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface ServiceRecordManager{
+public interface ServiceRecordManager extends BaseManager{
 
 		
 
-	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String name,String payload,String channelId,String chainCodeId,String chainCodeFunction,String transactionId,String blockId,String appClientId,String networkId,String response,String statusId) throws Exception;	
+	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String transactionId,String name,String payload,String channelId,String chainCodeId,String chainCodeFunction,String blockId,String appClientId,String networkId,String response,String statusId) throws Exception;	
 	public ServiceRecord updateServiceRecord(HfgwUserContext userContext,String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public ServiceRecord loadServiceRecord(HfgwUserContext userContext, String serviceRecordId, String [] tokensExpr) throws Exception;
 	public ServiceRecord internalSaveServiceRecord(HfgwUserContext userContext, ServiceRecord serviceRecord) throws Exception;

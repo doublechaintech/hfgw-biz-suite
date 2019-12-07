@@ -22,6 +22,8 @@ import org.apache.log4j.RollingFileAppender;
 import com.terapico.uccaf.BaseUserContext;
 
 public class LogUtil {
+	protected static final int MAX_FILE_SIZE = 100*1024*1024;
+	protected static final int MAX_FILE_ROLL = 100;
 	protected static class LogPackage {
 		String loggerKey;
 		BaseUserContext userContext;
@@ -46,12 +48,19 @@ public class LogUtil {
 	protected static Map<String, Logger> allloggers = new HashMap<>();
 	
 	
-	public static Logger getLogger(String name, Level level) {
-		Logger logger = getLogger(name);
-		logger.setLevel(level);
-		return logger;
-	}
 	public static Logger getLogger(String name) {
+		return getLogger(name, Level.TRACE);
+	}
+	public static Logger getLogger(String name, Level level) {
+		return getLogger(name, level, MAX_FILE_SIZE, MAX_FILE_ROLL);
+	}
+	public static Logger getLogger(String name, int fileSize, int rollingFiles) {
+		return getLogger(name, Level.TRACE, fileSize, rollingFiles);
+	}
+	public static Logger getLogger(String name, Level level, int fileSize, int rollingFiles) {
+		return getOrCreateLogger(name, level, fileSize, rollingFiles);
+	}
+	protected static Logger getOrCreateLogger(String name, Level level, int fileSize, int rollingFiles) {
 		if (allloggers.containsKey(name)) {
 			return allloggers.get(name);
 		}
@@ -62,10 +71,10 @@ public class LogUtil {
 			File outputFile = new File(TextUtil.getExtVariable("LOG_FOLDER", System.getProperty("user.home")), name.replace('.', '_') + ".log");
 			Layout layout = new PatternLayout("%d{yyyy-MM-dd HH:mm:ss} %-5p: %m%n");
 			RollingFileAppender newAppender = new RollingFileAppender(layout, outputFile.getAbsolutePath(), true);
-			newAppender.setMaxFileSize("1024000");
-			newAppender.setMaxBackupIndex(10);
+			newAppender.setMaxFileSize(String.format("%d", fileSize));
+			newAppender.setMaxBackupIndex(rollingFiles);
 			logger.addAppender(newAppender);
-			logger.setLevel(Level.TRACE);
+			logger.setLevel(level);
 			allloggers.put(name, logger);
 		} catch (IOException e) {
 			e.printStackTrace();

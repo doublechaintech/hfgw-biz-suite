@@ -31,6 +31,13 @@ public abstract class BaseViewPage extends HashMap<String, Object> {
 	public static final String X_NEXT_PAGE_URL = "nextPageUrl";
 	private static final boolean OBJECT_HASHCODE = false;
 	
+	public static Map<String, Object> makeToast(String content, int duration, String type) {
+		return MapUtil.put("text", content)
+				.put("duration", duration * 1000)
+				.put("icon", type)
+				.put("position", "center").into_map();
+	}
+	
 	public void addHashCode(Map<String, Object> resultMap) {
 		if (resultMap == null || resultMap.isEmpty()) {
 			return;

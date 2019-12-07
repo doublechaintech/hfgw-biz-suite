@@ -26,7 +26,6 @@ public class SecUserMapper extends BaseRowMapper<SecUser>{
  		setLastLoginTime(secUser, rs, rowNumber); 		
  		setDomain(secUser, rs, rowNumber); 		
  		setBlocking(secUser, rs, rowNumber); 		
- 		setCurrentStatus(secUser, rs, rowNumber); 		
  		setVersion(secUser, rs, rowNumber);
 
 		return secUser;
@@ -204,18 +203,6 @@ public class SecUserMapper extends BaseRowMapper<SecUser>{
  		secUser.setBlocking(createEmptyBlocking(secUserBlockingId));
  	}
  	
-	protected void setCurrentStatus(SecUser secUser, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String currentStatus = rs.getString(SecUserTable.COLUMN_CURRENT_STATUS);
-		if(currentStatus == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		secUser.setCurrentStatus(currentStatus);
-	}
-		
 	protected void setVersion(SecUser secUser, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long

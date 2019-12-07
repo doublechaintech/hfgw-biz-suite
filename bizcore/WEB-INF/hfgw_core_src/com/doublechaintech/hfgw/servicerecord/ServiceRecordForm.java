@@ -34,6 +34,20 @@ public class ServiceRecordForm extends BaseForm {
 	}
 
 
+	public ServiceRecordForm transactionIdField(String parameterName, String initValue){
+		FormField field = transactionIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ServiceRecordForm transactionIdField(String initValue){
+		return transactionIdField("transactionId",initValue);
+	}
+	public ServiceRecordForm transactionIdField(){
+		return transactionIdField("transactionId","");
+	}
+
+
 	public ServiceRecordForm nameField(String parameterName, String initValue){
 		FormField field = nameFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
@@ -101,20 +115,6 @@ public class ServiceRecordForm extends BaseForm {
 	}
 	public ServiceRecordForm chainCodeFunctionField(){
 		return chainCodeFunctionField("chainCodeFunction","");
-	}
-
-
-	public ServiceRecordForm transactionIdField(String parameterName, String initValue){
-		FormField field = transactionIdFromServiceRecord(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public ServiceRecordForm transactionIdField(String initValue){
-		return transactionIdField("transactionId",initValue);
-	}
-	public ServiceRecordForm transactionIdField(){
-		return transactionIdField("transactionId","");
 	}
 
 

@@ -554,6 +554,15 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  TRANSACTION_ID_OF_SERVICE_RECORD ="service_record.transaction_id";
+	public HfgwChecker checkTransactionIdOfServiceRecord(String transactionId)
+	{
+		
+	 	checkStringLengthRange(transactionId,0, 200,TRANSACTION_ID_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
 	public static final String  NAME_OF_SERVICE_RECORD ="service_record.name";
 	public HfgwChecker checkNameOfServiceRecord(String name)
 	{
@@ -595,15 +604,6 @@ public class HfgwChecker extends BaseChecker{
 	{
 		
 	 	checkStringLengthRange(chainCodeFunction,1, 20,CHAIN_CODE_FUNCTION_OF_SERVICE_RECORD ); 		
-		
-		return this;
-	}	
-
-	public static final String  TRANSACTION_ID_OF_SERVICE_RECORD ="service_record.transaction_id";
-	public HfgwChecker checkTransactionIdOfServiceRecord(String transactionId)
-	{
-		
-	 	checkStringLengthRange(transactionId,0, 200,TRANSACTION_ID_OF_SERVICE_RECORD ); 		
 		
 		return this;
 	}	
@@ -720,7 +720,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkNameOfChangeRequestType(String name)
 	{
 		
-	 	checkStringLengthRange(name,2, 16,NAME_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkStringLengthRange(name,2, 32,NAME_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -729,7 +729,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkCodeOfChangeRequestType(String code)
 	{
 		
-	 	checkStringLengthRange(code,7, 64,CODE_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkStringLengthRange(code,5, 68,CODE_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -747,7 +747,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkDisplayOrderOfChangeRequestType(int displayOrder)
 	{
 		
-	 	checkIntegerRange(displayOrder,0, 6,DISPLAY_ORDER_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkIntegerRange(displayOrder,0, 7,DISPLAY_ORDER_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -829,6 +829,60 @@ public class HfgwChecker extends BaseChecker{
 	{
 		
 	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_CHANGE_REQUEST ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.id";
+	public HfgwChecker checkIdOfChainCodeInvoker(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_CHAIN_CODE_INVOKER ); 		
+		
+		return this;
+	}	
+
+	public static final String  APP_CLIENT_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.app_client";
+	public HfgwChecker checkAppClientIdOfChainCodeInvoker(String appClientId)
+	{
+		
+	 	checkIdOfChainCodeInvoker(appClientId ); 		
+		
+		return this;
+	}	
+
+	public static final String  CHAIN_CODE_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.chain_code";
+	public HfgwChecker checkChainCodeIdOfChainCodeInvoker(String chainCodeId)
+	{
+		
+	 	checkIdOfChainCodeInvoker(chainCodeId ); 		
+		
+		return this;
+	}	
+
+	public static final String  PARAMETERS_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.parameters";
+	public HfgwChecker checkParametersOfChainCodeInvoker(String parameters)
+	{
+		
+	 	checkLongtext(parameters,0, 1048576,PARAMETERS_OF_CHAIN_CODE_INVOKER ); 		
+		
+		return this;
+	}	
+
+	public static final String  CHANGE_REQUEST_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.change_request";
+	public HfgwChecker checkChangeRequestIdOfChainCodeInvoker(String changeRequestId)
+	{
+		
+	 	checkIdOfChainCodeInvoker(changeRequestId ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.version";
+	public HfgwChecker checkVersionOfChainCodeInvoker(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_CHAIN_CODE_INVOKER ); 		
 		
 		return this;
 	}	
@@ -1009,6 +1063,15 @@ public class HfgwChecker extends BaseChecker{
 	{
 		
 	 	checkIdOfSecUser(domainId ); 		
+		
+		return this;
+	}	
+
+	public static final String  BLOCKING_OF_SEC_USER ="sec_user.blocking";
+	public HfgwChecker checkBlockingIdOfSecUser(String blockingId)
+	{
+		
+	 	checkIdOfSecUser(blockingId ); 		
 		
 		return this;
 	}	
@@ -1922,6 +1985,7 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 }
+
 
 
 

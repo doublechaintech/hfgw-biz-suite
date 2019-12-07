@@ -37,6 +37,10 @@ import com.doublechaintech.hfgw.userapp.UserApp;
 public class UserAppManagerImpl extends CustomHfgwCheckerManager implements UserAppManager {
 	
 	private static final String SERVICE_TYPE = "UserApp";
+	@Override
+	public UserAppDAO daoOf(HfgwUserContext userContext) {
+		return userAppDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

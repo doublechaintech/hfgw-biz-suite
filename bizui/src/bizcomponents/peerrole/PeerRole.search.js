@@ -22,9 +22,10 @@ import GlobalComponents from '../../custcomponents';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './PeerRole.search.less';
 import ListViewTool from '../../common/ListView.tool';
+import PeerRoleBase from './PeerRole.base';
 import PermissionSettingService from '../../permission/PermissionSetting.service';
 import appLocaleName from '../../common/Locale.tool';
-
+const { fieldLabels } = PeerRoleBase;
 import { Link, Route, Redirect } from 'dva/router';
 
 const {

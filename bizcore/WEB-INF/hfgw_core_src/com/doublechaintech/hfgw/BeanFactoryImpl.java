@@ -16,6 +16,7 @@ import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
 import com.doublechaintech.hfgw.userwhitelist.UserWhiteList;
 import com.doublechaintech.hfgw.secuser.SecUser;
@@ -103,6 +104,11 @@ public class BeanFactoryImpl{
 
 	public ChangeRequest createChangeRequest(Map<String,Object> options){
 		return new ChangeRequest();
+	}
+
+
+	public ChainCodeInvoker createChainCodeInvoker(Map<String,Object> options){
+		return new ChainCodeInvoker();
 	}
 
 

@@ -15,10 +15,16 @@
 	</bean>
 	
 	<!-- Start handle for different change request per type -->
-	<bean id="chaincodeInvokeHandler" class="com.doublechaintech.hfgw.changerequest.ChaincodeInvokeHandler" ></bean>
-	<bean id="networkManagerHandler" class="com.doublechaintech.hfgw.changerequest.NetworkManagerHandler" ></bean>
+	<bean id="certCheckerHandler" class="com.doublechaintech.hfgw.changerequest.CertCheckerHandler" ></bean>
+	<bean id="nodeCheckerHandler" class="com.doublechaintech.hfgw.changerequest.NodeCheckerHandler" ></bean>
+	<bean id="certUpdaterHandler" class="com.doublechaintech.hfgw.changerequest.CertUpdaterHandler" ></bean>
+	<bean id="nodeRoleManagerHandler" class="com.doublechaintech.hfgw.changerequest.NodeRoleManagerHandler" ></bean>
+	<bean id="ccInvokerHandler" class="com.doublechaintech.hfgw.changerequest.CcInvokerHandler" ></bean>
+	<bean id="ccQuerierHandler" class="com.doublechaintech.hfgw.changerequest.CcQuerierHandler" ></bean>
+	<bean id="ledgerQuerierHandler" class="com.doublechaintech.hfgw.changerequest.LedgerQuerierHandler" ></bean>
 
 	<!-- Detail Handler per event -->
+	<bean id="chainCodeInvokerProcessor" class="com.doublechaintech.hfgw.changerequest.ChainCodeInvokerProcessor" ></bean>
 
 </beans>
 

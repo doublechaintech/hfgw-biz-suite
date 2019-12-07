@@ -41,6 +41,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implements ServiceRecordManager {
 	
 	private static final String SERVICE_TYPE = "ServiceRecord";
+	@Override
+	public ServiceRecordDAO daoOf(HfgwUserContext userContext) {
+		return serviceRecordDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -172,18 +176,18 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
  	
  	
 
-	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String name,String payload,String channelId,String chainCodeId,String chainCodeFunction,String transactionId,String blockId,String appClientId,String networkId,String response,String statusId) throws Exception
-	//public ServiceRecord createServiceRecord(HfgwUserContext userContext,String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception
+	public ServiceRecord createServiceRecord(HfgwUserContext userContext, String transactionId,String name,String payload,String channelId,String chainCodeId,String chainCodeFunction,String blockId,String appClientId,String networkId,String response,String statusId) throws Exception
+	//public ServiceRecord createServiceRecord(HfgwUserContext userContext,String transactionId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception
 	{
 		
 		
 
 		
 
+		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		checkerOf(userContext).checkNameOfServiceRecord(name);
 		checkerOf(userContext).checkPayloadOfServiceRecord(payload);
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
-		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
 		checkerOf(userContext).checkResponseOfServiceRecord(response);
 	
@@ -192,6 +196,7 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 
 		ServiceRecord serviceRecord=createNewServiceRecord();	
 
+		serviceRecord.setTransactionId(transactionId);
 		serviceRecord.setName(name);
 		serviceRecord.setPayload(payload);
 			
@@ -205,7 +210,6 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		
 		
 		serviceRecord.setChainCodeFunction(chainCodeFunction);
-		serviceRecord.setTransactionId(transactionId);
 		serviceRecord.setBlockId(blockId);
 		serviceRecord.setCreateTime(userContext.now());
 			
@@ -248,6 +252,9 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		checkerOf(userContext).checkVersionOfServiceRecord( serviceRecordVersion);
 		
 
+		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
+		}
 		if(ServiceRecord.NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNameOfServiceRecord(parseString(newValueExpr));
 		}
@@ -260,9 +267,6 @@ public class ServiceRecordManagerImpl extends CustomHfgwCheckerManager implement
 		
 		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
 			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
-		}
-		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
-			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
 		}
 		if(ServiceRecord.BLOCK_ID_PROPERTY.equals(property)){
 			checkerOf(userContext).checkBlockIdOfServiceRecord(parseString(newValueExpr));

@@ -26,14 +26,14 @@ const transferToAnotherNetwork = (id, parameters) => {
 };
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}transactionStatusManager/addServiceRecord/transactionStatusId/name/payload/channelId/chainCodeId/chainCodeFunction/transactionId/blockId/appClientId/networkId/response/tokensExpr/`;
+  const url = `${PREFIX}transactionStatusManager/addServiceRecord/transactionStatusId/transactionId/name/payload/channelId/chainCodeId/chainCodeFunction/blockId/appClientId/networkId/response/tokensExpr/`;
   const transactionStatusId = targetObjectId;
   const requestParameters = { ...parameters, transactionStatusId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}transactionStatusManager/updateServiceRecordProperties/transactionStatusId/id/name/payload/chainCodeFunction/transactionId/blockId/response/tokensExpr/`;
+  const url = `${PREFIX}transactionStatusManager/updateServiceRecordProperties/transactionStatusId/id/transactionId/name/payload/chainCodeFunction/blockId/response/tokensExpr/`;
   const transactionStatusId = targetObjectId;
   const requestParameters = { ...parameters, transactionStatusId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });

@@ -17,6 +17,7 @@ import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
 import com.doublechaintech.hfgw.userwhitelist.UserWhiteList;
 import com.doublechaintech.hfgw.secuser.SecUser;
@@ -155,10 +156,10 @@ public class HfgwBaseViewScope {
 	protected static SerializeScope ServiceRecordBaseSummaryScope = SerializeScope.INCLUDE()
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
+		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
 		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
-		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
 		.field(ServiceRecord.RESPONSE_PROPERTY)
@@ -206,6 +207,16 @@ public class HfgwBaseViewScope {
 		return ChangeRequestBaseSummaryScope;
 	}
 
+	protected static SerializeScope ChainCodeInvokerBaseSummaryScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(ChainCodeInvoker.ID_PROPERTY)
+		.field(ChainCodeInvoker.PARAMETERS_PROPERTY)
+		;
+	/** 用于ChainCodeInvoker的子对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getChainCodeInvokerSummaryScope() {
+		return ChainCodeInvokerBaseSummaryScope;
+	}
+
 	protected static SerializeScope UserDomainBaseSummaryScope = SerializeScope.INCLUDE()
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(UserDomain.ID_PROPERTY)
@@ -240,7 +251,6 @@ public class HfgwBaseViewScope {
 		.field(SecUser.VERIFICATION_CODE_PROPERTY)
 		.field(SecUser.VERIFICATION_CODE_EXPIRE_PROPERTY)
 		.field(SecUser.LAST_LOGIN_TIME_PROPERTY)
-		.field(SecUser.CURRENT_STATUS_PROPERTY)
 		;
 	/** 用于SecUser的子对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getSecUserSummaryScope() {
@@ -549,10 +559,10 @@ public class HfgwBaseViewScope {
 	protected static SerializeScope ServiceRecordBaseSecondaryListItemScope = SerializeScope.INCLUDE()
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
+		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
 		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
-		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
 		.field(ServiceRecord.RESPONSE_PROPERTY)
@@ -600,6 +610,16 @@ public class HfgwBaseViewScope {
 		return ChangeRequestBaseSecondaryListItemScope;
 	}
 
+	protected static SerializeScope ChainCodeInvokerBaseSecondaryListItemScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(ChainCodeInvoker.ID_PROPERTY)
+		.field(ChainCodeInvoker.PARAMETERS_PROPERTY)
+		;
+	/** 用于ChainCodeInvoker的父对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getChainCodeInvokerSecondaryListItemScope() {
+		return ChainCodeInvokerBaseSecondaryListItemScope;
+	}
+
 	protected static SerializeScope UserDomainBaseSecondaryListItemScope = SerializeScope.INCLUDE()
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(UserDomain.ID_PROPERTY)
@@ -634,7 +654,6 @@ public class HfgwBaseViewScope {
 		.field(SecUser.VERIFICATION_CODE_PROPERTY)
 		.field(SecUser.VERIFICATION_CODE_EXPIRE_PROPERTY)
 		.field(SecUser.LAST_LOGIN_TIME_PROPERTY)
-		.field(SecUser.CURRENT_STATUS_PROPERTY)
 		;
 	/** 用于SecUser的父对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getSecUserSecondaryListItemScope() {
@@ -954,6 +973,7 @@ public class HfgwBaseViewScope {
 		.field(ChainCode.CODE_VERSION_PROPERTY)
 		.field(ChainCode.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(ChainCode.SERVICE_RECORD_LIST, getServiceRecordSecondaryListItemScope())
+		.field(ChainCode.CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerSecondaryListItemScope())
 		;
 	/** 用于ChainCode对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getChainCodeListItemScope() {
@@ -971,6 +991,7 @@ public class HfgwBaseViewScope {
 		.field(Application.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(Application.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
 		.field(Application.SERVICE_RECORD_LIST, getServiceRecordSecondaryListItemScope())
+		.field(Application.CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerSecondaryListItemScope())
 		;
 	/** 用于Application对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getApplicationListItemScope() {
@@ -980,12 +1001,12 @@ public class HfgwBaseViewScope {
 	protected static SerializeScope ServiceRecordBaseListItemScope = SerializeScope.INCLUDE()
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
+		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
 		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_PROPERTY, getChainCodeSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
-		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
 		.field(ServiceRecord.APP_CLIENT_PROPERTY, getApplicationSummaryScope())
@@ -1036,10 +1057,24 @@ public class HfgwBaseViewScope {
 		.field(ChangeRequest.REMOTE_IP_PROPERTY)
 		.field(ChangeRequest.REQUEST_TYPE_PROPERTY, getChangeRequestTypeSummaryScope())
 		.field(ChangeRequest.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
+		.field(ChangeRequest.CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerSecondaryListItemScope())
 		;
 	/** 用于ChangeRequest对象的列表时需要序列化的属性列表 */
 	public static SerializeScope getChangeRequestListItemScope() {
 		return ChangeRequestBaseListItemScope;
+	}
+
+	protected static SerializeScope ChainCodeInvokerBaseListItemScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(ChainCodeInvoker.ID_PROPERTY)
+		.field(ChainCodeInvoker.APP_CLIENT_PROPERTY, getApplicationSummaryScope())
+		.field(ChainCodeInvoker.CHAIN_CODE_PROPERTY, getChainCodeSummaryScope())
+		.field(ChainCodeInvoker.PARAMETERS_PROPERTY)
+		.field(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
+		;
+	/** 用于ChainCodeInvoker对象的列表时需要序列化的属性列表 */
+	public static SerializeScope getChainCodeInvokerListItemScope() {
+		return ChainCodeInvokerBaseListItemScope;
 	}
 
 	protected static SerializeScope UserDomainBaseListItemScope = SerializeScope.INCLUDE()
@@ -1081,7 +1116,6 @@ public class HfgwBaseViewScope {
 		.field(SecUser.LAST_LOGIN_TIME_PROPERTY)
 		.field(SecUser.DOMAIN_PROPERTY, getUserDomainSummaryScope())
 		.field(SecUser.BLOCKING_PROPERTY, getSecUserBlockingSummaryScope())
-		.field(SecUser.CURRENT_STATUS_PROPERTY)
 		.field(SecUser.USER_APP_LIST, getUserAppSecondaryListItemScope())
 		.field(SecUser.LOGIN_HISTORY_LIST, getLoginHistorySecondaryListItemScope())
 		;
@@ -1422,6 +1456,7 @@ public class HfgwBaseViewScope {
 		.field(ChainCode.CODE_VERSION_PROPERTY)
 		.field(ChainCode.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(ChainCode.SERVICE_RECORD_LIST, getServiceRecordListItemScope())
+		.field(ChainCode.CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerListItemScope())
 		;
 	/** 用于ChainCode对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getChainCodeDetailScope() {
@@ -1439,6 +1474,7 @@ public class HfgwBaseViewScope {
 		.field(Application.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(Application.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
 		.field(Application.SERVICE_RECORD_LIST, getServiceRecordListItemScope())
+		.field(Application.CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerListItemScope())
 		;
 	/** 用于Application对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getApplicationDetailScope() {
@@ -1448,12 +1484,12 @@ public class HfgwBaseViewScope {
 	protected static SerializeScope ServiceRecordBaseDetailScope = SerializeScope.INCLUDE()
 		.field(HfgwBaseConstants.X_LINK_TO_URL)
 		.field(ServiceRecord.ID_PROPERTY)
+		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.NAME_PROPERTY)
 		.field(ServiceRecord.PAYLOAD_PROPERTY)
 		.field(ServiceRecord.CHANNEL_PROPERTY, getChannelSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_PROPERTY, getChainCodeSummaryScope())
 		.field(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY)
-		.field(ServiceRecord.TRANSACTION_ID_PROPERTY)
 		.field(ServiceRecord.BLOCK_ID_PROPERTY)
 		.field(ServiceRecord.CREATE_TIME_PROPERTY)
 		.field(ServiceRecord.APP_CLIENT_PROPERTY, getApplicationSummaryScope())
@@ -1504,10 +1540,24 @@ public class HfgwBaseViewScope {
 		.field(ChangeRequest.REMOTE_IP_PROPERTY)
 		.field(ChangeRequest.REQUEST_TYPE_PROPERTY, getChangeRequestTypeSummaryScope())
 		.field(ChangeRequest.NETWORK_PROPERTY, getHyperledgerNetworkSummaryScope())
+		.field(ChangeRequest.CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerListItemScope())
 		;
 	/** 用于ChangeRequest对象的详情页时需要序列化的属性列表 */
 	public static SerializeScope getChangeRequestDetailScope() {
 		return ChangeRequestBaseDetailScope;
+	}
+
+	protected static SerializeScope ChainCodeInvokerBaseDetailScope = SerializeScope.INCLUDE()
+		.field(HfgwBaseConstants.X_LINK_TO_URL)
+		.field(ChainCodeInvoker.ID_PROPERTY)
+		.field(ChainCodeInvoker.APP_CLIENT_PROPERTY, getApplicationSummaryScope())
+		.field(ChainCodeInvoker.CHAIN_CODE_PROPERTY, getChainCodeSummaryScope())
+		.field(ChainCodeInvoker.PARAMETERS_PROPERTY)
+		.field(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, getChangeRequestSummaryScope())
+		;
+	/** 用于ChainCodeInvoker对象的详情页时需要序列化的属性列表 */
+	public static SerializeScope getChainCodeInvokerDetailScope() {
+		return ChainCodeInvokerBaseDetailScope;
 	}
 
 	protected static SerializeScope UserDomainBaseDetailScope = SerializeScope.INCLUDE()
@@ -1549,7 +1599,6 @@ public class HfgwBaseViewScope {
 		.field(SecUser.LAST_LOGIN_TIME_PROPERTY)
 		.field(SecUser.DOMAIN_PROPERTY, getUserDomainSummaryScope())
 		.field(SecUser.BLOCKING_PROPERTY, getSecUserBlockingSummaryScope())
-		.field(SecUser.CURRENT_STATUS_PROPERTY)
 		.field(SecUser.USER_APP_LIST, getUserAppListItemScope())
 		.field(SecUser.LOGIN_HISTORY_LIST, getLoginHistoryListItemScope())
 		;

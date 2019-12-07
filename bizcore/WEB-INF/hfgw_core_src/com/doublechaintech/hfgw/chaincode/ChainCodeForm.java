@@ -152,6 +152,20 @@ public class ChainCodeForm extends BaseForm {
 	}
 
 
+	public ChainCodeForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm transactionIdFieldForServiceRecord(String initValue){
+		return transactionIdFieldForServiceRecord("transactionId",initValue);
+	}
+	public ChainCodeForm transactionIdFieldForServiceRecord(){
+		return transactionIdFieldForServiceRecord("transactionId","");
+	}
+
+
 	public ChainCodeForm nameFieldForServiceRecord(String parameterName, String initValue){
 		FormField field =  nameFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
@@ -219,20 +233,6 @@ public class ChainCodeForm extends BaseForm {
 	}
 	public ChainCodeForm chainCodeFunctionFieldForServiceRecord(){
 		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
-	}
-
-
-	public ChainCodeForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public ChainCodeForm transactionIdFieldForServiceRecord(String initValue){
-		return transactionIdFieldForServiceRecord("transactionId",initValue);
-	}
-	public ChainCodeForm transactionIdFieldForServiceRecord(){
-		return transactionIdFieldForServiceRecord("transactionId","");
 	}
 
 
@@ -317,6 +317,76 @@ public class ChainCodeForm extends BaseForm {
 	}
 	public ChainCodeForm statusIdFieldForServiceRecord(){
 		return statusIdFieldForServiceRecord("statusId","");
+	}
+
+
+	public ChainCodeForm chainCodeInvokerIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  idFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm chainCodeInvokerIdFieldForChainCodeInvoker(String initValue){
+		return chainCodeInvokerIdFieldForChainCodeInvoker("chainCodeInvokerId",initValue);
+	}
+	public ChainCodeForm chainCodeInvokerIdFieldForChainCodeInvoker(){
+		return chainCodeInvokerIdFieldForChainCodeInvoker("chainCodeInvokerId","");
+	}
+
+
+	public ChainCodeForm appClientIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  appClientIdFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm appClientIdFieldForChainCodeInvoker(String initValue){
+		return appClientIdFieldForChainCodeInvoker("appClientId",initValue);
+	}
+	public ChainCodeForm appClientIdFieldForChainCodeInvoker(){
+		return appClientIdFieldForChainCodeInvoker("appClientId","");
+	}
+
+
+	public ChainCodeForm chainCodeIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  chainCodeIdFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm chainCodeIdFieldForChainCodeInvoker(String initValue){
+		return chainCodeIdFieldForChainCodeInvoker("chainCodeId",initValue);
+	}
+	public ChainCodeForm chainCodeIdFieldForChainCodeInvoker(){
+		return chainCodeIdFieldForChainCodeInvoker("chainCodeId","");
+	}
+
+
+	public ChainCodeForm parametersFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  parametersFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm parametersFieldForChainCodeInvoker(String initValue){
+		return parametersFieldForChainCodeInvoker("parameters",initValue);
+	}
+	public ChainCodeForm parametersFieldForChainCodeInvoker(){
+		return parametersFieldForChainCodeInvoker("parameters","");
+	}
+
+
+	public ChainCodeForm changeRequestIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  changeRequestIdFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ChainCodeForm changeRequestIdFieldForChainCodeInvoker(String initValue){
+		return changeRequestIdFieldForChainCodeInvoker("changeRequestId",initValue);
+	}
+	public ChainCodeForm changeRequestIdFieldForChainCodeInvoker(){
+		return changeRequestIdFieldForChainCodeInvoker("changeRequestId","");
 	}
 
 	

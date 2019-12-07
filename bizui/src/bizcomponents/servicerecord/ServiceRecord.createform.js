@@ -31,9 +31,9 @@ const { TextArea } = Input;
 const testValues = {};
 /*
 const testValues = {
+  transactionId: 'a21fe3srw',
   name: '调用链码',
   chainCodeFunction: 'transact',
-  transactionId: 'a21fe3srw',
   blockId: 'a21fe3srw',
   channelId: 'C000001',
   chainCodeId: 'CC000001',
@@ -221,7 +221,7 @@ class ServiceRecordCreateForm extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          服务记录
+          {window.trans('service_record')}
         </div>
       );
     };
@@ -229,7 +229,7 @@ class ServiceRecordCreateForm extends Component {
     return (
       <PageHeaderLayout
         title={internalRenderTitle()}
-        content={`${appLocaleName(userContext, 'CreateNew')}服务记录`}
+        content={`${appLocaleName(userContext, 'CreateNew')}${window.trans('service_record')}`}
         wrapperClassName={styles.advancedForm}
       >
         <ServiceRecordCreateFormBody {...this.props} />

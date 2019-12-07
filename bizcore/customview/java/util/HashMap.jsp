@@ -344,12 +344,12 @@ div {
 			AbstractHttpResponse respWrapper = (AbstractHttpResponse)response;
 			HttpResponse httpResponse = (HttpResponse)respWrapper.getResponse();
 			out.write(httpResponse.getHeader("X-Class"));
-			jspFileName = httpResponse.getHeader("X-Class").replace(".","/");
+			jspFileName = httpResponse.getHeader("X-Class").replace('.','/');
 			pageContext.setAttribute("jspFileName", jspFileName);
 			%></span>]
 		</div>
 	<% if (httpResponse.getHeader("x-actor-class") != null && !httpResponse.getHeader("x-actor-class").equals(httpResponse.getHeader("X-Class"))) {
-		jspFileName = httpResponse.getHeader("x-actor-class").replaceAll(".","/");
+		jspFileName = httpResponse.getHeader("x-actor-class").replace('.','/');
 		pageContext.setAttribute("jspFileName", jspFileName);
 	%>
 		<div class="div_fw_right">

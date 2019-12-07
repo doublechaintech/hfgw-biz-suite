@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.objectaccess;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -13,7 +14,7 @@ import com.doublechaintech.hfgw.userapp.UserApp;
 import com.doublechaintech.hfgw.userapp.UserAppDAO;
 
 
-public interface ObjectAccessDAO{
+public interface ObjectAccessDAO extends BaseDAO{
 
 	public SmartList<ObjectAccess> loadAll();
 	public ObjectAccess load(String id, Map<String,Object> options) throws Exception;

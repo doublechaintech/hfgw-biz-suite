@@ -38,14 +38,14 @@ const transferToAnotherNetwork = (id, parameters) => {
 };
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}applicationManager/addServiceRecord/applicationId/name/payload/channelId/chainCodeId/chainCodeFunction/transactionId/blockId/networkId/response/statusId/tokensExpr/`;
+  const url = `${PREFIX}applicationManager/addServiceRecord/applicationId/transactionId/name/payload/channelId/chainCodeId/chainCodeFunction/blockId/networkId/response/statusId/tokensExpr/`;
   const applicationId = targetObjectId;
   const requestParameters = { ...parameters, applicationId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}applicationManager/updateServiceRecordProperties/applicationId/id/name/payload/chainCodeFunction/transactionId/blockId/response/tokensExpr/`;
+  const url = `${PREFIX}applicationManager/updateServiceRecordProperties/applicationId/id/transactionId/name/payload/chainCodeFunction/blockId/response/tokensExpr/`;
   const applicationId = targetObjectId;
   const requestParameters = { ...parameters, applicationId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
@@ -53,6 +53,26 @@ const updateServiceRecord = (targetObjectId, parameters) => {
 
 const removeServiceRecordList = (targetObjectId, parameters) => {
   const url = `${PREFIX}applicationManager/removeServiceRecordList/applicationId/serviceRecordIds/tokensExpr/`;
+  const requestParameters = { ...parameters, applicationId: targetObjectId, tokensExpr: 'none' };
+  return postForm({ url, requestParameters });
+};
+
+const addChainCodeInvoker = (targetObjectId, parameters) => {
+  const url = `${PREFIX}applicationManager/addChainCodeInvoker/applicationId/chainCodeId/parameters/changeRequestId/tokensExpr/`;
+  const applicationId = targetObjectId;
+  const requestParameters = { ...parameters, applicationId, tokensExpr: 'none' };
+  return postForm({ url, requestParameters });
+};
+
+const updateChainCodeInvoker = (targetObjectId, parameters) => {
+  const url = `${PREFIX}applicationManager/updateChainCodeInvokerProperties/applicationId/id/parameters/tokensExpr/`;
+  const applicationId = targetObjectId;
+  const requestParameters = { ...parameters, applicationId, tokensExpr: 'none' };
+  return postForm({ url, requestParameters });
+};
+
+const removeChainCodeInvokerList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}applicationManager/removeChainCodeInvokerList/applicationId/chainCodeInvokerIds/tokensExpr/`;
   const requestParameters = { ...parameters, applicationId: targetObjectId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
@@ -83,8 +103,11 @@ const ApplicationService = {
   view,
   load,
   addServiceRecord,
+  addChainCodeInvoker,
   updateServiceRecord,
+  updateChainCodeInvoker,
   removeServiceRecordList,
+  removeChainCodeInvokerList,
   requestCandidateChannel,
   requestCandidateNetwork,
   transferToAnotherChannel,

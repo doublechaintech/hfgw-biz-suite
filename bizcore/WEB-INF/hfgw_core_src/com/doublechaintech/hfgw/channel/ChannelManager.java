@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface ChannelManager{
+public interface ChannelManager extends BaseManager{
 
 		
 
@@ -68,9 +69,9 @@ public interface ChannelManager{
 
 	*/
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String channelId, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String channelId, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId ,String [] tokensExpr)  throws Exception;
 	
-	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId , String [] tokensExpr)  throws Exception;
+	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId , String [] tokensExpr)  throws Exception;
 	public  Channel removeServiceRecord(HfgwUserContext userContext, String channelId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  Channel updateServiceRecord(HfgwUserContext userContext, String channelId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

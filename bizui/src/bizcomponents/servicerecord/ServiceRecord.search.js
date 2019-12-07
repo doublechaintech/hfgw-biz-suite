@@ -22,9 +22,10 @@ import GlobalComponents from '../../custcomponents';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './ServiceRecord.search.less';
 import ListViewTool from '../../common/ListView.tool';
+import ServiceRecordBase from './ServiceRecord.base';
 import PermissionSettingService from '../../permission/PermissionSetting.service';
 import appLocaleName from '../../common/Locale.tool';
-
+const { fieldLabels } = ServiceRecordBase;
 import { Link, Route, Redirect } from 'dva/router';
 
 const {

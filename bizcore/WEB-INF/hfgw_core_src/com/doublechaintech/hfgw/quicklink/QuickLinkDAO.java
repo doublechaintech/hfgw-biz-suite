@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.quicklink;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -13,7 +14,7 @@ import com.doublechaintech.hfgw.userapp.UserApp;
 import com.doublechaintech.hfgw.userapp.UserAppDAO;
 
 
-public interface QuickLinkDAO{
+public interface QuickLinkDAO extends BaseDAO{
 
 	public SmartList<QuickLink> loadAll();
 	public QuickLink load(String id, Map<String,Object> options) throws Exception;

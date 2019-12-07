@@ -53,12 +53,12 @@ public class ChannelCustomManagerImpl extends ChannelManagerImpl {
         String func = parameters[0];
         ArrayList realParameters = new ArrayList(Arrays.asList(parameters).subList(1, parameters.length));
         ServiceRecord serviceRecord = serviceRecordManagerOf(context).createServiceRecord(context,
+                "",
                 "调用链码",
                 func + realParameters.stream().collect(Collectors.joining(",", "(", ")")),
                 app.getChannel().getId(),
                 chaincodeId,
                 func,
-                "",
                 "",
                 app.getId(),
                 app.getNetwork().getId(),
@@ -135,12 +135,12 @@ public class ChannelCustomManagerImpl extends ChannelManagerImpl {
         request.setChaincodeID(chaincodeID);
 
         ServiceRecord serviceRecord = serviceRecordManagerOf(context).createServiceRecord(context,
+                "",
                 "通过链码查询",
                 func + realParameters.stream().collect(Collectors.joining(",", "(", ")")),
                 app.getChannel().getId(),
                 chaincodeId,
                 func,
-                "",
                 "",
                 app.getId(),
                 app.getNetwork().getId(),

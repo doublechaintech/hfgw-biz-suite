@@ -23,6 +23,7 @@ function RouterConfig({ history }) {
   const { TransactionStatusBizApp } = GlobalComponents;
   const { ChangeRequestTypeBizApp } = GlobalComponents;
   const { ChangeRequestBizApp } = GlobalComponents;
+  const { ChainCodeInvokerBizApp } = GlobalComponents;
   const { UserDomainBizApp } = GlobalComponents;
   const { UserWhiteListBizApp } = GlobalComponents;
   const { SecUserBizApp } = GlobalComponents;
@@ -60,6 +61,7 @@ function RouterConfig({ history }) {
           <Route path="/transactionStatus/" component={TransactionStatusBizApp} />
           <Route path="/changeRequestType/" component={ChangeRequestTypeBizApp} />
           <Route path="/changeRequest/" component={ChangeRequestBizApp} />
+          <Route path="/chainCodeInvoker/" component={ChainCodeInvokerBizApp} />
           <Route path="/userDomain/" component={UserDomainBizApp} />
           <Route path="/userWhiteList/" component={UserWhiteListBizApp} />
           <Route path="/secUser/" component={SecUserBizApp} />

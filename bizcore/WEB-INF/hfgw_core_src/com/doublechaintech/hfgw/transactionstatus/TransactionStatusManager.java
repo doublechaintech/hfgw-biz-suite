@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface TransactionStatusManager{
+public interface TransactionStatusManager extends BaseManager{
 
 		
 	
@@ -33,9 +34,9 @@ public interface TransactionStatusManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String transactionStatusId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String transactionStatusId, String transactionId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response ,String [] tokensExpr)  throws Exception;
 	
-	public  TransactionStatus addServiceRecord(HfgwUserContext userContext, String transactionStatusId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response , String [] tokensExpr)  throws Exception;
+	public  TransactionStatus addServiceRecord(HfgwUserContext userContext, String transactionStatusId, String transactionId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response , String [] tokensExpr)  throws Exception;
 	public  TransactionStatus removeServiceRecord(HfgwUserContext userContext, String transactionStatusId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  TransactionStatus updateServiceRecord(HfgwUserContext userContext, String transactionStatusId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 

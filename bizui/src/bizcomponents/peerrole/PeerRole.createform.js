@@ -209,7 +209,7 @@ class PeerRoleCreateForm extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          对等的角色
+          {window.trans('peer_role')}
         </div>
       );
     };
@@ -217,7 +217,7 @@ class PeerRoleCreateForm extends Component {
     return (
       <PageHeaderLayout
         title={internalRenderTitle()}
-        content={`${appLocaleName(userContext, 'CreateNew')}对等的角色`}
+        content={`${appLocaleName(userContext, 'CreateNew')}${window.trans('peer_role')}`}
         wrapperClassName={styles.advancedForm}
       >
         <PeerRoleCreateFormBody {...this.props} />

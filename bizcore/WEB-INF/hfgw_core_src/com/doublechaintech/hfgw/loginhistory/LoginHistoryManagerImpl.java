@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.secuser.CandidateSecUser;
 public class LoginHistoryManagerImpl extends CustomHfgwCheckerManager implements LoginHistoryManager {
 	
 	private static final String SERVICE_TYPE = "LoginHistory";
+	@Override
+	public LoginHistoryDAO daoOf(HfgwUserContext userContext) {
+		return loginHistoryDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

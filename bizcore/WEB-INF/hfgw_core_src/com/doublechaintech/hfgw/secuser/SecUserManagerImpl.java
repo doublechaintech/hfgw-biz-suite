@@ -38,6 +38,10 @@ import com.doublechaintech.hfgw.secuser.SecUser;
 public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecUserManager {
 	
 	private static final String SERVICE_TYPE = "SecUser";
+	@Override
+	public SecUserDAO daoOf(HfgwUserContext userContext) {
+		return secUserDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -175,7 +179,7 @@ public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecU
 		addAction(userContext, secUser, tokens,"@copy","cloneSecUser","cloneSecUser/"+secUser.getId()+"/","main","primary");
 		
 		addAction(userContext, secUser, tokens,"sec_user.transfer_to_domain","transferToAnotherDomain","transferToAnotherDomain/"+secUser.getId()+"/","main","primary");
-		addAction(userContext, secUser, tokens,"sec_user.block","block","blockActionForm/"+secUser.getId()+"/","main","danger");
+		addAction(userContext, secUser, tokens,"sec_user.transfer_to_blocking","transferToAnotherBlocking","transferToAnotherBlocking/"+secUser.getId()+"/","main","primary");
 		addAction(userContext, secUser, tokens,"sec_user.addUserApp","addUserApp","addUserApp/"+secUser.getId()+"/","userAppList","primary");
 		addAction(userContext, secUser, tokens,"sec_user.removeUserApp","removeUserApp","removeUserApp/"+secUser.getId()+"/","userAppList","primary");
 		addAction(userContext, secUser, tokens,"sec_user.updateUserApp","updateUserApp","updateUserApp/"+secUser.getId()+"/","userAppList","primary");
@@ -195,8 +199,8 @@ public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecU
  	
  	
 
-	public SecUser createSecUser(HfgwUserContext userContext, String login,String mobile,String email,String pwd,String weixinOpenid,String weixinAppid,String accessToken,int verificationCode,DateTime verificationCodeExpire,DateTime lastLoginTime,String domainId) throws Exception
-	//public SecUser createSecUser(HfgwUserContext userContext,String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String domainId) throws Exception
+	public SecUser createSecUser(HfgwUserContext userContext, String login,String mobile,String email,String pwd,String weixinOpenid,String weixinAppid,String accessToken,int verificationCode,DateTime verificationCodeExpire,DateTime lastLoginTime,String domainId,String blockingId) throws Exception
+	//public SecUser createSecUser(HfgwUserContext userContext,String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String domainId, String blockingId) throws Exception
 	{
 		
 		
@@ -234,7 +238,11 @@ public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecU
 		secUser.setDomain(domain);
 		
 		
-		secUser.setCurrentStatus("INIT");
+			
+		SecUserBlocking blocking = loadSecUserBlocking(userContext, blockingId,emptyOptions());
+		secUser.setBlocking(blocking);
+		
+		
 
 		secUser = saveSecUser(userContext, secUser, emptyOptions());
 		
@@ -289,6 +297,8 @@ public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecU
 		if(SecUser.LAST_LOGIN_TIME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkLastLoginTimeOfSecUser(parseTimestamp(newValueExpr));
 		}		
+
+				
 
 		
 	
@@ -398,47 +408,6 @@ public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecU
 		return SecUserTokens.mergeAll(tokens).done();
 	}
 	
-	private static final String [] STATUS_SEQUENCE={"BLOCKED"};
- 	protected String[] getNextCandidateStatus(HfgwUserContext userContext, String currentStatus) throws Exception{
- 	
- 		if("INIT".equals(currentStatus)){
- 			//if current status is null, just return the first status as the next status
- 			//code makes sure not throwing ArrayOutOfIndexException here.
- 			return STATUS_SEQUENCE;
- 		}
- 		/*
- 		List<String> statusList = Arrays.asList(STATUS_SEQUENCE);
- 		int index = statusList.indexOf(currentStatus);
- 		if(index < 0){
- 			throwExceptionWithMessage("The status '"+currentStatus+"' is not found from status list: "+ statusList );
- 		}
- 		if(index + 1 == statusList.size()){
- 			//this is the last status code; no next status any more
- 			return null;
- 		}
- 		
- 		//this is not the last one, just return it.
- 		*/
- 		return STATUS_SEQUENCE;
- 	
- 	}/**/
- 	protected void ensureStatus(HfgwUserContext userContext, SecUser secUser, String expectedNextStatus) throws Exception{
-		String currentStatus = secUser.getCurrentStatus();
-		//'null' is fine for function getNextStatus
-		String candidateStatus[] = getNextCandidateStatus(userContext, currentStatus);
-		
-		if(candidateStatus == null){
-			//no more next status
-			String message = "No next status for '"+currentStatus+"', but you want to put the status to 'HIDDEN'";
-			throwExceptionWithMessage(message);
-		}
-		int index = Arrays.asList(candidateStatus).indexOf(expectedNextStatus);
-		if(index<0){
-			String message = "The current status '"+currentStatus+"' next candidate status should be one of '"+candidateStatus+"', but you want to transit the status to '"+expectedNextStatus+"'";
-			throwExceptionWithMessage(message);
-		}
-	}
-	
 	protected void checkParamsForTransferingAnotherDomain(HfgwUserContext userContext, String secUserId, String anotherDomainId) throws Exception
  	{
  		
@@ -537,94 +506,7 @@ public class SecUserManagerImpl extends CustomHfgwCheckerManager implements SecU
 		return result;
 	}
  	
- 	
-	public static final String BLOCKED_STATUS = "BLOCKED";
- 	protected void checkParamsForBlocking(HfgwUserContext userContext, String secUserId, String who, String comments
-) throws Exception
- 	{
- 				checkerOf(userContext).checkIdOfSecUser(secUserId);
-		checkerOf(userContext).checkWhoOfSecUserBlocking(who);
-		checkerOf(userContext).checkCommentsOfSecUserBlocking(comments);
-
-	
-		checkerOf(userContext).throwExceptionIfHasErrors(SecUserManagerException.class);
-
- 	}
- 	public SecUser block(HfgwUserContext userContext, String secUserId, String who, String comments
-) throws Exception
- 	{
-		checkParamsForBlocking(userContext, secUserId, who, comments);
-		SecUser secUser = loadSecUser(userContext, secUserId, allTokens());	
-		synchronized(secUser){
-			//will be good when the secUser loaded from this JVM process cache.
-			//also good when there is a ram based DAO implementation
-			
-			checkIfEligibleForBlocking(userContext,secUser);
- 		
-
-			secUser.updateCurrentStatus(BLOCKED_STATUS);
-			//set the new status, it will be good if add constant to the bean definition
-			
-			//extract all referenced objects, load them respectively
-
-
-			SecUserBlocking blocking = createBlocking(userContext, who, comments);		
-			secUser.updateBlocking(blocking);		
-			
-			
-			secUser = saveSecUser(userContext, secUser, tokens().withBlocking().done());
-			return present(userContext,secUser, allTokens());
-			
-		}
-
- 	}
- 	
- 	
- 	
- 	
- 	public SecUserForm blockActionForm(HfgwUserContext userContext, String secUserId) throws Exception
- 	{
-		return new SecUserForm()
-			.withTitle("block")
-			.secUserIdField(secUserId)
-			.whoFieldOfSecUserBlocking()
-			.commentsFieldOfSecUserBlocking()
-			.blockAction();
- 	}
-	
- 	
- 	protected SecUserBlocking createBlocking(HfgwUserContext userContext, String who, String comments){
- 		SecUserBlocking blocking = new SecUserBlocking();
- 		//who, comments
- 		
-		blocking.setWho(who);
-		blocking.setBlockTime(userContext.now());
-		blocking.setComments(comments);
-
- 		
- 		
- 		
- 		return secUserBlockingDaoOf(userContext).save(blocking,emptyOptions());
- 	}
- 	protected void checkIfEligibleForBlocking(HfgwUserContext userContext, SecUser secUser) throws Exception{
- 
- 		ensureStatus(userContext,secUser, BLOCKED_STATUS);
- 		
- 		SecUserBlocking blocking = secUser.getBlocking();
- 		//check the current status equals to the status
- 		//String expectedCurrentStatus = blocking 		
- 		//if the previous is the expected status?
- 		
- 		
- 		//if already transited to this status?
- 		
- 		if( blocking != null){
-				throwExceptionWithMessage("The SecUser("+secUser.getId()+") has already been "+ BLOCKED_STATUS+".");
-		}
- 		
- 		
- 	}
-//--------------------------------------------------------------
+ //--------------------------------------------------------------
 	
 	 	
  	protected UserDomain loadUserDomain(HfgwUserContext userContext, String newDomainId, Map<String,Object> options) throws Exception

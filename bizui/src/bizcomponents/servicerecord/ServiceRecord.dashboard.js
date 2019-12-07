@@ -169,8 +169,15 @@ const internalSummaryOf = (serviceRecord, targetComponent) => {
   const userContext = null;
   return (
     <DescriptionList className={styles.headerList} size="small" col="4">
-      <Description term="ID">{serviceRecord.id}</Description>
-      <Description term="名称">{serviceRecord.name}</Description>
+      <Description term="ID" style={{ wordBreak: 'break-all' }}>
+        {serviceRecord.id}
+      </Description>
+      <Description term="事务Id" style={{ wordBreak: 'break-all' }}>
+        {serviceRecord.transactionId}
+      </Description>
+      <Description term="名称" style={{ wordBreak: 'break-all' }}>
+        {serviceRecord.name}
+      </Description>
       <Description term="频道">
         {serviceRecord.channel == null
           ? appLocaleName(userContext, 'NotAssigned')
@@ -211,9 +218,12 @@ const internalSummaryOf = (serviceRecord, targetComponent) => {
           style={{ fontSize: 20, color: 'red' }}
         />
       </Description>
-      <Description term="链码功能">{serviceRecord.chainCodeFunction}</Description>
-      <Description term="事务Id">{serviceRecord.transactionId}</Description>
-      <Description term="块Id">{serviceRecord.blockId}</Description>
+      <Description term="链码功能" style={{ wordBreak: 'break-all' }}>
+        {serviceRecord.chainCodeFunction}
+      </Description>
+      <Description term="块Id" style={{ wordBreak: 'break-all' }}>
+        {serviceRecord.blockId}
+      </Description>
       <Description term="创建时间">
         {moment(serviceRecord.createTime).format('YYYY-MM-DD HH:mm')}
       </Description>

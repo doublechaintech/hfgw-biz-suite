@@ -1,6 +1,6 @@
 export const SYSTEM_SHORT_NAME = 'hfgw'; //Use for requssting different apps
 export const SYSTEM_LOCAL_NAME = 'Hyperledger Fabric 应用网关';
-export const BUILD_TIIME = 'Fri Nov 22 17:00:06 CST 2019';
+export const BUILD_TIIME = 'Fri Dec 06 10:53:39 CST 2019';
 export const MEDIA_UPLOAD_URL = 'https://www.doublechaintech.com/mss/upload.html';
 export const MEDIA_PREFIX = 'https://www.doublechaintech.com/mss/';
 

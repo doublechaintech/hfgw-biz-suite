@@ -1829,6 +1829,50 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	}
 
 
+	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
+	public HyperledgerNetwork planToRemoveServiceRecordListWithTransactionId(HyperledgerNetwork hyperledgerNetwork, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearTransactionId();
+			serviceRecordItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countServiceRecordListWithTransactionId(String hyperledgerNetworkId, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect HyperledgerNetwork with channel in ServiceRecord
 	public HyperledgerNetwork planToRemoveServiceRecordListWithChannel(HyperledgerNetwork hyperledgerNetwork, String channelId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -1912,50 +1956,6 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
 		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
-		
-		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
-		return count;
-	}
-	
-	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
-	public HyperledgerNetwork planToRemoveServiceRecordListWithTransactionId(HyperledgerNetwork hyperledgerNetwork, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetwork.getId());
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
-		
-		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
-				findServiceRecordWithKey(key, options);
-		if(externalServiceRecordList == null){
-			return hyperledgerNetwork;
-		}
-		if(externalServiceRecordList.isEmpty()){
-			return hyperledgerNetwork;
-		}
-		
-		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
-			serviceRecordItem.clearTransactionId();
-			serviceRecordItem.clearNetwork();
-			
-		}
-		
-		
-		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();		
-		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
-		return hyperledgerNetwork;
-	}
-	
-	public int countServiceRecordListWithTransactionId(String hyperledgerNetworkId, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
 		return count;

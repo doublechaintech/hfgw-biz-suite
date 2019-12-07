@@ -138,6 +138,20 @@ public class TransactionStatusForm extends BaseForm {
 	}
 
 
+	public TransactionStatusForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public TransactionStatusForm transactionIdFieldForServiceRecord(String initValue){
+		return transactionIdFieldForServiceRecord("transactionId",initValue);
+	}
+	public TransactionStatusForm transactionIdFieldForServiceRecord(){
+		return transactionIdFieldForServiceRecord("transactionId","");
+	}
+
+
 	public TransactionStatusForm nameFieldForServiceRecord(String parameterName, String initValue){
 		FormField field =  nameFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
@@ -205,20 +219,6 @@ public class TransactionStatusForm extends BaseForm {
 	}
 	public TransactionStatusForm chainCodeFunctionFieldForServiceRecord(){
 		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
-	}
-
-
-	public TransactionStatusForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public TransactionStatusForm transactionIdFieldForServiceRecord(String initValue){
-		return transactionIdFieldForServiceRecord("transactionId",initValue);
-	}
-	public TransactionStatusForm transactionIdFieldForServiceRecord(){
-		return transactionIdFieldForServiceRecord("transactionId","");
 	}
 
 

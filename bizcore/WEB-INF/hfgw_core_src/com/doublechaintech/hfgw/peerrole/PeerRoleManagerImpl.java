@@ -37,6 +37,10 @@ import com.doublechaintech.hfgw.channel.Channel;
 public class PeerRoleManagerImpl extends CustomHfgwCheckerManager implements PeerRoleManager {
 	
 	private static final String SERVICE_TYPE = "PeerRole";
+	@Override
+	public PeerRoleDAO daoOf(HfgwUserContext userContext) {
+		return peerRoleDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

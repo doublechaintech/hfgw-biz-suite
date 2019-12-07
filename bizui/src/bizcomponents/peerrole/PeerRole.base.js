@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Divider, Avatar } from 'antd';
+import { Icon, Divider, Avata, Card, Col } from 'antd';
 
 import { Link } from 'dva/router';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import BaseTool from '../../common/Base.tool';
 import GlobalComponents from '../../custcomponents';
 import DescriptionList from '../../components/DescriptionList';
 const { Description } = DescriptionList;
+
 const {
   defaultRenderReferenceCell,
   defaultRenderBooleanCell,
@@ -19,6 +20,7 @@ const {
   defaultRenderDateCell,
   defaultRenderIdentifier,
   defaultRenderTextCell,
+  defaultSearchLocalData,
 } = BaseTool;
 
 const renderTextCell = defaultRenderTextCell;
@@ -32,12 +34,13 @@ const renderBooleanCell = defaultRenderBooleanCell;
 const renderReferenceCell = defaultRenderReferenceCell;
 
 const menuData = {
-  menuName: '对等的角色',
+  menuName: window.trans('peer_role'),
   menuFor: 'peerRole',
   subItems: [
     {
       name: 'channelPeerRoleList',
-      displayName: '通道对等的角色',
+      displayName: window.mtrans('channel_peer_role', 'peer_role.channel_peer_role_list', false),
+      type: 'channelPeerRole',
       icon: '500px',
       readPermission: false,
       createPermission: false,
@@ -50,16 +53,16 @@ const menuData = {
 };
 
 const settingMenuData = {
-  menuName: '对等的角色',
+  menuName: window.trans('peer_role'),
   menuFor: 'peerRole',
   subItems: [],
 };
 
 const fieldLabels = {
-  id: 'ID',
-  name: '名称',
-  code: '代码',
-  network: '网络',
+  id: window.trans('peer_role.id'),
+  name: window.trans('peer_role.name'),
+  code: window.trans('peer_role.code'),
+  network: window.trans('peer_role.network'),
 };
 
 const displayColumns = [
@@ -92,15 +95,24 @@ const displayColumns = [
     sorter: true,
   },
 ];
-// refernce to https://ant.design/components/list-cn/
+
+const searchLocalData = (targetObject, searchTerm) =>
+  defaultSearchLocalData(menuData, targetObject, searchTerm);
+
 const renderItemOfList = (peerRole, targetComponent) => {
   const userContext = null;
   return (
     <div key={peerRole.id}>
-      <DescriptionList key={peerRole.id} size="small" col="4">
-        <Description term="ID">{peerRole.id}</Description>
-        <Description term="名称">{peerRole.name}</Description>
-        <Description term="代码">{peerRole.code}</Description>
+      <DescriptionList key={peerRole.id} size="small" col="2">
+        <Description term={fieldLabels.id} style={{ wordBreak: 'break-all' }}>
+          {peerRole.id}
+        </Description>
+        <Description term={fieldLabels.name} style={{ wordBreak: 'break-all' }}>
+          {peerRole.name}
+        </Description>
+        <Description term={fieldLabels.code} style={{ wordBreak: 'break-all' }}>
+          {peerRole.code}
+        </Description>
       </DescriptionList>
       <Divider style={{ height: '2px' }} />
     </div>
@@ -129,5 +141,12 @@ const stepOf = (targetComponent, title, content, position, index) => {
     index,
   };
 };
-const PeerRoleBase = { menuData, displayColumns, fieldLabels, renderItemOfList, stepOf };
+const PeerRoleBase = {
+  menuData,
+  displayColumns,
+  fieldLabels,
+  renderItemOfList,
+  stepOf,
+  searchLocalData,
+};
 export default PeerRoleBase;

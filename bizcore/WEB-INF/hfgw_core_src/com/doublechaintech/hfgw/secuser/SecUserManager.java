@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface SecUserManager{
+public interface SecUserManager extends BaseManager{
 
 		
 	
@@ -27,16 +28,15 @@ public interface SecUserManager{
 
 	 
 
-	public SecUser createSecUser(HfgwUserContext userContext, String login,String mobile,String email,String pwd,String weixinOpenid,String weixinAppid,String accessToken,int verificationCode,DateTime verificationCodeExpire,DateTime lastLoginTime,String domainId) throws Exception;	
+	public SecUser createSecUser(HfgwUserContext userContext, String login,String mobile,String email,String pwd,String weixinOpenid,String weixinAppid,String accessToken,int verificationCode,DateTime verificationCodeExpire,DateTime lastLoginTime,String domainId,String blockingId) throws Exception;	
 	public SecUser updateSecUser(HfgwUserContext userContext,String secUserId, int secUserVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception;
 	public SecUser loadSecUser(HfgwUserContext userContext, String secUserId, String [] tokensExpr) throws Exception;
 	public SecUser internalSaveSecUser(HfgwUserContext userContext, SecUser secUser) throws Exception;
 	public SecUser internalSaveSecUser(HfgwUserContext userContext, SecUser secUser,Map<String,Object>option) throws Exception;
 	
 	public SecUser transferToAnotherDomain(HfgwUserContext userContext, String secUserId, String anotherDomainId)  throws Exception;
- 	public SecUser block(HfgwUserContext userContext, String secUserId, String who, String comments
-)  throws Exception;
-
+ 	public SecUser transferToAnotherBlocking(HfgwUserContext userContext, String secUserId, String anotherBlockingId)  throws Exception;
+ 
 
 	public void delete(HfgwUserContext userContext, String secUserId, int version) throws Exception;
 	public int deleteAll(HfgwUserContext userContext, String secureCode ) throws Exception;

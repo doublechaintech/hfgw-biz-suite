@@ -259,7 +259,7 @@ public class CustomSecUserManagerImpl extends SecUserManagerImpl implements
             return error("IllegalArgumentException: "+ e.getMessage());
         } catch (InvocationTargetException e) {
         	Throwable rootCause = e;
-        	while(! (rootCause instanceof java.sql.SQLException)) {
+        	while((rootCause != null) && !(rootCause instanceof java.sql.SQLException)) {
         		rootCause = rootCause.getCause();
         	}
         	if(rootCause instanceof java.sql.SQLException) {

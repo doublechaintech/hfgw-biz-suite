@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.grpcoption;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -13,7 +14,7 @@ import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.node.NodeDAO;
 
 
-public interface GrpcOptionDAO{
+public interface GrpcOptionDAO extends BaseDAO{
 
 	public SmartList<GrpcOption> loadAll();
 	public GrpcOption load(String id, Map<String,Object> options) throws Exception;

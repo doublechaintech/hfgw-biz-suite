@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface UserDomainManager{
+public interface UserDomainManager extends BaseManager{
 
 		
 
@@ -37,15 +38,13 @@ public interface UserDomainManager{
 
 	*/
 
-	//public  SecUserManager getSecUserManager(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime ,String [] tokensExpr)  throws Exception;
+	//public  SecUserManager getSecUserManager(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String blockingId ,String [] tokensExpr)  throws Exception;
 	
-	public  UserDomain addSecUser(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime , String [] tokensExpr)  throws Exception;
+	public  UserDomain addSecUser(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String blockingId , String [] tokensExpr)  throws Exception;
 	public  UserDomain removeSecUser(HfgwUserContext userContext, String userDomainId, String secUserId, int secUserVersion,String [] tokensExpr)  throws Exception;
 	public  UserDomain updateSecUser(HfgwUserContext userContext, String userDomainId, String secUserId, int secUserVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
-	public  UserDomain associateSecUserListToNewBlocking(HfgwUserContext userContext, String userDomainId, String  secUserIds[], String who, String comments, String [] tokensExpr) throws Exception ;
-	public  UserDomain associateSecUserListToBlocking(HfgwUserContext userContext, String userDomainId, String  secUserIds[],String blockingId, String [] tokensExpr) throws Exception ;
 
 	*/
 

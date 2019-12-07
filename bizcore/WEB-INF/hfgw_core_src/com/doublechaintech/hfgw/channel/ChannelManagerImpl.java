@@ -47,6 +47,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 public class ChannelManagerImpl extends CustomHfgwCheckerManager implements ChannelManager {
 	
 	private static final String SERVICE_TYPE = "Channel";
+	@Override
+	public ChannelDAO daoOf(HfgwUserContext userContext) {
+		return channelDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -563,24 +567,6 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 				return channel;
 			}
 	}
-	//disconnect Channel with chain_code in ServiceRecord
-	protected Channel breakWithServiceRecordByChainCode(HfgwUserContext userContext, String channelId, String chainCodeId,  String [] tokensExpr)
-		 throws Exception{
-			
-			//TODO add check code here
-			
-			Channel channel = loadChannel(userContext, channelId, allTokens());
-
-			synchronized(channel){ 
-				//Will be good when the thread loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				
-				channelDaoOf(userContext).planToRemoveServiceRecordListWithChainCode(channel, chainCodeId, this.emptyOptions());
-
-				channel = saveChannel(userContext, channel, tokens().withServiceRecordList().done());
-				return channel;
-			}
-	}
 	//disconnect Channel with transaction_id in ServiceRecord
 	protected Channel breakWithServiceRecordByTransactionId(HfgwUserContext userContext, String channelId, String transactionIdId,  String [] tokensExpr)
 		 throws Exception{
@@ -594,6 +580,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 				//Also good when there is a RAM based DAO implementation
 				
 				channelDaoOf(userContext).planToRemoveServiceRecordListWithTransactionId(channel, transactionIdId, this.emptyOptions());
+
+				channel = saveChannel(userContext, channel, tokens().withServiceRecordList().done());
+				return channel;
+			}
+	}
+	//disconnect Channel with chain_code in ServiceRecord
+	protected Channel breakWithServiceRecordByChainCode(HfgwUserContext userContext, String channelId, String chainCodeId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			Channel channel = loadChannel(userContext, channelId, allTokens());
+
+			synchronized(channel){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				channelDaoOf(userContext).planToRemoveServiceRecordListWithChainCode(channel, chainCodeId, this.emptyOptions());
 
 				channel = saveChannel(userContext, channel, tokens().withServiceRecordList().done());
 				return channel;
@@ -1709,10 +1713,12 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 
 
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String channelId, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String channelId, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChannel(channelId);
 
+		
+		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkNameOfServiceRecord(name);
 		
@@ -1721,8 +1727,6 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		checkerOf(userContext).checkChainCodeIdOfServiceRecord(chainCodeId);
 		
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
-		
-		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
 		
@@ -1738,12 +1742,12 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 
 	
 	}
-	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId, String [] tokensExpr) throws Exception
+	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,channelId,name, payload, chainCodeId, chainCodeFunction, transactionId, blockId, appClientId, networkId, response, statusId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,channelId,transactionId, name, payload, chainCodeId, chainCodeFunction, blockId, appClientId, networkId, response, statusId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payload, chainCodeId, chainCodeFunction, transactionId, blockId, appClientId, networkId, response, statusId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,transactionId, name, payload, chainCodeId, chainCodeFunction, blockId, appClientId, networkId, response, statusId);
 		
 		Channel channel = loadChannel(userContext, channelId, allTokens());
 		synchronized(channel){ 
@@ -1756,24 +1760,24 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 			return present(userContext,channel, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String channelId,String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String channelId,String id,String transactionId,String name,String payload,String chainCodeFunction,String blockId,String response,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChannel(channelId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
+		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkNameOfServiceRecord( name);
 		checkerOf(userContext).checkPayloadOfServiceRecord( payload);
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
-		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
 		checkerOf(userContext).checkResponseOfServiceRecord( response);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChannelManagerException.class);
 		
 	}
-	public  Channel updateServiceRecordProperties(HfgwUserContext userContext, String channelId, String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response, String [] tokensExpr) throws Exception
+	public  Channel updateServiceRecordProperties(HfgwUserContext userContext, String channelId, String id,String transactionId,String name,String payload,String chainCodeFunction,String blockId,String response, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,channelId,id,name,payload,chainCodeFunction,transactionId,blockId,response,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,channelId,id,transactionId,name,payload,chainCodeFunction,blockId,response,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -1788,10 +1792,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		ServiceRecord item = channelToUpdate.getServiceRecordList().first();
 		
+		item.updateTransactionId( transactionId );
 		item.updateName( name );
 		item.updatePayload( payload );
 		item.updateChainCodeFunction( chainCodeFunction );
-		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
 		item.updateResponse( response );
 
@@ -1804,18 +1808,18 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payload, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
 		
+		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setName(name);		
 		serviceRecord.setPayload(payload);		
 		ChainCode  chainCode = new ChainCode();
 		chainCode.setId(chainCodeId);		
 		serviceRecord.setChainCode(chainCode);		
 		serviceRecord.setChainCodeFunction(chainCodeFunction);		
-		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
 		Application  appClient = new Application();
@@ -1939,6 +1943,10 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		checkerOf(userContext).checkVersionOfServiceRecord(serviceRecordVersion);
 		
 
+		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
+		}
+		
 		if(ServiceRecord.NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNameOfServiceRecord(parseString(newValueExpr));
 		}
@@ -1949,10 +1957,6 @@ public class ChannelManagerImpl extends CustomHfgwCheckerManager implements Chan
 		
 		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
 			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
-		}
-		
-		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
-			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.BLOCK_ID_PROPERTY.equals(property)){

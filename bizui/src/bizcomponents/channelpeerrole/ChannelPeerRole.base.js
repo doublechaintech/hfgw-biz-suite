@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Divider, Avatar } from 'antd';
+import { Icon, Divider, Avata, Card, Col } from 'antd';
 
 import { Link } from 'dva/router';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import BaseTool from '../../common/Base.tool';
 import GlobalComponents from '../../custcomponents';
 import DescriptionList from '../../components/DescriptionList';
 const { Description } = DescriptionList;
+
 const {
   defaultRenderReferenceCell,
   defaultRenderBooleanCell,
@@ -19,6 +20,7 @@ const {
   defaultRenderDateCell,
   defaultRenderIdentifier,
   defaultRenderTextCell,
+  defaultSearchLocalData,
 } = BaseTool;
 
 const renderTextCell = defaultRenderTextCell;
@@ -32,22 +34,22 @@ const renderBooleanCell = defaultRenderBooleanCell;
 const renderReferenceCell = defaultRenderReferenceCell;
 
 const menuData = {
-  menuName: '通道对等的角色',
+  menuName: window.trans('channel_peer_role'),
   menuFor: 'channelPeerRole',
   subItems: [],
 };
 
 const settingMenuData = {
-  menuName: '通道对等的角色',
+  menuName: window.trans('channel_peer_role'),
   menuFor: 'channelPeerRole',
   subItems: [],
 };
 
 const fieldLabels = {
-  id: 'ID',
-  channel: '频道',
-  node: '节点',
-  peerRole: '对等的角色',
+  id: window.trans('channel_peer_role.id'),
+  channel: window.trans('channel_peer_role.channel'),
+  node: window.trans('channel_peer_role.node'),
+  peerRole: window.trans('channel_peer_role.peer_role'),
 };
 
 const displayColumns = [
@@ -78,13 +80,18 @@ const displayColumns = [
     sorter: true,
   },
 ];
-// refernce to https://ant.design/components/list-cn/
+
+const searchLocalData = (targetObject, searchTerm) =>
+  defaultSearchLocalData(menuData, targetObject, searchTerm);
+
 const renderItemOfList = (channelPeerRole, targetComponent) => {
   const userContext = null;
   return (
     <div key={channelPeerRole.id}>
-      <DescriptionList key={channelPeerRole.id} size="small" col="4">
-        <Description term="ID">{channelPeerRole.id}</Description>
+      <DescriptionList key={channelPeerRole.id} size="small" col="2">
+        <Description term={fieldLabels.id} style={{ wordBreak: 'break-all' }}>
+          {channelPeerRole.id}
+        </Description>
         <Description term={fieldLabels.channel}>
           <div>
             {channelPeerRole.channel == null
@@ -138,5 +145,12 @@ const stepOf = (targetComponent, title, content, position, index) => {
     index,
   };
 };
-const ChannelPeerRoleBase = { menuData, displayColumns, fieldLabels, renderItemOfList, stepOf };
+const ChannelPeerRoleBase = {
+  menuData,
+  displayColumns,
+  fieldLabels,
+  renderItemOfList,
+  stepOf,
+  searchLocalData,
+};
 export default ChannelPeerRoleBase;

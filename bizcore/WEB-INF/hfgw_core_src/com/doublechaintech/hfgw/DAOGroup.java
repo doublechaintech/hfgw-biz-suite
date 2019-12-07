@@ -46,6 +46,9 @@ import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeTokens;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 import com.doublechaintech.hfgw.changerequest.ChangeRequestDAO;
 import com.doublechaintech.hfgw.changerequest.ChangeRequestTokens;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerTokens;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
 import com.doublechaintech.hfgw.userdomain.UserDomainDAO;
 import com.doublechaintech.hfgw.userdomain.UserDomainTokens;
@@ -124,6 +127,8 @@ public class DAOGroup {
 	protected ChangeRequestTypeDAO changeRequestTypeDAO;
 
 	protected ChangeRequestDAO changeRequestDAO;
+
+	protected ChainCodeInvokerDAO chainCodeInvokerDAO;
 
 	protected UserDomainDAO userDomainDAO;
 
@@ -268,6 +273,14 @@ public class DAOGroup {
 	}
 	public void setChangeRequestDAO(ChangeRequestDAO dao){
 		this.changeRequestDAO = dao;
+	}
+
+
+	public ChainCodeInvokerDAO getChainCodeInvokerDAO(){
+		return this.chainCodeInvokerDAO;
+	}
+	public void setChainCodeInvokerDAO(ChainCodeInvokerDAO dao){
+		this.chainCodeInvokerDAO = dao;
 	}
 
 
@@ -672,6 +685,25 @@ public class DAOGroup {
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
 				return daoGoup.getChangeRequestDAO().present((ChangeRequest)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("ChainCodeInvoker", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getChainCodeInvokerDAO().load(id, ChainCodeInvokerTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getChainCodeInvokerDAO().enhanceList((List<ChainCodeInvoker>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChainCodeInvokerDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChainCodeInvokerDAO().present((ChainCodeInvoker)data, tokens);
 			}
 		});
 

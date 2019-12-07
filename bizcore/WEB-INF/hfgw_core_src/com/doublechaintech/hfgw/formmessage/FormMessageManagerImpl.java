@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.genericform.CandidateGenericForm;
 public class FormMessageManagerImpl extends CustomHfgwCheckerManager implements FormMessageManager {
 	
 	private static final String SERVICE_TYPE = "FormMessage";
+	@Override
+	public FormMessageDAO daoOf(HfgwUserContext userContext) {
+		return formMessageDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

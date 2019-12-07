@@ -38,6 +38,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 public class NodeTypeManagerImpl extends CustomHfgwCheckerManager implements NodeTypeManager {
 	
 	private static final String SERVICE_TYPE = "NodeType";
+	@Override
+	public NodeTypeDAO daoOf(HfgwUserContext userContext) {
+		return nodeTypeDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

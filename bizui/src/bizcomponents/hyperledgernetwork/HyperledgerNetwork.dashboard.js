@@ -167,8 +167,12 @@ const internalSummaryOf = (hyperledgerNetwork, targetComponent) => {
   const userContext = null;
   return (
     <DescriptionList className={styles.headerList} size="small" col="4">
-      <Description term="ID">{hyperledgerNetwork.id}</Description>
-      <Description term="名称">{hyperledgerNetwork.name}</Description>
+      <Description term="ID" style={{ wordBreak: 'break-all' }}>
+        {hyperledgerNetwork.id}
+      </Description>
+      <Description term="名称" style={{ wordBreak: 'break-all' }}>
+        {hyperledgerNetwork.name}
+      </Description>
 
       {buildTransferModal(hyperledgerNetwork, targetComponent)}
     </DescriptionList>
@@ -232,6 +236,7 @@ class HyperledgerNetworkDashboard extends Component {
         {
           name: 'organizationList',
           displayName: '组织',
+          viewGroup: '__no_group',
           type: 'organization',
           count: organizationCount,
           addFunction: true,
@@ -242,6 +247,7 @@ class HyperledgerNetworkDashboard extends Component {
         {
           name: 'nodeList',
           displayName: '节点',
+          viewGroup: '__no_group',
           type: 'node',
           count: nodeCount,
           addFunction: true,
@@ -252,6 +258,7 @@ class HyperledgerNetworkDashboard extends Component {
         {
           name: 'channelList',
           displayName: '频道',
+          viewGroup: '__no_group',
           type: 'channel',
           count: channelCount,
           addFunction: true,
@@ -262,6 +269,7 @@ class HyperledgerNetworkDashboard extends Component {
         {
           name: 'applicationList',
           displayName: '应用程序',
+          viewGroup: '__no_group',
           type: 'application',
           count: applicationCount,
           addFunction: true,
@@ -272,6 +280,7 @@ class HyperledgerNetworkDashboard extends Component {
         {
           name: 'serviceRecordList',
           displayName: '服务记录',
+          viewGroup: '__no_group',
           type: 'serviceRecord',
           count: serviceRecordCount,
           addFunction: true,
@@ -282,6 +291,7 @@ class HyperledgerNetworkDashboard extends Component {
         {
           name: 'changeRequestList',
           displayName: '变更请求',
+          viewGroup: '__no_group',
           type: 'changeRequest',
           count: changeRequestCount,
           addFunction: true,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Divider, Avatar } from 'antd';
+import { Icon, Divider, Avata, Card, Col } from 'antd';
 
 import { Link } from 'dva/router';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import BaseTool from '../../common/Base.tool';
 import GlobalComponents from '../../custcomponents';
 import DescriptionList from '../../components/DescriptionList';
 const { Description } = DescriptionList;
+
 const {
   defaultRenderReferenceCell,
   defaultRenderBooleanCell,
@@ -19,6 +20,7 @@ const {
   defaultRenderDateCell,
   defaultRenderIdentifier,
   defaultRenderTextCell,
+  defaultSearchLocalData,
 } = BaseTool;
 
 const renderTextCell = defaultRenderTextCell;
@@ -32,12 +34,13 @@ const renderBooleanCell = defaultRenderBooleanCell;
 const renderReferenceCell = defaultRenderReferenceCell;
 
 const menuData = {
-  menuName: '节点类型',
+  menuName: window.trans('node_type'),
   menuFor: 'nodeType',
   subItems: [
     {
       name: 'nodeList',
-      displayName: '节点',
+      displayName: window.mtrans('node', 'node_type.node_list', false),
+      type: 'node',
       icon: 'node',
       readPermission: false,
       createPermission: false,
@@ -50,16 +53,16 @@ const menuData = {
 };
 
 const settingMenuData = {
-  menuName: '节点类型',
+  menuName: window.trans('node_type'),
   menuFor: 'nodeType',
   subItems: [],
 };
 
 const fieldLabels = {
-  id: 'ID',
-  name: '名称',
-  code: '代码',
-  network: '网络',
+  id: window.trans('node_type.id'),
+  name: window.trans('node_type.name'),
+  code: window.trans('node_type.code'),
+  network: window.trans('node_type.network'),
 };
 
 const displayColumns = [
@@ -92,15 +95,24 @@ const displayColumns = [
     sorter: true,
   },
 ];
-// refernce to https://ant.design/components/list-cn/
+
+const searchLocalData = (targetObject, searchTerm) =>
+  defaultSearchLocalData(menuData, targetObject, searchTerm);
+
 const renderItemOfList = (nodeType, targetComponent) => {
   const userContext = null;
   return (
     <div key={nodeType.id}>
-      <DescriptionList key={nodeType.id} size="small" col="4">
-        <Description term="ID">{nodeType.id}</Description>
-        <Description term="名称">{nodeType.name}</Description>
-        <Description term="代码">{nodeType.code}</Description>
+      <DescriptionList key={nodeType.id} size="small" col="2">
+        <Description term={fieldLabels.id} style={{ wordBreak: 'break-all' }}>
+          {nodeType.id}
+        </Description>
+        <Description term={fieldLabels.name} style={{ wordBreak: 'break-all' }}>
+          {nodeType.name}
+        </Description>
+        <Description term={fieldLabels.code} style={{ wordBreak: 'break-all' }}>
+          {nodeType.code}
+        </Description>
       </DescriptionList>
       <Divider style={{ height: '2px' }} />
     </div>
@@ -129,5 +141,12 @@ const stepOf = (targetComponent, title, content, position, index) => {
     index,
   };
 };
-const NodeTypeBase = { menuData, displayColumns, fieldLabels, renderItemOfList, stepOf };
+const NodeTypeBase = {
+  menuData,
+  displayColumns,
+  fieldLabels,
+  renderItemOfList,
+  stepOf,
+  searchLocalData,
+};
 export default NodeTypeBase;

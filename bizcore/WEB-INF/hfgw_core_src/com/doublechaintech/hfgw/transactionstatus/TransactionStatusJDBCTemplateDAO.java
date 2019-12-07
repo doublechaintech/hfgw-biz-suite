@@ -645,6 +645,50 @@ public class TransactionStatusJDBCTemplateDAO extends HfgwBaseDAOImpl implements
 	}
 
 
+	//disconnect TransactionStatus with transaction_id in ServiceRecord
+	public TransactionStatus planToRemoveServiceRecordListWithTransactionId(TransactionStatus transactionStatus, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.STATUS_PROPERTY, transactionStatus.getId());
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return transactionStatus;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return transactionStatus;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearTransactionId();
+			serviceRecordItem.clearStatus();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = transactionStatus.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return transactionStatus;
+	}
+	
+	public int countServiceRecordListWithTransactionId(String transactionStatusId, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.STATUS_PROPERTY, transactionStatusId);
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect TransactionStatus with channel in ServiceRecord
 	public TransactionStatus planToRemoveServiceRecordListWithChannel(TransactionStatus transactionStatus, String channelId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -728,50 +772,6 @@ public class TransactionStatusJDBCTemplateDAO extends HfgwBaseDAOImpl implements
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(ServiceRecord.STATUS_PROPERTY, transactionStatusId);
 		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
-		
-		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
-		return count;
-	}
-	
-	//disconnect TransactionStatus with transaction_id in ServiceRecord
-	public TransactionStatus planToRemoveServiceRecordListWithTransactionId(TransactionStatus transactionStatus, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.STATUS_PROPERTY, transactionStatus.getId());
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
-		
-		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
-				findServiceRecordWithKey(key, options);
-		if(externalServiceRecordList == null){
-			return transactionStatus;
-		}
-		if(externalServiceRecordList.isEmpty()){
-			return transactionStatus;
-		}
-		
-		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
-			serviceRecordItem.clearTransactionId();
-			serviceRecordItem.clearStatus();
-			
-		}
-		
-		
-		SmartList<ServiceRecord> serviceRecordList = transactionStatus.getServiceRecordList();		
-		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
-		return transactionStatus;
-	}
-	
-	public int countServiceRecordListWithTransactionId(String transactionStatusId, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.STATUS_PROPERTY, transactionStatusId);
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
 		return count;

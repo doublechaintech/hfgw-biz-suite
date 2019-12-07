@@ -35,6 +35,10 @@ import com.doublechaintech.hfgw.userdomain.UserDomain;
 public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements UserDomainManager {
 	
 	private static final String SERVICE_TYPE = "UserDomain";
+	@Override
+	public UserDomainDAO daoOf(HfgwUserContext userContext) {
+		return userDomainDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -361,6 +365,24 @@ public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements U
 	}
 
 
+	//disconnect UserDomain with blocking in SecUser
+	protected UserDomain breakWithSecUserByBlocking(HfgwUserContext userContext, String userDomainId, String blockingId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			UserDomain userDomain = loadUserDomain(userContext, userDomainId, allTokens());
+
+			synchronized(userDomain){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				userDomainDaoOf(userContext).planToRemoveSecUserListWithBlocking(userDomain, blockingId, this.emptyOptions());
+
+				userDomain = saveUserDomain(userContext, userDomain, tokens().withSecUserList().done());
+				return userDomain;
+			}
+	}
 	
 	
 	
@@ -606,7 +628,7 @@ public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements U
 
 
 
-	protected void checkParamsForAddingSecUser(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingSecUser(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String blockingId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfUserDomain(userDomainId);
 
@@ -630,17 +652,19 @@ public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements U
 		checkerOf(userContext).checkVerificationCodeExpireOfSecUser(verificationCodeExpire);
 		
 		checkerOf(userContext).checkLastLoginTimeOfSecUser(lastLoginTime);
+		
+		checkerOf(userContext).checkBlockingIdOfSecUser(blockingId);
 	
 		checkerOf(userContext).throwExceptionIfHasErrors(UserDomainManagerException.class);
 
 	
 	}
-	public  UserDomain addSecUser(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String [] tokensExpr) throws Exception
+	public  UserDomain addSecUser(HfgwUserContext userContext, String userDomainId, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String blockingId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingSecUser(userContext,userDomainId,login, mobile, email, pwd, weixinOpenid, weixinAppid, accessToken, verificationCode, verificationCodeExpire, lastLoginTime,tokensExpr);
+		checkParamsForAddingSecUser(userContext,userDomainId,login, mobile, email, pwd, weixinOpenid, weixinAppid, accessToken, verificationCode, verificationCodeExpire, lastLoginTime, blockingId,tokensExpr);
 		
-		SecUser secUser = createSecUser(userContext,login, mobile, email, pwd, weixinOpenid, weixinAppid, accessToken, verificationCode, verificationCodeExpire, lastLoginTime);
+		SecUser secUser = createSecUser(userContext,login, mobile, email, pwd, weixinOpenid, weixinAppid, accessToken, verificationCode, verificationCodeExpire, lastLoginTime, blockingId);
 		
 		UserDomain userDomain = loadUserDomain(userContext, userDomainId, allTokens());
 		synchronized(userDomain){ 
@@ -709,7 +733,7 @@ public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements U
 	}
 	
 	
-	protected SecUser createSecUser(HfgwUserContext userContext, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime) throws Exception{
+	protected SecUser createSecUser(HfgwUserContext userContext, String login, String mobile, String email, String pwd, String weixinOpenid, String weixinAppid, String accessToken, int verificationCode, DateTime verificationCodeExpire, DateTime lastLoginTime, String blockingId) throws Exception{
 
 		SecUser secUser = new SecUser();
 		
@@ -724,7 +748,9 @@ public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements U
 		secUser.setVerificationCode(verificationCode);		
 		secUser.setVerificationCodeExpire(verificationCodeExpire);		
 		secUser.setLastLoginTime(lastLoginTime);		
-		secUser.setCurrentStatus("INIT");
+		SecUserBlocking  blocking = new SecUserBlocking();
+		blocking.setId(blockingId);		
+		secUser.setBlocking(blocking);
 	
 		
 		return secUser;
@@ -912,44 +938,10 @@ public class UserDomainManagerImpl extends CustomHfgwCheckerManager implements U
 
 	}
 	/*
-	public  UserDomain associateSecUserListToNewBlocking(HfgwUserContext userContext, String userDomainId, String  secUserIds[], String who, String comments, String [] tokensExpr) throws Exception {
 
-		
-		
-		Map<String, Object> options = tokens()
-				.allTokens()
-				.searchSecUserListWith(SecUser.ID_PROPERTY, "oneof", this.joinArray("|", secUserIds)).done();
-		
-		UserDomain userDomain = loadUserDomain(userContext, userDomainId, options);
-		
-		SecUserBlocking blocking = secUserBlockingManagerOf(userContext).createSecUserBlocking(userContext,  who,  comments);
-		
-		for(SecUser secUser: userDomain.getSecUserList()) {
-			//TODO: need to check if already associated
-			secUser.updateBlocking(blocking);
-		}
-		return this.internalSaveUserDomain(userContext, userDomain);
-	}
 	*/
 	
-	public  UserDomain associateSecUserListToBlocking(HfgwUserContext userContext, String userDomainId, String  secUserIds[], String blockingId, String [] tokensExpr) throws Exception {
 
-		
-		
-		Map<String, Object> options = tokens()
-				.allTokens()
-				.searchSecUserListWith(SecUser.ID_PROPERTY, "oneof", this.joinArray("|", secUserIds)).done();
-		
-		UserDomain userDomain = loadUserDomain(userContext, userDomainId, options);
-		
-		SecUserBlocking blocking = secUserBlockingManagerOf(userContext).loadSecUserBlocking(userContext,blockingId,new String[]{"none"} );
-		
-		for(SecUser secUser: userDomain.getSecUserList()) {
-			//TODO: need to check if already associated
-			secUser.updateBlocking(blocking);
-		}
-		return this.internalSaveUserDomain(userContext, userDomain);
-	}
 
 
 	public void onNewInstanceCreated(HfgwUserContext userContext, UserDomain newCreated) throws Exception{

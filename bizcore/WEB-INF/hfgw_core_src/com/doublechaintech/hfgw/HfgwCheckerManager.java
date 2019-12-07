@@ -14,6 +14,16 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 public class HfgwCheckerManager extends BaseManagerImpl {
+	public SmartList<BaseEntity> requestCandidateValuesForSearch(HfgwUserContext ctx, String ownerMemberName,
+			String ownerId, String resultMemberName, String resutlClassName, String targetClassName, String filterKey, int pageNo) {
+		return ((BaseDAO)daoOf(ctx)).requestCandidateValuesForSearch(ownerMemberName, ownerId, resultMemberName,
+				resutlClassName, targetClassName, filterKey, pageNo);
+	}
+	
+	protected Object daoOf(HfgwUserContext ctx) {
+		throw new UnsupportedOperationException("You must implement it in your specific Manager implementation");
+	}
+	
 	protected HfgwObjectChecker checkerOf(HfgwUserContext ctx) {
 		return ctx.getChecker();
 	}
@@ -222,6 +232,12 @@ public class HfgwCheckerManager extends BaseManagerImpl {
 	}
 	public com.doublechaintech.hfgw.changerequest.ChangeRequestDAO changeRequestDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getChangeRequestDAO();
+	}
+	public com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManager chainCodeInvokerManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getChainCodeInvokerManager();
+	}
+	public com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO chainCodeInvokerDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getChainCodeInvokerDAO();
 	}
 	public com.doublechaintech.hfgw.userdomain.UserDomainManager userDomainManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getUserDomainManager();

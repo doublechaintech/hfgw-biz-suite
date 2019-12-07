@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.application;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -11,13 +12,15 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 
 
-public interface ApplicationDAO{
+public interface ApplicationDAO extends BaseDAO{
 
 	public SmartList<Application> loadAll();
 	public Application load(String id, Map<String,Object> options) throws Exception;
@@ -47,13 +50,21 @@ public interface ApplicationDAO{
 
 	public ServiceRecordDAO getServiceRecordDAO();
 		
+	public ChainCodeInvokerDAO getChainCodeInvokerDAO();
+		
 	
  	public SmartList<Application> requestCandidateApplicationForServiceRecord(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+		
+ 	public SmartList<Application> requestCandidateApplicationForChainCodeInvoker(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
 	
 	public Application planToRemoveServiceRecordList(Application application, String serviceRecordIds[], Map<String,Object> options)throws Exception;
 
 
+	//disconnect Application with transaction_id in ServiceRecord
+	public Application planToRemoveServiceRecordListWithTransactionId(Application application, String transactionIdId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithTransactionId(String applicationId, String transactionIdId, Map<String,Object> options)throws Exception;
+	
 	//disconnect Application with channel in ServiceRecord
 	public Application planToRemoveServiceRecordListWithChannel(Application application, String channelId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithChannel(String applicationId, String channelId, Map<String,Object> options)throws Exception;
@@ -61,10 +72,6 @@ public interface ApplicationDAO{
 	//disconnect Application with chain_code in ServiceRecord
 	public Application planToRemoveServiceRecordListWithChainCode(Application application, String chainCodeId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithChainCode(String applicationId, String chainCodeId, Map<String,Object> options)throws Exception;
-	
-	//disconnect Application with transaction_id in ServiceRecord
-	public Application planToRemoveServiceRecordListWithTransactionId(Application application, String transactionIdId, Map<String,Object> options)throws Exception;
-	public int countServiceRecordListWithTransactionId(String applicationId, String transactionIdId, Map<String,Object> options)throws Exception;
 	
 	//disconnect Application with block_id in ServiceRecord
 	public Application planToRemoveServiceRecordListWithBlockId(Application application, String blockIdId, Map<String,Object> options)throws Exception;
@@ -77,6 +84,17 @@ public interface ApplicationDAO{
 	//disconnect Application with status in ServiceRecord
 	public Application planToRemoveServiceRecordListWithStatus(Application application, String statusId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithStatus(String applicationId, String statusId, Map<String,Object> options)throws Exception;
+	
+	public Application planToRemoveChainCodeInvokerList(Application application, String chainCodeInvokerIds[], Map<String,Object> options)throws Exception;
+
+
+	//disconnect Application with chain_code in ChainCodeInvoker
+	public Application planToRemoveChainCodeInvokerListWithChainCode(Application application, String chainCodeId, Map<String,Object> options)throws Exception;
+	public int countChainCodeInvokerListWithChainCode(String applicationId, String chainCodeId, Map<String,Object> options)throws Exception;
+	
+	//disconnect Application with change_request in ChainCodeInvoker
+	public Application planToRemoveChainCodeInvokerListWithChangeRequest(Application application, String changeRequestId, Map<String,Object> options)throws Exception;
+	public int countChainCodeInvokerListWithChangeRequest(String applicationId, String changeRequestId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<Application> queryList(String sql, Object ... parmeters);
@@ -100,6 +118,9 @@ public interface ApplicationDAO{
  
 	// 需要一个加载引用我的对象的enhance方法:ServiceRecord的appClient的ServiceRecordList
 	public SmartList<ServiceRecord> loadOurServiceRecordList(HfgwUserContext userContext, List<Application> us, Map<String,Object> options) throws Exception;
+	
+	// 需要一个加载引用我的对象的enhance方法:ChainCodeInvoker的appClient的ChainCodeInvokerList
+	public SmartList<ChainCodeInvoker> loadOurChainCodeInvokerList(HfgwUserContext userContext, List<Application> us, Map<String,Object> options) throws Exception;
 	
 }
 

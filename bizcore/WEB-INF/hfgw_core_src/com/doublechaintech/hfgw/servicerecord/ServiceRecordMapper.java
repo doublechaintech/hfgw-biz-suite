@@ -17,12 +17,12 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
 		ServiceRecord serviceRecord = getServiceRecord();		
 		 		
  		setId(serviceRecord, rs, rowNumber); 		
+ 		setTransactionId(serviceRecord, rs, rowNumber); 		
  		setName(serviceRecord, rs, rowNumber); 		
  		setPayload(serviceRecord, rs, rowNumber); 		
  		setChannel(serviceRecord, rs, rowNumber); 		
  		setChainCode(serviceRecord, rs, rowNumber); 		
  		setChainCodeFunction(serviceRecord, rs, rowNumber); 		
- 		setTransactionId(serviceRecord, rs, rowNumber); 		
  		setBlockId(serviceRecord, rs, rowNumber); 		
  		setCreateTime(serviceRecord, rs, rowNumber); 		
  		setAppClient(serviceRecord, rs, rowNumber); 		
@@ -48,6 +48,18 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
 		}
 		
 		serviceRecord.setId(id);
+	}
+		
+	protected void setTransactionId(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String transactionId = rs.getString(ServiceRecordTable.COLUMN_TRANSACTION_ID);
+		if(transactionId == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		serviceRecord.setTransactionId(transactionId);
 	}
 		
 	protected void setName(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
@@ -120,18 +132,6 @@ public class ServiceRecordMapper extends BaseRowMapper<ServiceRecord>{
 		}
 		
 		serviceRecord.setChainCodeFunction(chainCodeFunction);
-	}
-		
-	protected void setTransactionId(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String transactionId = rs.getString(ServiceRecordTable.COLUMN_TRANSACTION_ID);
-		if(transactionId == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		serviceRecord.setTransactionId(transactionId);
 	}
 		
 	protected void setBlockId(ServiceRecord serviceRecord, ResultSet rs, int rowNumber) throws SQLException{

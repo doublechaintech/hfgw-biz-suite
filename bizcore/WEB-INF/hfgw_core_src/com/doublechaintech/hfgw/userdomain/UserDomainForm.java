@@ -291,20 +291,6 @@ public class UserDomainForm extends BaseForm {
 		return blockingIdFieldForSecUser("blockingId","");
 	}
 
-
-	public UserDomainForm currentStatusFieldForSecUser(String parameterName, String initValue){
-		FormField field =  currentStatusFromSecUser(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public UserDomainForm currentStatusFieldForSecUser(String initValue){
-		return currentStatusFieldForSecUser("currentStatus",initValue);
-	}
-	public UserDomainForm currentStatusFieldForSecUser(){
-		return currentStatusFieldForSecUser("currentStatus","");
-	}
-
 	
 
 

@@ -209,7 +209,7 @@ class NodeTypeCreateForm extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          节点类型
+          {window.trans('node_type')}
         </div>
       );
     };
@@ -217,7 +217,7 @@ class NodeTypeCreateForm extends Component {
     return (
       <PageHeaderLayout
         title={internalRenderTitle()}
-        content={`${appLocaleName(userContext, 'CreateNew')}节点类型`}
+        content={`${appLocaleName(userContext, 'CreateNew')}${window.trans('node_type')}`}
         wrapperClassName={styles.advancedForm}
       >
         <NodeTypeCreateFormBody {...this.props} />

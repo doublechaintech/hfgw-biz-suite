@@ -49,6 +49,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager implements HyperledgerNetworkManager {
 	
 	private static final String SERVICE_TYPE = "HyperledgerNetwork";
+	@Override
+	public HyperledgerNetworkDAO daoOf(HfgwUserContext userContext) {
+		return hyperledgerNetworkDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -492,6 +496,24 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 				return hyperledgerNetwork;
 			}
 	}
+	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
+	protected HyperledgerNetwork breakWithServiceRecordByTransactionId(HfgwUserContext userContext, String hyperledgerNetworkId, String transactionIdId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
+
+			synchronized(hyperledgerNetwork){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				hyperledgerNetworkDaoOf(userContext).planToRemoveServiceRecordListWithTransactionId(hyperledgerNetwork, transactionIdId, this.emptyOptions());
+
+				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withServiceRecordList().done());
+				return hyperledgerNetwork;
+			}
+	}
 	//disconnect HyperledgerNetwork with channel in ServiceRecord
 	protected HyperledgerNetwork breakWithServiceRecordByChannel(HfgwUserContext userContext, String hyperledgerNetworkId, String channelId,  String [] tokensExpr)
 		 throws Exception{
@@ -523,24 +545,6 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 				//Also good when there is a RAM based DAO implementation
 				
 				hyperledgerNetworkDaoOf(userContext).planToRemoveServiceRecordListWithChainCode(hyperledgerNetwork, chainCodeId, this.emptyOptions());
-
-				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withServiceRecordList().done());
-				return hyperledgerNetwork;
-			}
-	}
-	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
-	protected HyperledgerNetwork breakWithServiceRecordByTransactionId(HfgwUserContext userContext, String hyperledgerNetworkId, String transactionIdId,  String [] tokensExpr)
-		 throws Exception{
-			
-			//TODO add check code here
-			
-			HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
-
-			synchronized(hyperledgerNetwork){ 
-				//Will be good when the thread loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				
-				hyperledgerNetworkDaoOf(userContext).planToRemoveServiceRecordListWithTransactionId(hyperledgerNetwork, transactionIdId, this.emptyOptions());
 
 				hyperledgerNetwork = saveHyperledgerNetwork(userContext, hyperledgerNetwork, tokens().withServiceRecordList().done());
 				return hyperledgerNetwork;
@@ -2124,10 +2128,12 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 
 
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String response, String statusId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String transactionId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String response, String statusId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
 
+		
+		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkNameOfServiceRecord(name);
 		
@@ -2138,8 +2144,6 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		checkerOf(userContext).checkChainCodeIdOfServiceRecord(chainCodeId);
 		
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
-		
-		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
 		
@@ -2153,12 +2157,12 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 
 	
 	}
-	public  HyperledgerNetwork addServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String response, String statusId, String [] tokensExpr) throws Exception
+	public  HyperledgerNetwork addServiceRecord(HfgwUserContext userContext, String hyperledgerNetworkId, String transactionId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String response, String statusId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,hyperledgerNetworkId,name, payload, channelId, chainCodeId, chainCodeFunction, transactionId, blockId, appClientId, response, statusId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,hyperledgerNetworkId,transactionId, name, payload, channelId, chainCodeId, chainCodeFunction, blockId, appClientId, response, statusId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payload, channelId, chainCodeId, chainCodeFunction, transactionId, blockId, appClientId, response, statusId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,transactionId, name, payload, channelId, chainCodeId, chainCodeFunction, blockId, appClientId, response, statusId);
 		
 		HyperledgerNetwork hyperledgerNetwork = loadHyperledgerNetwork(userContext, hyperledgerNetworkId, allTokens());
 		synchronized(hyperledgerNetwork){ 
@@ -2171,24 +2175,24 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 			return present(userContext,hyperledgerNetwork, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId,String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId,String id,String transactionId,String name,String payload,String chainCodeFunction,String blockId,String response,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfHyperledgerNetwork(hyperledgerNetworkId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
+		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkNameOfServiceRecord( name);
 		checkerOf(userContext).checkPayloadOfServiceRecord( payload);
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
-		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
 		checkerOf(userContext).checkResponseOfServiceRecord( response);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(HyperledgerNetworkManagerException.class);
 		
 	}
-	public  HyperledgerNetwork updateServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId, String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response, String [] tokensExpr) throws Exception
+	public  HyperledgerNetwork updateServiceRecordProperties(HfgwUserContext userContext, String hyperledgerNetworkId, String id,String transactionId,String name,String payload,String chainCodeFunction,String blockId,String response, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,hyperledgerNetworkId,id,name,payload,chainCodeFunction,transactionId,blockId,response,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,hyperledgerNetworkId,id,transactionId,name,payload,chainCodeFunction,blockId,response,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -2203,10 +2207,10 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		
 		ServiceRecord item = hyperledgerNetworkToUpdate.getServiceRecordList().first();
 		
+		item.updateTransactionId( transactionId );
 		item.updateName( name );
 		item.updatePayload( payload );
 		item.updateChainCodeFunction( chainCodeFunction );
-		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
 		item.updateResponse( response );
 
@@ -2219,11 +2223,12 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String response, String statusId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String transactionId, String name, String payload, String channelId, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String response, String statusId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
 		
+		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setName(name);		
 		serviceRecord.setPayload(payload);		
 		Channel  channel = new Channel();
@@ -2233,7 +2238,6 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		chainCode.setId(chainCodeId);		
 		serviceRecord.setChainCode(chainCode);		
 		serviceRecord.setChainCodeFunction(chainCodeFunction);		
-		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
 		Application  appClient = new Application();
@@ -2354,6 +2358,10 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		checkerOf(userContext).checkVersionOfServiceRecord(serviceRecordVersion);
 		
 
+		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
+		}
+		
 		if(ServiceRecord.NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNameOfServiceRecord(parseString(newValueExpr));
 		}
@@ -2364,10 +2372,6 @@ public class HyperledgerNetworkManagerImpl extends CustomHfgwCheckerManager impl
 		
 		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
 			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
-		}
-		
-		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
-			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.BLOCK_ID_PROPERTY.equals(property)){

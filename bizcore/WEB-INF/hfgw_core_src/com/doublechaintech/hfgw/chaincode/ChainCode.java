@@ -14,6 +14,7 @@ import com.doublechaintech.hfgw.KeyValuePair;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 @JsonSerialize(using = ChainCodeSerializer.class)
 public class ChainCode extends BaseEntity implements  java.io.Serializable{
@@ -27,6 +28,7 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String SERVICE_RECORD_LIST                      = "serviceRecordList" ;
+	public static final String CHAIN_CODE_INVOKER_LIST                  = "chainCodeInvokerList";
 
 	public static final String INTERNAL_TYPE="ChainCode";
 	public String getInternalType(){
@@ -56,6 +58,7 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 	
 	
 	protected		SmartList<ServiceRecord>	mServiceRecordList  ;
+	protected		SmartList<ChainCodeInvoker>	mChainCodeInvokerList;
 	
 		
 	public 	ChainCode(){
@@ -161,6 +164,10 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 		}
 		if(SERVICE_RECORD_LIST.equals(property)){
 			List<BaseEntity> list = getServiceRecordList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
+		if(CHAIN_CODE_INVOKER_LIST.equals(property)){
+			List<BaseEntity> list = getChainCodeInvokerList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 
@@ -383,6 +390,113 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 	
 
 
+	public  SmartList<ChainCodeInvoker> getChainCodeInvokerList(){
+		if(this.mChainCodeInvokerList == null){
+			this.mChainCodeInvokerList = new SmartList<ChainCodeInvoker>();
+			this.mChainCodeInvokerList.setListInternalName (CHAIN_CODE_INVOKER_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mChainCodeInvokerList;	
+	}
+	public  void setChainCodeInvokerList(SmartList<ChainCodeInvoker> chainCodeInvokerList){
+		for( ChainCodeInvoker chainCodeInvoker:chainCodeInvokerList){
+			chainCodeInvoker.setChainCode(this);
+		}
+
+		this.mChainCodeInvokerList = chainCodeInvokerList;
+		this.mChainCodeInvokerList.setListInternalName (CHAIN_CODE_INVOKER_LIST );
+		
+	}
+	
+	public  void addChainCodeInvoker(ChainCodeInvoker chainCodeInvoker){
+		chainCodeInvoker.setChainCode(this);
+		getChainCodeInvokerList().add(chainCodeInvoker);
+	}
+	public  void addChainCodeInvokerList(SmartList<ChainCodeInvoker> chainCodeInvokerList){
+		for( ChainCodeInvoker chainCodeInvoker:chainCodeInvokerList){
+			chainCodeInvoker.setChainCode(this);
+		}
+		getChainCodeInvokerList().addAll(chainCodeInvokerList);
+	}
+	public  void mergeChainCodeInvokerList(SmartList<ChainCodeInvoker> chainCodeInvokerList){
+		if(chainCodeInvokerList==null){
+			return;
+		}
+		if(chainCodeInvokerList.isEmpty()){
+			return;
+		}
+		addChainCodeInvokerList( chainCodeInvokerList );
+		
+	}
+	public  ChainCodeInvoker removeChainCodeInvoker(ChainCodeInvoker chainCodeInvokerIndex){
+		
+		int index = getChainCodeInvokerList().indexOf(chainCodeInvokerIndex);
+        if(index < 0){
+        	String message = "ChainCodeInvoker("+chainCodeInvokerIndex.getId()+") with version='"+chainCodeInvokerIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        ChainCodeInvoker chainCodeInvoker = getChainCodeInvokerList().get(index);        
+        // chainCodeInvoker.clearChainCode(); //disconnect with ChainCode
+        chainCodeInvoker.clearFromAll(); //disconnect with ChainCode
+		
+		boolean result = getChainCodeInvokerList().planToRemove(chainCodeInvoker);
+        if(!result){
+        	String message = "ChainCodeInvoker("+chainCodeInvokerIndex.getId()+") with version='"+chainCodeInvokerIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return chainCodeInvoker;
+        
+	
+	}
+	//断舍离
+	public  void breakWithChainCodeInvoker(ChainCodeInvoker chainCodeInvoker){
+		
+		if(chainCodeInvoker == null){
+			return;
+		}
+		chainCodeInvoker.setChainCode(null);
+		//getChainCodeInvokerList().remove();
+	
+	}
+	
+	public  boolean hasChainCodeInvoker(ChainCodeInvoker chainCodeInvoker){
+	
+		return getChainCodeInvokerList().contains(chainCodeInvoker);
+  
+	}
+	
+	public void copyChainCodeInvokerFrom(ChainCodeInvoker chainCodeInvoker) {
+
+		ChainCodeInvoker chainCodeInvokerInList = findTheChainCodeInvoker(chainCodeInvoker);
+		ChainCodeInvoker newChainCodeInvoker = new ChainCodeInvoker();
+		chainCodeInvokerInList.copyTo(newChainCodeInvoker);
+		newChainCodeInvoker.setVersion(0);//will trigger copy
+		getChainCodeInvokerList().add(newChainCodeInvoker);
+		addItemToFlexiableObject(COPIED_CHILD, newChainCodeInvoker);
+	}
+	
+	public  ChainCodeInvoker findTheChainCodeInvoker(ChainCodeInvoker chainCodeInvoker){
+		
+		int index =  getChainCodeInvokerList().indexOf(chainCodeInvoker);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "ChainCodeInvoker("+chainCodeInvoker.getId()+") with version='"+chainCodeInvoker.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getChainCodeInvokerList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpChainCodeInvokerList(){
+		getChainCodeInvokerList().clear();
+	}
+	
+	
+	
+
+
 	public void collectRefercences(BaseEntity owner, List<BaseEntity> entityList, String internalType){
 
 		addToEntityList(this, entityList, getChannel(), internalType);
@@ -394,6 +508,7 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getServiceRecordList(), internalType);
+		collectFromList(this, entityList, getChainCodeInvokerList(), internalType);
 
 		return entityList;
 	}
@@ -402,6 +517,7 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getServiceRecordList());
+		listOfList.add( getChainCodeInvokerList());
 			
 
 		return listOfList;
@@ -421,6 +537,11 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 		if(!getServiceRecordList().isEmpty()){
 			appendKeyValuePair(result, "serviceRecordCount", getServiceRecordList().getTotalCount());
 			appendKeyValuePair(result, "serviceRecordCurrentPageNumber", getServiceRecordList().getCurrentPageNumber());
+		}
+		appendKeyValuePair(result, CHAIN_CODE_INVOKER_LIST, getChainCodeInvokerList());
+		if(!getChainCodeInvokerList().isEmpty()){
+			appendKeyValuePair(result, "chainCodeInvokerCount", getChainCodeInvokerList().getTotalCount());
+			appendKeyValuePair(result, "chainCodeInvokerCurrentPageNumber", getChainCodeInvokerList().getCurrentPageNumber());
 		}
 
 		
@@ -443,6 +564,7 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 			dest.setChannel(getChannel());
 			dest.setVersion(getVersion());
 			dest.setServiceRecordList(getServiceRecordList());
+			dest.setChainCodeInvokerList(getChainCodeInvokerList());
 
 		}
 		super.copyTo(baseDest);
@@ -463,6 +585,7 @@ public class ChainCode extends BaseEntity implements  java.io.Serializable{
 			dest.mergeChannel(getChannel());
 			dest.mergeVersion(getVersion());
 			dest.mergeServiceRecordList(getServiceRecordList());
+			dest.mergeChainCodeInvokerList(getChainCodeInvokerList());
 
 		}
 		super.copyTo(baseDest);

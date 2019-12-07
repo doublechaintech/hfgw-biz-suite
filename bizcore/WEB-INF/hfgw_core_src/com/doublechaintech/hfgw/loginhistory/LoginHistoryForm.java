@@ -274,20 +274,6 @@ public class LoginHistoryForm extends BaseForm {
 		return blockingIdFieldOfSecUser("blockingId","");
 	}
 
-
-	public LoginHistoryForm currentStatusFieldOfSecUser(String parameterName, String initValue){
-		FormField field =  currentStatusFromSecUser(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public LoginHistoryForm currentStatusFieldOfSecUser(String initValue){
-		return currentStatusFieldOfSecUser("currentStatus",initValue);
-	}
-	public LoginHistoryForm currentStatusFieldOfSecUser(){
-		return currentStatusFieldOfSecUser("currentStatus","");
-	}
-
 	
 
 

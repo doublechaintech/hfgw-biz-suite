@@ -34,6 +34,10 @@ import com.doublechaintech.hfgw.userdomain.UserDomain;
 public class SecUserBlockingManagerImpl extends CustomHfgwCheckerManager implements SecUserBlockingManager {
 	
 	private static final String SERVICE_TYPE = "SecUserBlocking";
+	@Override
+	public SecUserBlockingDAO daoOf(HfgwUserContext userContext) {
+		return secUserBlockingDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -507,8 +511,7 @@ public class SecUserBlockingManagerImpl extends CustomHfgwCheckerManager impleme
 		secUser.setLastLoginTime(lastLoginTime);		
 		UserDomain  domain = new UserDomain();
 		domain.setId(domainId);		
-		secUser.setDomain(domain);		
-		secUser.setCurrentStatus("INIT");
+		secUser.setDomain(domain);
 	
 		
 		return secUser;
