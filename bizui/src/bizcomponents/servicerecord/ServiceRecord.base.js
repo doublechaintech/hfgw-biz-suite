@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Divider, Avatar } from 'antd';
+import { Icon, Divider, Avata, Card, Col } from 'antd';
 
 import { Link } from 'dva/router';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import BaseTool from '../../common/Base.tool';
 import GlobalComponents from '../../custcomponents';
 import DescriptionList from '../../components/DescriptionList';
 const { Description } = DescriptionList;
+
 const {
   defaultRenderReferenceCell,
   defaultRenderBooleanCell,
@@ -19,6 +20,7 @@ const {
   defaultRenderDateCell,
   defaultRenderIdentifier,
   defaultRenderTextCell,
+  defaultSearchLocalData,
 } = BaseTool;
 
 const renderTextCell = defaultRenderTextCell;
@@ -32,31 +34,31 @@ const renderBooleanCell = defaultRenderBooleanCell;
 const renderReferenceCell = defaultRenderReferenceCell;
 
 const menuData = {
-  menuName: '服务记录',
+  menuName: window.trans('service_record'),
   menuFor: 'serviceRecord',
   subItems: [],
 };
 
 const settingMenuData = {
-  menuName: '服务记录',
+  menuName: window.trans('service_record'),
   menuFor: 'serviceRecord',
   subItems: [],
 };
 
 const fieldLabels = {
-  id: 'ID',
-  name: '名称',
-  payload: '有效载荷',
-  channel: '频道',
-  chainCode: '链码',
-  chainCodeFunction: '链码功能',
-  transactionId: '事务Id',
-  blockId: '块Id',
-  createTime: '创建时间',
-  appClient: '应用客户端',
-  network: '网络',
-  response: '响应',
-  status: '状态',
+  id: window.trans('service_record.id'),
+  transactionId: window.trans('service_record.transaction_id'),
+  name: window.trans('service_record.name'),
+  payload: window.trans('service_record.payload'),
+  channel: window.trans('service_record.channel'),
+  chainCode: window.trans('service_record.chain_code'),
+  chainCodeFunction: window.trans('service_record.chain_code_function'),
+  blockId: window.trans('service_record.block_id'),
+  createTime: window.trans('service_record.create_time'),
+  appClient: window.trans('service_record.app_client'),
+  network: window.trans('service_record.network'),
+  response: window.trans('service_record.response'),
+  status: window.trans('service_record.status'),
 };
 
 const displayColumns = [
@@ -67,6 +69,13 @@ const displayColumns = [
     width: '8',
     render: (text, record) => renderTextCell(text, record, 'serviceRecord'),
     sorter: true,
+  },
+  {
+    title: fieldLabels.transactionId,
+    debugtype: 'string',
+    dataIndex: 'transactionId',
+    width: '13',
+    render: (text, record) => renderTextCell(text, record),
   },
   {
     title: fieldLabels.name,
@@ -99,13 +108,6 @@ const displayColumns = [
     debugtype: 'string',
     dataIndex: 'chainCodeFunction',
     width: '12',
-    render: (text, record) => renderTextCell(text, record),
-  },
-  {
-    title: fieldLabels.transactionId,
-    debugtype: 'string',
-    dataIndex: 'transactionId',
-    width: '13',
     render: (text, record) => renderTextCell(text, record),
   },
   {
@@ -147,14 +149,24 @@ const displayColumns = [
     sorter: true,
   },
 ];
-// refernce to https://ant.design/components/list-cn/
+
+const searchLocalData = (targetObject, searchTerm) =>
+  defaultSearchLocalData(menuData, targetObject, searchTerm);
+
 const renderItemOfList = (serviceRecord, targetComponent) => {
   const userContext = null;
   return (
     <div key={serviceRecord.id}>
-      <DescriptionList key={serviceRecord.id} size="small" col="4">
-        <Description term="ID">{serviceRecord.id}</Description>
-        <Description term="名称">{serviceRecord.name}</Description>
+      <DescriptionList key={serviceRecord.id} size="small" col="2">
+        <Description term={fieldLabels.id} style={{ wordBreak: 'break-all' }}>
+          {serviceRecord.id}
+        </Description>
+        <Description term={fieldLabels.transactionId} style={{ wordBreak: 'break-all' }}>
+          {serviceRecord.transactionId}
+        </Description>
+        <Description term={fieldLabels.name} style={{ wordBreak: 'break-all' }}>
+          {serviceRecord.name}
+        </Description>
         <Description term={fieldLabels.channel}>
           <div>
             {serviceRecord.channel == null
@@ -169,10 +181,13 @@ const renderItemOfList = (serviceRecord, targetComponent) => {
               : `${serviceRecord.chainCode.displayName}(${serviceRecord.chainCode.id})`}
           </div>
         </Description>
-        <Description term="链码功能">{serviceRecord.chainCodeFunction}</Description>
-        <Description term="事务Id">{serviceRecord.transactionId}</Description>
-        <Description term="块Id">{serviceRecord.blockId}</Description>
-        <Description term="创建时间">
+        <Description term={fieldLabels.chainCodeFunction} style={{ wordBreak: 'break-all' }}>
+          {serviceRecord.chainCodeFunction}
+        </Description>
+        <Description term={fieldLabels.blockId} style={{ wordBreak: 'break-all' }}>
+          {serviceRecord.blockId}
+        </Description>
+        <Description term={fieldLabels.createTime}>
           <div>{moment(serviceRecord.createTime).format('YYYY-MM-DD HH:mm')}</div>
         </Description>
         <Description term={fieldLabels.appClient}>
@@ -197,9 +212,9 @@ const renderItemOfList = (serviceRecord, targetComponent) => {
 
 const packFormValuesToObject = formValuesToPack => {
   const {
+    transactionId,
     name,
     chainCodeFunction,
-    transactionId,
     blockId,
     channelId,
     chainCodeId,
@@ -215,9 +230,9 @@ const packFormValuesToObject = formValuesToPack => {
   const network = { id: networkId, version: 2 ^ 31 };
   const status = { id: statusId, version: 2 ^ 31 };
   const data = {
+    transactionId,
     name,
     chainCodeFunction,
-    transactionId,
     blockId,
     channel,
     chainCode,
@@ -231,9 +246,9 @@ const packFormValuesToObject = formValuesToPack => {
 };
 const unpackObjectToFormValues = objectToUnpack => {
   const {
+    transactionId,
     name,
     chainCodeFunction,
-    transactionId,
     blockId,
     channel,
     chainCode,
@@ -249,9 +264,9 @@ const unpackObjectToFormValues = objectToUnpack => {
   const networkId = network ? network.id : null;
   const statusId = status ? status.id : null;
   const data = {
+    transactionId,
     name,
     chainCodeFunction,
-    transactionId,
     blockId,
     channelId,
     chainCodeId,
@@ -273,5 +288,12 @@ const stepOf = (targetComponent, title, content, position, index) => {
     index,
   };
 };
-const ServiceRecordBase = { menuData, displayColumns, fieldLabels, renderItemOfList, stepOf };
+const ServiceRecordBase = {
+  menuData,
+  displayColumns,
+  fieldLabels,
+  renderItemOfList,
+  stepOf,
+  searchLocalData,
+};
 export default ServiceRecordBase;

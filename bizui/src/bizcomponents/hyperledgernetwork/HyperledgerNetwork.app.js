@@ -99,6 +99,8 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
     super(props);
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props),
+      showSearch: false,
+      searchKeyword: '',
     };
   }
 
@@ -144,7 +146,7 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
         mode="inline"
         onOpenChange={this.handleOpenChange}
         defaultOpenKeys={['firstOne']}
-        style={{ width: '256px' }}
+        style={{ width: '456px' }}
       >
         <Menu.Item key="dashboard">
           <Link to={`/hyperledgerNetwork/${this.props.hyperledgerNetwork.id}/dashboard`}>
@@ -1059,7 +1061,20 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
         <Menu mode="vertical">{currentBreadcrumb.map(item => renderBreadcrumbMenuItem(item))}</Menu>
       );
     };
+
     const { Search } = Input;
+    const showSearchResult = () => {
+      this.setState({ showSearch: true });
+    };
+    const searchChange = evt => {
+      this.setState({ searchKeyword: evt.target.value });
+    };
+    const hideSearchResult = () => {
+      this.setState({ showSearch: false });
+    };
+
+    const { searchLocalData } = GlobalComponents.HyperledgerNetworkBase;
+
     const layout = (
       <Layout>
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -1080,8 +1095,10 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
             <Col className={styles.searchBox} {...searchBarResponsiveStyle}>
               <Search
                 size="default"
-                placeholder="请输入搜索条件, 查找功能，数据和词汇解释"
+                placeholder="请输入搜索条件, 查找功能，数据和词汇解释，关闭请点击搜索结果空白处"
                 enterButton
+                onFocus={() => showSearchResult()}
+                onChange={evt => searchChange(evt)}
                 style={{ marginLeft: '10px', marginTop: '7px', width: '100%' }}
               />
             </Col>
@@ -1095,6 +1112,12 @@ class HyperledgerNetworkBizApp extends React.PureComponent {
           </Row>
         </Header>
         <Layout style={{ marginTop: 44 }}>
+          {this.state.showSearch && (
+            <div style={{ backgroundColor: 'black' }} onClick={() => hideSearchResult()}>
+              {searchLocalData(this.props.hyperledgerNetwork, this.state.searchKeyword)}
+            </div>
+          )}
+
           <Layout>
             <Content style={{ margin: '24px 24px 0', height: '100%' }}>
               {this.buildRouters()}

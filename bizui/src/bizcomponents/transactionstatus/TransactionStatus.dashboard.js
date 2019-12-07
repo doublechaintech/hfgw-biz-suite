@@ -161,9 +161,15 @@ const internalSummaryOf = (transactionStatus, targetComponent) => {
   const userContext = null;
   return (
     <DescriptionList className={styles.headerList} size="small" col="4">
-      <Description term="ID">{transactionStatus.id}</Description>
-      <Description term="名称">{transactionStatus.name}</Description>
-      <Description term="代码">{transactionStatus.code}</Description>
+      <Description term="ID" style={{ wordBreak: 'break-all' }}>
+        {transactionStatus.id}
+      </Description>
+      <Description term="名称" style={{ wordBreak: 'break-all' }}>
+        {transactionStatus.name}
+      </Description>
+      <Description term="代码" style={{ wordBreak: 'break-all' }}>
+        {transactionStatus.code}
+      </Description>
 
       {buildTransferModal(transactionStatus, targetComponent)}
     </DescriptionList>
@@ -209,6 +215,7 @@ class TransactionStatusDashboard extends Component {
         {
           name: 'serviceRecordList',
           displayName: '服务记录',
+          viewGroup: '__no_group',
           type: 'serviceRecord',
           count: serviceRecordCount,
           addFunction: true,

@@ -21,13 +21,14 @@ import styles from './ServiceRecord.search.less';
 import GlobalComponents from '../../custcomponents';
 import SelectObject from '../../components/SelectObject';
 import appLocaleName from '../../common/Locale.tool';
+import ServiceRecordBase from './ServiceRecord.base';
 const FormItem = Form.Item;
 const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-
+const { fieldLabels } = ServiceRecordBase;
 const pushIfNotNull = (holder, value) => {
   if (value == null) {
     return;
@@ -142,6 +143,10 @@ class ServiceRecordSearchForm extends PureComponent {
       );
       pushIfNotNull(
         paramList,
+        this.buildStringSearchParameters(listName, fieldsValue, 'contains', 'transactionId')
+      );
+      pushIfNotNull(
+        paramList,
         this.buildStringSearchParameters(listName, fieldsValue, 'contains', 'name')
       );
       pushIfNotNull(
@@ -159,10 +164,6 @@ class ServiceRecordSearchForm extends PureComponent {
       pushIfNotNull(
         paramList,
         this.buildStringSearchParameters(listName, fieldsValue, 'contains', 'chainCodeFunction')
-      );
-      pushIfNotNull(
-        paramList,
-        this.buildStringSearchParameters(listName, fieldsValue, 'contains', 'transactionId')
       );
       pushIfNotNull(
         paramList,
@@ -239,7 +240,7 @@ class ServiceRecordSearchForm extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <Form.Item label="状态">
+            <Form.Item label={fieldLabels.status}>
               {getFieldDecorator('status', { initialValue: tryinit('status') })(
                 <SelectObject
                   disabled={!availableForEdit('status')}
@@ -252,7 +253,7 @@ class ServiceRecordSearchForm extends PureComponent {
           </Col>
 
           <Col md={8} sm={24}>
-            <FormItem label="ID">
+            <FormItem label={fieldLabels.id}>
               {getFieldDecorator('id')(
                 <Input size="default" placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
@@ -303,7 +304,7 @@ class ServiceRecordSearchForm extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="ID">
+            <FormItem label={fieldLabels.id}>
               {getFieldDecorator('id')(
                 <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
@@ -311,7 +312,15 @@ class ServiceRecordSearchForm extends PureComponent {
           </Col>
 
           <Col md={8} sm={24}>
-            <FormItem label="名称">
+            <FormItem label={fieldLabels.transactionId}>
+              {getFieldDecorator('transactionId')(
+                <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
+              )}
+            </FormItem>
+          </Col>
+
+          <Col md={8} sm={24}>
+            <FormItem label={fieldLabels.name}>
               {getFieldDecorator('name')(
                 <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
@@ -319,14 +328,14 @@ class ServiceRecordSearchForm extends PureComponent {
           </Col>
 
           <Col md={8} sm={24}>
-            <FormItem label="有效载荷">
+            <FormItem label={fieldLabels.payload}>
               {getFieldDecorator('payload')(
                 <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label="频道">
+            <Form.Item label={fieldLabels.channel}>
               {getFieldDecorator('channel', { initialValue: tryinit('channel') })(
                 <SelectObject
                   disabled={!availableForEdit('channel')}
@@ -338,7 +347,7 @@ class ServiceRecordSearchForm extends PureComponent {
             </Form.Item>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label="链码">
+            <Form.Item label={fieldLabels.chainCode}>
               {getFieldDecorator('chainCode', { initialValue: tryinit('chainCode') })(
                 <SelectObject
                   disabled={!availableForEdit('chainCode')}
@@ -351,7 +360,7 @@ class ServiceRecordSearchForm extends PureComponent {
           </Col>
 
           <Col md={8} sm={24}>
-            <FormItem label="链码功能">
+            <FormItem label={fieldLabels.chainCodeFunction}>
               {getFieldDecorator('chainCodeFunction')(
                 <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
@@ -359,22 +368,14 @@ class ServiceRecordSearchForm extends PureComponent {
           </Col>
 
           <Col md={8} sm={24}>
-            <FormItem label="事务Id">
-              {getFieldDecorator('transactionId')(
-                <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
-              )}
-            </FormItem>
-          </Col>
-
-          <Col md={8} sm={24}>
-            <FormItem label="块Id">
+            <FormItem label={fieldLabels.blockId}>
               {getFieldDecorator('blockId')(
                 <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label="应用客户端">
+            <Form.Item label={fieldLabels.appClient}>
               {getFieldDecorator('appClient', { initialValue: tryinit('appClient') })(
                 <SelectObject
                   disabled={!availableForEdit('appClient')}
@@ -386,7 +387,7 @@ class ServiceRecordSearchForm extends PureComponent {
             </Form.Item>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label="网络">
+            <Form.Item label={fieldLabels.network}>
               {getFieldDecorator('network', { initialValue: tryinit('network') })(
                 <SelectObject
                   disabled={!availableForEdit('network')}
@@ -399,14 +400,14 @@ class ServiceRecordSearchForm extends PureComponent {
           </Col>
 
           <Col md={8} sm={24}>
-            <FormItem label="响应">
+            <FormItem label={fieldLabels.response}>
               {getFieldDecorator('response')(
                 <Input placeholder={appLocaleName(userContext, 'PleaseInput')} />
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <Form.Item label="状态">
+            <Form.Item label={fieldLabels.status}>
               {getFieldDecorator('status', { initialValue: tryinit('status') })(
                 <SelectObject
                   disabled={!availableForEdit('status')}

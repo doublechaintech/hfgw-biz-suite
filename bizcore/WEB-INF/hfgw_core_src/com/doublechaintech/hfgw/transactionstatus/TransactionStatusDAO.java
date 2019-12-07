@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.transactionstatus;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -15,7 +16,7 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 
 
-public interface TransactionStatusDAO{
+public interface TransactionStatusDAO extends BaseDAO{
 
 	public SmartList<TransactionStatus> loadAll();
 	public TransactionStatus load(String id, Map<String,Object> options) throws Exception;
@@ -58,6 +59,10 @@ public interface TransactionStatusDAO{
 	public TransactionStatus planToRemoveServiceRecordList(TransactionStatus transactionStatus, String serviceRecordIds[], Map<String,Object> options)throws Exception;
 
 
+	//disconnect TransactionStatus with transaction_id in ServiceRecord
+	public TransactionStatus planToRemoveServiceRecordListWithTransactionId(TransactionStatus transactionStatus, String transactionIdId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithTransactionId(String transactionStatusId, String transactionIdId, Map<String,Object> options)throws Exception;
+	
 	//disconnect TransactionStatus with channel in ServiceRecord
 	public TransactionStatus planToRemoveServiceRecordListWithChannel(TransactionStatus transactionStatus, String channelId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithChannel(String transactionStatusId, String channelId, Map<String,Object> options)throws Exception;
@@ -65,10 +70,6 @@ public interface TransactionStatusDAO{
 	//disconnect TransactionStatus with chain_code in ServiceRecord
 	public TransactionStatus planToRemoveServiceRecordListWithChainCode(TransactionStatus transactionStatus, String chainCodeId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithChainCode(String transactionStatusId, String chainCodeId, Map<String,Object> options)throws Exception;
-	
-	//disconnect TransactionStatus with transaction_id in ServiceRecord
-	public TransactionStatus planToRemoveServiceRecordListWithTransactionId(TransactionStatus transactionStatus, String transactionIdId, Map<String,Object> options)throws Exception;
-	public int countServiceRecordListWithTransactionId(String transactionStatusId, String transactionIdId, Map<String,Object> options)throws Exception;
 	
 	//disconnect TransactionStatus with block_id in ServiceRecord
 	public TransactionStatus planToRemoveServiceRecordListWithBlockId(TransactionStatus transactionStatus, String blockIdId, Map<String,Object> options)throws Exception;

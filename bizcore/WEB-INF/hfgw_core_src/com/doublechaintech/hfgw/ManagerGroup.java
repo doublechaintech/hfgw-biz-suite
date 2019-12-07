@@ -29,6 +29,8 @@ import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManager;
 
 import com.doublechaintech.hfgw.changerequest.ChangeRequestManager;
 
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManager;
+
 import com.doublechaintech.hfgw.userdomain.UserDomainManager;
 
 import com.doublechaintech.hfgw.userwhitelist.UserWhiteListManager;
@@ -91,6 +93,8 @@ public class ManagerGroup {
 	protected ChangeRequestTypeManager changeRequestTypeManager;
 
 	protected ChangeRequestManager changeRequestManager;
+
+	protected ChainCodeInvokerManager chainCodeInvokerManager;
 
 	protected UserDomainManager userDomainManager;
 
@@ -235,6 +239,14 @@ public class ManagerGroup {
 	}
 	public void setChangeRequestManager(ChangeRequestManager manager){
 		this.changeRequestManager = manager;
+	}
+
+
+	public ChainCodeInvokerManager getChainCodeInvokerManager(){
+		return this.chainCodeInvokerManager;
+	}
+	public void setChainCodeInvokerManager(ChainCodeInvokerManager manager){
+		this.chainCodeInvokerManager = manager;
 	}
 
 

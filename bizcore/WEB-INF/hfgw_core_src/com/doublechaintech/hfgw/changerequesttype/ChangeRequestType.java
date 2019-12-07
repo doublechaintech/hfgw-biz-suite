@@ -18,14 +18,24 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 @JsonSerialize(using = ChangeRequestTypeSerializer.class)
 public class ChangeRequestType extends BaseEntity implements  java.io.Serializable{
 
-	public static final String CHAINCODE_INVOKE = "CHAINCODE_INVOKE";	// 调用链码
-	public static final String NETWORK_MANAGER = "NETWORK_MANAGER";	// 网络管理
+	public static final String CERT_CHECKER = "CERT_CHECKER";	// 证书健康状况检测
+	public static final String NODE_CHECKER = "NODE_CHECKER";	// 节点健康状况检测
+	public static final String CERT_UPDATER = "CERT_UPDATER";	// 证书更新
+	public static final String NODE_ROLE_MANAGER = "NODE_ROLE_MANAGER";	// 节点角色管理
+	public static final String CC_INVOKER = "CC_INVOKER";	// 调用链码发起交易
+	public static final String CC_QUERIER = "CC_QUERIER";	// 调用链码查询账本
+	public static final String LEDGER_QUERIER = "LEDGER_QUERIER";	// 查看账本交易
 	public static List<KeyValuePair> CODE_NAME_LIST;
 	static {
 		CODE_NAME_LIST = new ArrayList<>();
 
-		CODE_NAME_LIST.add(new KeyValuePair(CHAINCODE_INVOKE, "调用链码"));
-		CODE_NAME_LIST.add(new KeyValuePair(NETWORK_MANAGER, "网络管理"));
+		CODE_NAME_LIST.add(new KeyValuePair(CERT_CHECKER, "证书健康状况检测"));
+		CODE_NAME_LIST.add(new KeyValuePair(NODE_CHECKER, "节点健康状况检测"));
+		CODE_NAME_LIST.add(new KeyValuePair(CERT_UPDATER, "证书更新"));
+		CODE_NAME_LIST.add(new KeyValuePair(NODE_ROLE_MANAGER, "节点角色管理"));
+		CODE_NAME_LIST.add(new KeyValuePair(CC_INVOKER, "调用链码发起交易"));
+		CODE_NAME_LIST.add(new KeyValuePair(CC_QUERIER, "调用链码查询账本"));
+		CODE_NAME_LIST.add(new KeyValuePair(LEDGER_QUERIER, "查看账本交易"));
 	}
 	
 	public static final String ID_PROPERTY                    = "id"                ;

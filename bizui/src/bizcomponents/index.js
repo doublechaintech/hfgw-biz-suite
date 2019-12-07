@@ -208,6 +208,21 @@ import ChangeRequestProfile from './changerequest/ChangeRequest.profile';
 import ChangeRequestCreateFormBody from './changerequest/ChangeRequest.createformbody';
 import ChangeRequestService from './changerequest/ChangeRequest.service';
 import ChangeRequestUpdateForm from './changerequest/ChangeRequest.updateform';
+import ChainCodeInvokerBase from './chaincodeinvoker/ChainCodeInvoker.base';
+import ChainCodeInvokerBizApp from './chaincodeinvoker/ChainCodeInvoker.app';
+import ChainCodeInvokerModel from './chaincodeinvoker/ChainCodeInvoker.model';
+import ChainCodeInvokerDashboard from './chaincodeinvoker/ChainCodeInvoker.dashboard';
+import ChainCodeInvokerModalTable from './chaincodeinvoker/ChainCodeInvoker.modaltable';
+import ChainCodeInvokerSearch from './chaincodeinvoker/ChainCodeInvoker.search';
+import ChainCodeInvokerSearchForm from './chaincodeinvoker/ChainCodeInvoker.searchform';
+import ChainCodeInvokerCreateForm from './chaincodeinvoker/ChainCodeInvoker.createform';
+import ChainCodeInvokerAssociateForm from './chaincodeinvoker/ChainCodeInvoker.associateform';
+import ChainCodeInvokerTable from './chaincodeinvoker/ChainCodeInvoker.table';
+import ChainCodeInvokerPermission from './chaincodeinvoker/ChainCodeInvoker.permission';
+import ChainCodeInvokerProfile from './chaincodeinvoker/ChainCodeInvoker.profile';
+import ChainCodeInvokerCreateFormBody from './chaincodeinvoker/ChainCodeInvoker.createformbody';
+import ChainCodeInvokerService from './chaincodeinvoker/ChainCodeInvoker.service';
+import ChainCodeInvokerUpdateForm from './chaincodeinvoker/ChainCodeInvoker.updateform';
 import UserDomainBase from './userdomain/UserDomain.base';
 import UserDomainBizApp from './userdomain/UserDomain.app';
 import UserDomainModel from './userdomain/UserDomain.model';
@@ -465,6 +480,7 @@ const BizModels = [
   TransactionStatusModel,
   ChangeRequestTypeModel,
   ChangeRequestModel,
+  ChainCodeInvokerModel,
   UserDomainModel,
   UserWhiteListModel,
   SecUserModel,
@@ -506,6 +522,7 @@ menuLibrary.serviceRecord = ServiceRecordBase.menuData;
 menuLibrary.transactionStatus = TransactionStatusBase.menuData;
 menuLibrary.changeRequestType = ChangeRequestTypeBase.menuData;
 menuLibrary.changeRequest = ChangeRequestBase.menuData;
+menuLibrary.chainCodeInvoker = ChainCodeInvokerBase.menuData;
 menuLibrary.userDomain = UserDomainBase.menuData;
 menuLibrary.userWhiteList = UserWhiteListBase.menuData;
 menuLibrary.secUser = SecUserBase.menuData;
@@ -549,6 +566,7 @@ const ViewMapping = {
   'com.doublechaintech.hfgw.transactionstatus.TransactionStatus': { name: 'transactionStatus' },
   'com.doublechaintech.hfgw.changerequesttype.ChangeRequestType': { name: 'changeRequestType' },
   'com.doublechaintech.hfgw.changerequest.ChangeRequest': { name: 'changeRequest' },
+  'com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker': { name: 'chainCodeInvoker' },
   'com.doublechaintech.hfgw.userdomain.UserDomain': { name: 'userDomain' },
   'com.doublechaintech.hfgw.userwhitelist.UserWhiteList': { name: 'userWhiteList' },
   'com.doublechaintech.hfgw.secuser.SecUser': { name: 'secUser' },
@@ -812,6 +830,21 @@ const OOTBComponents = {
   ChangeRequestCreateFormBody,
   ChangeRequestService,
   ChangeRequestUpdateForm,
+  ChainCodeInvokerBase,
+  ChainCodeInvokerBizApp,
+  ChainCodeInvokerModel,
+  ChainCodeInvokerDashboard,
+  ChainCodeInvokerModalTable,
+  ChainCodeInvokerSearch,
+  ChainCodeInvokerSearchForm,
+  ChainCodeInvokerCreateForm,
+  ChainCodeInvokerAssociateForm,
+  ChainCodeInvokerTable,
+  ChainCodeInvokerPermission,
+  ChainCodeInvokerProfile,
+  ChainCodeInvokerCreateFormBody,
+  ChainCodeInvokerService,
+  ChainCodeInvokerUpdateForm,
   UserDomainBase,
   UserDomainBizApp,
   UserDomainModel,

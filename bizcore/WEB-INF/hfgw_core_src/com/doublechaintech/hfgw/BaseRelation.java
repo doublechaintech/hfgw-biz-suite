@@ -148,10 +148,13 @@ public class BaseRelation{
 		String [] changeRequestRelatedObjectNames = {"request_type:ChangeRequestType","network:HyperledgerNetwork"};
 		addRelationIndex("ChangeRequest",changeRequestRelatedObjectNames);
 
+		String [] chainCodeInvokerRelatedObjectNames = {"app_client:Application","chain_code:ChainCode","change_request:ChangeRequest"};
+		addRelationIndex("ChainCodeInvoker",chainCodeInvokerRelatedObjectNames);
+
 		String [] userWhiteListRelatedObjectNames = {"domain:UserDomain"};
 		addRelationIndex("UserWhiteList",userWhiteListRelatedObjectNames);
 
-		String [] secUserRelatedObjectNames = {"domain:UserDomain"};
+		String [] secUserRelatedObjectNames = {"domain:UserDomain","blocking:SecUserBlocking"};
 		addRelationIndex("SecUser",secUserRelatedObjectNames);
 
 		String [] userAppRelatedObjectNames = {"sec_user:SecUser"};
@@ -228,8 +231,12 @@ public class BaseRelation{
 		addGenericRelation("ChangeRequestType"                     ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"requestType");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("ChainCodeInvoker"                      ,TRUST_CHAIN_READ,"appClient");
+		addGenericRelation("ChainCodeInvoker"                      ,TRUST_CHAIN_READ,"chainCode");
+		addGenericRelation("ChainCodeInvoker"                      ,TRUST_CHAIN_READ,"changeRequest");
 		addGenericRelation("UserWhiteList"                         ,TRUST_CHAIN_READ,"domain");
 		addGenericRelation("SecUser"                               ,TRUST_CHAIN_READ,"domain");
+		addGenericRelation("SecUser"                               ,TRUST_CHAIN_READ,"blocking");
 		addGenericRelation("UserApp"                               ,TRUST_CHAIN_READ,"secUser");
 		addGenericRelation("QuickLink"                             ,TRUST_CHAIN_READ,"app");
 		addGenericRelation("ListAccess"                            ,TRUST_CHAIN_READ,"app");

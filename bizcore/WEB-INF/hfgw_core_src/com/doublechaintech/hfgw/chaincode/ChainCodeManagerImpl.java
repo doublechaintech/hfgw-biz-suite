@@ -22,11 +22,13 @@ import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 import com.doublechaintech.hfgw.channel.CandidateChannel;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
+import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -39,6 +41,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements ChainCodeManager {
 	
 	private static final String SERVICE_TYPE = "ChainCode";
+	@Override
+	public ChainCodeDAO daoOf(HfgwUserContext userContext) {
+		return chainCodeDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -159,6 +165,10 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		addAction(userContext, chainCode, tokens,"chain_code.removeServiceRecord","removeServiceRecord","removeServiceRecord/"+chainCode.getId()+"/","serviceRecordList","primary");
 		addAction(userContext, chainCode, tokens,"chain_code.updateServiceRecord","updateServiceRecord","updateServiceRecord/"+chainCode.getId()+"/","serviceRecordList","primary");
 		addAction(userContext, chainCode, tokens,"chain_code.copyServiceRecordFrom","copyServiceRecordFrom","copyServiceRecordFrom/"+chainCode.getId()+"/","serviceRecordList","primary");
+		addAction(userContext, chainCode, tokens,"chain_code.addChainCodeInvoker","addChainCodeInvoker","addChainCodeInvoker/"+chainCode.getId()+"/","chainCodeInvokerList","primary");
+		addAction(userContext, chainCode, tokens,"chain_code.removeChainCodeInvoker","removeChainCodeInvoker","removeChainCodeInvoker/"+chainCode.getId()+"/","chainCodeInvokerList","primary");
+		addAction(userContext, chainCode, tokens,"chain_code.updateChainCodeInvoker","updateChainCodeInvoker","updateChainCodeInvoker/"+chainCode.getId()+"/","chainCodeInvokerList","primary");
+		addAction(userContext, chainCode, tokens,"chain_code.copyChainCodeInvokerFrom","copyChainCodeInvokerFrom","copyChainCodeInvokerFrom/"+chainCode.getId()+"/","chainCodeInvokerList","primary");
 	
 		
 		
@@ -329,6 +339,7 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
 		.sortServiceRecordListWith("id","desc")
+		.sortChainCodeInvokerListWith("id","desc")
 		.analyzeAllLists().done();
 
 	}
@@ -437,24 +448,6 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 	}
 
 
-	//disconnect ChainCode with channel in ServiceRecord
-	protected ChainCode breakWithServiceRecordByChannel(HfgwUserContext userContext, String chainCodeId, String channelId,  String [] tokensExpr)
-		 throws Exception{
-			
-			//TODO add check code here
-			
-			ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
-
-			synchronized(chainCode){ 
-				//Will be good when the thread loaded from this JVM process cache.
-				//Also good when there is a RAM based DAO implementation
-				
-				chainCodeDaoOf(userContext).planToRemoveServiceRecordListWithChannel(chainCode, channelId, this.emptyOptions());
-
-				chainCode = saveChainCode(userContext, chainCode, tokens().withServiceRecordList().done());
-				return chainCode;
-			}
-	}
 	//disconnect ChainCode with transaction_id in ServiceRecord
 	protected ChainCode breakWithServiceRecordByTransactionId(HfgwUserContext userContext, String chainCodeId, String transactionIdId,  String [] tokensExpr)
 		 throws Exception{
@@ -468,6 +461,24 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 				//Also good when there is a RAM based DAO implementation
 				
 				chainCodeDaoOf(userContext).planToRemoveServiceRecordListWithTransactionId(chainCode, transactionIdId, this.emptyOptions());
+
+				chainCode = saveChainCode(userContext, chainCode, tokens().withServiceRecordList().done());
+				return chainCode;
+			}
+	}
+	//disconnect ChainCode with channel in ServiceRecord
+	protected ChainCode breakWithServiceRecordByChannel(HfgwUserContext userContext, String chainCodeId, String channelId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+
+			synchronized(chainCode){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				chainCodeDaoOf(userContext).planToRemoveServiceRecordListWithChannel(chainCode, channelId, this.emptyOptions());
 
 				chainCode = saveChainCode(userContext, chainCode, tokens().withServiceRecordList().done());
 				return chainCode;
@@ -545,16 +556,54 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 				return chainCode;
 			}
 	}
+	//disconnect ChainCode with app_client in ChainCodeInvoker
+	protected ChainCode breakWithChainCodeInvokerByAppClient(HfgwUserContext userContext, String chainCodeId, String appClientId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+
+			synchronized(chainCode){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				chainCodeDaoOf(userContext).planToRemoveChainCodeInvokerListWithAppClient(chainCode, appClientId, this.emptyOptions());
+
+				chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
+				return chainCode;
+			}
+	}
+	//disconnect ChainCode with change_request in ChainCodeInvoker
+	protected ChainCode breakWithChainCodeInvokerByChangeRequest(HfgwUserContext userContext, String chainCodeId, String changeRequestId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+
+			synchronized(chainCode){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				chainCodeDaoOf(userContext).planToRemoveChainCodeInvokerListWithChangeRequest(chainCode, changeRequestId, this.emptyOptions());
+
+				chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
+				return chainCode;
+			}
+	}
 	
 	
 	
 	
 	
 
-	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId,String [] tokensExpr) throws Exception{
+	protected void checkParamsForAddingServiceRecord(HfgwUserContext userContext, String chainCodeId, String transactionId, String name, String payload, String channelId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId,String [] tokensExpr) throws Exception{
 		
 				checkerOf(userContext).checkIdOfChainCode(chainCodeId);
 
+		
+		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkNameOfServiceRecord(name);
 		
@@ -563,8 +612,6 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		checkerOf(userContext).checkChannelIdOfServiceRecord(channelId);
 		
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(chainCodeFunction);
-		
-		checkerOf(userContext).checkTransactionIdOfServiceRecord(transactionId);
 		
 		checkerOf(userContext).checkBlockIdOfServiceRecord(blockId);
 		
@@ -580,12 +627,12 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 
 	
 	}
-	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId, String [] tokensExpr) throws Exception
+	public  ChainCode addServiceRecord(HfgwUserContext userContext, String chainCodeId, String transactionId, String name, String payload, String channelId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId, String [] tokensExpr) throws Exception
 	{	
 		
-		checkParamsForAddingServiceRecord(userContext,chainCodeId,name, payload, channelId, chainCodeFunction, transactionId, blockId, appClientId, networkId, response, statusId,tokensExpr);
+		checkParamsForAddingServiceRecord(userContext,chainCodeId,transactionId, name, payload, channelId, chainCodeFunction, blockId, appClientId, networkId, response, statusId,tokensExpr);
 		
-		ServiceRecord serviceRecord = createServiceRecord(userContext,name, payload, channelId, chainCodeFunction, transactionId, blockId, appClientId, networkId, response, statusId);
+		ServiceRecord serviceRecord = createServiceRecord(userContext,transactionId, name, payload, channelId, chainCodeFunction, blockId, appClientId, networkId, response, statusId);
 		
 		ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
 		synchronized(chainCode){ 
@@ -598,24 +645,24 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
 		}
 	}
-	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String chainCodeId,String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response,String [] tokensExpr) throws Exception {
+	protected void checkParamsForUpdatingServiceRecordProperties(HfgwUserContext userContext, String chainCodeId,String id,String transactionId,String name,String payload,String chainCodeFunction,String blockId,String response,String [] tokensExpr) throws Exception {
 		
 		checkerOf(userContext).checkIdOfChainCode(chainCodeId);
 		checkerOf(userContext).checkIdOfServiceRecord(id);
 		
+		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkNameOfServiceRecord( name);
 		checkerOf(userContext).checkPayloadOfServiceRecord( payload);
 		checkerOf(userContext).checkChainCodeFunctionOfServiceRecord( chainCodeFunction);
-		checkerOf(userContext).checkTransactionIdOfServiceRecord( transactionId);
 		checkerOf(userContext).checkBlockIdOfServiceRecord( blockId);
 		checkerOf(userContext).checkResponseOfServiceRecord( response);
 
 		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
 		
 	}
-	public  ChainCode updateServiceRecordProperties(HfgwUserContext userContext, String chainCodeId, String id,String name,String payload,String chainCodeFunction,String transactionId,String blockId,String response, String [] tokensExpr) throws Exception
+	public  ChainCode updateServiceRecordProperties(HfgwUserContext userContext, String chainCodeId, String id,String transactionId,String name,String payload,String chainCodeFunction,String blockId,String response, String [] tokensExpr) throws Exception
 	{	
-		checkParamsForUpdatingServiceRecordProperties(userContext,chainCodeId,id,name,payload,chainCodeFunction,transactionId,blockId,response,tokensExpr);
+		checkParamsForUpdatingServiceRecordProperties(userContext,chainCodeId,id,transactionId,name,payload,chainCodeFunction,blockId,response,tokensExpr);
 
 		Map<String, Object> options = tokens()
 				.allTokens()
@@ -630,10 +677,10 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		
 		ServiceRecord item = chainCodeToUpdate.getServiceRecordList().first();
 		
+		item.updateTransactionId( transactionId );
 		item.updateName( name );
 		item.updatePayload( payload );
 		item.updateChainCodeFunction( chainCodeFunction );
-		item.updateTransactionId( transactionId );
 		item.updateBlockId( blockId );
 		item.updateResponse( response );
 
@@ -646,18 +693,18 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 	}
 	
 	
-	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String name, String payload, String channelId, String chainCodeFunction, String transactionId, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception{
+	protected ServiceRecord createServiceRecord(HfgwUserContext userContext, String transactionId, String name, String payload, String channelId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId) throws Exception{
 
 		ServiceRecord serviceRecord = new ServiceRecord();
 		
 		
+		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setName(name);		
 		serviceRecord.setPayload(payload);		
 		Channel  channel = new Channel();
 		channel.setId(channelId);		
 		serviceRecord.setChannel(channel);		
 		serviceRecord.setChainCodeFunction(chainCodeFunction);		
-		serviceRecord.setTransactionId(transactionId);		
 		serviceRecord.setBlockId(blockId);		
 		serviceRecord.setCreateTime(userContext.now());		
 		Application  appClient = new Application();
@@ -781,6 +828,10 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		checkerOf(userContext).checkVersionOfServiceRecord(serviceRecordVersion);
 		
 
+		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
+			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
+		}
+		
 		if(ServiceRecord.NAME_PROPERTY.equals(property)){
 			checkerOf(userContext).checkNameOfServiceRecord(parseString(newValueExpr));
 		}
@@ -791,10 +842,6 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 		
 		if(ServiceRecord.CHAIN_CODE_FUNCTION_PROPERTY.equals(property)){
 			checkerOf(userContext).checkChainCodeFunctionOfServiceRecord(parseString(newValueExpr));
-		}
-		
-		if(ServiceRecord.TRANSACTION_ID_PROPERTY.equals(property)){
-			checkerOf(userContext).checkTransactionIdOfServiceRecord(parseString(newValueExpr));
 		}
 		
 		if(ServiceRecord.BLOCK_ID_PROPERTY.equals(property)){
@@ -836,6 +883,246 @@ public class ChainCodeManagerImpl extends CustomHfgwCheckerManager implements Ch
 			serviceRecord.changeProperty(property, newValueExpr);
 			
 			chainCode = saveChainCode(userContext, chainCode, tokens().withServiceRecordList().done());
+			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
+		}
+
+	}
+	/*
+
+	*/
+	
+
+
+
+	protected void checkParamsForAddingChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String appClientId, String parameters, String changeRequestId,String [] tokensExpr) throws Exception{
+		
+				checkerOf(userContext).checkIdOfChainCode(chainCodeId);
+
+		
+		checkerOf(userContext).checkAppClientIdOfChainCodeInvoker(appClientId);
+		
+		checkerOf(userContext).checkParametersOfChainCodeInvoker(parameters);
+		
+		checkerOf(userContext).checkChangeRequestIdOfChainCodeInvoker(changeRequestId);
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
+
+	
+	}
+	public  ChainCode addChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String appClientId, String parameters, String changeRequestId, String [] tokensExpr) throws Exception
+	{	
+		
+		checkParamsForAddingChainCodeInvoker(userContext,chainCodeId,appClientId, parameters, changeRequestId,tokensExpr);
+		
+		ChainCodeInvoker chainCodeInvoker = createChainCodeInvoker(userContext,appClientId, parameters, changeRequestId);
+		
+		ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+		synchronized(chainCode){ 
+			//Will be good when the chainCode loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			chainCode.addChainCodeInvoker( chainCodeInvoker );		
+			chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
+			
+			userContext.getManagerGroup().getChainCodeInvokerManager().onNewInstanceCreated(userContext, chainCodeInvoker);
+			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
+		}
+	}
+	protected void checkParamsForUpdatingChainCodeInvokerProperties(HfgwUserContext userContext, String chainCodeId,String id,String parameters,String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfChainCode(chainCodeId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(id);
+		
+		checkerOf(userContext).checkParametersOfChainCodeInvoker( parameters);
+
+		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
+		
+	}
+	public  ChainCode updateChainCodeInvokerProperties(HfgwUserContext userContext, String chainCodeId, String id,String parameters, String [] tokensExpr) throws Exception
+	{	
+		checkParamsForUpdatingChainCodeInvokerProperties(userContext,chainCodeId,id,parameters,tokensExpr);
+
+		Map<String, Object> options = tokens()
+				.allTokens()
+				//.withChainCodeInvokerListList()
+				.searchChainCodeInvokerListWith(ChainCodeInvoker.ID_PROPERTY, "is", id).done();
+		
+		ChainCode chainCodeToUpdate = loadChainCode(userContext, chainCodeId, options);
+		
+		if(chainCodeToUpdate.getChainCodeInvokerList().isEmpty()){
+			throw new ChainCodeManagerException("ChainCodeInvoker is NOT FOUND with id: '"+id+"'");
+		}
+		
+		ChainCodeInvoker item = chainCodeToUpdate.getChainCodeInvokerList().first();
+		
+		item.updateParameters( parameters );
+
+		
+		//checkParamsForAddingChainCodeInvoker(userContext,chainCodeId,name, code, used,tokensExpr);
+		ChainCode chainCode = saveChainCode(userContext, chainCodeToUpdate, tokens().withChainCodeInvokerList().done());
+		synchronized(chainCode){ 
+			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
+		}
+	}
+	
+	
+	protected ChainCodeInvoker createChainCodeInvoker(HfgwUserContext userContext, String appClientId, String parameters, String changeRequestId) throws Exception{
+
+		ChainCodeInvoker chainCodeInvoker = new ChainCodeInvoker();
+		
+		
+		Application  appClient = new Application();
+		appClient.setId(appClientId);		
+		chainCodeInvoker.setAppClient(appClient);		
+		chainCodeInvoker.setParameters(parameters);		
+		ChangeRequest  changeRequest = new ChangeRequest();
+		changeRequest.setId(changeRequestId);		
+		chainCodeInvoker.setChangeRequest(changeRequest);
+	
+		
+		return chainCodeInvoker;
+	
+		
+	}
+	
+	protected ChainCodeInvoker createIndexedChainCodeInvoker(String id, int version){
+
+		ChainCodeInvoker chainCodeInvoker = new ChainCodeInvoker();
+		chainCodeInvoker.setId(id);
+		chainCodeInvoker.setVersion(version);
+		return chainCodeInvoker;			
+		
+	}
+	
+	protected void checkParamsForRemovingChainCodeInvokerList(HfgwUserContext userContext, String chainCodeId, 
+			String chainCodeInvokerIds[],String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfChainCode(chainCodeId);
+		for(String chainCodeInvokerIdItem: chainCodeInvokerIds){
+			checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerIdItem);
+		}
+		
+		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
+		
+	}
+	public  ChainCode removeChainCodeInvokerList(HfgwUserContext userContext, String chainCodeId, 
+			String chainCodeInvokerIds[],String [] tokensExpr) throws Exception{
+			
+			checkParamsForRemovingChainCodeInvokerList(userContext, chainCodeId,  chainCodeInvokerIds, tokensExpr);
+			
+			
+			ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+			synchronized(chainCode){ 
+				//Will be good when the chainCode loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				chainCodeDaoOf(userContext).planToRemoveChainCodeInvokerList(chainCode, chainCodeInvokerIds, allTokens());
+				chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
+				deleteRelationListInGraph(userContext, chainCode.getChainCodeInvokerList());
+				return present(userContext,chainCode, mergedAllTokens(tokensExpr));
+			}
+	}
+	
+	protected void checkParamsForRemovingChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfChainCode( chainCodeId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerId);
+		checkerOf(userContext).checkVersionOfChainCodeInvoker(chainCodeInvokerVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
+	
+	}
+	public  ChainCode removeChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForRemovingChainCodeInvoker(userContext,chainCodeId, chainCodeInvokerId, chainCodeInvokerVersion,tokensExpr);
+		
+		ChainCodeInvoker chainCodeInvoker = createIndexedChainCodeInvoker(chainCodeInvokerId, chainCodeInvokerVersion);
+		ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+		synchronized(chainCode){ 
+			//Will be good when the chainCode loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			chainCode.removeChainCodeInvoker( chainCodeInvoker );		
+			chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
+			deleteRelationInGraph(userContext, chainCodeInvoker);
+			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
+		}
+		
+		
+	}
+	protected void checkParamsForCopyingChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfChainCode( chainCodeId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerId);
+		checkerOf(userContext).checkVersionOfChainCodeInvoker(chainCodeInvokerVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
+	
+	}
+	public  ChainCode copyChainCodeInvokerFrom(HfgwUserContext userContext, String chainCodeId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForCopyingChainCodeInvoker(userContext,chainCodeId, chainCodeInvokerId, chainCodeInvokerVersion,tokensExpr);
+		
+		ChainCodeInvoker chainCodeInvoker = createIndexedChainCodeInvoker(chainCodeInvokerId, chainCodeInvokerVersion);
+		ChainCode chainCode = loadChainCode(userContext, chainCodeId, allTokens());
+		synchronized(chainCode){ 
+			//Will be good when the chainCode loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			
+			
+			
+			chainCode.copyChainCodeInvokerFrom( chainCodeInvoker );		
+			chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
+			
+			userContext.getManagerGroup().getChainCodeInvokerManager().onNewInstanceCreated(userContext, (ChainCodeInvoker)chainCode.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
+		}
+		
+	}
+	
+	protected void checkParamsForUpdatingChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String chainCodeInvokerId, int chainCodeInvokerVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+		
+
+		
+		checkerOf(userContext).checkIdOfChainCode(chainCodeId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerId);
+		checkerOf(userContext).checkVersionOfChainCodeInvoker(chainCodeInvokerVersion);
+		
+
+		if(ChainCodeInvoker.PARAMETERS_PROPERTY.equals(property)){
+			checkerOf(userContext).checkParametersOfChainCodeInvoker(parseString(newValueExpr));
+		}
+		
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(ChainCodeManagerException.class);
+	
+	}
+	
+	public  ChainCode updateChainCodeInvoker(HfgwUserContext userContext, String chainCodeId, String chainCodeInvokerId, int chainCodeInvokerVersion, String property, String newValueExpr,String [] tokensExpr)
+			throws Exception{
+		
+		checkParamsForUpdatingChainCodeInvoker(userContext, chainCodeId, chainCodeInvokerId, chainCodeInvokerVersion, property, newValueExpr,  tokensExpr);
+		
+		Map<String,Object> loadTokens = this.tokens().withChainCodeInvokerList().searchChainCodeInvokerListWith(ChainCodeInvoker.ID_PROPERTY, "eq", chainCodeInvokerId).done();
+		
+		
+		
+		ChainCode chainCode = loadChainCode(userContext, chainCodeId, loadTokens);
+		
+		synchronized(chainCode){ 
+			//Will be good when the chainCode loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			//chainCode.removeChainCodeInvoker( chainCodeInvoker );	
+			//make changes to AcceleraterAccount.
+			ChainCodeInvoker chainCodeInvokerIndex = createIndexedChainCodeInvoker(chainCodeInvokerId, chainCodeInvokerVersion);
+		
+			ChainCodeInvoker chainCodeInvoker = chainCode.findTheChainCodeInvoker(chainCodeInvokerIndex);
+			if(chainCodeInvoker == null){
+				throw new ChainCodeManagerException(chainCodeInvoker+" is NOT FOUND" );
+			}
+			
+			chainCodeInvoker.changeProperty(property, newValueExpr);
+			
+			chainCode = saveChainCode(userContext, chainCode, tokens().withChainCodeInvokerList().done());
 			return present(userContext,chainCode, mergedAllTokens(tokensExpr));
 		}
 

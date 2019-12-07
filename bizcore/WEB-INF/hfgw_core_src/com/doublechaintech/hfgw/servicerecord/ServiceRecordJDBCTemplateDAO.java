@@ -847,18 +847,18 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
  	protected Object[] prepareServiceRecordUpdateParameters(ServiceRecord serviceRecord){
  		Object[] parameters = new Object[15];
  
- 		parameters[0] = serviceRecord.getName();
- 		parameters[1] = serviceRecord.getPayload(); 	
+ 		parameters[0] = serviceRecord.getTransactionId();
+ 		parameters[1] = serviceRecord.getName();
+ 		parameters[2] = serviceRecord.getPayload(); 	
  		if(serviceRecord.getChannel() != null){
- 			parameters[2] = serviceRecord.getChannel().getId();
+ 			parameters[3] = serviceRecord.getChannel().getId();
  		}
   	
  		if(serviceRecord.getChainCode() != null){
- 			parameters[3] = serviceRecord.getChainCode().getId();
+ 			parameters[4] = serviceRecord.getChainCode().getId();
  		}
  
- 		parameters[4] = serviceRecord.getChainCodeFunction();
- 		parameters[5] = serviceRecord.getTransactionId();
+ 		parameters[5] = serviceRecord.getChainCodeFunction();
  		parameters[6] = serviceRecord.getBlockId();
  		parameters[7] = serviceRecord.getCreateTime(); 	
  		if(serviceRecord.getAppClient() != null){
@@ -886,20 +886,20 @@ public class ServiceRecordJDBCTemplateDAO extends HfgwBaseDAOImpl implements Ser
 		serviceRecord.setId(newServiceRecordId);
 		parameters[0] =  serviceRecord.getId();
  
- 		parameters[1] = serviceRecord.getName();
- 		parameters[2] = serviceRecord.getPayload(); 	
+ 		parameters[1] = serviceRecord.getTransactionId();
+ 		parameters[2] = serviceRecord.getName();
+ 		parameters[3] = serviceRecord.getPayload(); 	
  		if(serviceRecord.getChannel() != null){
- 			parameters[3] = serviceRecord.getChannel().getId();
+ 			parameters[4] = serviceRecord.getChannel().getId();
  		
  		}
  		 	
  		if(serviceRecord.getChainCode() != null){
- 			parameters[4] = serviceRecord.getChainCode().getId();
+ 			parameters[5] = serviceRecord.getChainCode().getId();
  		
  		}
  		
- 		parameters[5] = serviceRecord.getChainCodeFunction();
- 		parameters[6] = serviceRecord.getTransactionId();
+ 		parameters[6] = serviceRecord.getChainCodeFunction();
  		parameters[7] = serviceRecord.getBlockId();
  		parameters[8] = serviceRecord.getCreateTime(); 	
  		if(serviceRecord.getAppClient() != null){

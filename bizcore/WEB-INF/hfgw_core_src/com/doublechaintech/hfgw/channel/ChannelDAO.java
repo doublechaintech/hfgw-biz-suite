@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.channel;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -23,7 +24,7 @@ import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
 import com.doublechaintech.hfgw.application.ApplicationDAO;
 
 
-public interface ChannelDAO{
+public interface ChannelDAO extends BaseDAO{
 
 	public SmartList<Channel> loadAll();
 	public Channel load(String id, Map<String,Object> options) throws Exception;
@@ -112,13 +113,13 @@ public interface ChannelDAO{
 	public Channel planToRemoveServiceRecordList(Channel channel, String serviceRecordIds[], Map<String,Object> options)throws Exception;
 
 
-	//disconnect Channel with chain_code in ServiceRecord
-	public Channel planToRemoveServiceRecordListWithChainCode(Channel channel, String chainCodeId, Map<String,Object> options)throws Exception;
-	public int countServiceRecordListWithChainCode(String channelId, String chainCodeId, Map<String,Object> options)throws Exception;
-	
 	//disconnect Channel with transaction_id in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithTransactionId(Channel channel, String transactionIdId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithTransactionId(String channelId, String transactionIdId, Map<String,Object> options)throws Exception;
+	
+	//disconnect Channel with chain_code in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithChainCode(Channel channel, String chainCodeId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithChainCode(String channelId, String chainCodeId, Map<String,Object> options)throws Exception;
 	
 	//disconnect Channel with block_id in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithBlockId(Channel channel, String blockIdId, Map<String,Object> options)throws Exception;

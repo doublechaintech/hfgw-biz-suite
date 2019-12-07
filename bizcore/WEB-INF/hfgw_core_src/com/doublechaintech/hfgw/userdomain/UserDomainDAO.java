@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.userdomain;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -15,7 +16,7 @@ import com.doublechaintech.hfgw.secuser.SecUserDAO;
 import com.doublechaintech.hfgw.userwhitelist.UserWhiteListDAO;
 
 
-public interface UserDomainDAO{
+public interface UserDomainDAO extends BaseDAO{
 
 	public SmartList<UserDomain> loadAll();
 	public UserDomain load(String id, Map<String,Object> options) throws Exception;
@@ -59,6 +60,10 @@ public interface UserDomainDAO{
 	public UserDomain planToRemoveSecUserList(UserDomain userDomain, String secUserIds[], Map<String,Object> options)throws Exception;
 
 
+	//disconnect UserDomain with blocking in SecUser
+	public UserDomain planToRemoveSecUserListWithBlocking(UserDomain userDomain, String blockingId, Map<String,Object> options)throws Exception;
+	public int countSecUserListWithBlocking(String userDomainId, String blockingId, Map<String,Object> options)throws Exception;
+	
 	
 	public SmartList<UserDomain> queryList(String sql, Object ... parmeters);
 	public int count(String sql, Object ... parmeters);

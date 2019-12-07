@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.hyperledgernetwork;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -31,7 +32,7 @@ import com.doublechaintech.hfgw.nodetype.NodeTypeDAO;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeDAO;
 
 
-public interface HyperledgerNetworkDAO{
+public interface HyperledgerNetworkDAO extends BaseDAO{
 
 	public SmartList<HyperledgerNetwork> loadAll();
 	public HyperledgerNetwork load(String id, Map<String,Object> options) throws Exception;
@@ -138,6 +139,10 @@ public interface HyperledgerNetworkDAO{
 	public HyperledgerNetwork planToRemoveServiceRecordList(HyperledgerNetwork hyperledgerNetwork, String serviceRecordIds[], Map<String,Object> options)throws Exception;
 
 
+	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
+	public HyperledgerNetwork planToRemoveServiceRecordListWithTransactionId(HyperledgerNetwork hyperledgerNetwork, String transactionIdId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithTransactionId(String hyperledgerNetworkId, String transactionIdId, Map<String,Object> options)throws Exception;
+	
 	//disconnect HyperledgerNetwork with channel in ServiceRecord
 	public HyperledgerNetwork planToRemoveServiceRecordListWithChannel(HyperledgerNetwork hyperledgerNetwork, String channelId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithChannel(String hyperledgerNetworkId, String channelId, Map<String,Object> options)throws Exception;
@@ -145,10 +150,6 @@ public interface HyperledgerNetworkDAO{
 	//disconnect HyperledgerNetwork with chain_code in ServiceRecord
 	public HyperledgerNetwork planToRemoveServiceRecordListWithChainCode(HyperledgerNetwork hyperledgerNetwork, String chainCodeId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithChainCode(String hyperledgerNetworkId, String chainCodeId, Map<String,Object> options)throws Exception;
-	
-	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
-	public HyperledgerNetwork planToRemoveServiceRecordListWithTransactionId(HyperledgerNetwork hyperledgerNetwork, String transactionIdId, Map<String,Object> options)throws Exception;
-	public int countServiceRecordListWithTransactionId(String hyperledgerNetworkId, String transactionIdId, Map<String,Object> options)throws Exception;
 	
 	//disconnect HyperledgerNetwork with block_id in ServiceRecord
 	public HyperledgerNetwork planToRemoveServiceRecordListWithBlockId(HyperledgerNetwork hyperledgerNetwork, String blockIdId, Map<String,Object> options)throws Exception;

@@ -162,9 +162,15 @@ const internalSummaryOf = (node, targetComponent) => {
   const userContext = null;
   return (
     <DescriptionList className={styles.headerList} size="small" col="4">
-      <Description term="ID">{node.id}</Description>
-      <Description term="名称">{node.name}</Description>
-      <Description term="url">{node.url}</Description>
+      <Description term="ID" style={{ wordBreak: 'break-all' }}>
+        {node.id}
+      </Description>
+      <Description term="名称" style={{ wordBreak: 'break-all' }}>
+        {node.name}
+      </Description>
+      <Description term="url" style={{ wordBreak: 'break-all' }}>
+        {node.url}
+      </Description>
       <Description term="组织">
         {node.organization == null
           ? appLocaleName(userContext, 'NotAssigned')
@@ -225,9 +231,15 @@ const internalSummaryOf = (node, targetComponent) => {
           style={{ fontSize: 20, color: 'red' }}
         />
       </Description>
-      <Description term="地址">{node.address}</Description>
-      <Description term="联系人">{node.contactPerson}</Description>
-      <Description term="联系电话">{node.contactTelephone}</Description>
+      <Description term="地址" style={{ wordBreak: 'break-all' }}>
+        {node.address}
+      </Description>
+      <Description term="联系人" style={{ wordBreak: 'break-all' }}>
+        {node.contactPerson}
+      </Description>
+      <Description term="联系电话" style={{ wordBreak: 'break-all' }}>
+        {node.contactTelephone}
+      </Description>
 
       {buildTransferModal(node, targetComponent)}
     </DescriptionList>
@@ -275,6 +287,7 @@ class NodeDashboard extends Component {
         {
           name: 'grpcOptionList',
           displayName: 'Grpc选项',
+          viewGroup: '__no_group',
           type: 'grpcOption',
           count: grpcOptionCount,
           addFunction: true,
@@ -285,6 +298,7 @@ class NodeDashboard extends Component {
         {
           name: 'channelPeerRoleList',
           displayName: '通道对等的角色',
+          viewGroup: '__no_group',
           type: 'channelPeerRole',
           count: channelPeerRoleCount,
           addFunction: true,

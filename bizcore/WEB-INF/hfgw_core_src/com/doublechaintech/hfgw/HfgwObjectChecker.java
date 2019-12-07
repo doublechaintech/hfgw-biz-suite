@@ -281,6 +281,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(chainCodeAsBaseEntity,"channel",this::checkChannelOfChainCode);
 		commonObjectPropertyCheck(chainCodeAsBaseEntity,"version",this::checkVersionOfChainCode);
 		commonObjectPropertyCheck(chainCodeAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfChainCode);
+		commonObjectPropertyCheck(chainCodeAsBaseEntity,"chainCodeInvokerList",this::checkChainCodeInvokerListOfChainCode);
 		return this;
 
 	}
@@ -301,6 +302,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(applicationAsBaseEntity,"network",this::checkNetworkOfApplication);
 		commonObjectPropertyCheck(applicationAsBaseEntity,"version",this::checkVersionOfApplication);
 		commonObjectPropertyCheck(applicationAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfApplication);
+		commonObjectPropertyCheck(applicationAsBaseEntity,"chainCodeInvokerList",this::checkChainCodeInvokerListOfApplication);
 		return this;
 
 	}
@@ -312,12 +314,12 @@ public class HfgwObjectChecker extends HfgwChecker{
 		}
 		markAsChecked(serviceRecordAsBaseEntity);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"id",this::checkIdOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"transactionId",this::checkTransactionIdOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"name",this::checkNameOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"payload",this::checkPayloadOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"channel",this::checkChannelOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"chainCode",this::checkChainCodeOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"chainCodeFunction",this::checkChainCodeFunctionOfServiceRecord);
-		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"transactionId",this::checkTransactionIdOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"blockId",this::checkBlockIdOfServiceRecord);
 		commonObjectPropertyAssign(serviceRecordAsBaseEntity,"createTime",this::assignCreateTimeOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"appClient",this::checkAppClientOfServiceRecord);
@@ -378,6 +380,23 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"requestType",this::checkRequestTypeOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"network",this::checkNetworkOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"version",this::checkVersionOfChangeRequest);
+		commonObjectPropertyCheck(changeRequestAsBaseEntity,"chainCodeInvokerList",this::checkChainCodeInvokerListOfChangeRequest);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixChainCodeInvoker(BaseEntity chainCodeInvokerAsBaseEntity){
+
+		if( isChecked(chainCodeInvokerAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(chainCodeInvokerAsBaseEntity);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"id",this::checkIdOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"appClient",this::checkAppClientOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"chainCode",this::checkChainCodeOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"parameters",this::checkParametersOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"changeRequest",this::checkChangeRequestOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"version",this::checkVersionOfChainCodeInvoker);
 		return this;
 
 	}
@@ -430,7 +449,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(secUserAsBaseEntity,"verificationCodeExpire",this::checkVerificationCodeExpireOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"lastLoginTime",this::checkLastLoginTimeOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"domain",this::checkDomainOfSecUser);
-		commonObjectPropertyAssign(secUserAsBaseEntity,"currentStatus",this::assignCurrentStatusOfSecUser);
+		commonObjectPropertyCheck(secUserAsBaseEntity,"blocking",this::checkBlockingOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"version",this::checkVersionOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"userAppList",this::checkUserAppListOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"loginHistoryList",this::checkLoginHistoryListOfSecUser);
@@ -996,6 +1015,13 @@ public class HfgwObjectChecker extends HfgwChecker{
 		return this;
 	}
 
+	public HfgwObjectChecker checkChainCodeInvokerListOfChainCode(List<BaseEntity> chainCodeInvokerList){
+		AtomicInteger index = new AtomicInteger();
+		chainCodeInvokerList.stream().forEach(chainCodeInvoker->
+			commonObjectElementCheck(chainCodeInvoker,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChainCodeInvoker));
+		return this;
+	}
+
 	public static final String CHANNEL_OF_CHAIN_CODE = "chain_code.channel";
 
 
@@ -1014,6 +1040,13 @@ public class HfgwObjectChecker extends HfgwChecker{
 		AtomicInteger index = new AtomicInteger();
 		serviceRecordList.stream().forEach(serviceRecord->
 			commonObjectElementCheck(serviceRecord,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixServiceRecord));
+		return this;
+	}
+
+	public HfgwObjectChecker checkChainCodeInvokerListOfApplication(List<BaseEntity> chainCodeInvokerList){
+		AtomicInteger index = new AtomicInteger();
+		chainCodeInvokerList.stream().forEach(chainCodeInvoker->
+			commonObjectElementCheck(chainCodeInvoker,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChainCodeInvoker));
 		return this;
 	}
 
@@ -1157,6 +1190,13 @@ public class HfgwObjectChecker extends HfgwChecker{
 	}
 
 
+	public HfgwObjectChecker checkChainCodeInvokerListOfChangeRequest(List<BaseEntity> chainCodeInvokerList){
+		AtomicInteger index = new AtomicInteger();
+		chainCodeInvokerList.stream().forEach(chainCodeInvoker->
+			commonObjectElementCheck(chainCodeInvoker,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChainCodeInvoker));
+		return this;
+	}
+
 	public static final String REQUEST_TYPE_OF_CHANGE_REQUEST = "change_request.request_type";
 
 
@@ -1181,6 +1221,48 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String APP_CLIENT_OF_CHAIN_CODE_INVOKER = "chain_code_invoker.app_client";
+
+
+	public HfgwObjectChecker checkAppClientOfChainCodeInvoker(BaseEntity appClientAsBaseEntity){
+
+		if(appClientAsBaseEntity == null){
+			checkBaseEntityReference(appClientAsBaseEntity,true,APP_CLIENT_OF_CHAIN_CODE_INVOKER);
+			return this;
+		}
+		checkAndFixApplication(appClientAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String CHAIN_CODE_OF_CHAIN_CODE_INVOKER = "chain_code_invoker.chain_code";
+
+
+	public HfgwObjectChecker checkChainCodeOfChainCodeInvoker(BaseEntity chainCodeAsBaseEntity){
+
+		if(chainCodeAsBaseEntity == null){
+			checkBaseEntityReference(chainCodeAsBaseEntity,true,CHAIN_CODE_OF_CHAIN_CODE_INVOKER);
+			return this;
+		}
+		checkAndFixChainCode(chainCodeAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String CHANGE_REQUEST_OF_CHAIN_CODE_INVOKER = "chain_code_invoker.change_request";
+
+
+	public HfgwObjectChecker checkChangeRequestOfChainCodeInvoker(BaseEntity changeRequestAsBaseEntity){
+
+		if(changeRequestAsBaseEntity == null){
+			checkBaseEntityReference(changeRequestAsBaseEntity,true,CHANGE_REQUEST_OF_CHAIN_CODE_INVOKER);
+			return this;
+		}
+		checkAndFixChangeRequest(changeRequestAsBaseEntity);
 		return this;
 	}
 
@@ -1492,22 +1574,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		setEntityProperty(targetEntity,"remoteIp",userContext.getRemoteIP());
-		return this;
-	}
-	public HfgwObjectChecker assignBlockingOfSecUser(BaseEntity targetEntity){
-		if(!isObjectForCreate(targetEntity)){
-			return this;
-		}
-		return this;
-	}
-	public HfgwObjectChecker assignCurrentStatusOfSecUser(BaseEntity targetEntity){
-		if(!isObjectForCreate(targetEntity)){
-			return this;
-		}
-		if(userContext==null){
-			return this;
-		}
-		setEntityProperty(targetEntity,"currentStatus","INIT");
 		return this;
 	}
 	public HfgwObjectChecker assignBlockTimeOfSecUserBlocking(BaseEntity targetEntity){

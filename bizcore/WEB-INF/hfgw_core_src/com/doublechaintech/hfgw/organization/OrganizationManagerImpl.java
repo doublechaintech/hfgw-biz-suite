@@ -38,6 +38,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 public class OrganizationManagerImpl extends CustomHfgwCheckerManager implements OrganizationManager {
 	
 	private static final String SERVICE_TYPE = "Organization";
+	@Override
+	public OrganizationDAO daoOf(HfgwUserContext userContext) {
+		return organizationDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

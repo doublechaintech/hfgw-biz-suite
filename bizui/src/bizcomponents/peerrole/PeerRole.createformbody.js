@@ -26,7 +26,7 @@ import appLocaleName from '../../common/Locale.tool';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-
+const { fieldLabels } = PeerRoleBase;
 const testValues = {};
 /*
 const testValues = {
@@ -71,7 +71,7 @@ class PeerRoleCreateFormBody extends Component {
     const { convertedImagesValues } = this.state;
     const userContext = null;
     const { getFieldDecorator, validateFieldsAndScroll, getFieldsError } = form;
-    const { fieldLabels } = PeerRoleBase;
+
     const { PeerRoleService } = GlobalComponents;
 
     const capFirstChar = value => {
@@ -123,7 +123,7 @@ class PeerRoleCreateFormBody extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          对等的角色
+          {window.trans('peer_role')}
         </div>
       );
     };
@@ -141,7 +141,7 @@ class PeerRoleCreateFormBody extends Component {
                 <Form.Item label={fieldLabels.name} {...formItemLayout}>
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="名称" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.name} />)}
                 </Form.Item>
               </Col>
 
@@ -149,7 +149,7 @@ class PeerRoleCreateFormBody extends Component {
                 <Form.Item label={fieldLabels.code} {...formItemLayout}>
                   {getFieldDecorator('code', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="代码" disabled />)}
+                  })(<Input size="large" placeHolder={fieldLabels.code} disabled />)}
                 </Form.Item>
               </Col>
 

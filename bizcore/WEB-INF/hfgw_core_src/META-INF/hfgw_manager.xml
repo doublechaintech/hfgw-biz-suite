@@ -33,10 +33,10 @@
 	<bean id="channelPeerRoleManager" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl" parent="channelPeerRoleManagerBase" ></bean>
 	
 	<bean id="chainCodeManagerBase" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl"/>
-	<bean id="chainCodeManager" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl" parent="chainCodeManagerBase" ></bean>
+	<bean id="chainCodeManager" class="com.doublechaintech.hfgw.chaincode.ChainCodeCustomManagerImpl" parent="chainCodeManagerBase" ></bean>
 	
 	<bean id="applicationManagerBase" class="com.doublechaintech.hfgw.application.ApplicationManagerImpl"/>
-	<bean id="applicationManager" class="com.doublechaintech.hfgw.application.ApplicationManagerImpl" parent="applicationManagerBase" ></bean>
+	<bean id="applicationManager" class="com.doublechaintech.hfgw.application.ApplicationCustomManagerImpl" parent="applicationManagerBase" ></bean>
 	
 	<bean id="serviceRecordManagerBase" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl"/>
 	<bean id="serviceRecordManager" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl" parent="serviceRecordManagerBase" ></bean>
@@ -49,6 +49,9 @@
 	
 	<bean id="changeRequestManagerBase" class="com.doublechaintech.hfgw.changerequest.ChangeRequestManagerImpl"/>
 	<bean id="changeRequestManager" class="com.doublechaintech.hfgw.changerequest.ChangeRequestManagerImpl" parent="changeRequestManagerBase" ></bean>
+	
+	<bean id="chainCodeInvokerManagerBase" class="com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManagerImpl"/>
+	<bean id="chainCodeInvokerManager" class="com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManagerImpl" parent="chainCodeInvokerManagerBase" ></bean>
 	
 	<bean id="userDomainManagerBase" class="com.doublechaintech.hfgw.userdomain.UserDomainManagerImpl"/>
 	<bean id="userDomainManager" class="com.doublechaintech.hfgw.userdomain.UserDomainCustomManagerImpl" parent="userDomainManagerBase" ></bean>
@@ -114,6 +117,7 @@
 		<property name="transactionStatusManager" ref="transactionStatusManager"/>
 		<property name="changeRequestTypeManager" ref="changeRequestTypeManager"/>
 		<property name="changeRequestManager" ref="changeRequestManager"/>
+		<property name="chainCodeInvokerManager" ref="chainCodeInvokerManager"/>
 		<property name="userDomainManager" ref="userDomainManager"/>
 		<property name="userWhiteListManager" ref="userWhiteListManager"/>
 		<property name="secUserManager" ref="secUserManager"/>

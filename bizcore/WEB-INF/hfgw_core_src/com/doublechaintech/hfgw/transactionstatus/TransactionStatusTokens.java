@@ -152,7 +152,7 @@ public class TransactionStatusTokens extends CommonTokens{
 	
 	
 	public TransactionStatusTokens searchAllTextOfServiceRecordList(String verb, String value){	
-		String field = "id|name|payload|chainCodeFunction|transactionId|blockId|response";
+		String field = "id|transactionId|name|payload|chainCodeFunction|blockId|response";
 		addSearchMoreOptions(SERVICE_RECORD_LIST,serviceRecordListSearchCounter++, field, verb, value);
 		return this;
 	}

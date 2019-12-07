@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.userapp.CandidateUserApp;
 public class QuickLinkManagerImpl extends CustomHfgwCheckerManager implements QuickLinkManager {
 	
 	private static final String SERVICE_TYPE = "QuickLink";
+	@Override
+	public QuickLinkDAO daoOf(HfgwUserContext userContext) {
+		return quickLinkDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

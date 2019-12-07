@@ -39,9 +39,10 @@ const testValues = {
   weixinAppid: 'wxapp12098410239840',
   accessToken: 'jwt_token_12345678',
   verificationCode: '0',
-  verificationCodeExpire: '2019-11-08 19:21:51',
-  lastLoginTime: '2019-11-07 03:21:36',
+  verificationCodeExpire: '2019-11-26 22:47:46',
+  lastLoginTime: '2019-11-17 14:08:41',
   domainId: 'UD000001',
+  blockingId: 'SUB000001',
 }
 */
 
@@ -217,7 +218,7 @@ class SecUserCreateForm extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          安全用户
+          {window.trans('sec_user')}
         </div>
       );
     };
@@ -225,7 +226,7 @@ class SecUserCreateForm extends Component {
     return (
       <PageHeaderLayout
         title={internalRenderTitle()}
-        content={`${appLocaleName(userContext, 'CreateNew')}安全用户`}
+        content={`${appLocaleName(userContext, 'CreateNew')}${window.trans('sec_user')}`}
         wrapperClassName={styles.advancedForm}
       >
         <SecUserCreateFormBody {...this.props} />

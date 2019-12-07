@@ -742,6 +742,19 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
+	protected FormField transactionIdFromServiceRecord(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("事务Id");
+		field.setLocaleKey("service_record.transaction_id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写事务Id");
+		return field;
+	}
+
 	protected FormField nameFromServiceRecord(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("名称");
@@ -804,19 +817,6 @@ public class BaseForm extends GenericForm{
 		field.setType("text");
 		field.setRequired(true);
 		field.setPlaceholder("请填写链码功能");
-		return field;
-	}
-
-	protected FormField transactionIdFromServiceRecord(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("事务Id");
-		field.setLocaleKey("service_record.transaction_id");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写事务Id");
 		return field;
 	}
 
@@ -1132,6 +1132,71 @@ public class BaseForm extends GenericForm{
 		return field;
 	}
 
+	protected FormField idFromChainCodeInvoker(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("ID");
+		field.setLocaleKey("chain_code_invoker.id");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("text");
+		field.setRequired(true);
+		field.setPlaceholder("请填写ID");
+		return field;
+	}
+
+	protected FormField appClientIdFromChainCodeInvoker(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("应用客户端");
+		field.setLocaleKey("chain_code_invoker.app_client");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("Application");
+		field.setRequired(true);
+		field.setPlaceholder("请填写应用客户端");
+		return field;
+	}
+
+	protected FormField chainCodeIdFromChainCodeInvoker(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("链码");
+		field.setLocaleKey("chain_code_invoker.chain_code");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("ChainCode");
+		field.setRequired(true);
+		field.setPlaceholder("请填写链码");
+		return field;
+	}
+
+	protected FormField parametersFromChainCodeInvoker(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("参数");
+		field.setLocaleKey("chain_code_invoker.parameters");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("longtext");
+		field.setRequired(true);
+		field.setPlaceholder("请填写参数");
+		return field;
+	}
+
+	protected FormField changeRequestIdFromChainCodeInvoker(String parameterName, String initValue){
+		FormField field = new FormField();
+		field.setLabel("变更请求");
+		field.setLocaleKey("chain_code_invoker.change_request");
+		field.setParameterName(parameterName);
+		field.setDefaultValue(initValue);
+		field.setFieldGroup("基本信息");
+		field.setType("ChangeRequest");
+		field.setRequired(true);
+		field.setPlaceholder("请填写变更请求");
+		return field;
+	}
+
 	protected FormField idFromUserDomain(String parameterName, String initValue){
 		FormField field = new FormField();
 		field.setLabel("ID");
@@ -1376,19 +1441,6 @@ public class BaseForm extends GenericForm{
 		field.setType("SecUserBlocking");
 		field.setRequired(true);
 		field.setPlaceholder("请填写屏蔽");
-		return field;
-	}
-
-	protected FormField currentStatusFromSecUser(String parameterName, String initValue){
-		FormField field = new FormField();
-		field.setLabel("当前状态");
-		field.setLocaleKey("sec_user.current_status");
-		field.setParameterName(parameterName);
-		field.setDefaultValue(initValue);
-		field.setFieldGroup("基本信息");
-		field.setType("text");
-		field.setRequired(true);
-		field.setPlaceholder("请填写当前状态");
 		return field;
 	}
 

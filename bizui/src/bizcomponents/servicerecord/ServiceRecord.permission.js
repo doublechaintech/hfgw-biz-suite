@@ -56,9 +56,9 @@ const internalSummaryOf = (serviceRecord, targetComponent) => {
   return (
     <DescriptionList className={styles.headerList} size="small" col="4">
       <Description term="ID">{serviceRecord.id}</Description>
+      <Description term="事务Id">{serviceRecord.transactionId}</Description>
       <Description term="名称">{serviceRecord.name}</Description>
       <Description term="链码功能">{serviceRecord.chainCodeFunction}</Description>
-      <Description term="事务Id">{serviceRecord.transactionId}</Description>
       <Description term="块Id">{serviceRecord.blockId}</Description>
       <Description term="创建时间">
         {moment(serviceRecord.createTime).format('YYYY-MM-DD')}

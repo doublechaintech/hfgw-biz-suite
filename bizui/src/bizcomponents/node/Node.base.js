@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Divider, Avatar } from 'antd';
+import { Icon, Divider, Avata, Card, Col } from 'antd';
 
 import { Link } from 'dva/router';
 import moment from 'moment';
@@ -9,6 +9,7 @@ import BaseTool from '../../common/Base.tool';
 import GlobalComponents from '../../custcomponents';
 import DescriptionList from '../../components/DescriptionList';
 const { Description } = DescriptionList;
+
 const {
   defaultRenderReferenceCell,
   defaultRenderBooleanCell,
@@ -19,6 +20,7 @@ const {
   defaultRenderDateCell,
   defaultRenderIdentifier,
   defaultRenderTextCell,
+  defaultSearchLocalData,
 } = BaseTool;
 
 const renderTextCell = defaultRenderTextCell;
@@ -32,12 +34,13 @@ const renderBooleanCell = defaultRenderBooleanCell;
 const renderReferenceCell = defaultRenderReferenceCell;
 
 const menuData = {
-  menuName: '节点',
+  menuName: window.trans('node'),
   menuFor: 'node',
   subItems: [
     {
       name: 'grpcOptionList',
-      displayName: 'Grpc选项',
+      displayName: window.mtrans('grpc_option', 'node.grpc_option_list', false),
+      type: 'grpcOption',
       icon: '500px',
       readPermission: false,
       createPermission: false,
@@ -48,7 +51,8 @@ const menuData = {
     },
     {
       name: 'channelPeerRoleList',
-      displayName: '通道对等的角色',
+      displayName: window.mtrans('channel_peer_role', 'node.channel_peer_role_list', false),
+      type: 'channelPeerRole',
       icon: '500px',
       readPermission: false,
       createPermission: false,
@@ -61,23 +65,23 @@ const menuData = {
 };
 
 const settingMenuData = {
-  menuName: '节点',
+  menuName: window.trans('node'),
   menuFor: 'node',
   subItems: [],
 };
 
 const fieldLabels = {
-  id: 'ID',
-  name: '名称',
-  url: 'url',
-  organization: '组织',
-  channel: '频道',
-  network: '网络',
-  tlsCacert: 'Tls Cacert',
-  type: '类型',
-  address: '地址',
-  contactPerson: '联系人',
-  contactTelephone: '联系电话',
+  id: window.trans('node.id'),
+  name: window.trans('node.name'),
+  url: window.trans('node.url'),
+  organization: window.trans('node.organization'),
+  channel: window.trans('node.channel'),
+  network: window.trans('node.network'),
+  tlsCacert: window.trans('node.tls_cacert'),
+  type: window.trans('node.type'),
+  address: window.trans('node.address'),
+  contactPerson: window.trans('node.contact_person'),
+  contactTelephone: window.trans('node.contact_telephone'),
 };
 
 const displayColumns = [
@@ -156,15 +160,24 @@ const displayColumns = [
     render: (text, record) => renderTextCell(text, record),
   },
 ];
-// refernce to https://ant.design/components/list-cn/
+
+const searchLocalData = (targetObject, searchTerm) =>
+  defaultSearchLocalData(menuData, targetObject, searchTerm);
+
 const renderItemOfList = (node, targetComponent) => {
   const userContext = null;
   return (
     <div key={node.id}>
-      <DescriptionList key={node.id} size="small" col="4">
-        <Description term="ID">{node.id}</Description>
-        <Description term="名称">{node.name}</Description>
-        <Description term="url">{node.url}</Description>
+      <DescriptionList key={node.id} size="small" col="2">
+        <Description term={fieldLabels.id} style={{ wordBreak: 'break-all' }}>
+          {node.id}
+        </Description>
+        <Description term={fieldLabels.name} style={{ wordBreak: 'break-all' }}>
+          {node.name}
+        </Description>
+        <Description term={fieldLabels.url} style={{ wordBreak: 'break-all' }}>
+          {node.url}
+        </Description>
         <Description term={fieldLabels.organization}>
           <div>
             {node.organization == null
@@ -186,9 +199,15 @@ const renderItemOfList = (node, targetComponent) => {
               : `${node.type.displayName}(${node.type.id})`}
           </div>
         </Description>
-        <Description term="地址">{node.address}</Description>
-        <Description term="联系人">{node.contactPerson}</Description>
-        <Description term="联系电话">{node.contactTelephone}</Description>
+        <Description term={fieldLabels.address} style={{ wordBreak: 'break-all' }}>
+          {node.address}
+        </Description>
+        <Description term={fieldLabels.contactPerson} style={{ wordBreak: 'break-all' }}>
+          {node.contactPerson}
+        </Description>
+        <Description term={fieldLabels.contactTelephone} style={{ wordBreak: 'break-all' }}>
+          {node.contactTelephone}
+        </Description>
       </DescriptionList>
       <Divider style={{ height: '2px' }} />
     </div>
@@ -267,5 +286,12 @@ const stepOf = (targetComponent, title, content, position, index) => {
     index,
   };
 };
-const NodeBase = { menuData, displayColumns, fieldLabels, renderItemOfList, stepOf };
+const NodeBase = {
+  menuData,
+  displayColumns,
+  fieldLabels,
+  renderItemOfList,
+  stepOf,
+  searchLocalData,
+};
 export default NodeBase;

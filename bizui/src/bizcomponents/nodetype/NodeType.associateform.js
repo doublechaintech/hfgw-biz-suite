@@ -145,7 +145,7 @@ class NodeTypeAssociateForm extends Component {
                 <Form.Item label={fieldLabels.name} {...formItemLayout}>
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="名称" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.name} />)}
                 </Form.Item>
               </Col>
 
@@ -153,7 +153,7 @@ class NodeTypeAssociateForm extends Component {
                 <Form.Item label={fieldLabels.code} {...formItemLayout}>
                   {getFieldDecorator('code', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="代码" disabled />)}
+                  })(<Input size="large" placeHolder={fieldLabels.code} disabled />)}
                 </Form.Item>
               </Col>
             </Row>

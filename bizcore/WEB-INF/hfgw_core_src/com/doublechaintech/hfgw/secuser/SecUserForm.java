@@ -201,20 +201,6 @@ public class SecUserForm extends BaseForm {
 		return blockingIdField("blockingId","");
 	}
 
-
-	public SecUserForm currentStatusField(String parameterName, String initValue){
-		FormField field = currentStatusFromSecUser(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public SecUserForm currentStatusField(String initValue){
-		return currentStatusField("currentStatus",initValue);
-	}
-	public SecUserForm currentStatusField(){
-		return currentStatusField("currentStatus","");
-	}
-
 	
 	
 
@@ -514,14 +500,16 @@ public class SecUserForm extends BaseForm {
 	}
 
  	
- 	public SecUserForm  blockAction(){
+ 	public SecUserForm transferToAnotherBlockingAction(){
 		FormAction action = new FormAction();
-		action.setLabel("屏蔽");
-		action.setLocaleKey("sec_user.block");
-		action.setUrl("secUserManager/block/secUserId/who/comments/");
+		action.setLabel("显示");
+		action.setLocaleKey("show");
+		action.setUrl("transferToAnotherBlocking/secUserId/");
 		this.addFormAction(action);
 		return this;
 	}
+
+ 
 
 	public SecUserForm showAction(){
 		FormAction action = new FormAction();

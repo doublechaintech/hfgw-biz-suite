@@ -26,14 +26,14 @@ const transferToAnotherChannel = (id, parameters) => {
 };
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}chainCodeManager/addServiceRecord/chainCodeId/name/payload/channelId/chainCodeFunction/transactionId/blockId/appClientId/networkId/response/statusId/tokensExpr/`;
+  const url = `${PREFIX}chainCodeManager/addServiceRecord/chainCodeId/transactionId/name/payload/channelId/chainCodeFunction/blockId/appClientId/networkId/response/statusId/tokensExpr/`;
   const chainCodeId = targetObjectId;
   const requestParameters = { ...parameters, chainCodeId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}chainCodeManager/updateServiceRecordProperties/chainCodeId/id/name/payload/chainCodeFunction/transactionId/blockId/response/tokensExpr/`;
+  const url = `${PREFIX}chainCodeManager/updateServiceRecordProperties/chainCodeId/id/transactionId/name/payload/chainCodeFunction/blockId/response/tokensExpr/`;
   const chainCodeId = targetObjectId;
   const requestParameters = { ...parameters, chainCodeId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
@@ -41,6 +41,26 @@ const updateServiceRecord = (targetObjectId, parameters) => {
 
 const removeServiceRecordList = (targetObjectId, parameters) => {
   const url = `${PREFIX}chainCodeManager/removeServiceRecordList/chainCodeId/serviceRecordIds/tokensExpr/`;
+  const requestParameters = { ...parameters, chainCodeId: targetObjectId, tokensExpr: 'none' };
+  return postForm({ url, requestParameters });
+};
+
+const addChainCodeInvoker = (targetObjectId, parameters) => {
+  const url = `${PREFIX}chainCodeManager/addChainCodeInvoker/chainCodeId/appClientId/parameters/changeRequestId/tokensExpr/`;
+  const chainCodeId = targetObjectId;
+  const requestParameters = { ...parameters, chainCodeId, tokensExpr: 'none' };
+  return postForm({ url, requestParameters });
+};
+
+const updateChainCodeInvoker = (targetObjectId, parameters) => {
+  const url = `${PREFIX}chainCodeManager/updateChainCodeInvokerProperties/chainCodeId/id/parameters/tokensExpr/`;
+  const chainCodeId = targetObjectId;
+  const requestParameters = { ...parameters, chainCodeId, tokensExpr: 'none' };
+  return postForm({ url, requestParameters });
+};
+
+const removeChainCodeInvokerList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}chainCodeManager/removeChainCodeInvokerList/chainCodeId/chainCodeInvokerIds/tokensExpr/`;
   const requestParameters = { ...parameters, chainCodeId: targetObjectId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
@@ -71,8 +91,11 @@ const ChainCodeService = {
   view,
   load,
   addServiceRecord,
+  addChainCodeInvoker,
   updateServiceRecord,
+  updateChainCodeInvoker,
   removeServiceRecordList,
+  removeChainCodeInvokerList,
   requestCandidateChannel,
   transferToAnotherChannel,
   listFunctions,

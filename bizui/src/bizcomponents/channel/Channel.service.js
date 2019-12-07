@@ -106,14 +106,14 @@ const removeApplicationList = (targetObjectId, parameters) => {
 };
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}channelManager/addServiceRecord/channelId/name/payload/chainCodeId/chainCodeFunction/transactionId/blockId/appClientId/networkId/response/statusId/tokensExpr/`;
+  const url = `${PREFIX}channelManager/addServiceRecord/channelId/transactionId/name/payload/chainCodeId/chainCodeFunction/blockId/appClientId/networkId/response/statusId/tokensExpr/`;
   const channelId = targetObjectId;
   const requestParameters = { ...parameters, channelId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}channelManager/updateServiceRecordProperties/channelId/id/name/payload/chainCodeFunction/transactionId/blockId/response/tokensExpr/`;
+  const url = `${PREFIX}channelManager/updateServiceRecordProperties/channelId/id/transactionId/name/payload/chainCodeFunction/blockId/response/tokensExpr/`;
   const channelId = targetObjectId;
   const requestParameters = { ...parameters, channelId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });

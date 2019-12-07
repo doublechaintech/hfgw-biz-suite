@@ -26,13 +26,13 @@ import appLocaleName from '../../common/Locale.tool';
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const { TextArea } = Input;
-
+const { fieldLabels } = ServiceRecordBase;
 const testValues = {};
 /*
 const testValues = {
+  transactionId: 'a21fe3srw',
   name: '调用链码',
   chainCodeFunction: 'transact',
-  transactionId: 'a21fe3srw',
   blockId: 'a21fe3srw',
   channelId: 'C000001',
   chainCodeId: 'CC000001',
@@ -79,7 +79,7 @@ class ServiceRecordCreateFormBody extends Component {
     const { convertedImagesValues } = this.state;
     const userContext = null;
     const { getFieldDecorator, validateFieldsAndScroll, getFieldsError } = form;
-    const { fieldLabels } = ServiceRecordBase;
+
     const { ServiceRecordService } = GlobalComponents;
 
     const capFirstChar = value => {
@@ -131,7 +131,7 @@ class ServiceRecordCreateFormBody extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          服务记录
+          {window.trans('service_record')}
         </div>
       );
     };
@@ -146,10 +146,18 @@ class ServiceRecordCreateFormBody extends Component {
           <Form>
             <Row gutter={16}>
               <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.transactionId} {...formItemLayout}>
+                  {getFieldDecorator('transactionId', {
+                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
+                  })(<Input size="large" placeHolder={fieldLabels.transactionId} />)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={24} md={24} sm={24}>
                 <Form.Item label={fieldLabels.name} {...formItemLayout}>
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="名称" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.name} />)}
                 </Form.Item>
               </Col>
 
@@ -157,15 +165,7 @@ class ServiceRecordCreateFormBody extends Component {
                 <Form.Item label={fieldLabels.chainCodeFunction} {...formItemLayout}>
                   {getFieldDecorator('chainCodeFunction', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="链码功能" />)}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.transactionId} {...formItemLayout}>
-                  {getFieldDecorator('transactionId', {
-                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="事务Id" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.chainCodeFunction} />)}
                 </Form.Item>
               </Col>
 
@@ -173,7 +173,7 @@ class ServiceRecordCreateFormBody extends Component {
                 <Form.Item label={fieldLabels.blockId} {...formItemLayout}>
                   {getFieldDecorator('blockId', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="块Id" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.blockId} />)}
                 </Form.Item>
               </Col>
 
@@ -255,7 +255,7 @@ class ServiceRecordCreateFormBody extends Component {
           </Form>
         </Card>
 
-        <Card title={`有效载荷`} className={styles.card} bordered={false}>
+        <Card title={fieldLabels.payload} className={styles.card} bordered={false}>
           <Form>
             <Row gutter={16}>
               <Col lg={24} md={24} sm={24}>
@@ -269,7 +269,7 @@ class ServiceRecordCreateFormBody extends Component {
           </Form>
         </Card>
 
-        <Card title={`响应`} className={styles.card} bordered={false}>
+        <Card title={fieldLabels.response} className={styles.card} bordered={false}>
           <Form>
             <Row gutter={16}>
               <Col lg={24} md={24} sm={24}>

@@ -32,9 +32,9 @@ const { TextArea } = Input;
 const testValues = {};
 /*
 const testValues = {
+  transactionId: 'a21fe3srw',
   name: '调用链码',
   chainCodeFunction: 'transact',
-  transactionId: 'a21fe3srw',
   blockId: 'a21fe3srw',
   channelId: 'C000001',
   chainCodeId: 'CC000001',
@@ -148,10 +148,18 @@ class ServiceRecordAssociateForm extends Component {
           <Form>
             <Row gutter={16}>
               <Col lg={12} md={12} sm={12}>
+                <Form.Item label={fieldLabels.transactionId} {...formItemLayout}>
+                  {getFieldDecorator('transactionId', {
+                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
+                  })(<Input size="large" placeHolder={fieldLabels.transactionId} />)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={12} md={12} sm={12}>
                 <Form.Item label={fieldLabels.name} {...formItemLayout}>
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="名称" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.name} />)}
                 </Form.Item>
               </Col>
 
@@ -159,15 +167,7 @@ class ServiceRecordAssociateForm extends Component {
                 <Form.Item label={fieldLabels.chainCodeFunction} {...formItemLayout}>
                   {getFieldDecorator('chainCodeFunction', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="链码功能" />)}
-                </Form.Item>
-              </Col>
-
-              <Col lg={12} md={12} sm={12}>
-                <Form.Item label={fieldLabels.transactionId} {...formItemLayout}>
-                  {getFieldDecorator('transactionId', {
-                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="事务Id" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.chainCodeFunction} />)}
                 </Form.Item>
               </Col>
 
@@ -175,7 +175,7 @@ class ServiceRecordAssociateForm extends Component {
                 <Form.Item label={fieldLabels.blockId} {...formItemLayout}>
                   {getFieldDecorator('blockId', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="块Id" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.blockId} />)}
                 </Form.Item>
               </Col>
             </Row>

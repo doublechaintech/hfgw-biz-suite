@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.channelpeerrole;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -17,7 +18,7 @@ import com.doublechaintech.hfgw.peerrole.PeerRoleDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 
 
-public interface ChannelPeerRoleDAO{
+public interface ChannelPeerRoleDAO extends BaseDAO{
 
 	public SmartList<ChannelPeerRole> loadAll();
 	public ChannelPeerRole load(String id, Map<String,Object> options) throws Exception;

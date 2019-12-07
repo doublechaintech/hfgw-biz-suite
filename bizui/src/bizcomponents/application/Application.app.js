@@ -99,6 +99,8 @@ class ApplicationBizApp extends React.PureComponent {
     super(props);
     this.state = {
       openKeys: this.getDefaultCollapsedSubMenus(props),
+      showSearch: false,
+      searchKeyword: '',
     };
   }
 
@@ -144,7 +146,7 @@ class ApplicationBizApp extends React.PureComponent {
         mode="inline"
         onOpenChange={this.handleOpenChange}
         defaultOpenKeys={['firstOne']}
-        style={{ width: '256px' }}
+        style={{ width: '456px' }}
       >
         <Menu.Item key="dashboard">
           <Link to={`/application/${this.props.application.id}/dashboard`}>
@@ -241,6 +243,74 @@ class ApplicationBizApp extends React.PureComponent {
     }))(ServiceRecordUpdateForm);
   };
 
+  getChainCodeInvokerSearch = () => {
+    const { ChainCodeInvokerSearch } = GlobalComponents;
+    const userContext = null;
+    return connect(state => ({
+      rule: state.rule,
+      name: '链代码调用程序',
+      role: 'chainCodeInvoker',
+      data: state._application.chainCodeInvokerList,
+      metaInfo: state._application.chainCodeInvokerListMetaInfo,
+      count: state._application.chainCodeInvokerCount,
+      returnURL: `/application/${state._application.id}/dashboard`,
+      currentPage: state._application.chainCodeInvokerCurrentPageNumber,
+      searchFormParameters: state._application.chainCodeInvokerSearchFormParameters,
+      searchParameters: { ...state._application.searchParameters },
+      expandForm: state._application.expandForm,
+      loading: state._application.loading,
+      partialList: state._application.partialList,
+      owner: {
+        type: '_application',
+        id: state._application.id,
+        referenceName: 'appClient',
+        listName: 'chainCodeInvokerList',
+        ref: state._application,
+        listDisplayName: appLocaleName(userContext, 'List'),
+      }, // this is for model namespace and
+    }))(ChainCodeInvokerSearch);
+  };
+  getChainCodeInvokerCreateForm = () => {
+    const { ChainCodeInvokerCreateForm } = GlobalComponents;
+    const userContext = null;
+    return connect(state => ({
+      rule: state.rule,
+      role: 'chainCodeInvoker',
+      data: state._application.chainCodeInvokerList,
+      metaInfo: state._application.chainCodeInvokerListMetaInfo,
+      count: state._application.chainCodeInvokerCount,
+      returnURL: `/application/${state._application.id}/list`,
+      currentPage: state._application.chainCodeInvokerCurrentPageNumber,
+      searchFormParameters: state._application.chainCodeInvokerSearchFormParameters,
+      loading: state._application.loading,
+      owner: {
+        type: '_application',
+        id: state._application.id,
+        referenceName: 'appClient',
+        listName: 'chainCodeInvokerList',
+        ref: state._application,
+        listDisplayName: appLocaleName(userContext, 'List'),
+      }, // this is for model namespace and
+    }))(ChainCodeInvokerCreateForm);
+  };
+
+  getChainCodeInvokerUpdateForm = () => {
+    const userContext = null;
+    const { ChainCodeInvokerUpdateForm } = GlobalComponents;
+    return connect(state => ({
+      selectedRows: state._application.selectedRows,
+      role: 'chainCodeInvoker',
+      currentUpdateIndex: state._application.currentUpdateIndex,
+      owner: {
+        type: '_application',
+        id: state._application.id,
+        listName: 'chainCodeInvokerList',
+        ref: state._application,
+        listDisplayName: appLocaleName(userContext, 'List'),
+      }, // this is for model namespace and
+    }))(ChainCodeInvokerUpdateForm);
+  };
+
   getPageTitle = () => {
     // const { location } = this.props
     // const { pathname } = location
@@ -266,6 +336,19 @@ class ApplicationBizApp extends React.PureComponent {
       {
         path: '/application/:id/list/serviceRecordUpdateForm',
         component: this.getServiceRecordUpdateForm(),
+      },
+
+      {
+        path: '/application/:id/list/chainCodeInvokerList',
+        component: this.getChainCodeInvokerSearch(),
+      },
+      {
+        path: '/application/:id/list/chainCodeInvokerCreateForm',
+        component: this.getChainCodeInvokerCreateForm(),
+      },
+      {
+        path: '/application/:id/list/chainCodeInvokerUpdateForm',
+        component: this.getChainCodeInvokerUpdateForm(),
       },
       {
         path: '/application/:id/ChangeRequestType/:code',
@@ -345,7 +428,20 @@ class ApplicationBizApp extends React.PureComponent {
         <Menu mode="vertical">{currentBreadcrumb.map(item => renderBreadcrumbMenuItem(item))}</Menu>
       );
     };
+
     const { Search } = Input;
+    const showSearchResult = () => {
+      this.setState({ showSearch: true });
+    };
+    const searchChange = evt => {
+      this.setState({ searchKeyword: evt.target.value });
+    };
+    const hideSearchResult = () => {
+      this.setState({ showSearch: false });
+    };
+
+    const { searchLocalData } = GlobalComponents.ApplicationBase;
+
     const layout = (
       <Layout>
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
@@ -366,8 +462,10 @@ class ApplicationBizApp extends React.PureComponent {
             <Col className={styles.searchBox} {...searchBarResponsiveStyle}>
               <Search
                 size="default"
-                placeholder="请输入搜索条件, 查找功能，数据和词汇解释"
+                placeholder="请输入搜索条件, 查找功能，数据和词汇解释，关闭请点击搜索结果空白处"
                 enterButton
+                onFocus={() => showSearchResult()}
+                onChange={evt => searchChange(evt)}
                 style={{ marginLeft: '10px', marginTop: '7px', width: '100%' }}
               />
             </Col>
@@ -381,6 +479,12 @@ class ApplicationBizApp extends React.PureComponent {
           </Row>
         </Header>
         <Layout style={{ marginTop: 44 }}>
+          {this.state.showSearch && (
+            <div style={{ backgroundColor: 'black' }} onClick={() => hideSearchResult()}>
+              {searchLocalData(this.props.application, this.state.searchKeyword)}
+            </div>
+          )}
+
           <Layout>
             <Content style={{ margin: '24px 24px 0', height: '100%' }}>
               {this.buildRouters()}

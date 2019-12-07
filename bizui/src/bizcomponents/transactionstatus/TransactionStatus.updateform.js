@@ -286,7 +286,7 @@ class TransactionStatusUpdateForm extends Component {
                   {getFieldDecorator('id', {
                     initialValue: selectedRow.id,
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="ID" disabled />)}
+                  })(<Input size="large" placeHolder={fieldLabels.id} disabled />)}
                 </Form.Item>
               </Col>
 
@@ -295,7 +295,7 @@ class TransactionStatusUpdateForm extends Component {
                   {getFieldDecorator('name', {
                     initialValue: selectedRow.name,
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="名称" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.name} />)}
                 </Form.Item>
               </Col>
 
@@ -304,7 +304,7 @@ class TransactionStatusUpdateForm extends Component {
                   {getFieldDecorator('code', {
                     initialValue: selectedRow.code,
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="代码" disabled />)}
+                  })(<Input size="large" placeHolder={fieldLabels.code} disabled />)}
                 </Form.Item>
               </Col>
             </Row>

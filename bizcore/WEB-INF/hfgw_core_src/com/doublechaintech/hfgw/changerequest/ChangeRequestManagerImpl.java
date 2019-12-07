@@ -22,10 +22,14 @@ import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 import com.doublechaintech.hfgw.changerequesttype.CandidateChangeRequestType;
 import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 
+import com.doublechaintech.hfgw.chaincode.ChainCode;
+import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.application.Application;
 
 
 
@@ -35,6 +39,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.CandidateHyperledgerNetwork;
 public class ChangeRequestManagerImpl extends CustomHfgwCheckerManager implements ChangeRequestManager {
 	
 	private static final String SERVICE_TYPE = "ChangeRequest";
+	@Override
+	public ChangeRequestDAO daoOf(HfgwUserContext userContext) {
+		return changeRequestDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
@@ -152,6 +160,10 @@ public class ChangeRequestManagerImpl extends CustomHfgwCheckerManager implement
 		
 		addAction(userContext, changeRequest, tokens,"change_request.transfer_to_request_type","transferToAnotherRequestType","transferToAnotherRequestType/"+changeRequest.getId()+"/","main","primary");
 		addAction(userContext, changeRequest, tokens,"change_request.transfer_to_network","transferToAnotherNetwork","transferToAnotherNetwork/"+changeRequest.getId()+"/","main","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.addChainCodeInvoker","addChainCodeInvoker","addChainCodeInvoker/"+changeRequest.getId()+"/","chainCodeInvokerList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.removeChainCodeInvoker","removeChainCodeInvoker","removeChainCodeInvoker/"+changeRequest.getId()+"/","chainCodeInvokerList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.updateChainCodeInvoker","updateChainCodeInvoker","updateChainCodeInvoker/"+changeRequest.getId()+"/","chainCodeInvokerList","primary");
+		addAction(userContext, changeRequest, tokens,"change_request.copyChainCodeInvokerFrom","copyChainCodeInvokerFrom","copyChainCodeInvokerFrom/"+changeRequest.getId()+"/","chainCodeInvokerList","primary");
 	
 		
 		
@@ -320,6 +332,7 @@ public class ChangeRequestManagerImpl extends CustomHfgwCheckerManager implement
 	}
 	protected Map<String,Object> viewTokens(){
 		return tokens().allTokens()
+		.sortChainCodeInvokerListWith("id","desc")
 		.analyzeAllLists().done();
 
 	}
@@ -521,11 +534,287 @@ public class ChangeRequestManagerImpl extends CustomHfgwCheckerManager implement
 	}
 
 
+	//disconnect ChangeRequest with app_client in ChainCodeInvoker
+	protected ChangeRequest breakWithChainCodeInvokerByAppClient(HfgwUserContext userContext, String changeRequestId, String appClientId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+
+			synchronized(changeRequest){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				changeRequestDaoOf(userContext).planToRemoveChainCodeInvokerListWithAppClient(changeRequest, appClientId, this.emptyOptions());
+
+				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+				return changeRequest;
+			}
+	}
+	//disconnect ChangeRequest with chain_code in ChainCodeInvoker
+	protected ChangeRequest breakWithChainCodeInvokerByChainCode(HfgwUserContext userContext, String changeRequestId, String chainCodeId,  String [] tokensExpr)
+		 throws Exception{
+			
+			//TODO add check code here
+			
+			ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+
+			synchronized(changeRequest){ 
+				//Will be good when the thread loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				
+				changeRequestDaoOf(userContext).planToRemoveChainCodeInvokerListWithChainCode(changeRequest, chainCodeId, this.emptyOptions());
+
+				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+				return changeRequest;
+			}
+	}
 	
 	
 	
 	
 	
+
+	protected void checkParamsForAddingChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String appClientId, String chainCodeId, String parameters,String [] tokensExpr) throws Exception{
+		
+				checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
+
+		
+		checkerOf(userContext).checkAppClientIdOfChainCodeInvoker(appClientId);
+		
+		checkerOf(userContext).checkChainCodeIdOfChainCodeInvoker(chainCodeId);
+		
+		checkerOf(userContext).checkParametersOfChainCodeInvoker(parameters);
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
+
+	
+	}
+	public  ChangeRequest addChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String appClientId, String chainCodeId, String parameters, String [] tokensExpr) throws Exception
+	{	
+		
+		checkParamsForAddingChainCodeInvoker(userContext,changeRequestId,appClientId, chainCodeId, parameters,tokensExpr);
+		
+		ChainCodeInvoker chainCodeInvoker = createChainCodeInvoker(userContext,appClientId, chainCodeId, parameters);
+		
+		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+		synchronized(changeRequest){ 
+			//Will be good when the changeRequest loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			changeRequest.addChainCodeInvoker( chainCodeInvoker );		
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+			
+			userContext.getManagerGroup().getChainCodeInvokerManager().onNewInstanceCreated(userContext, chainCodeInvoker);
+			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
+		}
+	}
+	protected void checkParamsForUpdatingChainCodeInvokerProperties(HfgwUserContext userContext, String changeRequestId,String id,String parameters,String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(id);
+		
+		checkerOf(userContext).checkParametersOfChainCodeInvoker( parameters);
+
+		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
+		
+	}
+	public  ChangeRequest updateChainCodeInvokerProperties(HfgwUserContext userContext, String changeRequestId, String id,String parameters, String [] tokensExpr) throws Exception
+	{	
+		checkParamsForUpdatingChainCodeInvokerProperties(userContext,changeRequestId,id,parameters,tokensExpr);
+
+		Map<String, Object> options = tokens()
+				.allTokens()
+				//.withChainCodeInvokerListList()
+				.searchChainCodeInvokerListWith(ChainCodeInvoker.ID_PROPERTY, "is", id).done();
+		
+		ChangeRequest changeRequestToUpdate = loadChangeRequest(userContext, changeRequestId, options);
+		
+		if(changeRequestToUpdate.getChainCodeInvokerList().isEmpty()){
+			throw new ChangeRequestManagerException("ChainCodeInvoker is NOT FOUND with id: '"+id+"'");
+		}
+		
+		ChainCodeInvoker item = changeRequestToUpdate.getChainCodeInvokerList().first();
+		
+		item.updateParameters( parameters );
+
+		
+		//checkParamsForAddingChainCodeInvoker(userContext,changeRequestId,name, code, used,tokensExpr);
+		ChangeRequest changeRequest = saveChangeRequest(userContext, changeRequestToUpdate, tokens().withChainCodeInvokerList().done());
+		synchronized(changeRequest){ 
+			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
+		}
+	}
+	
+	
+	protected ChainCodeInvoker createChainCodeInvoker(HfgwUserContext userContext, String appClientId, String chainCodeId, String parameters) throws Exception{
+
+		ChainCodeInvoker chainCodeInvoker = new ChainCodeInvoker();
+		
+		
+		Application  appClient = new Application();
+		appClient.setId(appClientId);		
+		chainCodeInvoker.setAppClient(appClient);		
+		ChainCode  chainCode = new ChainCode();
+		chainCode.setId(chainCodeId);		
+		chainCodeInvoker.setChainCode(chainCode);		
+		chainCodeInvoker.setParameters(parameters);
+	
+		
+		return chainCodeInvoker;
+	
+		
+	}
+	
+	protected ChainCodeInvoker createIndexedChainCodeInvoker(String id, int version){
+
+		ChainCodeInvoker chainCodeInvoker = new ChainCodeInvoker();
+		chainCodeInvoker.setId(id);
+		chainCodeInvoker.setVersion(version);
+		return chainCodeInvoker;			
+		
+	}
+	
+	protected void checkParamsForRemovingChainCodeInvokerList(HfgwUserContext userContext, String changeRequestId, 
+			String chainCodeInvokerIds[],String [] tokensExpr) throws Exception {
+		
+		checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
+		for(String chainCodeInvokerIdItem: chainCodeInvokerIds){
+			checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerIdItem);
+		}
+		
+		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
+		
+	}
+	public  ChangeRequest removeChainCodeInvokerList(HfgwUserContext userContext, String changeRequestId, 
+			String chainCodeInvokerIds[],String [] tokensExpr) throws Exception{
+			
+			checkParamsForRemovingChainCodeInvokerList(userContext, changeRequestId,  chainCodeInvokerIds, tokensExpr);
+			
+			
+			ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+			synchronized(changeRequest){ 
+				//Will be good when the changeRequest loaded from this JVM process cache.
+				//Also good when there is a RAM based DAO implementation
+				changeRequestDaoOf(userContext).planToRemoveChainCodeInvokerList(changeRequest, chainCodeInvokerIds, allTokens());
+				changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+				deleteRelationListInGraph(userContext, changeRequest.getChainCodeInvokerList());
+				return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
+			}
+	}
+	
+	protected void checkParamsForRemovingChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfChangeRequest( changeRequestId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerId);
+		checkerOf(userContext).checkVersionOfChainCodeInvoker(chainCodeInvokerVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
+	
+	}
+	public  ChangeRequest removeChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForRemovingChainCodeInvoker(userContext,changeRequestId, chainCodeInvokerId, chainCodeInvokerVersion,tokensExpr);
+		
+		ChainCodeInvoker chainCodeInvoker = createIndexedChainCodeInvoker(chainCodeInvokerId, chainCodeInvokerVersion);
+		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+		synchronized(changeRequest){ 
+			//Will be good when the changeRequest loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			changeRequest.removeChainCodeInvoker( chainCodeInvoker );		
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+			deleteRelationInGraph(userContext, chainCodeInvoker);
+			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
+		}
+		
+		
+	}
+	protected void checkParamsForCopyingChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkerOf(userContext).checkIdOfChangeRequest( changeRequestId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerId);
+		checkerOf(userContext).checkVersionOfChainCodeInvoker(chainCodeInvokerVersion);
+		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
+	
+	}
+	public  ChangeRequest copyChainCodeInvokerFrom(HfgwUserContext userContext, String changeRequestId, 
+		String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr) throws Exception{
+		
+		checkParamsForCopyingChainCodeInvoker(userContext,changeRequestId, chainCodeInvokerId, chainCodeInvokerVersion,tokensExpr);
+		
+		ChainCodeInvoker chainCodeInvoker = createIndexedChainCodeInvoker(chainCodeInvokerId, chainCodeInvokerVersion);
+		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, allTokens());
+		synchronized(changeRequest){ 
+			//Will be good when the changeRequest loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			
+			
+			
+			changeRequest.copyChainCodeInvokerFrom( chainCodeInvoker );		
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+			
+			userContext.getManagerGroup().getChainCodeInvokerManager().onNewInstanceCreated(userContext, (ChainCodeInvoker)changeRequest.getFlexiableObjects().get(BaseEntity.COPIED_CHILD));
+			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
+		}
+		
+	}
+	
+	protected void checkParamsForUpdatingChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String chainCodeInvokerId, int chainCodeInvokerVersion, String property, String newValueExpr,String [] tokensExpr) throws Exception{
+		
+
+		
+		checkerOf(userContext).checkIdOfChangeRequest(changeRequestId);
+		checkerOf(userContext).checkIdOfChainCodeInvoker(chainCodeInvokerId);
+		checkerOf(userContext).checkVersionOfChainCodeInvoker(chainCodeInvokerVersion);
+		
+
+		if(ChainCodeInvoker.PARAMETERS_PROPERTY.equals(property)){
+			checkerOf(userContext).checkParametersOfChainCodeInvoker(parseString(newValueExpr));
+		}
+		
+	
+		checkerOf(userContext).throwExceptionIfHasErrors(ChangeRequestManagerException.class);
+	
+	}
+	
+	public  ChangeRequest updateChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String chainCodeInvokerId, int chainCodeInvokerVersion, String property, String newValueExpr,String [] tokensExpr)
+			throws Exception{
+		
+		checkParamsForUpdatingChainCodeInvoker(userContext, changeRequestId, chainCodeInvokerId, chainCodeInvokerVersion, property, newValueExpr,  tokensExpr);
+		
+		Map<String,Object> loadTokens = this.tokens().withChainCodeInvokerList().searchChainCodeInvokerListWith(ChainCodeInvoker.ID_PROPERTY, "eq", chainCodeInvokerId).done();
+		
+		
+		
+		ChangeRequest changeRequest = loadChangeRequest(userContext, changeRequestId, loadTokens);
+		
+		synchronized(changeRequest){ 
+			//Will be good when the changeRequest loaded from this JVM process cache.
+			//Also good when there is a RAM based DAO implementation
+			//changeRequest.removeChainCodeInvoker( chainCodeInvoker );	
+			//make changes to AcceleraterAccount.
+			ChainCodeInvoker chainCodeInvokerIndex = createIndexedChainCodeInvoker(chainCodeInvokerId, chainCodeInvokerVersion);
+		
+			ChainCodeInvoker chainCodeInvoker = changeRequest.findTheChainCodeInvoker(chainCodeInvokerIndex);
+			if(chainCodeInvoker == null){
+				throw new ChangeRequestManagerException(chainCodeInvoker+" is NOT FOUND" );
+			}
+			
+			chainCodeInvoker.changeProperty(property, newValueExpr);
+			
+			changeRequest = saveChangeRequest(userContext, changeRequest, tokens().withChainCodeInvokerList().done());
+			return present(userContext,changeRequest, mergedAllTokens(tokensExpr));
+		}
+
+	}
+	/*
+
+	*/
+	
+
+
 
 	public void onNewInstanceCreated(HfgwUserContext userContext, ChangeRequest newCreated) throws Exception{
 		ensureRelationInGraph(userContext, newCreated);

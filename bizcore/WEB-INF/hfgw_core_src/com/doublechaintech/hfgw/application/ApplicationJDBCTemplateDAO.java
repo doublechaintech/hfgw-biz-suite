@@ -23,8 +23,10 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 
@@ -73,6 +75,25 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
  		}
  		
 	 	return this.serviceRecordDAO;
+ 	}	
+ 	
+			
+		
+	
+  	private  ChainCodeInvokerDAO  chainCodeInvokerDAO;
+ 	public void setChainCodeInvokerDAO(ChainCodeInvokerDAO pChainCodeInvokerDAO){
+ 	
+ 		if(pChainCodeInvokerDAO == null){
+ 			throw new IllegalStateException("Do not try to set chainCodeInvokerDAO to null.");
+ 		}
+	 	this.chainCodeInvokerDAO = pChainCodeInvokerDAO;
+ 	}
+ 	public ChainCodeInvokerDAO getChainCodeInvokerDAO(){
+ 		if(this.chainCodeInvokerDAO == null){
+ 			throw new IllegalStateException("The chainCodeInvokerDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.chainCodeInvokerDAO;
  	}	
  	
 			
@@ -129,6 +150,13 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
  		
  		if(isSaveServiceRecordListEnabled(options)){
  			for(ServiceRecord item: newApplication.getServiceRecordList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
+ 		if(isSaveChainCodeInvokerListEnabled(options)){
+ 			for(ChainCodeInvoker item: newApplication.getChainCodeInvokerList()){
  				item.setVersion(0);
  			}
  		}
@@ -266,6 +294,20 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
  	}
  	
 		
+	
+	protected boolean isExtractChainCodeInvokerListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,ApplicationTokens.CHAIN_CODE_INVOKER_LIST);
+ 	}
+ 	protected boolean isAnalyzeChainCodeInvokerListEnabled(Map<String,Object> options){		 		
+ 		return ApplicationTokens.of(options).analyzeChainCodeInvokerListEnabled();
+ 	}
+	
+	protected boolean isSaveChainCodeInvokerListEnabled(Map<String,Object> options){
+		return checkOptions(options, ApplicationTokens.CHAIN_CODE_INVOKER_LIST);
+		
+ 	}
+ 	
+		
 
 	
 
@@ -306,6 +348,14 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
  		}	
  		if(isAnalyzeServiceRecordListEnabled(loadOptions)){
 	 		analyzeServiceRecordList(application, loadOptions);
+ 		}
+ 		
+		
+		if(isExtractChainCodeInvokerListEnabled(loadOptions)){
+	 		extractChainCodeInvokerList(application, loadOptions);
+ 		}	
+ 		if(isAnalyzeChainCodeInvokerListEnabled(loadOptions)){
+	 		analyzeChainCodeInvokerList(application, loadOptions);
  		}
  		
 		
@@ -397,6 +447,56 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		SmartList<ServiceRecord> serviceRecordList = application.getServiceRecordList();
 		if(serviceRecordList != null){
 			getServiceRecordDAO().analyzeServiceRecordByAppClient(serviceRecordList, application.getId(), options);
+			
+		}
+		
+		return application;
+	
+	}	
+	
+		
+	protected void enhanceChainCodeInvokerList(SmartList<ChainCodeInvoker> chainCodeInvokerList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected Application extractChainCodeInvokerList(Application application, Map<String,Object> options){
+		
+		
+		if(application == null){
+			return null;
+		}
+		if(application.getId() == null){
+			return application;
+		}
+
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = getChainCodeInvokerDAO().findChainCodeInvokerByAppClient(application.getId(),options);
+		if(chainCodeInvokerList != null){
+			enhanceChainCodeInvokerList(chainCodeInvokerList,options);
+			application.setChainCodeInvokerList(chainCodeInvokerList);
+		}
+		
+		return application;
+	
+	}	
+	
+	protected Application analyzeChainCodeInvokerList(Application application, Map<String,Object> options){
+		
+		
+		if(application == null){
+			return null;
+		}
+		if(application.getId() == null){
+			return application;
+		}
+
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();
+		if(chainCodeInvokerList != null){
+			getChainCodeInvokerDAO().analyzeChainCodeInvokerByAppClient(chainCodeInvokerList, application.getId(), options);
 			
 		}
 		
@@ -714,6 +814,13 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 	 		
  		}		
 		
+		if(isSaveChainCodeInvokerListEnabled(options)){
+	 		saveChainCodeInvokerList(application, options);
+	 		//removeChainCodeInvokerList(application, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
 		return application;
 		
 	}
@@ -786,6 +893,50 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 	}
 
 
+	//disconnect Application with transaction_id in ServiceRecord
+	public Application planToRemoveServiceRecordListWithTransactionId(Application application, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return application;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return application;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearTransactionId();
+			serviceRecordItem.clearAppClient();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = application.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return application;
+	}
+	
+	public int countServiceRecordListWithTransactionId(String applicationId, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect Application with channel in ServiceRecord
 	public Application planToRemoveServiceRecordListWithChannel(Application application, String channelId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -869,50 +1020,6 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
 		key.put(ServiceRecord.CHAIN_CODE_PROPERTY, chainCodeId);
-		
-		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
-		return count;
-	}
-	
-	//disconnect Application with transaction_id in ServiceRecord
-	public Application planToRemoveServiceRecordListWithTransactionId(Application application, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APP_CLIENT_PROPERTY, application.getId());
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
-		
-		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
-				findServiceRecordWithKey(key, options);
-		if(externalServiceRecordList == null){
-			return application;
-		}
-		if(externalServiceRecordList.isEmpty()){
-			return application;
-		}
-		
-		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
-			serviceRecordItem.clearTransactionId();
-			serviceRecordItem.clearAppClient();
-			
-		}
-		
-		
-		SmartList<ServiceRecord> serviceRecordList = application.getServiceRecordList();		
-		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
-		return application;
-	}
-	
-	public int countServiceRecordListWithTransactionId(String applicationId, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.APP_CLIENT_PROPERTY, applicationId);
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
 		
 		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
 		return count;
@@ -1050,6 +1157,122 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		return count;
 	}
 	
+	public Application planToRemoveChainCodeInvokerList(Application application, String chainCodeInvokerIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, application.getId());
+		key.put(ChainCodeInvoker.ID_PROPERTY, chainCodeInvokerIds);
+		
+		SmartList<ChainCodeInvoker> externalChainCodeInvokerList = getChainCodeInvokerDAO().
+				findChainCodeInvokerWithKey(key, options);
+		if(externalChainCodeInvokerList == null){
+			return application;
+		}
+		if(externalChainCodeInvokerList.isEmpty()){
+			return application;
+		}
+		
+		for(ChainCodeInvoker chainCodeInvokerItem: externalChainCodeInvokerList){
+
+			chainCodeInvokerItem.clearFromAll();
+		}
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();		
+		chainCodeInvokerList.addAllToRemoveList(externalChainCodeInvokerList);
+		return application;	
+	
+	}
+
+
+	//disconnect Application with chain_code in ChainCodeInvoker
+	public Application planToRemoveChainCodeInvokerListWithChainCode(Application application, String chainCodeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, application.getId());
+		key.put(ChainCodeInvoker.CHAIN_CODE_PROPERTY, chainCodeId);
+		
+		SmartList<ChainCodeInvoker> externalChainCodeInvokerList = getChainCodeInvokerDAO().
+				findChainCodeInvokerWithKey(key, options);
+		if(externalChainCodeInvokerList == null){
+			return application;
+		}
+		if(externalChainCodeInvokerList.isEmpty()){
+			return application;
+		}
+		
+		for(ChainCodeInvoker chainCodeInvokerItem: externalChainCodeInvokerList){
+			chainCodeInvokerItem.clearChainCode();
+			chainCodeInvokerItem.clearAppClient();
+			
+		}
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();		
+		chainCodeInvokerList.addAllToRemoveList(externalChainCodeInvokerList);
+		return application;
+	}
+	
+	public int countChainCodeInvokerListWithChainCode(String applicationId, String chainCodeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, applicationId);
+		key.put(ChainCodeInvoker.CHAIN_CODE_PROPERTY, chainCodeId);
+		
+		int count = getChainCodeInvokerDAO().countChainCodeInvokerWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect Application with change_request in ChainCodeInvoker
+	public Application planToRemoveChainCodeInvokerListWithChangeRequest(Application application, String changeRequestId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, application.getId());
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		
+		SmartList<ChainCodeInvoker> externalChainCodeInvokerList = getChainCodeInvokerDAO().
+				findChainCodeInvokerWithKey(key, options);
+		if(externalChainCodeInvokerList == null){
+			return application;
+		}
+		if(externalChainCodeInvokerList.isEmpty()){
+			return application;
+		}
+		
+		for(ChainCodeInvoker chainCodeInvokerItem: externalChainCodeInvokerList){
+			chainCodeInvokerItem.clearChangeRequest();
+			chainCodeInvokerItem.clearAppClient();
+			
+		}
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();		
+		chainCodeInvokerList.addAllToRemoveList(externalChainCodeInvokerList);
+		return application;
+	}
+	
+	public int countChainCodeInvokerListWithChangeRequest(String applicationId, String changeRequestId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, applicationId);
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		
+		int count = getChainCodeInvokerDAO().countChainCodeInvokerWithKey(key, options);
+		return count;
+	}
+	
 
 		
 	protected Application saveServiceRecordList(Application application, Map<String,Object> options){
@@ -1118,10 +1341,77 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 	
 	
 		
+	protected Application saveChainCodeInvokerList(Application application, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();
+		if(chainCodeInvokerList == null){
+			//null list means nothing
+			return application;
+		}
+		SmartList<ChainCodeInvoker> mergedUpdateChainCodeInvokerList = new SmartList<ChainCodeInvoker>();
+		
+		
+		mergedUpdateChainCodeInvokerList.addAll(chainCodeInvokerList); 
+		if(chainCodeInvokerList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateChainCodeInvokerList.addAll(chainCodeInvokerList.getToRemoveList());
+			chainCodeInvokerList.removeAll(chainCodeInvokerList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getChainCodeInvokerDAO().saveChainCodeInvokerList(mergedUpdateChainCodeInvokerList,options);
+		
+		if(chainCodeInvokerList.getToRemoveList() != null){
+			chainCodeInvokerList.removeAll(chainCodeInvokerList.getToRemoveList());
+		}
+		
+		
+		return application;
+	
+	}
+	
+	protected Application removeChainCodeInvokerList(Application application, Map<String,Object> options){
+	
+	
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();
+		if(chainCodeInvokerList == null){
+			return application;
+		}	
+	
+		SmartList<ChainCodeInvoker> toRemoveChainCodeInvokerList = chainCodeInvokerList.getToRemoveList();
+		
+		if(toRemoveChainCodeInvokerList == null){
+			return application;
+		}
+		if(toRemoveChainCodeInvokerList.isEmpty()){
+			return application;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getChainCodeInvokerDAO().removeChainCodeInvokerList(toRemoveChainCodeInvokerList,options);
+		
+		return application;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
 
 	public Application present(Application application,Map<String, Object> options){
 	
 		presentServiceRecordList(application,options);
+		presentChainCodeInvokerList(application,options);
 
 		return application;
 	
@@ -1147,9 +1437,35 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 		return application;
 	}			
 		
+	//Using java8 feature to reduce the code significantly
+ 	protected Application presentChainCodeInvokerList(
+			Application application,
+			Map<String, Object> options) {
+
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = application.getChainCodeInvokerList();		
+				SmartList<ChainCodeInvoker> newList= presentSubList(application.getId(),
+				chainCodeInvokerList,
+				options,
+				getChainCodeInvokerDAO()::countChainCodeInvokerByAppClient,
+				getChainCodeInvokerDAO()::findChainCodeInvokerByAppClient
+				);
+
+		
+		application.setChainCodeInvokerList(newList);
+		
+
+		return application;
+	}			
+		
 
 	
     public SmartList<Application> requestCandidateApplicationForServiceRecord(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(ApplicationTable.COLUMN_NAME, filterKey, pageNo, pageSize, getApplicationMapper());
+    }
+		
+    public SmartList<Application> requestCandidateApplicationForChainCodeInvoker(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(ApplicationTable.COLUMN_NAME, filterKey, pageNo, pageSize, getApplicationMapper());
@@ -1186,6 +1502,29 @@ public class ApplicationJDBCTemplateDAO extends HfgwBaseDAOImpl implements Appli
 			SmartList<ServiceRecord> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setServiceRecordList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
+	// 需要一个加载引用我的对象的enhance方法:ChainCodeInvoker的appClient的ChainCodeInvokerList
+	public SmartList<ChainCodeInvoker> loadOurChainCodeInvokerList(HfgwUserContext userContext, List<Application> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<ChainCodeInvoker> loadedObjs = userContext.getDAOGroup().getChainCodeInvokerDAO().findChainCodeInvokerWithKey(key, options);
+		Map<String, List<ChainCodeInvoker>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getAppClient().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<ChainCodeInvoker> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<ChainCodeInvoker> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setChainCodeInvokerList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

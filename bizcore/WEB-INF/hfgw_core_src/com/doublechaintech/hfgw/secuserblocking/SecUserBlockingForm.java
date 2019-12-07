@@ -263,20 +263,6 @@ public class SecUserBlockingForm extends BaseForm {
 		return blockingIdFieldForSecUser("blockingId","");
 	}
 
-
-	public SecUserBlockingForm currentStatusFieldForSecUser(String parameterName, String initValue){
-		FormField field =  currentStatusFromSecUser(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public SecUserBlockingForm currentStatusFieldForSecUser(String initValue){
-		return currentStatusFieldForSecUser("currentStatus",initValue);
-	}
-	public SecUserBlockingForm currentStatusFieldForSecUser(){
-		return currentStatusFieldForSecUser("currentStatus","");
-	}
-
 	
 
 

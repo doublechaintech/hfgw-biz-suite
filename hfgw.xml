@@ -85,12 +85,12 @@
 	/>
 
 	<service_record
+		transaction_id="a21fe3srw|[0,200]"
 		name="调用链码|网络管理|[1,200]"
 		payload="text()"
 		channel="$(channel)"
 		chain_code="$(chain_code)"
 		chain_code_function="transact|[1,20]"
-		transaction_id="a21fe3srw|[0,200]"
 		block_id="a21fe3srw|[0,200]"
 		create_time="createTime()"
 		app_client="$(application)"
@@ -109,10 +109,10 @@
 	 />
 
 	<change_request_type
-		name="调用链码|网络管理"
-		code="CHAINCODE_INVOKE|NETWORK_MANAGER"
-		icon="upload|edit"
-		display_order="1|2|3|4|5|6"
+		name="证书健康状况检测|节点健康状况检测|证书更新|节点角色管理|调用链码发起交易|调用链码查询账本|查看账本交易"
+		code="CERT_CHECKER|NODE_CHECKER|CERT_UPDATER|NODE_ROLE_MANAGER|CC_INVOKER|CC_QUERIER|LEDGER_QUERIER"
+		icon="upload|edit|edit|edit|edit|edit|edit"
+		display_order="1|2|3|4|5|6|7"
 		bind_types="text()"
 		step_configuration="text()"
 		network="$(hyperledger_network)"
@@ -130,6 +130,15 @@
 		request_type="$(change_request_type)"
 		network="$(hyperledger_network)"
 		_features="change_request"
+	/>
+
+  <chain_code_invoker
+		app_client="$(application)"
+		chain_code="$(chain_code)"
+		parameters="text()"
+		change_request="$(change_request)"
+		_bind_with_cr_type="CC_INVOKER"
+		_features="event"
 	/>
 
 </root>

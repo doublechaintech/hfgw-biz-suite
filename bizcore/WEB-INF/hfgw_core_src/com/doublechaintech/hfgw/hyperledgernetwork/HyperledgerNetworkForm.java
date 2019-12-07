@@ -558,6 +558,20 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 
 
+	public HyperledgerNetworkForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public HyperledgerNetworkForm transactionIdFieldForServiceRecord(String initValue){
+		return transactionIdFieldForServiceRecord("transactionId",initValue);
+	}
+	public HyperledgerNetworkForm transactionIdFieldForServiceRecord(){
+		return transactionIdFieldForServiceRecord("transactionId","");
+	}
+
+
 	public HyperledgerNetworkForm nameFieldForServiceRecord(String parameterName, String initValue){
 		FormField field =  nameFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
@@ -625,20 +639,6 @@ public class HyperledgerNetworkForm extends BaseForm {
 	}
 	public HyperledgerNetworkForm chainCodeFunctionFieldForServiceRecord(){
 		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
-	}
-
-
-	public HyperledgerNetworkForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
-		this.addFormField(field);
-		return this;
-	}
-	
-	public HyperledgerNetworkForm transactionIdFieldForServiceRecord(String initValue){
-		return transactionIdFieldForServiceRecord("transactionId",initValue);
-	}
-	public HyperledgerNetworkForm transactionIdFieldForServiceRecord(){
-		return transactionIdFieldForServiceRecord("transactionId","");
 	}
 
 

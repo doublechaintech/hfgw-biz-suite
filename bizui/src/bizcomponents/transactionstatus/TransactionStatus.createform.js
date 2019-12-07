@@ -213,7 +213,7 @@ class TransactionStatusCreateForm extends Component {
         <div>
           {linkComp}
           {appLocaleName(userContext, 'CreateNew')}
-          交易状态
+          {window.trans('transaction_status')}
         </div>
       );
     };
@@ -221,7 +221,7 @@ class TransactionStatusCreateForm extends Component {
     return (
       <PageHeaderLayout
         title={internalRenderTitle()}
-        content={`${appLocaleName(userContext, 'CreateNew')}交易状态`}
+        content={`${appLocaleName(userContext, 'CreateNew')}${window.trans('transaction_status')}`}
         wrapperClassName={styles.advancedForm}
       >
         <TransactionStatusCreateFormBody {...this.props} />

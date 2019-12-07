@@ -36,6 +36,10 @@ import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 public class ChangeRequestTypeManagerImpl extends CustomHfgwCheckerManager implements ChangeRequestTypeManager {
 	
 	private static final String SERVICE_TYPE = "ChangeRequestType";
+	@Override
+	public ChangeRequestTypeDAO daoOf(HfgwUserContext userContext) {
+		return changeRequestTypeDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

@@ -44,6 +44,10 @@ import com.doublechaintech.hfgw.channel.Channel;
 public class NodeManagerImpl extends CustomHfgwCheckerManager implements NodeManager {
 	
 	private static final String SERVICE_TYPE = "Node";
+	@Override
+	public NodeDAO daoOf(HfgwUserContext userContext) {
+		return nodeDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

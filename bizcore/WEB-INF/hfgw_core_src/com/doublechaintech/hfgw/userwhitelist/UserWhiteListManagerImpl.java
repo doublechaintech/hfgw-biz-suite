@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.userdomain.CandidateUserDomain;
 public class UserWhiteListManagerImpl extends CustomHfgwCheckerManager implements UserWhiteListManager {
 	
 	private static final String SERVICE_TYPE = "UserWhiteList";
+	@Override
+	public UserWhiteListDAO daoOf(HfgwUserContext userContext) {
+		return userWhiteListDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

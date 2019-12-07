@@ -160,7 +160,9 @@ const internalSummaryOf = (channelPeerRole, targetComponent) => {
   const userContext = null;
   return (
     <DescriptionList className={styles.headerList} size="small" col="4">
-      <Description term="ID">{channelPeerRole.id}</Description>
+      <Description term="ID" style={{ wordBreak: 'break-all' }}>
+        {channelPeerRole.id}
+      </Description>
       <Description term="频道">
         {channelPeerRole.channel == null
           ? appLocaleName(userContext, 'NotAssigned')

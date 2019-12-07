@@ -22,8 +22,10 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeDAO;
 
 
@@ -54,6 +56,25 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
  	}
 
 
+			
+		
+	
+  	private  ChainCodeInvokerDAO  chainCodeInvokerDAO;
+ 	public void setChainCodeInvokerDAO(ChainCodeInvokerDAO pChainCodeInvokerDAO){
+ 	
+ 		if(pChainCodeInvokerDAO == null){
+ 			throw new IllegalStateException("Do not try to set chainCodeInvokerDAO to null.");
+ 		}
+	 	this.chainCodeInvokerDAO = pChainCodeInvokerDAO;
+ 	}
+ 	public ChainCodeInvokerDAO getChainCodeInvokerDAO(){
+ 		if(this.chainCodeInvokerDAO == null){
+ 			throw new IllegalStateException("The chainCodeInvokerDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.chainCodeInvokerDAO;
+ 	}	
+ 	
 			
 		
 
@@ -104,6 +125,13 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
 		ChangeRequest newChangeRequest = loadInternalChangeRequest(accessKey, options);
 		newChangeRequest.setVersion(0);
 		
+		
+ 		
+ 		if(isSaveChainCodeInvokerListEnabled(options)){
+ 			for(ChainCodeInvoker item: newChangeRequest.getChainCodeInvokerList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
 		
 
 		
@@ -224,6 +252,20 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
  	
  
 		
+	
+	protected boolean isExtractChainCodeInvokerListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,ChangeRequestTokens.CHAIN_CODE_INVOKER_LIST);
+ 	}
+ 	protected boolean isAnalyzeChainCodeInvokerListEnabled(Map<String,Object> options){		 		
+ 		return ChangeRequestTokens.of(options).analyzeChainCodeInvokerListEnabled();
+ 	}
+	
+	protected boolean isSaveChainCodeInvokerListEnabled(Map<String,Object> options){
+		return checkOptions(options, ChangeRequestTokens.CHAIN_CODE_INVOKER_LIST);
+		
+ 	}
+ 	
+		
 
 	
 
@@ -258,6 +300,14 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
 	 		extractNetwork(changeRequest, loadOptions);
  		}
  
+		
+		if(isExtractChainCodeInvokerListEnabled(loadOptions)){
+	 		extractChainCodeInvokerList(changeRequest, loadOptions);
+ 		}	
+ 		if(isAnalyzeChainCodeInvokerListEnabled(loadOptions)){
+	 		analyzeChainCodeInvokerList(changeRequest, loadOptions);
+ 		}
+ 		
 		
 		return changeRequest;
 		
@@ -304,6 +354,56 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
  	}
  		
  
+		
+	protected void enhanceChainCodeInvokerList(SmartList<ChainCodeInvoker> chainCodeInvokerList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected ChangeRequest extractChainCodeInvokerList(ChangeRequest changeRequest, Map<String,Object> options){
+		
+		
+		if(changeRequest == null){
+			return null;
+		}
+		if(changeRequest.getId() == null){
+			return changeRequest;
+		}
+
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = getChainCodeInvokerDAO().findChainCodeInvokerByChangeRequest(changeRequest.getId(),options);
+		if(chainCodeInvokerList != null){
+			enhanceChainCodeInvokerList(chainCodeInvokerList,options);
+			changeRequest.setChainCodeInvokerList(chainCodeInvokerList);
+		}
+		
+		return changeRequest;
+	
+	}	
+	
+	protected ChangeRequest analyzeChainCodeInvokerList(ChangeRequest changeRequest, Map<String,Object> options){
+		
+		
+		if(changeRequest == null){
+			return null;
+		}
+		if(changeRequest.getId() == null){
+			return changeRequest;
+		}
+
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();
+		if(chainCodeInvokerList != null){
+			getChainCodeInvokerDAO().analyzeChainCodeInvokerByChangeRequest(chainCodeInvokerList, changeRequest.getId(), options);
+			
+		}
+		
+		return changeRequest;
+	
+	}	
+	
 		
 		
   	
@@ -603,6 +703,13 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
  		}
  
 		
+		if(isSaveChainCodeInvokerListEnabled(options)){
+	 		saveChainCodeInvokerList(changeRequest, options);
+	 		//removeChainCodeInvokerList(changeRequest, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
 		return changeRequest;
 		
 	}
@@ -647,18 +754,227 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
  
 
 	
+	public ChangeRequest planToRemoveChainCodeInvokerList(ChangeRequest changeRequest, String chainCodeInvokerIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
+		key.put(ChainCodeInvoker.ID_PROPERTY, chainCodeInvokerIds);
+		
+		SmartList<ChainCodeInvoker> externalChainCodeInvokerList = getChainCodeInvokerDAO().
+				findChainCodeInvokerWithKey(key, options);
+		if(externalChainCodeInvokerList == null){
+			return changeRequest;
+		}
+		if(externalChainCodeInvokerList.isEmpty()){
+			return changeRequest;
+		}
+		
+		for(ChainCodeInvoker chainCodeInvokerItem: externalChainCodeInvokerList){
 
+			chainCodeInvokerItem.clearFromAll();
+		}
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();		
+		chainCodeInvokerList.addAllToRemoveList(externalChainCodeInvokerList);
+		return changeRequest;	
+	
+	}
+
+
+	//disconnect ChangeRequest with app_client in ChainCodeInvoker
+	public ChangeRequest planToRemoveChainCodeInvokerListWithAppClient(ChangeRequest changeRequest, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, appClientId);
+		
+		SmartList<ChainCodeInvoker> externalChainCodeInvokerList = getChainCodeInvokerDAO().
+				findChainCodeInvokerWithKey(key, options);
+		if(externalChainCodeInvokerList == null){
+			return changeRequest;
+		}
+		if(externalChainCodeInvokerList.isEmpty()){
+			return changeRequest;
+		}
+		
+		for(ChainCodeInvoker chainCodeInvokerItem: externalChainCodeInvokerList){
+			chainCodeInvokerItem.clearAppClient();
+			chainCodeInvokerItem.clearChangeRequest();
+			
+		}
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();		
+		chainCodeInvokerList.addAllToRemoveList(externalChainCodeInvokerList);
+		return changeRequest;
+	}
+	
+	public int countChainCodeInvokerListWithAppClient(String changeRequestId, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		key.put(ChainCodeInvoker.APP_CLIENT_PROPERTY, appClientId);
+		
+		int count = getChainCodeInvokerDAO().countChainCodeInvokerWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect ChangeRequest with chain_code in ChainCodeInvoker
+	public ChangeRequest planToRemoveChainCodeInvokerListWithChainCode(ChangeRequest changeRequest, String chainCodeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequest.getId());
+		key.put(ChainCodeInvoker.CHAIN_CODE_PROPERTY, chainCodeId);
+		
+		SmartList<ChainCodeInvoker> externalChainCodeInvokerList = getChainCodeInvokerDAO().
+				findChainCodeInvokerWithKey(key, options);
+		if(externalChainCodeInvokerList == null){
+			return changeRequest;
+		}
+		if(externalChainCodeInvokerList.isEmpty()){
+			return changeRequest;
+		}
+		
+		for(ChainCodeInvoker chainCodeInvokerItem: externalChainCodeInvokerList){
+			chainCodeInvokerItem.clearChainCode();
+			chainCodeInvokerItem.clearChangeRequest();
+			
+		}
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();		
+		chainCodeInvokerList.addAllToRemoveList(externalChainCodeInvokerList);
+		return changeRequest;
+	}
+	
+	public int countChainCodeInvokerListWithChainCode(String changeRequestId, String chainCodeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, changeRequestId);
+		key.put(ChainCodeInvoker.CHAIN_CODE_PROPERTY, chainCodeId);
+		
+		int count = getChainCodeInvokerDAO().countChainCodeInvokerWithKey(key, options);
+		return count;
+	}
+	
+
+		
+	protected ChangeRequest saveChainCodeInvokerList(ChangeRequest changeRequest, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();
+		if(chainCodeInvokerList == null){
+			//null list means nothing
+			return changeRequest;
+		}
+		SmartList<ChainCodeInvoker> mergedUpdateChainCodeInvokerList = new SmartList<ChainCodeInvoker>();
+		
+		
+		mergedUpdateChainCodeInvokerList.addAll(chainCodeInvokerList); 
+		if(chainCodeInvokerList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateChainCodeInvokerList.addAll(chainCodeInvokerList.getToRemoveList());
+			chainCodeInvokerList.removeAll(chainCodeInvokerList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getChainCodeInvokerDAO().saveChainCodeInvokerList(mergedUpdateChainCodeInvokerList,options);
+		
+		if(chainCodeInvokerList.getToRemoveList() != null){
+			chainCodeInvokerList.removeAll(chainCodeInvokerList.getToRemoveList());
+		}
+		
+		
+		return changeRequest;
+	
+	}
+	
+	protected ChangeRequest removeChainCodeInvokerList(ChangeRequest changeRequest, Map<String,Object> options){
+	
+	
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();
+		if(chainCodeInvokerList == null){
+			return changeRequest;
+		}	
+	
+		SmartList<ChainCodeInvoker> toRemoveChainCodeInvokerList = chainCodeInvokerList.getToRemoveList();
+		
+		if(toRemoveChainCodeInvokerList == null){
+			return changeRequest;
+		}
+		if(toRemoveChainCodeInvokerList.isEmpty()){
+			return changeRequest;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getChainCodeInvokerDAO().removeChainCodeInvokerList(toRemoveChainCodeInvokerList,options);
+		
+		return changeRequest;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
 		
 
 	public ChangeRequest present(ChangeRequest changeRequest,Map<String, Object> options){
 	
+		presentChainCodeInvokerList(changeRequest,options);
 
 		return changeRequest;
 	
 	}
 		
+	//Using java8 feature to reduce the code significantly
+ 	protected ChangeRequest presentChainCodeInvokerList(
+			ChangeRequest changeRequest,
+			Map<String, Object> options) {
+
+		SmartList<ChainCodeInvoker> chainCodeInvokerList = changeRequest.getChainCodeInvokerList();		
+				SmartList<ChainCodeInvoker> newList= presentSubList(changeRequest.getId(),
+				chainCodeInvokerList,
+				options,
+				getChainCodeInvokerDAO()::countChainCodeInvokerByChangeRequest,
+				getChainCodeInvokerDAO()::findChainCodeInvokerByChangeRequest
+				);
+
+		
+		changeRequest.setChainCodeInvokerList(newList);
+		
+
+		return changeRequest;
+	}			
+		
 
 	
+    public SmartList<ChangeRequest> requestCandidateChangeRequestForChainCodeInvoker(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(ChangeRequestTable.COLUMN_NAME, filterKey, pageNo, pageSize, getChangeRequestMapper());
+    }
+		
 
 	protected String getTableName(){
 		return ChangeRequestTable.TABLE_NAME;
@@ -670,6 +986,29 @@ public class ChangeRequestJDBCTemplateDAO extends HfgwBaseDAOImpl implements Cha
 		this.enhanceListInternal(changeRequestList, this.getChangeRequestMapper());
 	}
 	
+	
+	// 需要一个加载引用我的对象的enhance方法:ChainCodeInvoker的changeRequest的ChainCodeInvokerList
+	public SmartList<ChainCodeInvoker> loadOurChainCodeInvokerList(HfgwUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ChainCodeInvoker.CHANGE_REQUEST_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<ChainCodeInvoker> loadedObjs = userContext.getDAOGroup().getChainCodeInvokerDAO().findChainCodeInvokerWithKey(key, options);
+		Map<String, List<ChainCodeInvoker>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getChangeRequest().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<ChainCodeInvoker> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<ChainCodeInvoker> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setChainCodeInvokerList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
 	
 	
 	@Override

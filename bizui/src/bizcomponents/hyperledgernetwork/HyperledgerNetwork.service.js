@@ -158,14 +158,14 @@ const removeApplicationList = (targetObjectId, parameters) => {
 };
 
 const addServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/addServiceRecord/hyperledgerNetworkId/name/payload/channelId/chainCodeId/chainCodeFunction/transactionId/blockId/appClientId/response/statusId/tokensExpr/`;
+  const url = `${PREFIX}hyperledgerNetworkManager/addServiceRecord/hyperledgerNetworkId/transactionId/name/payload/channelId/chainCodeId/chainCodeFunction/blockId/appClientId/response/statusId/tokensExpr/`;
   const hyperledgerNetworkId = targetObjectId;
   const requestParameters = { ...parameters, hyperledgerNetworkId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });
 };
 
 const updateServiceRecord = (targetObjectId, parameters) => {
-  const url = `${PREFIX}hyperledgerNetworkManager/updateServiceRecordProperties/hyperledgerNetworkId/id/name/payload/chainCodeFunction/transactionId/blockId/response/tokensExpr/`;
+  const url = `${PREFIX}hyperledgerNetworkManager/updateServiceRecordProperties/hyperledgerNetworkId/id/transactionId/name/payload/chainCodeFunction/blockId/response/tokensExpr/`;
   const hyperledgerNetworkId = targetObjectId;
   const requestParameters = { ...parameters, hyperledgerNetworkId, tokensExpr: 'none' };
   return postForm({ url, requestParameters });

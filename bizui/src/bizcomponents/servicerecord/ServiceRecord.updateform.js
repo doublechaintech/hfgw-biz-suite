@@ -287,25 +287,7 @@ class ServiceRecordUpdateForm extends Component {
                   {getFieldDecorator('id', {
                     initialValue: selectedRow.id,
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="ID" disabled />)}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.name} {...formItemLayout}>
-                  {getFieldDecorator('name', {
-                    initialValue: selectedRow.name,
-                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="名称" />)}
-                </Form.Item>
-              </Col>
-
-              <Col lg={24} md={24} sm={24}>
-                <Form.Item label={fieldLabels.chainCodeFunction} {...formItemLayout}>
-                  {getFieldDecorator('chainCodeFunction', {
-                    initialValue: selectedRow.chainCodeFunction,
-                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="链码功能" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.id} disabled />)}
                 </Form.Item>
               </Col>
 
@@ -314,7 +296,25 @@ class ServiceRecordUpdateForm extends Component {
                   {getFieldDecorator('transactionId', {
                     initialValue: selectedRow.transactionId,
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="事务Id" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.transactionId} />)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.name} {...formItemLayout}>
+                  {getFieldDecorator('name', {
+                    initialValue: selectedRow.name,
+                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
+                  })(<Input size="large" placeHolder={fieldLabels.name} />)}
+                </Form.Item>
+              </Col>
+
+              <Col lg={24} md={24} sm={24}>
+                <Form.Item label={fieldLabels.chainCodeFunction} {...formItemLayout}>
+                  {getFieldDecorator('chainCodeFunction', {
+                    initialValue: selectedRow.chainCodeFunction,
+                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
+                  })(<Input size="large" placeHolder={fieldLabels.chainCodeFunction} />)}
                 </Form.Item>
               </Col>
 
@@ -323,14 +323,14 @@ class ServiceRecordUpdateForm extends Component {
                   {getFieldDecorator('blockId', {
                     initialValue: selectedRow.blockId,
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="块Id" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.blockId} />)}
                 </Form.Item>
               </Col>
             </Row>
           </Form>
         </Card>
 
-        <Card title={`有效载荷`} className={styles.card} bordered={false}>
+        <Card title={window.trans('service_record')} className={styles.card} bordered={false}>
           <Form>
             <Row gutter={16}>
               <Col lg={24} md={24} sm={24}>
@@ -345,7 +345,7 @@ class ServiceRecordUpdateForm extends Component {
           </Form>
         </Card>
 
-        <Card title={`响应`} className={styles.card} bordered={false}>
+        <Card title={window.trans('service_record')} className={styles.card} bordered={false}>
           <Form>
             <Row gutter={16}>
               <Col lg={24} md={24} sm={24}>

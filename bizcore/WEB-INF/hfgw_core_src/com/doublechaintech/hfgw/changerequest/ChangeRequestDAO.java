@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.changerequest;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -10,12 +11,14 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeDAO;
 
 
-public interface ChangeRequestDAO{
+public interface ChangeRequestDAO extends BaseDAO{
 
 	public SmartList<ChangeRequest> loadAll();
 	public ChangeRequest load(String id, Map<String,Object> options) throws Exception;
@@ -43,7 +46,22 @@ public interface ChangeRequestDAO{
 	public ChangeRequest disconnectFromAll(String changeRequestId, int version) throws Exception;
 	public int deleteAll() throws Exception;
 
+	public ChainCodeInvokerDAO getChainCodeInvokerDAO();
+		
 	
+ 	public SmartList<ChangeRequest> requestCandidateChangeRequestForChainCodeInvoker(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+		
+	
+	public ChangeRequest planToRemoveChainCodeInvokerList(ChangeRequest changeRequest, String chainCodeInvokerIds[], Map<String,Object> options)throws Exception;
+
+
+	//disconnect ChangeRequest with app_client in ChainCodeInvoker
+	public ChangeRequest planToRemoveChainCodeInvokerListWithAppClient(ChangeRequest changeRequest, String appClientId, Map<String,Object> options)throws Exception;
+	public int countChainCodeInvokerListWithAppClient(String changeRequestId, String appClientId, Map<String,Object> options)throws Exception;
+	
+	//disconnect ChangeRequest with chain_code in ChainCodeInvoker
+	public ChangeRequest planToRemoveChainCodeInvokerListWithChainCode(ChangeRequest changeRequest, String chainCodeId, Map<String,Object> options)throws Exception;
+	public int countChainCodeInvokerListWithChainCode(String changeRequestId, String chainCodeId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<ChangeRequest> queryList(String sql, Object ... parmeters);
@@ -65,6 +83,9 @@ public interface ChangeRequestDAO{
 
  
  
+	// 需要一个加载引用我的对象的enhance方法:ChainCodeInvoker的changeRequest的ChainCodeInvokerList
+	public SmartList<ChainCodeInvoker> loadOurChainCodeInvokerList(HfgwUserContext userContext, List<ChangeRequest> us, Map<String,Object> options) throws Exception;
+	
 }
 
 

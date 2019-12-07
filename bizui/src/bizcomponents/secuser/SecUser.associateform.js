@@ -40,9 +40,10 @@ const testValues = {
   weixinAppid: 'wxapp12098410239840',
   accessToken: 'jwt_token_12345678',
   verificationCode: '0',
-  verificationCodeExpire: '2019-11-17 05:20:18',
-  lastLoginTime: '2019-11-19 16:00:24',
+  verificationCodeExpire: '2019-12-06 00:20:24',
+  lastLoginTime: '2019-11-18 09:28:13',
   domainId: 'UD000001',
+  blockingId: 'SUB000001',
 }
 */
 
@@ -154,7 +155,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.login} {...formItemLayout}>
                   {getFieldDecorator('login', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="登录" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.login} />)}
                 </Form.Item>
               </Col>
 
@@ -162,7 +163,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.mobile} {...formItemLayout}>
                   {getFieldDecorator('mobile', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="手机号码" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.mobile} />)}
                 </Form.Item>
               </Col>
 
@@ -170,7 +171,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.email} {...formItemLayout}>
                   {getFieldDecorator('email', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="电子邮件" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.email} />)}
                 </Form.Item>
               </Col>
 
@@ -178,7 +179,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.pwd} {...formItemLayout}>
                   {getFieldDecorator('pwd', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="密码" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.pwd} />)}
                 </Form.Item>
               </Col>
 
@@ -186,7 +187,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.weixinOpenid} {...formItemLayout}>
                   {getFieldDecorator('weixinOpenid', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="微信openid" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.weixinOpenid} />)}
                 </Form.Item>
               </Col>
 
@@ -194,7 +195,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.weixinAppid} {...formItemLayout}>
                   {getFieldDecorator('weixinAppid', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="微信Appid" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.weixinAppid} />)}
                 </Form.Item>
               </Col>
 
@@ -202,7 +203,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.accessToken} {...formItemLayout}>
                   {getFieldDecorator('accessToken', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="访问令牌" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.accessToken} />)}
                 </Form.Item>
               </Col>
 
@@ -210,7 +211,7 @@ class SecUserAssociateForm extends Component {
                 <Form.Item label={fieldLabels.verificationCode} {...formItemLayout}>
                   {getFieldDecorator('verificationCode', {
                     rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
-                  })(<Input size="large" placeholder="验证码" />)}
+                  })(<Input size="large" placeHolder={fieldLabels.verificationCode} />)}
                 </Form.Item>
               </Col>
 
@@ -224,7 +225,7 @@ class SecUserAssociateForm extends Component {
                       showTime
                       format="YYYY-MM-DD HH:mm"
                       minuteStep={5}
-                      placeholder="验证码过期"
+                      placeHolder={fieldLabels.verificationCodeExpire}
                     />
                   )}
                 </Form.Item>
@@ -240,7 +241,7 @@ class SecUserAssociateForm extends Component {
                       showTime
                       format="YYYY-MM-DD HH:mm"
                       minuteStep={5}
-                      placeholder="最后登录时间"
+                      placeHolder={fieldLabels.lastLoginTime}
                     />
                   )}
                 </Form.Item>
@@ -258,6 +259,21 @@ class SecUserAssociateForm extends Component {
                       disabled={!availableForEdit('domain')}
                       targetType={'domain'}
                       requestFunction={SecUserService.requestCandidateDomain}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+
+              <Col lg={12} md={12} sm={24}>
+                <Form.Item label={fieldLabels.blocking} {...formItemLayout}>
+                  {getFieldDecorator('blockingId', {
+                    initialValue: tryinit('blocking'),
+                    rules: [{ required: true, message: appLocaleName(userContext, 'PleaseInput') }],
+                  })(
+                    <SelectObject
+                      disabled={!availableForEdit('blocking')}
+                      targetType={'blocking'}
+                      requestFunction={SecUserService.requestCandidateBlocking}
                     />
                   )}
                 </Form.Item>
