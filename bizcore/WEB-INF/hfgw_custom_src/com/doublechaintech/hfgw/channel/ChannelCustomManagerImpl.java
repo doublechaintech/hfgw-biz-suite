@@ -20,6 +20,7 @@ import com.doublechaintech.hfgw.chaincode.ChainCodeTokens;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordTokens;
 import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
+import com.terapico.caf.RemoteInitiable;
 import com.terapico.uccaf.BaseUserContext;
 import org.hyperledger.fabric.sdk.*;
 import org.hyperledger.fabric.sdk.Channel;
@@ -36,7 +37,42 @@ public class ChannelCustomManagerImpl extends ChannelManagerImpl {
         return accessOK();
     }
 
-    public ServiceRecord invokeChaincode(HfgwUserContext context, String applicationId, String chaincodeId, String[] parameters) throws Exception {
+
+    public static class CCRequest implements RemoteInitiable {
+        private String appid;
+        private String ccid;
+        private String[] parameters;
+
+        public String getAppid() {
+            return appid;
+        }
+
+        public void setAppid(String pAppid) {
+            appid = pAppid;
+        }
+
+        public String getCcid() {
+            return ccid;
+        }
+
+        public void setCcid(String pCcid) {
+            ccid = pCcid;
+        }
+
+        public String[] getParameters() {
+            return parameters;
+        }
+
+        public void setParameters(String[] pParameters) {
+            parameters = pParameters;
+        }
+    }
+
+    public ServiceRecord invokeChaincode(HfgwUserContext context, CCRequest pCCRequest) throws Exception{
+        return invokeChaincode0(context, pCCRequest.getAppid(), pCCRequest.getCcid(), pCCRequest.getParameters());
+    }
+
+    public ServiceRecord invokeChaincode0(HfgwUserContext context, String applicationId, String chaincodeId, String[] parameters) throws Exception {
         if (parameters == null || parameters.length < 1) {
             throwExceptionWithMessage("parameters have at least 1 element");
         }
