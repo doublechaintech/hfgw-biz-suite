@@ -50,13 +50,13 @@ public class HFNetworkHelper {
     }
 
     private static HFClient initClientForApp(HfgwUserContext pContext, String pAppId) throws Exception {
-        System.setProperty(CLIENT_THREAD_EXECUTOR_MAXIMUMPOOLSIZE, "10");
-        System.setProperty(DEFAULT_CRYPTO_SUITE_FACTORY, CryptoSuiteFactoryImpl.class.getName());
+       // System.setProperty(CLIENT_THREAD_EXECUTOR_MAXIMUMPOOLSIZE, "10");
+        //System.setProperty(DEFAULT_CRYPTO_SUITE_FACTORY, CryptoSuiteFactoryImpl.class.getName());
         HFClient client = HFClient.createNewInstance();
-        Properties p = new Properties();
-        p.setProperty(ASYMMETRIC_KEY_TYPE, "RSA");
-        p.setProperty(SIGNATURE_ALGORITHM, "sha256WithRSA");
-        client.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite(p));
+      //  Properties p = new Properties();
+       // p.setProperty(ASYMMETRIC_KEY_TYPE, "RSA");
+        //p.setProperty(SIGNATURE_ALGORITHM, "sha256WithRSA");
+        client.setCryptoSuite(CryptoSuite.Factory.getCryptoSuite());
         Application app = pContext.getManagerGroup().getApplicationManager().loadApplication(
                 pContext, pAppId, ApplicationTokens.withoutListsTokens().toArray());
 
