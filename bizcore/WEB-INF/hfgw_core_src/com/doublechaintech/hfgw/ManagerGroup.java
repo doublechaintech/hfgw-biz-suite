@@ -11,9 +11,11 @@ import com.doublechaintech.hfgw.node.NodeManager;
 
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionManager;
 
-import com.doublechaintech.hfgw.tlscacert.TlsCacertManager;
-
 import com.doublechaintech.hfgw.channel.ChannelManager;
+
+import com.doublechaintech.hfgw.peerrole.PeerRoleManager;
+
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManager;
 
 import com.doublechaintech.hfgw.chaincode.ChainCodeManager;
 
@@ -21,9 +23,13 @@ import com.doublechaintech.hfgw.application.ApplicationManager;
 
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordManager;
 
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusManager;
+
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManager;
 
 import com.doublechaintech.hfgw.changerequest.ChangeRequestManager;
+
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManager;
 
 import com.doublechaintech.hfgw.userdomain.UserDomainManager;
 
@@ -70,9 +76,11 @@ public class ManagerGroup {
 
 	protected GrpcOptionManager grpcOptionManager;
 
-	protected TlsCacertManager tlsCacertManager;
-
 	protected ChannelManager channelManager;
+
+	protected PeerRoleManager peerRoleManager;
+
+	protected ChannelPeerRoleManager channelPeerRoleManager;
 
 	protected ChainCodeManager chainCodeManager;
 
@@ -80,9 +88,13 @@ public class ManagerGroup {
 
 	protected ServiceRecordManager serviceRecordManager;
 
+	protected TransactionStatusManager transactionStatusManager;
+
 	protected ChangeRequestTypeManager changeRequestTypeManager;
 
 	protected ChangeRequestManager changeRequestManager;
+
+	protected ChainCodeInvokerManager chainCodeInvokerManager;
 
 	protected UserDomainManager userDomainManager;
 
@@ -158,19 +170,27 @@ public class ManagerGroup {
 	}
 
 
-	public TlsCacertManager getTlsCacertManager(){
-		return this.tlsCacertManager;
-	}
-	public void setTlsCacertManager(TlsCacertManager manager){
-		this.tlsCacertManager = manager;
-	}
-
-
 	public ChannelManager getChannelManager(){
 		return this.channelManager;
 	}
 	public void setChannelManager(ChannelManager manager){
 		this.channelManager = manager;
+	}
+
+
+	public PeerRoleManager getPeerRoleManager(){
+		return this.peerRoleManager;
+	}
+	public void setPeerRoleManager(PeerRoleManager manager){
+		this.peerRoleManager = manager;
+	}
+
+
+	public ChannelPeerRoleManager getChannelPeerRoleManager(){
+		return this.channelPeerRoleManager;
+	}
+	public void setChannelPeerRoleManager(ChannelPeerRoleManager manager){
+		this.channelPeerRoleManager = manager;
 	}
 
 
@@ -198,6 +218,14 @@ public class ManagerGroup {
 	}
 
 
+	public TransactionStatusManager getTransactionStatusManager(){
+		return this.transactionStatusManager;
+	}
+	public void setTransactionStatusManager(TransactionStatusManager manager){
+		this.transactionStatusManager = manager;
+	}
+
+
 	public ChangeRequestTypeManager getChangeRequestTypeManager(){
 		return this.changeRequestTypeManager;
 	}
@@ -211,6 +239,14 @@ public class ManagerGroup {
 	}
 	public void setChangeRequestManager(ChangeRequestManager manager){
 		this.changeRequestManager = manager;
+	}
+
+
+	public ChainCodeInvokerManager getChainCodeInvokerManager(){
+		return this.chainCodeInvokerManager;
+	}
+	public void setChainCodeInvokerManager(ChainCodeInvokerManager manager){
+		this.chainCodeInvokerManager = manager;
 	}
 
 

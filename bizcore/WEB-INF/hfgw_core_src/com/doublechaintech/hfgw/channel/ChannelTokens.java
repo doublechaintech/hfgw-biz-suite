@@ -74,6 +74,7 @@ public class ChannelTokens extends CommonTokens{
 		return start()
 			.withNetwork()
 			.withNodeList()
+			.withChannelPeerRoleList()
 			.withChainCodeList()
 			.withApplicationList()
 			.withServiceRecordList();
@@ -155,7 +156,7 @@ public class ChannelTokens extends CommonTokens{
 	
 	
 	public ChannelTokens searchAllTextOfNodeList(String verb, String value){	
-		String field = "id|name|url";
+		String field = "id|name|url|tlsCacert|address|contactPerson|contactTelephone";
 		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
 		return this;
 	}
@@ -176,6 +177,76 @@ public class ChannelTokens extends CommonTokens{
 	}
 	public ChannelTokens excludeColumnsOfNodeList(String[] columns){		
 		addSimpleOptions(NODE_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
+	protected static final String CHANNEL_PEER_ROLE_LIST = "channelPeerRoleList";
+	public String getChannelPeerRoleList(){
+		return CHANNEL_PEER_ROLE_LIST;
+	}
+	public ChannelTokens withChannelPeerRoleList(){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST);
+		return this;
+	}
+	public ChannelTokens analyzeChannelPeerRoleList(){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzeChannelPeerRoleListEnabled(){		
+		
+		if(checkOptions(this.options(), CHANNEL_PEER_ROLE_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public ChannelTokens extractMoreFromChannelPeerRoleList(String idsSeperatedWithComma){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int channelPeerRoleListSortCounter = 0;
+	public ChannelTokens sortChannelPeerRoleListWith(String field, String descOrAsc){		
+		addSortMoreOptions(CHANNEL_PEER_ROLE_LIST,channelPeerRoleListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int channelPeerRoleListSearchCounter = 0;
+	public ChannelTokens searchChannelPeerRoleListWith(String field, String verb, String value){		
+		
+		withChannelPeerRoleList();
+		addSearchMoreOptions(CHANNEL_PEER_ROLE_LIST,channelPeerRoleListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public ChannelTokens searchAllTextOfChannelPeerRoleList(String verb, String value){	
+		String field = "id";
+		addSearchMoreOptions(CHANNEL_PEER_ROLE_LIST,channelPeerRoleListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public ChannelTokens rowsPerPageOfChannelPeerRoleList(int rowsPerPage){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public ChannelTokens currentPageNumberOfChannelPeerRoleList(int currentPageNumber){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public ChannelTokens retainColumnsOfChannelPeerRoleList(String[] columns){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public ChannelTokens excludeColumnsOfChannelPeerRoleList(String[] columns){		
+		addSimpleOptions(CHANNEL_PEER_ROLE_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -365,7 +436,7 @@ public class ChannelTokens extends CommonTokens{
 	
 	
 	public ChannelTokens searchAllTextOfServiceRecordList(String verb, String value){	
-		String field = "id|name|payLoad|transactionId|blockId|currentStatus";
+		String field = "id|transactionId|name|payload|chainCodeFunction|blockId|response";
 		addSearchMoreOptions(SERVICE_RECORD_LIST,serviceRecordListSearchCounter++, field, verb, value);
 		return this;
 	}
@@ -395,6 +466,7 @@ public class ChannelTokens extends CommonTokens{
 	public  ChannelTokens searchEntireObjectText(String verb, String value){
 		
 		searchAllTextOfNodeList(verb, value);	
+		searchAllTextOfChannelPeerRoleList(verb, value);	
 		searchAllTextOfChainCodeList(verb, value);	
 		searchAllTextOfApplicationList(verb, value);	
 		searchAllTextOfServiceRecordList(verb, value);	

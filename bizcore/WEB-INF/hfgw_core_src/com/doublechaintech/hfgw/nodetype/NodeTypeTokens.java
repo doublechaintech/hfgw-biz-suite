@@ -152,7 +152,7 @@ public class NodeTypeTokens extends CommonTokens{
 	
 	
 	public NodeTypeTokens searchAllTextOfNodeList(String verb, String value){	
-		String field = "id|name|url";
+		String field = "id|name|url|tlsCacert|address|contactPerson|contactTelephone";
 		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
 		return this;
 	}

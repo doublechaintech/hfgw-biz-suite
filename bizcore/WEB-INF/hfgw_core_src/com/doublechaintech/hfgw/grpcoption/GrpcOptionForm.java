@@ -149,6 +149,34 @@ public class GrpcOptionForm extends BaseForm {
 	}
 
 
+	public GrpcOptionForm networkIdFieldOfNode(String parameterName, String initValue){
+		FormField field =  networkIdFromNode(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public GrpcOptionForm networkIdFieldOfNode(String initValue){
+		return networkIdFieldOfNode("networkId",initValue);
+	}
+	public GrpcOptionForm networkIdFieldOfNode(){
+		return networkIdFieldOfNode("networkId","");
+	}
+
+
+	public GrpcOptionForm tlsCacertFieldOfNode(String parameterName, String initValue){
+		FormField field =  tlsCacertFromNode(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public GrpcOptionForm tlsCacertFieldOfNode(String initValue){
+		return tlsCacertFieldOfNode("tlsCacert",initValue);
+	}
+	public GrpcOptionForm tlsCacertFieldOfNode(){
+		return tlsCacertFieldOfNode("tlsCacert","");
+	}
+
+
 	public GrpcOptionForm typeIdFieldOfNode(String parameterName, String initValue){
 		FormField field =  typeIdFromNode(parameterName, initValue);
 		this.addFormField(field);	
@@ -160,6 +188,48 @@ public class GrpcOptionForm extends BaseForm {
 	}
 	public GrpcOptionForm typeIdFieldOfNode(){
 		return typeIdFieldOfNode("typeId","");
+	}
+
+
+	public GrpcOptionForm addressFieldOfNode(String parameterName, String initValue){
+		FormField field =  addressFromNode(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public GrpcOptionForm addressFieldOfNode(String initValue){
+		return addressFieldOfNode("address",initValue);
+	}
+	public GrpcOptionForm addressFieldOfNode(){
+		return addressFieldOfNode("address","");
+	}
+
+
+	public GrpcOptionForm contactPersonFieldOfNode(String parameterName, String initValue){
+		FormField field =  contactPersonFromNode(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public GrpcOptionForm contactPersonFieldOfNode(String initValue){
+		return contactPersonFieldOfNode("contactPerson",initValue);
+	}
+	public GrpcOptionForm contactPersonFieldOfNode(){
+		return contactPersonFieldOfNode("contactPerson","");
+	}
+
+
+	public GrpcOptionForm contactTelephoneFieldOfNode(String parameterName, String initValue){
+		FormField field =  contactTelephoneFromNode(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public GrpcOptionForm contactTelephoneFieldOfNode(String initValue){
+		return contactTelephoneFieldOfNode("contactTelephone",initValue);
+	}
+	public GrpcOptionForm contactTelephoneFieldOfNode(){
+		return contactTelephoneFieldOfNode("contactTelephone","");
 	}
 
 	

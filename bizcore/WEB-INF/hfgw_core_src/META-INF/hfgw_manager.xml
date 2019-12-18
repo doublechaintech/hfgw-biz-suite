@@ -23,26 +23,35 @@
 	<bean id="grpcOptionManagerBase" class="com.doublechaintech.hfgw.grpcoption.GrpcOptionManagerImpl"/>
 	<bean id="grpcOptionManager" class="com.doublechaintech.hfgw.grpcoption.GrpcOptionManagerImpl" parent="grpcOptionManagerBase" ></bean>
 	
-	<bean id="tlsCacertManagerBase" class="com.doublechaintech.hfgw.tlscacert.TlsCacertManagerImpl"/>
-	<bean id="tlsCacertManager" class="com.doublechaintech.hfgw.tlscacert.TlsCacertManagerImpl" parent="tlsCacertManagerBase" ></bean>
-	
 	<bean id="channelManagerBase" class="com.doublechaintech.hfgw.channel.ChannelManagerImpl"/>
 	<bean id="channelManager" class="com.doublechaintech.hfgw.channel.ChannelCustomManagerImpl" parent="channelManagerBase" ></bean>
 	
+	<bean id="peerRoleManagerBase" class="com.doublechaintech.hfgw.peerrole.PeerRoleManagerImpl"/>
+	<bean id="peerRoleManager" class="com.doublechaintech.hfgw.peerrole.PeerRoleManagerImpl" parent="peerRoleManagerBase" ></bean>
+	
+	<bean id="channelPeerRoleManagerBase" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl"/>
+	<bean id="channelPeerRoleManager" class="com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManagerImpl" parent="channelPeerRoleManagerBase" ></bean>
+	
 	<bean id="chainCodeManagerBase" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl"/>
-	<bean id="chainCodeManager" class="com.doublechaintech.hfgw.chaincode.ChainCodeManagerImpl" parent="chainCodeManagerBase" ></bean>
+	<bean id="chainCodeManager" class="com.doublechaintech.hfgw.chaincode.ChainCodeCustomManagerImpl" parent="chainCodeManagerBase" ></bean>
 	
 	<bean id="applicationManagerBase" class="com.doublechaintech.hfgw.application.ApplicationManagerImpl"/>
-	<bean id="applicationManager" class="com.doublechaintech.hfgw.application.ApplicationManagerImpl" parent="applicationManagerBase" ></bean>
+	<bean id="applicationManager" class="com.doublechaintech.hfgw.application.ApplicationCustomManagerImpl" parent="applicationManagerBase" ></bean>
 	
 	<bean id="serviceRecordManagerBase" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl"/>
 	<bean id="serviceRecordManager" class="com.doublechaintech.hfgw.servicerecord.ServiceRecordManagerImpl" parent="serviceRecordManagerBase" ></bean>
+	
+	<bean id="transactionStatusManagerBase" class="com.doublechaintech.hfgw.transactionstatus.TransactionStatusManagerImpl"/>
+	<bean id="transactionStatusManager" class="com.doublechaintech.hfgw.transactionstatus.TransactionStatusManagerImpl" parent="transactionStatusManagerBase" ></bean>
 	
 	<bean id="changeRequestTypeManagerBase" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManagerImpl"/>
 	<bean id="changeRequestTypeManager" class="com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManagerImpl" parent="changeRequestTypeManagerBase" ></bean>
 	
 	<bean id="changeRequestManagerBase" class="com.doublechaintech.hfgw.changerequest.ChangeRequestManagerImpl"/>
 	<bean id="changeRequestManager" class="com.doublechaintech.hfgw.changerequest.ChangeRequestManagerImpl" parent="changeRequestManagerBase" ></bean>
+	
+	<bean id="chainCodeInvokerManagerBase" class="com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManagerImpl"/>
+	<bean id="chainCodeInvokerManager" class="com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManagerImpl" parent="chainCodeInvokerManagerBase" ></bean>
 	
 	<bean id="userDomainManagerBase" class="com.doublechaintech.hfgw.userdomain.UserDomainManagerImpl"/>
 	<bean id="userDomainManager" class="com.doublechaintech.hfgw.userdomain.UserDomainCustomManagerImpl" parent="userDomainManagerBase" ></bean>
@@ -99,13 +108,16 @@
 		<property name="nodeTypeManager" ref="nodeTypeManager"/>
 		<property name="nodeManager" ref="nodeManager"/>
 		<property name="grpcOptionManager" ref="grpcOptionManager"/>
-		<property name="tlsCacertManager" ref="tlsCacertManager"/>
 		<property name="channelManager" ref="channelManager"/>
+		<property name="peerRoleManager" ref="peerRoleManager"/>
+		<property name="channelPeerRoleManager" ref="channelPeerRoleManager"/>
 		<property name="chainCodeManager" ref="chainCodeManager"/>
 		<property name="applicationManager" ref="applicationManager"/>
 		<property name="serviceRecordManager" ref="serviceRecordManager"/>
+		<property name="transactionStatusManager" ref="transactionStatusManager"/>
 		<property name="changeRequestTypeManager" ref="changeRequestTypeManager"/>
 		<property name="changeRequestManager" ref="changeRequestManager"/>
+		<property name="chainCodeInvokerManager" ref="chainCodeInvokerManager"/>
 		<property name="userDomainManager" ref="userDomainManager"/>
 		<property name="userWhiteListManager" ref="userWhiteListManager"/>
 		<property name="secUserManager" ref="secUserManager"/>

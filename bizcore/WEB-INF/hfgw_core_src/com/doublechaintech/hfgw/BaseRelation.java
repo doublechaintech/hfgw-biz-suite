@@ -115,17 +115,20 @@ public class BaseRelation{
 		String [] nodeTypeRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("NodeType",nodeTypeRelatedObjectNames);
 
-		String [] nodeRelatedObjectNames = {"organization:Organization","channel:Channel","type:NodeType"};
+		String [] nodeRelatedObjectNames = {"organization:Organization","channel:Channel","network:HyperledgerNetwork","type:NodeType"};
 		addRelationIndex("Node",nodeRelatedObjectNames);
 
 		String [] grpcOptionRelatedObjectNames = {"node:Node"};
 		addRelationIndex("GrpcOption",grpcOptionRelatedObjectNames);
 
-		String [] tlsCacertRelatedObjectNames = {"node:Node"};
-		addRelationIndex("TlsCacert",tlsCacertRelatedObjectNames);
-
 		String [] channelRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("Channel",channelRelatedObjectNames);
+
+		String [] peerRoleRelatedObjectNames = {"network:HyperledgerNetwork"};
+		addRelationIndex("PeerRole",peerRoleRelatedObjectNames);
+
+		String [] channelPeerRoleRelatedObjectNames = {"channel:Channel","node:Node","peer_role:PeerRole"};
+		addRelationIndex("ChannelPeerRole",channelPeerRoleRelatedObjectNames);
 
 		String [] chainCodeRelatedObjectNames = {"channel:Channel"};
 		addRelationIndex("ChainCode",chainCodeRelatedObjectNames);
@@ -133,8 +136,11 @@ public class BaseRelation{
 		String [] applicationRelatedObjectNames = {"channel:Channel","network:HyperledgerNetwork"};
 		addRelationIndex("Application",applicationRelatedObjectNames);
 
-		String [] serviceRecordRelatedObjectNames = {"channel:Channel","chain_code:ChainCode","network:HyperledgerNetwork"};
+		String [] serviceRecordRelatedObjectNames = {"channel:Channel","chain_code:ChainCode","app_client:Application","network:HyperledgerNetwork","status:TransactionStatus"};
 		addRelationIndex("ServiceRecord",serviceRecordRelatedObjectNames);
+
+		String [] transactionStatusRelatedObjectNames = {"network:HyperledgerNetwork"};
+		addRelationIndex("TransactionStatus",transactionStatusRelatedObjectNames);
 
 		String [] changeRequestTypeRelatedObjectNames = {"network:HyperledgerNetwork"};
 		addRelationIndex("ChangeRequestType",changeRequestTypeRelatedObjectNames);
@@ -142,10 +148,13 @@ public class BaseRelation{
 		String [] changeRequestRelatedObjectNames = {"request_type:ChangeRequestType","network:HyperledgerNetwork"};
 		addRelationIndex("ChangeRequest",changeRequestRelatedObjectNames);
 
+		String [] chainCodeInvokerRelatedObjectNames = {"app_client:Application","chain_code:ChainCode","change_request:ChangeRequest"};
+		addRelationIndex("ChainCodeInvoker",chainCodeInvokerRelatedObjectNames);
+
 		String [] userWhiteListRelatedObjectNames = {"domain:UserDomain"};
 		addRelationIndex("UserWhiteList",userWhiteListRelatedObjectNames);
 
-		String [] secUserRelatedObjectNames = {"domain:UserDomain"};
+		String [] secUserRelatedObjectNames = {"domain:UserDomain","blocking:SecUserBlocking"};
 		addRelationIndex("SecUser",secUserRelatedObjectNames);
 
 		String [] userAppRelatedObjectNames = {"sec_user:SecUser"};
@@ -202,21 +211,32 @@ public class BaseRelation{
 		addGenericRelation("NodeType"                              ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"organization");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"channel");
+		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("Node"                                  ,TRUST_CHAIN_READ,"type");
 		addGenericRelation("GrpcOption"                            ,TRUST_CHAIN_READ,"node");
-		addGenericRelation("TlsCacert"                             ,TRUST_CHAIN_READ,"node");
 		addGenericRelation("Channel"                               ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("PeerRole"                              ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"channel");
+		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"node");
+		addGenericRelation("ChannelPeerRole"                       ,TRUST_CHAIN_READ,"peerRole");
 		addGenericRelation("ChainCode"                             ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("Application"                           ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("Application"                           ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"channel");
 		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"chainCode");
+		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"appClient");
 		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("ServiceRecord"                         ,TRUST_CHAIN_READ,"status");
+		addGenericRelation("TransactionStatus"                     ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ChangeRequestType"                     ,TRUST_CHAIN_READ,"network");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"requestType");
 		addGenericRelation("ChangeRequest"                         ,TRUST_CHAIN_READ,"network");
+		addGenericRelation("ChainCodeInvoker"                      ,TRUST_CHAIN_READ,"appClient");
+		addGenericRelation("ChainCodeInvoker"                      ,TRUST_CHAIN_READ,"chainCode");
+		addGenericRelation("ChainCodeInvoker"                      ,TRUST_CHAIN_READ,"changeRequest");
 		addGenericRelation("UserWhiteList"                         ,TRUST_CHAIN_READ,"domain");
 		addGenericRelation("SecUser"                               ,TRUST_CHAIN_READ,"domain");
+		addGenericRelation("SecUser"                               ,TRUST_CHAIN_READ,"blocking");
 		addGenericRelation("UserApp"                               ,TRUST_CHAIN_READ,"secUser");
 		addGenericRelation("QuickLink"                             ,TRUST_CHAIN_READ,"app");
 		addGenericRelation("ListAccess"                            ,TRUST_CHAIN_READ,"app");

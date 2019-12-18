@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.userapp.CandidateUserApp;
 public class ObjectAccessManagerImpl extends CustomHfgwCheckerManager implements ObjectAccessManager {
 	
 	private static final String SERVICE_TYPE = "ObjectAccess";
+	@Override
+	public ObjectAccessDAO daoOf(HfgwUserContext userContext) {
+		return objectAccessDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

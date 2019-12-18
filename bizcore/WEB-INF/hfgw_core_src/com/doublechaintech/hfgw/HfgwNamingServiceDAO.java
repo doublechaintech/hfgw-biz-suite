@@ -24,13 +24,16 @@ public class HfgwNamingServiceDAO extends CommonJDBCTemplateDAO {
 		namingTableMap.put("NodeType", new String[]{"node_type_data","name"});
 		namingTableMap.put("Node", new String[]{"node_data","name"});
 		namingTableMap.put("GrpcOption", new String[]{"grpc_option_data","parameter_name"});
-		namingTableMap.put("TlsCacert", new String[]{"tls_cacert_data","path"});
 		namingTableMap.put("Channel", new String[]{"channel_data","name"});
+		namingTableMap.put("PeerRole", new String[]{"peer_role_data","name"});
+		namingTableMap.put("ChannelPeerRole", new String[]{"channel_peer_role_data","id"});
 		namingTableMap.put("ChainCode", new String[]{"chain_code_data","name"});
 		namingTableMap.put("Application", new String[]{"application_data","name"});
-		namingTableMap.put("ServiceRecord", new String[]{"service_record_data","name"});
+		namingTableMap.put("ServiceRecord", new String[]{"service_record_data","transaction_id"});
+		namingTableMap.put("TransactionStatus", new String[]{"transaction_status_data","name"});
 		namingTableMap.put("ChangeRequestType", new String[]{"change_request_type_data","name"});
 		namingTableMap.put("ChangeRequest", new String[]{"change_request_data","name"});
+		namingTableMap.put("ChainCodeInvoker", new String[]{"chain_code_invoker_data","parameters"});
 		namingTableMap.put("UserDomain", new String[]{"user_domain_data","name"});
 		namingTableMap.put("UserWhiteList", new String[]{"user_white_list_data","user_identity"});
 		namingTableMap.put("SecUser", new String[]{"sec_user_data","login"});
@@ -303,7 +306,68 @@ public class HfgwNamingServiceDAO extends CommonJDBCTemplateDAO {
 		
 	}*/
 	
+    public SmartList<BaseEntity> requestCandidateValuesForSearch(String ownerMemberName, String ownerId, String resultMemberName, String resutlClassName, String targetClassName, String filterKey, int pageNo){
+    	this.checkFieldName(resultMemberName);
+    	this.checkFieldName(resutlClassName);
+    	this.checkFieldName(ownerMemberName);
+    	this.checkFieldName(targetClassName);
+    	
+    	List<Object> params = new ArrayList<>();
+    	params.add(ownerId);
+    	
+    	String filterClause = " ";
+    	String joinClause = " ";
+    	if (filterKey != null && !filterKey.trim().isEmpty() ) {
+    		String[] sqlInfo=namingTableMap.get(targetClassName);
+    		if(sqlInfo==null){
+    			throw new IllegalArgumentException("sqlOf(String currentClassName): Not able to find sql info for filter class: "+targetClassName);
+    		}
+    		if(sqlInfo.length<2){
+    			throw new IllegalArgumentException("sqlOf(String currentClassName): sqlInfo.length should equals 2 for filter class: "+targetClassName);
+    			
+    		}
+    		String displayExpr = sqlInfo[1];
+    		joinClause = String.format(" left join %s_data T2 on T1.%s=T2.id ", mapToInternalColumn(targetClassName), mapToInternalColumn(resultMemberName));
+    		filterClause = String.format(" and T2.%s like ? ", displayExpr);
+    		params.add("%"+filterKey.trim()+"%");
+    	}
+    	String sql = String.format("select distinct T1.%s from %s_data T1%swhere T1.%s = ?%sorder by cast(%s as CHAR CHARACTER SET GBK) asc", 
+    			mapToInternalColumn(resultMemberName), mapToInternalColumn(resutlClassName), 
+    			joinClause,
+    			mapToInternalColumn(ownerMemberName), 
+    			filterClause,
+    			mapToInternalColumn(resultMemberName));
+    	// System.out.println(sql +" executed with " + params);
+    	List<String> keyList = getJdbcTemplateObject().queryForList(sql, params.toArray(), String.class);
+    	SmartList<BaseEntity> resultList = new SmartList<>();
+    	if (keyList == null) {
+    		return resultList;
+    	}
+    	keyList.forEach(key->{
+    		resultList.add(BaseEntity.pretendToBe(targetClassName, key));
+    	});
+    	this.alias(resultList);
+    	return resultList;
+    }
     
+    protected String mapToInternalColumn(String field){
+		char [] fieldArray = field.toCharArray();
+		StringBuilder internalFieldBuffer = new StringBuilder();
+		int i = 0;
+		for(char ch:fieldArray){
+			i++;
+			if(Character.isUpperCase(ch) ){
+				if (i > 1) {
+					internalFieldBuffer.append('_');
+				}
+				char lowerCaseChar = Character.toLowerCase(ch);
+				internalFieldBuffer.append(lowerCaseChar);
+				continue;
+			}
+			internalFieldBuffer.append(ch);
+		}
+		return internalFieldBuffer.toString();
+	}
 }
 
 

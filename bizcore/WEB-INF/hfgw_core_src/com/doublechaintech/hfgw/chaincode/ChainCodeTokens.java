@@ -73,7 +73,8 @@ public class ChainCodeTokens extends CommonTokens{
 		
 		return start()
 			.withChannel()
-			.withServiceRecordList();
+			.withServiceRecordList()
+			.withChainCodeInvokerList();
 	
 	}
 	public static ChainCodeTokens withoutListsTokens(){
@@ -152,7 +153,7 @@ public class ChainCodeTokens extends CommonTokens{
 	
 	
 	public ChainCodeTokens searchAllTextOfServiceRecordList(String verb, String value){	
-		String field = "id|name|payLoad|transactionId|blockId|currentStatus";
+		String field = "id|transactionId|name|payload|chainCodeFunction|blockId|response";
 		addSearchMoreOptions(SERVICE_RECORD_LIST,serviceRecordListSearchCounter++, field, verb, value);
 		return this;
 	}
@@ -178,10 +179,81 @@ public class ChainCodeTokens extends CommonTokens{
 	
 	
 		
+	protected static final String CHAIN_CODE_INVOKER_LIST = "chainCodeInvokerList";
+	public String getChainCodeInvokerList(){
+		return CHAIN_CODE_INVOKER_LIST;
+	}
+	public ChainCodeTokens withChainCodeInvokerList(){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST);
+		return this;
+	}
+	public ChainCodeTokens analyzeChainCodeInvokerList(){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzeChainCodeInvokerListEnabled(){		
+		
+		if(checkOptions(this.options(), CHAIN_CODE_INVOKER_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public ChainCodeTokens extractMoreFromChainCodeInvokerList(String idsSeperatedWithComma){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int chainCodeInvokerListSortCounter = 0;
+	public ChainCodeTokens sortChainCodeInvokerListWith(String field, String descOrAsc){		
+		addSortMoreOptions(CHAIN_CODE_INVOKER_LIST,chainCodeInvokerListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int chainCodeInvokerListSearchCounter = 0;
+	public ChainCodeTokens searchChainCodeInvokerListWith(String field, String verb, String value){		
+		
+		withChainCodeInvokerList();
+		addSearchMoreOptions(CHAIN_CODE_INVOKER_LIST,chainCodeInvokerListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public ChainCodeTokens searchAllTextOfChainCodeInvokerList(String verb, String value){	
+		String field = "id|parameters";
+		addSearchMoreOptions(CHAIN_CODE_INVOKER_LIST,chainCodeInvokerListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public ChainCodeTokens rowsPerPageOfChainCodeInvokerList(int rowsPerPage){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public ChainCodeTokens currentPageNumberOfChainCodeInvokerList(int currentPageNumber){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public ChainCodeTokens retainColumnsOfChainCodeInvokerList(String[] columns){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public ChainCodeTokens excludeColumnsOfChainCodeInvokerList(String[] columns){		
+		addSimpleOptions(CHAIN_CODE_INVOKER_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
 	
 	public  ChainCodeTokens searchEntireObjectText(String verb, String value){
 		
 		searchAllTextOfServiceRecordList(verb, value);	
+		searchAllTextOfChainCodeInvokerList(verb, value);	
 		return this;
 	}
 }

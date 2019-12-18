@@ -543,25 +543,22 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
  		return prepareNodeTypeCreateParameters(nodeType);
  	}
  	protected Object[] prepareNodeTypeUpdateParameters(NodeType nodeType){
- 		Object[] parameters = new Object[9];
+ 		Object[] parameters = new Object[6];
  
  		parameters[0] = nodeType.getName();
  		parameters[1] = nodeType.getCode(); 	
  		if(nodeType.getNetwork() != null){
  			parameters[2] = nodeType.getNetwork().getId();
  		}
- 
- 		parameters[3] = nodeType.getAddress();
- 		parameters[4] = nodeType.getContactPerson();
- 		parameters[5] = nodeType.getContactTelephone();		
- 		parameters[6] = nodeType.nextVersion();
- 		parameters[7] = nodeType.getId();
- 		parameters[8] = nodeType.getVersion();
+ 		
+ 		parameters[3] = nodeType.nextVersion();
+ 		parameters[4] = nodeType.getId();
+ 		parameters[5] = nodeType.getVersion();
  				
  		return parameters;
  	}
  	protected Object[] prepareNodeTypeCreateParameters(NodeType nodeType){
-		Object[] parameters = new Object[7];
+		Object[] parameters = new Object[4];
 		String newNodeTypeId=getNextId();
 		nodeType.setId(newNodeTypeId);
 		parameters[0] =  nodeType.getId();
@@ -572,10 +569,7 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
  			parameters[3] = nodeType.getNetwork().getId();
  		
  		}
- 		
- 		parameters[4] = nodeType.getAddress();
- 		parameters[5] = nodeType.getContactPerson();
- 		parameters[6] = nodeType.getContactTelephone();		
+ 				
  				
  		return parameters;
  	}
@@ -734,6 +728,50 @@ public class NodeTypeJDBCTemplateDAO extends HfgwBaseDAOImpl implements NodeType
 		MultipleAccessKey key = new MultipleAccessKey();
 		key.put(Node.TYPE_PROPERTY, nodeTypeId);
 		key.put(Node.CHANNEL_PROPERTY, channelId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect NodeType with network in Node
+	public NodeType planToRemoveNodeListWithNetwork(NodeType nodeType, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.TYPE_PROPERTY, nodeType.getId());
+		key.put(Node.NETWORK_PROPERTY, networkId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return nodeType;
+		}
+		if(externalNodeList.isEmpty()){
+			return nodeType;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearNetwork();
+			nodeItem.clearType();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = nodeType.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return nodeType;
+	}
+	
+	public int countNodeListWithNetwork(String nodeTypeId, String networkId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.TYPE_PROPERTY, nodeTypeId);
+		key.put(Node.NETWORK_PROPERTY, networkId);
 		
 		int count = getNodeDAO().countNodeWithKey(key, options);
 		return count;

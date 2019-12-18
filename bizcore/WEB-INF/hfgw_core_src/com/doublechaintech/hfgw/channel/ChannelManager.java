@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface ChannelManager{
+public interface ChannelManager extends BaseManager{
 
 		
 
@@ -28,11 +29,21 @@ public interface ChannelManager{
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
 
-	//public  NodeManager getNodeManager(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String typeId ,String [] tokensExpr)  throws Exception;
+	//public  NodeManager getNodeManager(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone ,String [] tokensExpr)  throws Exception;
 	
-	public  Channel addNode(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String typeId , String [] tokensExpr)  throws Exception;
+	public  Channel addNode(HfgwUserContext userContext, String channelId, String name, String url, String organizationId, String networkId, String tlsCacert, String typeId, String address, String contactPerson, String contactTelephone , String [] tokensExpr)  throws Exception;
 	public  Channel removeNode(HfgwUserContext userContext, String channelId, String nodeId, int nodeVersion,String [] tokensExpr)  throws Exception;
 	public  Channel updateNode(HfgwUserContext userContext, String channelId, String nodeId, int nodeVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
+
+	//public  ChannelPeerRoleManager getChannelPeerRoleManager(HfgwUserContext userContext, String channelId, String nodeId, String peerRoleId ,String [] tokensExpr)  throws Exception;
+	
+	public  Channel addChannelPeerRole(HfgwUserContext userContext, String channelId, String nodeId, String peerRoleId , String [] tokensExpr)  throws Exception;
+	public  Channel removeChannelPeerRole(HfgwUserContext userContext, String channelId, String channelPeerRoleId, int channelPeerRoleVersion,String [] tokensExpr)  throws Exception;
+	public  Channel updateChannelPeerRole(HfgwUserContext userContext, String channelId, String channelPeerRoleId, int channelPeerRoleVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
 
@@ -58,15 +69,13 @@ public interface ChannelManager{
 
 	*/
 
-	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String transactionId, String blockId, String networkId ,String [] tokensExpr)  throws Exception;
+	//public  ServiceRecordManager getServiceRecordManager(HfgwUserContext userContext, String channelId, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId ,String [] tokensExpr)  throws Exception;
 	
-	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String name, String payLoad, String chainCodeId, String transactionId, String blockId, String networkId , String [] tokensExpr)  throws Exception;
+	public  Channel addServiceRecord(HfgwUserContext userContext, String channelId, String transactionId, String name, String payload, String chainCodeId, String chainCodeFunction, String blockId, String appClientId, String networkId, String response, String statusId , String [] tokensExpr)  throws Exception;
 	public  Channel removeServiceRecord(HfgwUserContext userContext, String channelId, String serviceRecordId, int serviceRecordVersion,String [] tokensExpr)  throws Exception;
 	public  Channel updateServiceRecord(HfgwUserContext userContext, String channelId, String serviceRecordId, int serviceRecordVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
 
 	/*
-	public  Channel associateServiceRecordListToNewApplication(HfgwUserContext userContext, String channelId, String  serviceRecordIds[], String name, String mspid, String publicKey, String privateKey, String channelId, String networkId, String [] tokensExpr) throws Exception ;
-	public  Channel associateServiceRecordListToApplication(HfgwUserContext userContext, String channelId, String  serviceRecordIds[],String applicationId, String [] tokensExpr) throws Exception ;
 
 	*/
 

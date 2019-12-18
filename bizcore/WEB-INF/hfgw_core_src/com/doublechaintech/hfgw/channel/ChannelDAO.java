@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.channel;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -10,18 +11,20 @@ import com.doublechaintech.hfgw.HfgwUserContext;
 
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetworkDAO;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
 import com.doublechaintech.hfgw.node.NodeDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
 import com.doublechaintech.hfgw.application.ApplicationDAO;
 
 
-public interface ChannelDAO{
+public interface ChannelDAO extends BaseDAO{
 
 	public SmartList<Channel> loadAll();
 	public Channel load(String id, Map<String,Object> options) throws Exception;
@@ -51,6 +54,8 @@ public interface ChannelDAO{
 
 	public NodeDAO getNodeDAO();
 		
+	public ChannelPeerRoleDAO getChannelPeerRoleDAO();
+		
 	public ChainCodeDAO getChainCodeDAO();
 		
 	public ApplicationDAO getApplicationDAO();
@@ -59,6 +64,8 @@ public interface ChannelDAO{
 		
 	
  	public SmartList<Channel> requestCandidateChannelForNode(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
+		
+ 	public SmartList<Channel> requestCandidateChannelForChannelPeerRole(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
  	public SmartList<Channel> requestCandidateChannelForChainCode(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception;
 		
@@ -74,9 +81,24 @@ public interface ChannelDAO{
 	public Channel planToRemoveNodeListWithOrganization(Channel channel, String organizationId, Map<String,Object> options)throws Exception;
 	public int countNodeListWithOrganization(String channelId, String organizationId, Map<String,Object> options)throws Exception;
 	
+	//disconnect Channel with network in Node
+	public Channel planToRemoveNodeListWithNetwork(Channel channel, String networkId, Map<String,Object> options)throws Exception;
+	public int countNodeListWithNetwork(String channelId, String networkId, Map<String,Object> options)throws Exception;
+	
 	//disconnect Channel with type in Node
 	public Channel planToRemoveNodeListWithType(Channel channel, String typeId, Map<String,Object> options)throws Exception;
 	public int countNodeListWithType(String channelId, String typeId, Map<String,Object> options)throws Exception;
+	
+	public Channel planToRemoveChannelPeerRoleList(Channel channel, String channelPeerRoleIds[], Map<String,Object> options)throws Exception;
+
+
+	//disconnect Channel with node in ChannelPeerRole
+	public Channel planToRemoveChannelPeerRoleListWithNode(Channel channel, String nodeId, Map<String,Object> options)throws Exception;
+	public int countChannelPeerRoleListWithNode(String channelId, String nodeId, Map<String,Object> options)throws Exception;
+	
+	//disconnect Channel with peer_role in ChannelPeerRole
+	public Channel planToRemoveChannelPeerRoleListWithPeerRole(Channel channel, String peerRoleId, Map<String,Object> options)throws Exception;
+	public int countChannelPeerRoleListWithPeerRole(String channelId, String peerRoleId, Map<String,Object> options)throws Exception;
 	
 	public Channel planToRemoveChainCodeList(Channel channel, String chainCodeIds[], Map<String,Object> options)throws Exception;
 
@@ -91,21 +113,29 @@ public interface ChannelDAO{
 	public Channel planToRemoveServiceRecordList(Channel channel, String serviceRecordIds[], Map<String,Object> options)throws Exception;
 
 
-	//disconnect Channel with chain_code in ServiceRecord
-	public Channel planToRemoveServiceRecordListWithChainCode(Channel channel, String chainCodeId, Map<String,Object> options)throws Exception;
-	public int countServiceRecordListWithChainCode(String channelId, String chainCodeId, Map<String,Object> options)throws Exception;
-	
 	//disconnect Channel with transaction_id in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithTransactionId(Channel channel, String transactionIdId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithTransactionId(String channelId, String transactionIdId, Map<String,Object> options)throws Exception;
+	
+	//disconnect Channel with chain_code in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithChainCode(Channel channel, String chainCodeId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithChainCode(String channelId, String chainCodeId, Map<String,Object> options)throws Exception;
 	
 	//disconnect Channel with block_id in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithBlockId(Channel channel, String blockIdId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithBlockId(String channelId, String blockIdId, Map<String,Object> options)throws Exception;
 	
+	//disconnect Channel with app_client in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithAppClient(Channel channel, String appClientId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithAppClient(String channelId, String appClientId, Map<String,Object> options)throws Exception;
+	
 	//disconnect Channel with network in ServiceRecord
 	public Channel planToRemoveServiceRecordListWithNetwork(Channel channel, String networkId, Map<String,Object> options)throws Exception;
 	public int countServiceRecordListWithNetwork(String channelId, String networkId, Map<String,Object> options)throws Exception;
+	
+	//disconnect Channel with status in ServiceRecord
+	public Channel planToRemoveServiceRecordListWithStatus(Channel channel, String statusId, Map<String,Object> options)throws Exception;
+	public int countServiceRecordListWithStatus(String channelId, String statusId, Map<String,Object> options)throws Exception;
 	
 	
 	public SmartList<Channel> queryList(String sql, Object ... parmeters);
@@ -121,6 +151,9 @@ public interface ChannelDAO{
  
 	// 需要一个加载引用我的对象的enhance方法:Node的channel的NodeList
 	public SmartList<Node> loadOurNodeList(HfgwUserContext userContext, List<Channel> us, Map<String,Object> options) throws Exception;
+	
+	// 需要一个加载引用我的对象的enhance方法:ChannelPeerRole的channel的ChannelPeerRoleList
+	public SmartList<ChannelPeerRole> loadOurChannelPeerRoleList(HfgwUserContext userContext, List<Channel> us, Map<String,Object> options) throws Exception;
 	
 	// 需要一个加载引用我的对象的enhance方法:ChainCode的channel的ChainCodeList
 	public SmartList<ChainCode> loadOurChainCodeList(HfgwUserContext userContext, List<Channel> us, Map<String,Object> options) throws Exception;

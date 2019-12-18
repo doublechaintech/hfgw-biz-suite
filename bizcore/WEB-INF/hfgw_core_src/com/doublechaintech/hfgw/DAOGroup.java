@@ -19,12 +19,15 @@ import com.doublechaintech.hfgw.node.NodeTokens;
 import com.doublechaintech.hfgw.grpcoption.GrpcOption;
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionDAO;
 import com.doublechaintech.hfgw.grpcoption.GrpcOptionTokens;
-import com.doublechaintech.hfgw.tlscacert.TlsCacert;
-import com.doublechaintech.hfgw.tlscacert.TlsCacertDAO;
-import com.doublechaintech.hfgw.tlscacert.TlsCacertTokens;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
 import com.doublechaintech.hfgw.channel.ChannelTokens;
+import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.peerrole.PeerRoleDAO;
+import com.doublechaintech.hfgw.peerrole.PeerRoleTokens;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleTokens;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.chaincode.ChainCodeDAO;
 import com.doublechaintech.hfgw.chaincode.ChainCodeTokens;
@@ -34,12 +37,18 @@ import com.doublechaintech.hfgw.application.ApplicationTokens;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordTokens;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusTokens;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeDAO;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeTokens;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 import com.doublechaintech.hfgw.changerequest.ChangeRequestDAO;
 import com.doublechaintech.hfgw.changerequest.ChangeRequestTokens;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerTokens;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
 import com.doublechaintech.hfgw.userdomain.UserDomainDAO;
 import com.doublechaintech.hfgw.userdomain.UserDomainTokens;
@@ -101,9 +110,11 @@ public class DAOGroup {
 
 	protected GrpcOptionDAO grpcOptionDAO;
 
-	protected TlsCacertDAO tlsCacertDAO;
-
 	protected ChannelDAO channelDAO;
+
+	protected PeerRoleDAO peerRoleDAO;
+
+	protected ChannelPeerRoleDAO channelPeerRoleDAO;
 
 	protected ChainCodeDAO chainCodeDAO;
 
@@ -111,9 +122,13 @@ public class DAOGroup {
 
 	protected ServiceRecordDAO serviceRecordDAO;
 
+	protected TransactionStatusDAO transactionStatusDAO;
+
 	protected ChangeRequestTypeDAO changeRequestTypeDAO;
 
 	protected ChangeRequestDAO changeRequestDAO;
+
+	protected ChainCodeInvokerDAO chainCodeInvokerDAO;
 
 	protected UserDomainDAO userDomainDAO;
 
@@ -189,19 +204,27 @@ public class DAOGroup {
 	}
 
 
-	public TlsCacertDAO getTlsCacertDAO(){
-		return this.tlsCacertDAO;
-	}
-	public void setTlsCacertDAO(TlsCacertDAO dao){
-		this.tlsCacertDAO = dao;
-	}
-
-
 	public ChannelDAO getChannelDAO(){
 		return this.channelDAO;
 	}
 	public void setChannelDAO(ChannelDAO dao){
 		this.channelDAO = dao;
+	}
+
+
+	public PeerRoleDAO getPeerRoleDAO(){
+		return this.peerRoleDAO;
+	}
+	public void setPeerRoleDAO(PeerRoleDAO dao){
+		this.peerRoleDAO = dao;
+	}
+
+
+	public ChannelPeerRoleDAO getChannelPeerRoleDAO(){
+		return this.channelPeerRoleDAO;
+	}
+	public void setChannelPeerRoleDAO(ChannelPeerRoleDAO dao){
+		this.channelPeerRoleDAO = dao;
 	}
 
 
@@ -229,6 +252,14 @@ public class DAOGroup {
 	}
 
 
+	public TransactionStatusDAO getTransactionStatusDAO(){
+		return this.transactionStatusDAO;
+	}
+	public void setTransactionStatusDAO(TransactionStatusDAO dao){
+		this.transactionStatusDAO = dao;
+	}
+
+
 	public ChangeRequestTypeDAO getChangeRequestTypeDAO(){
 		return this.changeRequestTypeDAO;
 	}
@@ -242,6 +273,14 @@ public class DAOGroup {
 	}
 	public void setChangeRequestDAO(ChangeRequestDAO dao){
 		this.changeRequestDAO = dao;
+	}
+
+
+	public ChainCodeInvokerDAO getChainCodeInvokerDAO(){
+		return this.chainCodeInvokerDAO;
+	}
+	public void setChainCodeInvokerDAO(ChainCodeInvokerDAO dao){
+		this.chainCodeInvokerDAO = dao;
 	}
 
 
@@ -478,25 +517,6 @@ public class DAOGroup {
 			}
 		});
 
-		internalLoaderMap.put("TlsCacert", new BasicLoader() {
-			@Override
-			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
-				return daoGoup.getTlsCacertDAO().load(id, TlsCacertTokens.withoutLists());
-			}
-			@Override
-			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
-				daoGoup.getTlsCacertDAO().enhanceList((List<TlsCacert>)list);
-			}
-			@Override
-			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
-				return daoGoup.getTlsCacertDAO().load(id, tokens);
-			}
-			@Override
-			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
-				return daoGoup.getTlsCacertDAO().present((TlsCacert)data, tokens);
-			}
-		});
-
 		internalLoaderMap.put("Channel", new BasicLoader() {
 			@Override
 			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
@@ -513,6 +533,44 @@ public class DAOGroup {
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
 				return daoGoup.getChannelDAO().present((Channel)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("PeerRole", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getPeerRoleDAO().load(id, PeerRoleTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getPeerRoleDAO().enhanceList((List<PeerRole>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getPeerRoleDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getPeerRoleDAO().present((PeerRole)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("ChannelPeerRole", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getChannelPeerRoleDAO().load(id, ChannelPeerRoleTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getChannelPeerRoleDAO().enhanceList((List<ChannelPeerRole>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChannelPeerRoleDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChannelPeerRoleDAO().present((ChannelPeerRole)data, tokens);
 			}
 		});
 
@@ -573,6 +631,25 @@ public class DAOGroup {
 			}
 		});
 
+		internalLoaderMap.put("TransactionStatus", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getTransactionStatusDAO().load(id, TransactionStatusTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getTransactionStatusDAO().enhanceList((List<TransactionStatus>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getTransactionStatusDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getTransactionStatusDAO().present((TransactionStatus)data, tokens);
+			}
+		});
+
 		internalLoaderMap.put("ChangeRequestType", new BasicLoader() {
 			@Override
 			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
@@ -608,6 +685,25 @@ public class DAOGroup {
 			@Override
 			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
 				return daoGoup.getChangeRequestDAO().present((ChangeRequest)data, tokens);
+			}
+		});
+
+		internalLoaderMap.put("ChainCodeInvoker", new BasicLoader() {
+			@Override
+			public BaseEntity loadBasicData(DAOGroup daoGoup, String id) throws Exception {
+				return daoGoup.getChainCodeInvokerDAO().load(id, ChainCodeInvokerTokens.withoutLists());
+			}
+			@Override
+			public void enhanceList(DAOGroup daoGoup, List list) throws Exception {
+				daoGoup.getChainCodeInvokerDAO().enhanceList((List<ChainCodeInvoker>)list);
+			}
+			@Override
+			public BaseEntity loadBasicDataWithToken(DAOGroup daoGoup, String id, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChainCodeInvokerDAO().load(id, tokens);
+			}
+			@Override
+			public BaseEntity present(DAOGroup daoGoup, BaseEntity data, Map<String, Object> tokens) throws Exception {
+				return daoGoup.getChainCodeInvokerDAO().present((ChainCodeInvoker)data, tokens);
 			}
 		});
 

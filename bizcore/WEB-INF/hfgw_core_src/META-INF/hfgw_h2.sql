@@ -32,9 +32,6 @@ create table node_type_data (
 	name                          	varchar(28)                              comment '名称',
 	code                          	varchar(28)                              comment '代码',
 	network                       	varchar(48)                              comment '网络',
-	address                       	varchar(52)                              comment '地址',
-	contact_person                	varchar(8)                               comment '联系人',
-	contact_telephone             	varchar(44)                              comment '联系电话',
 	version                       	int                                      comment '版本'
 	
 ) ;
@@ -47,7 +44,12 @@ create table node_data (
 	url                           	varchar(200)                             comment 'url',
 	organization                  	varchar(48)                              comment '组织',
 	channel                       	varchar(48)                              comment '频道',
+	network                       	varchar(48)                              comment '网络',
+	tls_cacert                    	longtext                                 comment 'Tls Cacert',
 	type                          	varchar(48)                              comment '类型',
+	address                       	varchar(52)                              comment '地址',
+	contact_person                	varchar(8)                               comment '联系人',
+	contact_telephone             	varchar(44)                              comment '联系电话',
 	version                       	int                                      comment '版本'
 	
 ) ;
@@ -64,22 +66,33 @@ create table grpc_option_data (
 ) ;
 -- primary key will be created later for better import performance
 
-drop table  if exists tls_cacert_data;
-create table tls_cacert_data (
-	id                            	varchar(48)          not null            comment 'ID',
-	path                          	varchar(200)                             comment '路径',
-	cert                          	longtext                                 comment 'Cert',
-	node                          	varchar(48)                              comment '节点',
-	version                       	int                                      comment '版本'
-	
-) ;
--- primary key will be created later for better import performance
-
 drop table  if exists channel_data;
 create table channel_data (
 	id                            	varchar(48)          not null            comment 'ID',
 	name                          	varchar(20)                              comment '名称',
 	network                       	varchar(48)                              comment '网络',
+	version                       	int                                      comment '版本'
+	
+) ;
+-- primary key will be created later for better import performance
+
+drop table  if exists peer_role_data;
+create table peer_role_data (
+	id                            	varchar(48)          not null            comment 'ID',
+	name                          	varchar(56)                              comment '名称',
+	code                          	varchar(56)                              comment '代码',
+	network                       	varchar(48)                              comment '网络',
+	version                       	int                                      comment '版本'
+	
+) ;
+-- primary key will be created later for better import performance
+
+drop table  if exists channel_peer_role_data;
+create table channel_peer_role_data (
+	id                            	varchar(48)          not null            comment 'ID',
+	channel                       	varchar(48)                              comment '频道',
+	node                          	varchar(48)                              comment '节点',
+	peer_role                     	varchar(48)                              comment '对等的角色',
 	version                       	int                                      comment '版本'
 	
 ) ;
@@ -115,16 +128,29 @@ create table application_data (
 drop table  if exists service_record_data;
 create table service_record_data (
 	id                            	varchar(48)          not null            comment 'ID',
+	transaction_id                	varchar(200)                             comment '事务Id',
 	name                          	varchar(200)                             comment '名称',
-	pay_load                      	longtext                                 comment '支付负载',
+	payload                       	longtext                                 comment '有效载荷',
 	channel                       	varchar(48)                              comment '频道',
 	chain_code                    	varchar(48)                              comment '链码',
-	transaction_id                	varchar(200)                             comment '事务Id',
+	chain_code_function           	varchar(20)                              comment '链码功能',
 	block_id                      	varchar(200)                             comment '块Id',
 	create_time                   	datetime                                 comment '创建时间',
-	application                   	varchar(48)                              comment '应用程序',
+	app_client                    	varchar(48)                              comment '应用客户端',
 	network                       	varchar(48)                              comment '网络',
-	current_status                	varchar(28)                              comment '当前状态',
+	response                      	longtext                                 comment '响应',
+	status                        	varchar(48)                              comment '状态',
+	version                       	int                                      comment '版本'
+	
+) ;
+-- primary key will be created later for better import performance
+
+drop table  if exists transaction_status_data;
+create table transaction_status_data (
+	id                            	varchar(48)          not null            comment 'ID',
+	name                          	varchar(36)                              comment '名称',
+	code                          	varchar(36)                              comment '代码',
+	network                       	varchar(48)                              comment '网络',
 	version                       	int                                      comment '版本'
 	
 ) ;
@@ -133,8 +159,8 @@ create table service_record_data (
 drop table  if exists change_request_type_data;
 create table change_request_type_data (
 	id                            	varchar(48)          not null            comment 'ID',
-	name                          	varchar(16)                              comment '名称',
-	code                          	varchar(64)                              comment '代码',
+	name                          	varchar(32)                              comment '名称',
+	code                          	varchar(68)                              comment '代码',
 	icon                          	varchar(24)                              comment '图标',
 	display_order                 	int                                      comment '显示顺序',
 	bind_types                    	longtext                                 comment '绑定类型',
@@ -153,6 +179,18 @@ create table change_request_data (
 	remote_ip                     	varchar(40)                              comment '远程Ip',
 	request_type                  	varchar(48)                              comment '请求类型',
 	network                       	varchar(48)                              comment '网络',
+	version                       	int                                      comment '版本'
+	
+) ;
+-- primary key will be created later for better import performance
+
+drop table  if exists chain_code_invoker_data;
+create table chain_code_invoker_data (
+	id                            	varchar(48)          not null            comment 'ID',
+	app_client                    	varchar(48)                              comment '应用客户端',
+	chain_code                    	varchar(48)                              comment '链码',
+	parameters                    	longtext                                 comment '参数',
+	change_request                	varchar(48)                              comment '变更请求',
 	version                       	int                                      comment '版本'
 	
 ) ;
@@ -193,7 +231,6 @@ create table sec_user_data (
 	last_login_time               	datetime                                 comment '最后登录时间',
 	domain                        	varchar(48)                              comment '域',
 	blocking                      	varchar(48)                              comment '屏蔽',
-	current_status                	varchar(28)                              comment '当前状态',
 	version                       	int                                      comment '版本'
 	
 ) ;
@@ -391,14 +428,14 @@ insert into organization_data values
 	('O000002','doublechaintech0002','doublechaintech0002','HN000001','1');
 
 insert into node_type_data values
-	('peer','peer','peer','HN000001','北京市建国门内大街100号','张三','010-9998880','1'),
-	('orderer','orderer','orderer','HN000001','北京市建国门内大街100号0002','张三0002','010-99988800002','1');
+	('peer','peer','peer','HN000001','1'),
+	('orderer','orderer','orderer','HN000001','1');
 
 insert into node_data values
-	('N000001','skynet-peer','grpcs://www.skynet-peer.skynet.com:7051','O000001','C000001','peer','1'),
-	('N000002','skynet-orderer','grpcs://www.skynet-orderer.skynet.com:7050','O000001','C000001','peer','1'),
-	('N000003','skynet-peer','grpcs://www.skynet-peer.skynet.com:7051','O000002','C000002','orderer','1'),
-	('N000004','skynet-orderer','grpcs://www.skynet-orderer.skynet.com:7050','O000002','C000002','orderer','1');
+	('N000001','skynet-peer','grpcs://www.skynet-peer.skynet.com:7051','O000001','C000001','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','peer','北京市建国门内大街100号','张三','010-9998880','1'),
+	('N000002','skynet-orderer','grpcs://www.skynet-orderer.skynet.com:7050','O000001','C000001','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','peer','北京市建国门内大街100号0002','张三0002','010-99988800002','1'),
+	('N000003','skynet-peer','grpcs://www.skynet-peer.skynet.com:7051','O000002','C000002','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','orderer','北京市建国门内大街100号0003','张三0003','010-99988800003','1'),
+	('N000004','skynet-orderer','grpcs://www.skynet-orderer.skynet.com:7050','O000002','C000002','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','orderer','北京市建国门内大街100号0004','张三0004','010-99988800004','1');
 
 insert into grpc_option_data values
 	('GO000001','optionkey','optionValue','N000001','1'),
@@ -410,19 +447,26 @@ insert into grpc_option_data values
 	('GO000007','optionkey0007','optionValue0007','N000004','1'),
 	('GO000008','optionkey0008','optionValue0008','N000004','1');
 
-insert into tls_cacert_data values
-	('TC000001','/catls.pem','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000001','1'),
-	('TC000002','/catls.pem0002','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000001','1'),
-	('TC000003','/catls.pem0003','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000002','1'),
-	('TC000004','/catls.pem0004','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000002','1'),
-	('TC000005','/catls.pem0005','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000003','1'),
-	('TC000006','/catls.pem0006','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000003','1'),
-	('TC000007','/catls.pem0007','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000004','1'),
-	('TC000008','/catls.pem0008','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','N000004','1');
-
 insert into channel_data values
 	('C000001','channelname','HN000001','1'),
 	('C000002','channelname0002','HN000001','1');
+
+insert into peer_role_data values
+	('endorsingPeer','endorsingPeer','endorsingPeer','HN000001','1'),
+	('chaincodeQuery','chaincodeQuery','chaincodeQuery','HN000001','1'),
+	('ledgerQuery','ledgerQuery','ledgerQuery','HN000001','1'),
+	('eventSource','eventSource','eventSource','HN000001','1'),
+	('discover','discover','discover','HN000001','1');
+
+insert into channel_peer_role_data values
+	('CPR000001','C000001','N000001','endorsingPeer','1'),
+	('CPR000002','C000001','N000001','endorsingPeer','1'),
+	('CPR000003','C000001','N000002','chaincodeQuery','1'),
+	('CPR000004','C000001','N000002','chaincodeQuery','1'),
+	('CPR000005','C000002','N000003','ledgerQuery','1'),
+	('CPR000006','C000002','N000003','eventSource','1'),
+	('CPR000007','C000002','N000004','eventSource','1'),
+	('CPR000008','C000002','N000004','discover','1');
 
 insert into chain_code_data values
 	('CC000001','sacc:1','sacc','1','C000001','1'),
@@ -431,30 +475,51 @@ insert into chain_code_data values
 	('CC000004','sacc:10004','sacc0004','v1','C000002','1');
 
 insert into application_data values
-	('A000001','生态环境处应用2','2019-11-02 17:46:00','skynet','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','HN000001','1'),
-	('A000002','水环境管理处节点应用3','2019-11-17 14:43:22','doublechaintech','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','HN000001','1'),
-	('A000003','科技与国际合作处应用4','2019-11-04 20:28:36','skynet','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','HN000001','1'),
-	('A000004','生态环境处应用2','2019-11-18 00:17:06','doublechaintech','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','HN000001','1');
+	('A000001','生态环境处应用2','2019-11-23 12:08:33','skynet','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','HN000001','1'),
+	('A000002','水环境管理处节点应用3','2019-11-18 09:50:54','doublechaintech','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','HN000001','1'),
+	('A000003','科技与国际合作处应用4','2019-11-22 19:06:45','skynet','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','HN000001','1'),
+	('A000004','生态环境处应用2','2019-11-20 11:12:45','doublechaintech','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','HN000001','1');
 
 insert into service_record_data values
-	('SR000001','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000001','a21fe3srw','a21fe3srw','2019-11-09 11:23:11',NULL,'HN000001','APPLIED','1'),
-	('SR000002','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000001','a21fe3srw0002','a21fe3srw0002','2019-11-05 13:59:01',NULL,'HN000001','APPLIED0002','1'),
-	('SR000003','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000002','a21fe3srw0003','a21fe3srw0003','2019-11-07 05:52:47',NULL,'HN000001','APPLIED0003','1'),
-	('SR000004','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000002','a21fe3srw0004','a21fe3srw0004','2019-11-09 20:30:03',NULL,'HN000001','APPLIED0004','1'),
-	('SR000005','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000003','a21fe3srw0005','a21fe3srw0005','2019-11-08 15:22:35',NULL,'HN000001','APPLIED0005','1'),
-	('SR000006','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000003','a21fe3srw0006','a21fe3srw0006','2019-11-11 06:32:51',NULL,'HN000001','APPLIED0006','1'),
-	('SR000007','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000004','a21fe3srw0007','a21fe3srw0007','2019-11-08 08:26:37',NULL,'HN000001','APPLIED0007','1'),
-	('SR000008','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000004','a21fe3srw0008','a21fe3srw0008','2019-11-18 16:07:56',NULL,'HN000001','APPLIED0008','1');
+	('SR000001','a21fe3srw','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000001','transact','a21fe3srw','2019-12-04 12:45:43','A000001','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','new','1'),
+	('SR000002','a21fe3srw0002','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000001','transact0002','a21fe3srw0002','2019-11-20 11:15:35','A000001','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','new','1'),
+	('SR000003','a21fe3srw0003','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000002','transact0003','a21fe3srw0003','2019-11-17 21:22:05','A000002','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','endorsed','1'),
+	('SR000004','a21fe3srw0004','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000001','CC000002','transact0004','a21fe3srw0004','2019-11-20 20:24:20','A000002','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','endorsed','1'),
+	('SR000005','a21fe3srw0005','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000003','transact0005','a21fe3srw0005','2019-11-21 21:11:16','A000003','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','committed','1'),
+	('SR000006','a21fe3srw0006','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000003','transact0006','a21fe3srw0006','2019-12-02 16:06:16','A000003','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','committed','1'),
+	('SR000007','a21fe3srw0007','调用链码','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000004','transact0007','a21fe3srw0007','2019-12-04 19:54:39','A000004','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','rejected','1'),
+	('SR000008','a21fe3srw0008','网络管理','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','C000002','CC000004','transact0008','a21fe3srw0008','2019-12-06 04:48:12','A000004','HN000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','rejected','1');
+
+insert into transaction_status_data values
+	('new','new','new','HN000001','1'),
+	('endorsed','endorsed','endorsed','HN000001','1'),
+	('committed','committed','committed','HN000001','1'),
+	('rejected','rejected','rejected','HN000001','1');
 
 insert into change_request_type_data values
-	('CHAINCODE_INVOKE','调用链码','CHAINCODE_INVOKE','upload','1','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
-	('NETWORK_MANAGER','网络管理','NETWORK_MANAGER','edit','2','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1');
+	('CERT_CHECKER','证书健康状况检测','CERT_CHECKER','upload','1','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
+	('NODE_CHECKER','节点健康状况检测','NODE_CHECKER','edit','2','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
+	('CERT_UPDATER','证书更新','CERT_UPDATER','edit','3','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
+	('NODE_ROLE_MANAGER','节点角色管理','NODE_ROLE_MANAGER','edit','4','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
+	('CC_INVOKER','调用链码发起交易','CC_INVOKER','edit','5','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
+	('CC_QUERIER','调用链码查询账本','CC_QUERIER','edit','6','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1'),
+	('LEDGER_QUERIER','查看账本交易','LEDGER_QUERIER','edit','7','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','HN000001','1');
 
 insert into change_request_data values
-	('CR000001','存款','2019-11-16 12:33:01','8.8.8.8','CHAINCODE_INVOKE','HN000001','1'),
-	('CR000002','转账','2019-11-18 02:53:25','8.8.8.8','CHAINCODE_INVOKE','HN000001','1'),
-	('CR000003','取款','2019-11-18 03:37:43','8.8.8.8','NETWORK_MANAGER','HN000001','1'),
-	('CR000004','存款','2019-11-12 14:22:37','8.8.8.8','NETWORK_MANAGER','HN000001','1');
+	('CR000001','存款','2019-11-14 21:51:50','8.8.8.8','CERT_CHECKER','HN000001','1'),
+	('CR000002','转账','2019-11-29 08:48:31','8.8.8.8','NODE_CHECKER','HN000001','1'),
+	('CR000003','取款','2019-12-02 16:12:04','8.8.8.8','NODE_ROLE_MANAGER','HN000001','1'),
+	('CR000004','存款','2019-12-01 05:17:46','8.8.8.8','CC_QUERIER','HN000001','1');
+
+insert into chain_code_invoker_data values
+	('CCI000001','A000001','CC000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000001','1'),
+	('CCI000002','A000001','CC000001','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000001','1'),
+	('CCI000003','A000002','CC000002','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000002','1'),
+	('CCI000004','A000002','CC000002','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000002','1'),
+	('CCI000005','A000003','CC000003','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000003','1'),
+	('CCI000006','A000003','CC000003','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000003','1'),
+	('CCI000007','A000004','CC000004','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000004','1'),
+	('CCI000008','A000004','CC000004','    一段样例文字。    一段样例文字。\n可以分段。可以分段。\n\n可以空行。可以空行。\n\n','CR000004','1');
 
 insert into user_domain_data values
 	('UD000001','用户区域','1');
@@ -464,11 +529,11 @@ insert into user_white_list_data values
 	('UWL000002','13808188512','tester;ios-spokesperson0002','UD000001','1');
 
 insert into sec_user_data values
-	('SU000001','login','13900000001','suddy_chang@163.com','C183EC89F92A462CF45B95504792EC4625E847C90536EEFE512D1C9DB8602E95','wx123456789abcdefghijklmn','wxapp12098410239840','jwt_token_12345678','0','2019-11-08 22:34:31','2019-11-14 03:30:26','UD000001',NULL,'BLOCKED','1'),
-	('SU000002','login0002','13900000002','2@qq.com','AC2F95628244C6975EB2C36942EA879ED93D93F5895EF3157733E4629FA86B92','wx123456789abcdefghijklmn0002','wxapp120984102398400002','jwt_token_123456780002','9999999','2019-11-12 13:35:10','2019-11-18 23:05:56','UD000001',NULL,'BLOCKED0002','1');
+	('SU000001','login','13900000001','suddy_chang@163.com','C183EC89F92A462CF45B95504792EC4625E847C90536EEFE512D1C9DB8602E95','wx123456789abcdefghijklmn','wxapp12098410239840','jwt_token_12345678','0','2019-11-26 02:25:01','2019-11-27 07:28:04','UD000001','SUB000001','1'),
+	('SU000002','login0002','13900000002','2@qq.com','AC2F95628244C6975EB2C36942EA879ED93D93F5895EF3157733E4629FA86B92','wx123456789abcdefghijklmn0002','wxapp120984102398400002','jwt_token_123456780002','9999999','2019-11-30 13:44:34','2019-11-16 15:00:33','UD000001','SUB000001','1');
 
 insert into sec_user_blocking_data values
-	('SUB000001','currentUser()','2019-11-09 01:07:23','这个用户多次发送违反社区的帖子，现在把他给屏蔽了','1');
+	('SUB000001','currentUser()','2019-11-29 18:29:42','这个用户多次发送违反社区的帖子，现在把他给屏蔽了','1');
 
 insert into user_app_data values
 	('UA000001','审车平台','SU000001','users','1','MXWR','CarInspectionPlatform','CIP000001','/link/to/app','1'),
@@ -477,14 +542,14 @@ insert into user_app_data values
 	('UA000004','审车公司','SU000002','bar-chart','1','MXWR','CarInspectionServiceCompany','CISC000001','/link/to/app0004','1');
 
 insert into quick_link_data values
-	('QL000001','列表','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表','2019-11-03 16:03:05','UA000001','1'),
-	('QL000002','列表0002','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0002','2019-11-08 12:09:49','UA000001','1'),
-	('QL000003','列表0003','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0003','2019-11-20 00:11:40','UA000002','1'),
-	('QL000004','列表0004','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0004','2019-11-12 22:23:51','UA000002','1'),
-	('QL000005','列表0005','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0005','2019-11-15 14:42:28','UA000003','1'),
-	('QL000006','列表0006','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0006','2019-11-16 14:58:32','UA000003','1'),
-	('QL000007','列表0007','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0007','2019-11-18 00:29:04','UA000004','1'),
-	('QL000008','列表0008','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0008','2019-11-20 13:37:14','UA000004','1');
+	('QL000001','列表','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表','2019-11-28 16:13:13','UA000001','1'),
+	('QL000002','列表0002','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0002','2019-11-26 04:13:00','UA000001','1'),
+	('QL000003','列表0003','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0003','2019-11-27 16:41:12','UA000002','1'),
+	('QL000004','列表0004','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0004','2019-12-06 02:50:05','UA000002','1'),
+	('QL000005','列表0005','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0005','2019-12-04 15:48:29','UA000003','1'),
+	('QL000006','列表0006','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0006','2019-11-28 04:42:04','UA000003','1'),
+	('QL000007','列表0007','facebook','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0007','2019-11-21 03:11:51','UA000004','1'),
+	('QL000008','列表0008','google','https://demo.doublechaintech.com/demodata/imageManager/genImage/y00/200/200/red/','列表0008','2019-11-24 11:26:00','UA000004','1');
 
 insert into list_access_data values
 	('LA000001','列表','levelOneCategoryList','1','1','1','1','1','UA000001','1'),
@@ -507,10 +572,10 @@ insert into object_access_data values
 	('OA000008','控制访问列表10008','AccountSet','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','levelOneCategoryList','UA000004','1');
 
 insert into login_history_data values
-	('LH000001','2019-11-18 23:51:14','192.168.1.1','登陆成功','SU000001','1'),
-	('LH000002','2019-11-07 08:26:34','192.168.1.2','登陆成功0002','SU000001','1'),
-	('LH000003','2019-11-19 03:16:06','192.168.1.1','登陆成功0003','SU000002','1'),
-	('LH000004','2019-10-30 23:34:19','192.168.1.2','登陆成功0004','SU000002','1');
+	('LH000001','2019-11-29 23:33:23','192.168.1.1','登陆成功','SU000001','1'),
+	('LH000002','2019-11-21 04:47:57','192.168.1.2','登陆成功0002','SU000001','1'),
+	('LH000003','2019-12-05 23:16:08','192.168.1.1','登陆成功0003','SU000002','1'),
+	('LH000004','2019-12-05 08:53:26','192.168.1.2','登陆成功0004','SU000002','1');
 
 insert into generic_form_data values
 	('GF000001','登记输入单','姓名就是你身份证上的名字','1');
@@ -558,19 +623,29 @@ alter table node_data add constraint
 alter table node_data add constraint 
 	fk4channel_of_node_data foreign key (channel) references channel_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 alter table node_data add constraint 
+	fk4network_of_node_data foreign key (network) references hyperledger_network_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table node_data add constraint 
 	fk4type_of_node_data foreign key (type) references node_type_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table grpc_option_data add constraint pk4id_of_grpc_option_data primary key (id);
 alter table grpc_option_data add constraint 
 	fk4node_of_grpc_option_data foreign key (node) references node_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
-alter table tls_cacert_data add constraint pk4id_of_tls_cacert_data primary key (id);
-alter table tls_cacert_data add constraint 
-	fk4node_of_tls_cacert_data foreign key (node) references node_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
-
 alter table channel_data add constraint pk4id_of_channel_data primary key (id);
 alter table channel_data add constraint 
 	fk4network_of_channel_data foreign key (network) references hyperledger_network_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+alter table peer_role_data add constraint pk4id_of_peer_role_data primary key (id);
+alter table peer_role_data add constraint 
+	fk4network_of_peer_role_data foreign key (network) references hyperledger_network_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+alter table channel_peer_role_data add constraint pk4id_of_channel_peer_role_data primary key (id);
+alter table channel_peer_role_data add constraint 
+	fk4channel_of_channel_peer_role_data foreign key (channel) references channel_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table channel_peer_role_data add constraint 
+	fk4node_of_channel_peer_role_data foreign key (node) references node_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table channel_peer_role_data add constraint 
+	fk4peer_role_of_channel_peer_role_data foreign key (peer_role) references peer_role_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table chain_code_data add constraint pk4id_of_chain_code_data primary key (id);
 alter table chain_code_data add constraint 
@@ -588,7 +663,15 @@ alter table service_record_data add constraint
 alter table service_record_data add constraint 
 	fk4chain_code_of_service_record_data foreign key (chain_code) references chain_code_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 alter table service_record_data add constraint 
+	fk4app_client_of_service_record_data foreign key (app_client) references application_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table service_record_data add constraint 
 	fk4network_of_service_record_data foreign key (network) references hyperledger_network_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table service_record_data add constraint 
+	fk4status_of_service_record_data foreign key (status) references transaction_status_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
+alter table transaction_status_data add constraint pk4id_of_transaction_status_data primary key (id);
+alter table transaction_status_data add constraint 
+	fk4network_of_transaction_status_data foreign key (network) references hyperledger_network_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table change_request_type_data add constraint pk4id_of_change_request_type_data primary key (id);
 alter table change_request_type_data add constraint 
@@ -600,6 +683,14 @@ alter table change_request_data add constraint
 alter table change_request_data add constraint 
 	fk4network_of_change_request_data foreign key (network) references hyperledger_network_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
+alter table chain_code_invoker_data add constraint pk4id_of_chain_code_invoker_data primary key (id);
+alter table chain_code_invoker_data add constraint 
+	fk4app_client_of_chain_code_invoker_data foreign key (app_client) references application_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table chain_code_invoker_data add constraint 
+	fk4chain_code_of_chain_code_invoker_data foreign key (chain_code) references chain_code_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table chain_code_invoker_data add constraint 
+	fk4change_request_of_chain_code_invoker_data foreign key (change_request) references change_request_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+
 alter table user_domain_data add constraint pk4id_of_user_domain_data primary key (id);
 
 alter table user_white_list_data add constraint pk4id_of_user_white_list_data primary key (id);
@@ -609,6 +700,8 @@ alter table user_white_list_data add constraint
 alter table sec_user_data add constraint pk4id_of_sec_user_data primary key (id);
 alter table sec_user_data add constraint 
 	fk4domain_of_sec_user_data foreign key (domain) references user_domain_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
+alter table sec_user_data add constraint 
+	fk4blocking_of_sec_user_data foreign key (blocking) references sec_user_blocking_data(id) ON DELETE CASCADE ON UPDATE CASCADE;
 
 alter table sec_user_blocking_data add constraint pk4id_of_sec_user_blocking_data primary key (id);
 
@@ -667,9 +760,12 @@ create unique index idx4id_ver_of_node on node_data (id, version);
 
 create unique index idx4id_ver_of_grpc_option on grpc_option_data (id, version);
 
-create unique index idx4id_ver_of_tls_cacert on tls_cacert_data (id, version);
-
 create unique index idx4id_ver_of_channel on channel_data (id, version);
+
+create unique index idx4id_ver_of_peer_role on peer_role_data (id, version);
+create unique index idx4code_of_peer_role on peer_role_data (code);
+
+create unique index idx4id_ver_of_channel_peer_role on channel_peer_role_data (id, version);
 
 create unique index idx4id_ver_of_chain_code on chain_code_data (id, version);
 
@@ -681,12 +777,17 @@ create  index idx4transaction_id_of_service_record on service_record_data (trans
 create  index idx4block_id_of_service_record on service_record_data (block_id);
 create  index idx4create_time_of_service_record on service_record_data (create_time);
 
+create unique index idx4id_ver_of_transaction_status on transaction_status_data (id, version);
+create unique index idx4code_of_transaction_status on transaction_status_data (code);
+
 create unique index idx4id_ver_of_change_request_type on change_request_type_data (id, version);
 create unique index idx4code_of_change_request_type on change_request_type_data (code);
 create  index idx4display_order_of_change_request_type on change_request_type_data (display_order);
 
 create unique index idx4id_ver_of_change_request on change_request_data (id, version);
 create  index idx4create_time_of_change_request on change_request_data (create_time);
+
+create unique index idx4id_ver_of_chain_code_invoker on chain_code_invoker_data (id, version);
 
 create unique index idx4id_ver_of_user_domain on user_domain_data (id, version);
 
@@ -745,12 +846,12 @@ insert into user_domain_data values ('UD000001','用户区域','1');
 
 
 
-insert into sec_user_data values('SU000001','User000001','13900000001','1000001@qq.com','24327F1C00D22210298A18D0DB9AA6C4C22DEAC4BEAE7C02E616442CA7764246', 'weixin_openid_000001', 'weixin_appid_000001', 'jwt_token_000001' ,'9292993','2019-09-09 09:09:09','2019-09-09 09:09:09','UD000001',NULL,'INIT',1);
+insert into sec_user_data values('SU000001','User000001','13900000001','1000001@qq.com','24327F1C00D22210298A18D0DB9AA6C4C22DEAC4BEAE7C02E616442CA7764246', 'weixin_openid_000001', 'weixin_appid_000001', 'jwt_token_000001' ,'9292993','2019-09-09 09:09:09','2019-09-09 09:09:09','UD000001',NULL,1);
 insert into user_app_data values('UA000001','Hyperledger Fabric 应用网关','SU000001','university',1,'MXWR','HyperledgerNetwork','HN000001','/link/to/app','1');
 insert into user_app_data values('UA000002','我的账户','SU000001','lock',1,'MXWR','SecUser','SU000001','/link/to/app','1');
-insert into user_app_data values('UA000003','用户管理','SU000001','lock',1,'MXWR','UserDomain','UD000001','/link/to/app','1');
+insert into user_app_data values('UA000003','用户管理','SU000001','users',1,'MXWR','UserDomain','UD000001','/link/to/app','1');
 
-/* ------------------------------------------------------------------------ */
+/* ------------------------------ generate users for all target od marked as user4all ------------------------------------------ */
 
 
 select mobile as `可用于登录的账号`, 'admin123' as `密码` from sec_user_data;
@@ -758,7 +859,6 @@ select mobile as `可用于登录的账号`, 'admin123' as `密码` from sec_use
 /*
 | 角色        | 用户名           | 密码         |
 | ------------- |:-------------:|:-------------------:|
-|Hyperledger网络|13900000001|admin123|
 
 
 */

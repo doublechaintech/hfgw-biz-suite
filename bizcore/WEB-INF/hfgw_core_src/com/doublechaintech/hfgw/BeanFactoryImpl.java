@@ -7,13 +7,16 @@ import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.grpcoption.GrpcOption;
-import com.doublechaintech.hfgw.tlscacert.TlsCacert;
 import com.doublechaintech.hfgw.channel.Channel;
+import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvoker;
 import com.doublechaintech.hfgw.userdomain.UserDomain;
 import com.doublechaintech.hfgw.userwhitelist.UserWhiteList;
 import com.doublechaintech.hfgw.secuser.SecUser;
@@ -59,13 +62,18 @@ public class BeanFactoryImpl{
 	}
 
 
-	public TlsCacert createTlsCacert(Map<String,Object> options){
-		return new TlsCacert();
+	public Channel createChannel(Map<String,Object> options){
+		return new Channel();
 	}
 
 
-	public Channel createChannel(Map<String,Object> options){
-		return new Channel();
+	public PeerRole createPeerRole(Map<String,Object> options){
+		return new PeerRole();
+	}
+
+
+	public ChannelPeerRole createChannelPeerRole(Map<String,Object> options){
+		return new ChannelPeerRole();
 	}
 
 
@@ -84,6 +92,11 @@ public class BeanFactoryImpl{
 	}
 
 
+	public TransactionStatus createTransactionStatus(Map<String,Object> options){
+		return new TransactionStatus();
+	}
+
+
 	public ChangeRequestType createChangeRequestType(Map<String,Object> options){
 		return new ChangeRequestType();
 	}
@@ -91,6 +104,11 @@ public class BeanFactoryImpl{
 
 	public ChangeRequest createChangeRequest(Map<String,Object> options){
 		return new ChangeRequest();
+	}
+
+
+	public ChainCodeInvoker createChainCodeInvoker(Map<String,Object> options){
+		return new ChainCodeInvoker();
 	}
 
 

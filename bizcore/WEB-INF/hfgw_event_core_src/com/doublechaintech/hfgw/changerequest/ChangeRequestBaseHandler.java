@@ -10,7 +10,7 @@ import com.doublechaintech.hfgw.CustomHfgwCheckerManager;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
 public class ChangeRequestBaseHandler extends CustomHfgwCheckerManager{
 	
-	private static final String SUB_EVENT_NAMES[]={};
+	private static final String SUB_EVENT_NAMES[]={"chainCodeInvokerProcessor"};
 	
 	public ChangeRequest handle(HfgwUserContext userContext, ChangeRequest request) throws Exception {
 		

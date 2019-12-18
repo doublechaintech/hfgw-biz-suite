@@ -131,33 +131,6 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  ADDRESS_OF_NODE_TYPE ="node_type.address";
-	public HfgwChecker checkAddressOfNodeType(String address)
-	{
-		
-	 	checkStringLengthRange(address,4, 52,ADDRESS_OF_NODE_TYPE ); 		
-		
-		return this;
-	}	
-
-	public static final String  CONTACT_PERSON_OF_NODE_TYPE ="node_type.contact_person";
-	public HfgwChecker checkContactPersonOfNodeType(String contactPerson)
-	{
-		
-	 	checkStringLengthRange(contactPerson,1, 8,CONTACT_PERSON_OF_NODE_TYPE ); 		
-		
-		return this;
-	}	
-
-	public static final String  CONTACT_TELEPHONE_OF_NODE_TYPE ="node_type.contact_telephone";
-	public HfgwChecker checkContactTelephoneOfNodeType(String contactTelephone)
-	{
-		
-	 	checkStringLengthRange(contactTelephone,3, 44,CONTACT_TELEPHONE_OF_NODE_TYPE ); 		
-		
-		return this;
-	}	
-
 	public static final String  VERSION_OF_NODE_TYPE ="node_type.version";
 	public HfgwChecker checkVersionOfNodeType(int version)
 	{
@@ -212,11 +185,56 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  NETWORK_OF_NODE ="node.network";
+	public HfgwChecker checkNetworkIdOfNode(String networkId)
+	{
+		
+	 	checkIdOfNode(networkId ); 		
+		
+		return this;
+	}	
+
+	public static final String  TLS_CACERT_OF_NODE ="node.tls_cacert";
+	public HfgwChecker checkTlsCacertOfNode(String tlsCacert)
+	{
+		
+	 	checkLongtext(tlsCacert,0, 1048576,TLS_CACERT_OF_NODE ); 		
+		
+		return this;
+	}	
+
 	public static final String  TYPE_OF_NODE ="node.type";
 	public HfgwChecker checkTypeIdOfNode(String typeId)
 	{
 		
 	 	checkIdOfNode(typeId ); 		
+		
+		return this;
+	}	
+
+	public static final String  ADDRESS_OF_NODE ="node.address";
+	public HfgwChecker checkAddressOfNode(String address)
+	{
+		
+	 	checkStringLengthRange(address,4, 52,ADDRESS_OF_NODE ); 		
+		
+		return this;
+	}	
+
+	public static final String  CONTACT_PERSON_OF_NODE ="node.contact_person";
+	public HfgwChecker checkContactPersonOfNode(String contactPerson)
+	{
+		
+	 	checkStringLengthRange(contactPerson,1, 8,CONTACT_PERSON_OF_NODE ); 		
+		
+		return this;
+	}	
+
+	public static final String  CONTACT_TELEPHONE_OF_NODE ="node.contact_telephone";
+	public HfgwChecker checkContactTelephoneOfNode(String contactTelephone)
+	{
+		
+	 	checkStringLengthRange(contactTelephone,3, 44,CONTACT_TELEPHONE_OF_NODE ); 		
 		
 		return this;
 	}	
@@ -275,51 +293,6 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  ID_OF_TLS_CACERT ="tls_cacert.id";
-	public HfgwChecker checkIdOfTlsCacert(String id)
-	{
-		
-	 	checkStringLengthRange(id,2, 64,ID_OF_TLS_CACERT ); 		
-		
-		return this;
-	}	
-
-	public static final String  PATH_OF_TLS_CACERT ="tls_cacert.path";
-	public HfgwChecker checkPathOfTlsCacert(String path)
-	{
-		
-	 	checkStringLengthRange(path,0, 200,PATH_OF_TLS_CACERT ); 		
-		
-		return this;
-	}	
-
-	public static final String  CERT_OF_TLS_CACERT ="tls_cacert.cert";
-	public HfgwChecker checkCertOfTlsCacert(String cert)
-	{
-		
-	 	checkLongtext(cert,0, 1000,CERT_OF_TLS_CACERT ); 		
-		
-		return this;
-	}	
-
-	public static final String  NODE_OF_TLS_CACERT ="tls_cacert.node";
-	public HfgwChecker checkNodeIdOfTlsCacert(String nodeId)
-	{
-		
-	 	checkIdOfTlsCacert(nodeId ); 		
-		
-		return this;
-	}	
-
-	public static final String  VERSION_OF_TLS_CACERT ="tls_cacert.version";
-	public HfgwChecker checkVersionOfTlsCacert(int version)
-	{
-		
-	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_TLS_CACERT ); 		
-		
-		return this;
-	}	
-
 	public static final String  ID_OF_CHANNEL ="channel.id";
 	public HfgwChecker checkIdOfChannel(String id)
 	{
@@ -352,6 +325,96 @@ public class HfgwChecker extends BaseChecker{
 	{
 		
 	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_CHANNEL ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_PEER_ROLE ="peer_role.id";
+	public HfgwChecker checkIdOfPeerRole(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_PEER_ROLE ); 		
+		
+		return this;
+	}	
+
+	public static final String  NAME_OF_PEER_ROLE ="peer_role.name";
+	public HfgwChecker checkNameOfPeerRole(String name)
+	{
+		
+	 	checkStringLengthRange(name,4, 56,NAME_OF_PEER_ROLE ); 		
+		
+		return this;
+	}	
+
+	public static final String  CODE_OF_PEER_ROLE ="peer_role.code";
+	public HfgwChecker checkCodeOfPeerRole(String code)
+	{
+		
+	 	checkStringLengthRange(code,4, 56,CODE_OF_PEER_ROLE ); 		
+		
+		return this;
+	}	
+
+	public static final String  NETWORK_OF_PEER_ROLE ="peer_role.network";
+	public HfgwChecker checkNetworkIdOfPeerRole(String networkId)
+	{
+		
+	 	checkIdOfPeerRole(networkId ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_PEER_ROLE ="peer_role.version";
+	public HfgwChecker checkVersionOfPeerRole(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_PEER_ROLE ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_CHANNEL_PEER_ROLE ="channel_peer_role.id";
+	public HfgwChecker checkIdOfChannelPeerRole(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_CHANNEL_PEER_ROLE ); 		
+		
+		return this;
+	}	
+
+	public static final String  CHANNEL_OF_CHANNEL_PEER_ROLE ="channel_peer_role.channel";
+	public HfgwChecker checkChannelIdOfChannelPeerRole(String channelId)
+	{
+		
+	 	checkIdOfChannelPeerRole(channelId ); 		
+		
+		return this;
+	}	
+
+	public static final String  NODE_OF_CHANNEL_PEER_ROLE ="channel_peer_role.node";
+	public HfgwChecker checkNodeIdOfChannelPeerRole(String nodeId)
+	{
+		
+	 	checkIdOfChannelPeerRole(nodeId ); 		
+		
+		return this;
+	}	
+
+	public static final String  PEER_ROLE_OF_CHANNEL_PEER_ROLE ="channel_peer_role.peer_role";
+	public HfgwChecker checkPeerRoleIdOfChannelPeerRole(String peerRoleId)
+	{
+		
+	 	checkIdOfChannelPeerRole(peerRoleId ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_CHANNEL_PEER_ROLE ="channel_peer_role.version";
+	public HfgwChecker checkVersionOfChannelPeerRole(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_CHANNEL_PEER_ROLE ); 		
 		
 		return this;
 	}	
@@ -491,6 +554,15 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  TRANSACTION_ID_OF_SERVICE_RECORD ="service_record.transaction_id";
+	public HfgwChecker checkTransactionIdOfServiceRecord(String transactionId)
+	{
+		
+	 	checkStringLengthRange(transactionId,0, 200,TRANSACTION_ID_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
 	public static final String  NAME_OF_SERVICE_RECORD ="service_record.name";
 	public HfgwChecker checkNameOfServiceRecord(String name)
 	{
@@ -500,11 +572,11 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  PAY_LOAD_OF_SERVICE_RECORD ="service_record.pay_load";
-	public HfgwChecker checkPayLoadOfServiceRecord(String payLoad)
+	public static final String  PAYLOAD_OF_SERVICE_RECORD ="service_record.payload";
+	public HfgwChecker checkPayloadOfServiceRecord(String payload)
 	{
 		
-	 	checkLongtext(payLoad,0, 1048576,PAY_LOAD_OF_SERVICE_RECORD ); 		
+	 	checkLongtext(payload,0, 1048576,PAYLOAD_OF_SERVICE_RECORD ); 		
 		
 		return this;
 	}	
@@ -527,11 +599,11 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
-	public static final String  TRANSACTION_ID_OF_SERVICE_RECORD ="service_record.transaction_id";
-	public HfgwChecker checkTransactionIdOfServiceRecord(String transactionId)
+	public static final String  CHAIN_CODE_FUNCTION_OF_SERVICE_RECORD ="service_record.chain_code_function";
+	public HfgwChecker checkChainCodeFunctionOfServiceRecord(String chainCodeFunction)
 	{
 		
-	 	checkStringLengthRange(transactionId,1, 200,TRANSACTION_ID_OF_SERVICE_RECORD ); 		
+	 	checkStringLengthRange(chainCodeFunction,1, 20,CHAIN_CODE_FUNCTION_OF_SERVICE_RECORD ); 		
 		
 		return this;
 	}	
@@ -540,7 +612,16 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkBlockIdOfServiceRecord(String blockId)
 	{
 		
-	 	checkStringLengthRange(blockId,1, 200,BLOCK_ID_OF_SERVICE_RECORD ); 		
+	 	checkStringLengthRange(blockId,0, 200,BLOCK_ID_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
+	public static final String  APP_CLIENT_OF_SERVICE_RECORD ="service_record.app_client";
+	public HfgwChecker checkAppClientIdOfServiceRecord(String appClientId)
+	{
+		
+	 	checkIdOfServiceRecord(appClientId ); 		
 		
 		return this;
 	}	
@@ -554,11 +635,74 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 
+	public static final String  RESPONSE_OF_SERVICE_RECORD ="service_record.response";
+	public HfgwChecker checkResponseOfServiceRecord(String response)
+	{
+		
+	 	checkLongtext(response,0, 1048576,RESPONSE_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
+	public static final String  STATUS_OF_SERVICE_RECORD ="service_record.status";
+	public HfgwChecker checkStatusIdOfServiceRecord(String statusId)
+	{
+		
+	 	checkIdOfServiceRecord(statusId ); 		
+		
+		return this;
+	}	
+
 	public static final String  VERSION_OF_SERVICE_RECORD ="service_record.version";
 	public HfgwChecker checkVersionOfServiceRecord(int version)
 	{
 		
 	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_SERVICE_RECORD ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_TRANSACTION_STATUS ="transaction_status.id";
+	public HfgwChecker checkIdOfTransactionStatus(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_TRANSACTION_STATUS ); 		
+		
+		return this;
+	}	
+
+	public static final String  NAME_OF_TRANSACTION_STATUS ="transaction_status.name";
+	public HfgwChecker checkNameOfTransactionStatus(String name)
+	{
+		
+	 	checkStringLengthRange(name,1, 36,NAME_OF_TRANSACTION_STATUS ); 		
+		
+		return this;
+	}	
+
+	public static final String  CODE_OF_TRANSACTION_STATUS ="transaction_status.code";
+	public HfgwChecker checkCodeOfTransactionStatus(String code)
+	{
+		
+	 	checkStringLengthRange(code,1, 36,CODE_OF_TRANSACTION_STATUS ); 		
+		
+		return this;
+	}	
+
+	public static final String  NETWORK_OF_TRANSACTION_STATUS ="transaction_status.network";
+	public HfgwChecker checkNetworkIdOfTransactionStatus(String networkId)
+	{
+		
+	 	checkIdOfTransactionStatus(networkId ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_TRANSACTION_STATUS ="transaction_status.version";
+	public HfgwChecker checkVersionOfTransactionStatus(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_TRANSACTION_STATUS ); 		
 		
 		return this;
 	}	
@@ -576,7 +720,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkNameOfChangeRequestType(String name)
 	{
 		
-	 	checkStringLengthRange(name,2, 16,NAME_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkStringLengthRange(name,2, 32,NAME_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -585,7 +729,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkCodeOfChangeRequestType(String code)
 	{
 		
-	 	checkStringLengthRange(code,7, 64,CODE_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkStringLengthRange(code,5, 68,CODE_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -603,7 +747,7 @@ public class HfgwChecker extends BaseChecker{
 	public HfgwChecker checkDisplayOrderOfChangeRequestType(int displayOrder)
 	{
 		
-	 	checkIntegerRange(displayOrder,0, 6,DISPLAY_ORDER_OF_CHANGE_REQUEST_TYPE ); 		
+	 	checkIntegerRange(displayOrder,0, 7,DISPLAY_ORDER_OF_CHANGE_REQUEST_TYPE ); 		
 		
 		return this;
 	}	
@@ -685,6 +829,60 @@ public class HfgwChecker extends BaseChecker{
 	{
 		
 	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_CHANGE_REQUEST ); 		
+		
+		return this;
+	}	
+
+	public static final String  ID_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.id";
+	public HfgwChecker checkIdOfChainCodeInvoker(String id)
+	{
+		
+	 	checkStringLengthRange(id,2, 64,ID_OF_CHAIN_CODE_INVOKER ); 		
+		
+		return this;
+	}	
+
+	public static final String  APP_CLIENT_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.app_client";
+	public HfgwChecker checkAppClientIdOfChainCodeInvoker(String appClientId)
+	{
+		
+	 	checkIdOfChainCodeInvoker(appClientId ); 		
+		
+		return this;
+	}	
+
+	public static final String  CHAIN_CODE_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.chain_code";
+	public HfgwChecker checkChainCodeIdOfChainCodeInvoker(String chainCodeId)
+	{
+		
+	 	checkIdOfChainCodeInvoker(chainCodeId ); 		
+		
+		return this;
+	}	
+
+	public static final String  PARAMETERS_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.parameters";
+	public HfgwChecker checkParametersOfChainCodeInvoker(String parameters)
+	{
+		
+	 	checkLongtext(parameters,0, 1048576,PARAMETERS_OF_CHAIN_CODE_INVOKER ); 		
+		
+		return this;
+	}	
+
+	public static final String  CHANGE_REQUEST_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.change_request";
+	public HfgwChecker checkChangeRequestIdOfChainCodeInvoker(String changeRequestId)
+	{
+		
+	 	checkIdOfChainCodeInvoker(changeRequestId ); 		
+		
+		return this;
+	}	
+
+	public static final String  VERSION_OF_CHAIN_CODE_INVOKER ="chain_code_invoker.version";
+	public HfgwChecker checkVersionOfChainCodeInvoker(int version)
+	{
+		
+	 	checkIntegerRange(version,0, Integer.MAX_VALUE,VERSION_OF_CHAIN_CODE_INVOKER ); 		
 		
 		return this;
 	}	
@@ -865,6 +1063,15 @@ public class HfgwChecker extends BaseChecker{
 	{
 		
 	 	checkIdOfSecUser(domainId ); 		
+		
+		return this;
+	}	
+
+	public static final String  BLOCKING_OF_SEC_USER ="sec_user.blocking";
+	public HfgwChecker checkBlockingIdOfSecUser(String blockingId)
+	{
+		
+	 	checkIdOfSecUser(blockingId ); 		
 		
 		return this;
 	}	
@@ -1778,6 +1985,7 @@ public class HfgwChecker extends BaseChecker{
 		return this;
 	}	
 }
+
 
 
 

@@ -38,7 +38,7 @@ class NodeModalTable extends PureComponent {
           dataSource={data}
           columns={displayColumns}
           size="small"
-          scroll={{ x: 1185 }}
+          scroll={{ x: 1800 }}
         />
       </div>
     )

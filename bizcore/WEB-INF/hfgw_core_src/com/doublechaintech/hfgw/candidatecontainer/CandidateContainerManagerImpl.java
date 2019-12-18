@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.candidatecontainer.CandidateContainer;
 public class CandidateContainerManagerImpl extends CustomHfgwCheckerManager implements CandidateContainerManager {
 	
 	private static final String SERVICE_TYPE = "CandidateContainer";
+	@Override
+	public CandidateContainerDAO daoOf(HfgwUserContext userContext) {
+		return candidateContainerDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

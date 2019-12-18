@@ -34,7 +34,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 	public static final String LAST_LOGIN_TIME_PROPERTY       = "lastLoginTime"     ;
 	public static final String DOMAIN_PROPERTY                = "domain"            ;
 	public static final String BLOCKING_PROPERTY              = "blocking"          ;
-	public static final String CURRENT_STATUS_PROPERTY        = "currentStatus"     ;
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String USER_APP_LIST                            = "userAppList"       ;
@@ -72,7 +71,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 	protected		DateTime            	mLastLoginTime      ;
 	protected		UserDomain          	mDomain             ;
 	protected		SecUserBlocking     	mBlocking           ;
-	protected		String              	mCurrentStatus      ;
 	protected		int                 	mVersion            ;
 	
 	
@@ -332,9 +330,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 		if(BLOCKING_PROPERTY.equals(property)){
 			return getBlocking();
 		}
-		if(CURRENT_STATUS_PROPERTY.equals(property)){
-			return getCurrentStatus();
-		}
 		if(USER_APP_LIST.equals(property)){
 			List<BaseEntity> list = getUserAppList().stream().map(item->item).collect(Collectors.toList());
 			return list;
@@ -591,22 +586,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 		setBlocking ( null );
 		this.changed = true;
 	}
-	
-	public void setCurrentStatus(String currentStatus){
-		this.mCurrentStatus = trimString(currentStatus);;
-	}
-	public String getCurrentStatus(){
-		return this.mCurrentStatus;
-	}
-	public SecUser updateCurrentStatus(String currentStatus){
-		this.mCurrentStatus = trimString(currentStatus);;
-		this.changed = true;
-		return this;
-	}
-	public void mergeCurrentStatus(String currentStatus){
-		if(currentStatus != null) { setCurrentStatus(currentStatus);}
-	}
-	
 	
 	public void setVersion(int version){
 		this.mVersion = version;;
@@ -883,7 +862,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 		appendKeyValuePair(result, LAST_LOGIN_TIME_PROPERTY, getLastLoginTime());
 		appendKeyValuePair(result, DOMAIN_PROPERTY, getDomain());
 		appendKeyValuePair(result, BLOCKING_PROPERTY, getBlocking());
-		appendKeyValuePair(result, CURRENT_STATUS_PROPERTY, getCurrentStatus());
 		appendKeyValuePair(result, VERSION_PROPERTY, getVersion());
 		appendKeyValuePair(result, USER_APP_LIST, getUserAppList());
 		if(!getUserAppList().isEmpty()){
@@ -922,7 +900,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 			dest.setLastLoginTime(getLastLoginTime());
 			dest.setDomain(getDomain());
 			dest.setBlocking(getBlocking());
-			dest.setCurrentStatus(getCurrentStatus());
 			dest.setVersion(getVersion());
 			dest.setUserAppList(getUserAppList());
 			dest.setLoginHistoryList(getLoginHistoryList());
@@ -952,7 +929,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 			dest.mergeLastLoginTime(getLastLoginTime());
 			dest.mergeDomain(getDomain());
 			dest.mergeBlocking(getBlocking());
-			dest.mergeCurrentStatus(getCurrentStatus());
 			dest.mergeVersion(getVersion());
 			dest.mergeUserAppList(getUserAppList());
 			dest.mergeLoginHistoryList(getLoginHistoryList());
@@ -981,7 +957,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 			dest.mergeVerificationCode(getVerificationCode());
 			dest.mergeVerificationCodeExpire(getVerificationCodeExpire());
 			dest.mergeLastLoginTime(getLastLoginTime());
-			dest.mergeCurrentStatus(getCurrentStatus());
 			dest.mergeVersion(getVersion());
 
 		}
@@ -1009,7 +984,6 @@ public class SecUser extends BaseEntity implements  java.io.Serializable{
 		if(getBlocking() != null ){
  			stringBuilder.append("\tblocking='SecUserBlocking("+getBlocking().getId()+")';");
  		}
-		stringBuilder.append("\tcurrentStatus='"+getCurrentStatus()+"';");
 		stringBuilder.append("\tversion='"+getVersion()+"';");
 		stringBuilder.append("}");
 

@@ -74,9 +74,12 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 		return start()
 			.withOrganizationList()
 			.withNodeTypeList()
+			.withNodeList()
 			.withChannelList()
+			.withPeerRoleList()
 			.withApplicationList()
 			.withServiceRecordList()
+			.withTransactionStatusList()
 			.withChangeRequestTypeList()
 			.withChangeRequestList();
 	
@@ -216,7 +219,7 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	
 	
 	public HyperledgerNetworkTokens searchAllTextOfNodeTypeList(String verb, String value){	
-		String field = "id|name|code|address|contactPerson|contactTelephone";
+		String field = "id|name|code";
 		addSearchMoreOptions(NODE_TYPE_LIST,nodeTypeListSearchCounter++, field, verb, value);
 		return this;
 	}
@@ -237,6 +240,76 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	}
 	public HyperledgerNetworkTokens excludeColumnsOfNodeTypeList(String[] columns){		
 		addSimpleOptions(NODE_TYPE_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
+	protected static final String NODE_LIST = "nodeList";
+	public String getNodeList(){
+		return NODE_LIST;
+	}
+	public HyperledgerNetworkTokens withNodeList(){		
+		addSimpleOptions(NODE_LIST);
+		return this;
+	}
+	public HyperledgerNetworkTokens analyzeNodeList(){		
+		addSimpleOptions(NODE_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzeNodeListEnabled(){		
+		
+		if(checkOptions(this.options(), NODE_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public HyperledgerNetworkTokens extractMoreFromNodeList(String idsSeperatedWithComma){		
+		addSimpleOptions(NODE_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int nodeListSortCounter = 0;
+	public HyperledgerNetworkTokens sortNodeListWith(String field, String descOrAsc){		
+		addSortMoreOptions(NODE_LIST,nodeListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int nodeListSearchCounter = 0;
+	public HyperledgerNetworkTokens searchNodeListWith(String field, String verb, String value){		
+		
+		withNodeList();
+		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public HyperledgerNetworkTokens searchAllTextOfNodeList(String verb, String value){	
+		String field = "id|name|url|tlsCacert|address|contactPerson|contactTelephone";
+		addSearchMoreOptions(NODE_LIST,nodeListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public HyperledgerNetworkTokens rowsPerPageOfNodeList(int rowsPerPage){		
+		addSimpleOptions(NODE_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public HyperledgerNetworkTokens currentPageNumberOfNodeList(int currentPageNumber){		
+		addSimpleOptions(NODE_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public HyperledgerNetworkTokens retainColumnsOfNodeList(String[] columns){		
+		addSimpleOptions(NODE_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public HyperledgerNetworkTokens excludeColumnsOfNodeList(String[] columns){		
+		addSimpleOptions(NODE_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -307,6 +380,76 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	}
 	public HyperledgerNetworkTokens excludeColumnsOfChannelList(String[] columns){		
 		addSimpleOptions(CHANNEL_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
+	protected static final String PEER_ROLE_LIST = "peerRoleList";
+	public String getPeerRoleList(){
+		return PEER_ROLE_LIST;
+	}
+	public HyperledgerNetworkTokens withPeerRoleList(){		
+		addSimpleOptions(PEER_ROLE_LIST);
+		return this;
+	}
+	public HyperledgerNetworkTokens analyzePeerRoleList(){		
+		addSimpleOptions(PEER_ROLE_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzePeerRoleListEnabled(){		
+		
+		if(checkOptions(this.options(), PEER_ROLE_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public HyperledgerNetworkTokens extractMoreFromPeerRoleList(String idsSeperatedWithComma){		
+		addSimpleOptions(PEER_ROLE_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int peerRoleListSortCounter = 0;
+	public HyperledgerNetworkTokens sortPeerRoleListWith(String field, String descOrAsc){		
+		addSortMoreOptions(PEER_ROLE_LIST,peerRoleListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int peerRoleListSearchCounter = 0;
+	public HyperledgerNetworkTokens searchPeerRoleListWith(String field, String verb, String value){		
+		
+		withPeerRoleList();
+		addSearchMoreOptions(PEER_ROLE_LIST,peerRoleListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public HyperledgerNetworkTokens searchAllTextOfPeerRoleList(String verb, String value){	
+		String field = "id|name|code";
+		addSearchMoreOptions(PEER_ROLE_LIST,peerRoleListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public HyperledgerNetworkTokens rowsPerPageOfPeerRoleList(int rowsPerPage){		
+		addSimpleOptions(PEER_ROLE_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public HyperledgerNetworkTokens currentPageNumberOfPeerRoleList(int currentPageNumber){		
+		addSimpleOptions(PEER_ROLE_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public HyperledgerNetworkTokens retainColumnsOfPeerRoleList(String[] columns){		
+		addSimpleOptions(PEER_ROLE_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public HyperledgerNetworkTokens excludeColumnsOfPeerRoleList(String[] columns){		
+		addSimpleOptions(PEER_ROLE_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -426,7 +569,7 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	
 	
 	public HyperledgerNetworkTokens searchAllTextOfServiceRecordList(String verb, String value){	
-		String field = "id|name|payLoad|transactionId|blockId|currentStatus";
+		String field = "id|transactionId|name|payload|chainCodeFunction|blockId|response";
 		addSearchMoreOptions(SERVICE_RECORD_LIST,serviceRecordListSearchCounter++, field, verb, value);
 		return this;
 	}
@@ -447,6 +590,76 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 	}
 	public HyperledgerNetworkTokens excludeColumnsOfServiceRecordList(String[] columns){		
 		addSimpleOptions(SERVICE_RECORD_LIST+"ExcludeColumns",columns);
+		return this;
+	}
+	
+	
+		
+	protected static final String TRANSACTION_STATUS_LIST = "transactionStatusList";
+	public String getTransactionStatusList(){
+		return TRANSACTION_STATUS_LIST;
+	}
+	public HyperledgerNetworkTokens withTransactionStatusList(){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST);
+		return this;
+	}
+	public HyperledgerNetworkTokens analyzeTransactionStatusList(){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST+".anaylze");
+		return this;
+	}
+	public boolean analyzeTransactionStatusListEnabled(){		
+		
+		if(checkOptions(this.options(), TRANSACTION_STATUS_LIST+".anaylze")){
+			return true; //most of the case, should call here
+		}
+		//if not true, then query for global setting
+		return checkOptions(this.options(), ALL_LISTS_ANALYZE);
+	}
+	public HyperledgerNetworkTokens extractMoreFromTransactionStatusList(String idsSeperatedWithComma){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST+".extractIds", idsSeperatedWithComma);
+		return this;
+	}
+	
+	
+	
+	
+	private int transactionStatusListSortCounter = 0;
+	public HyperledgerNetworkTokens sortTransactionStatusListWith(String field, String descOrAsc){		
+		addSortMoreOptions(TRANSACTION_STATUS_LIST,transactionStatusListSortCounter++, field, descOrAsc);
+		return this;
+	}
+	private int transactionStatusListSearchCounter = 0;
+	public HyperledgerNetworkTokens searchTransactionStatusListWith(String field, String verb, String value){		
+		
+		withTransactionStatusList();
+		addSearchMoreOptions(TRANSACTION_STATUS_LIST,transactionStatusListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public HyperledgerNetworkTokens searchAllTextOfTransactionStatusList(String verb, String value){	
+		String field = "id|name|code";
+		addSearchMoreOptions(TRANSACTION_STATUS_LIST,transactionStatusListSearchCounter++, field, verb, value);
+		return this;
+	}
+	
+	
+	
+	public HyperledgerNetworkTokens rowsPerPageOfTransactionStatusList(int rowsPerPage){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST+"RowsPerPage",rowsPerPage);
+		return this;
+	}
+	public HyperledgerNetworkTokens currentPageNumberOfTransactionStatusList(int currentPageNumber){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST+"CurrentPage",currentPageNumber);
+		return this;
+	}
+	public HyperledgerNetworkTokens retainColumnsOfTransactionStatusList(String[] columns){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST+"RetainColumns",columns);
+		return this;
+	}
+	public HyperledgerNetworkTokens excludeColumnsOfTransactionStatusList(String[] columns){		
+		addSimpleOptions(TRANSACTION_STATUS_LIST+"ExcludeColumns",columns);
 		return this;
 	}
 	
@@ -597,9 +810,12 @@ public class HyperledgerNetworkTokens extends CommonTokens{
 		
 		searchAllTextOfOrganizationList(verb, value);	
 		searchAllTextOfNodeTypeList(verb, value);	
+		searchAllTextOfNodeList(verb, value);	
 		searchAllTextOfChannelList(verb, value);	
+		searchAllTextOfPeerRoleList(verb, value);	
 		searchAllTextOfApplicationList(verb, value);	
 		searchAllTextOfServiceRecordList(verb, value);	
+		searchAllTextOfTransactionStatusList(verb, value);	
 		searchAllTextOfChangeRequestTypeList(verb, value);	
 		searchAllTextOfChangeRequestList(verb, value);	
 		return this;

@@ -1,105 +1,153 @@
+import React, { PureComponent } from 'react';
+import { connect } from 'dva';
+import Result from '../../components/Result';
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Select,
+  Icon,
+  Button,
+  Dropdown,
+  Menu,
+  InputNumber,
+  DatePicker,
+  Modal,
+  message,
+  Alert,
+} from 'antd';
+import GlobalComponents from '../../custcomponents';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './ServiceRecord.search.less';
+import ListViewTool from '../../common/ListView.tool';
+import ServiceRecordBase from './ServiceRecord.base';
+import PermissionSettingService from '../../permission/PermissionSetting.service';
+import appLocaleName from '../../common/Locale.tool';
+const { fieldLabels } = ServiceRecordBase;
+import { Link, Route, Redirect } from 'dva/router';
 
-import React, { PureComponent } from 'react'
-import { connect } from 'dva'
-import Result from '../../components/Result'
-import { Row, Col, Card, Form, Input, Select, Icon, Button, Dropdown, Menu, InputNumber, DatePicker, Modal, message,Alert } from 'antd';
-import GlobalComponents from '../../custcomponents'
-import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import styles from './ServiceRecord.search.less'
-import ListViewTool from '../../common/ListView.tool'
-import PermissionSettingService from '../../permission/PermissionSetting.service'
-import appLocaleName from '../../common/Locale.tool'
+const {
+  hasCreatePermission,
+  hasExecutionPermission,
+  hasDeletePermission,
+  hasUpdatePermission,
+  hasReadPermission,
+} = PermissionSettingService;
 
-import { Link, Route, Redirect} from 'dva/router'
+const {
+  handleSelectRows,
+  handleStandardTableChange,
+  showDeletionDialog,
+  handleUpdate,
+  handleDeletionModalVisible,
+  handleElementCreate,
+  toggleAssociateModalVisible,
+  handleCloseAlert,
+} = ListViewTool;
 
-const  {  hasCreatePermission,hasExecutionPermission,hasDeletePermission,hasUpdatePermission,hasReadPermission } = PermissionSettingService
-
-
-const {handleSelectRows,handleStandardTableChange,
-  showDeletionDialog,handleUpdate,handleDeletionModalVisible,
-  handleElementCreate,toggleAssociateModalVisible,handleCloseAlert}=ListViewTool
-
-
-const buttonMenuFor =(targetComponent, internalName, localeName)=> {
-  const userContext = null
+const buttonMenuFor = (targetComponent, internalName, localeName) => {
+  const userContext = null;
   return (
-   <Menu >
-     <Menu.Item key="1" onClick={()=>toggleAssociateModalVisible(targetComponent,internalName)}>{appLocaleName(userContext,"New")}{localeName}</Menu.Item>
-     <Menu.Item key="2">{appLocaleName(userContext,"Merge")}{localeName}</Menu.Item>
+    <Menu>
+      <Menu.Item key="1" onClick={() => toggleAssociateModalVisible(targetComponent, internalName)}>
+        {appLocaleName(userContext, 'New')}
+        {localeName}
+      </Menu.Item>
+      <Menu.Item key="2">
+        {appLocaleName(userContext, 'Merge')}
+        {localeName}
+      </Menu.Item>
     </Menu>
-  )
+  );
+};
 
-}
+const showListActionBar = targetComponent => {
+  const { selectedRows } = targetComponent.state;
+  const { metaInfo } = targetComponent.props;
+  const disable = selectedRows.length === 0;
+  const userContext = null;
+  return (
+    <div className={styles.tableListOperator}>
+      {hasCreatePermission(metaInfo) && (
+        <Button icon="plus" type="primary" onClick={() => handleElementCreate(targetComponent)}>
+          {appLocaleName(userContext, 'New')}
+        </Button>
+      )}
 
+      {hasUpdatePermission(metaInfo) && (
+        <Button onClick={() => handleUpdate(targetComponent)} icon="edit" disabled={disable}>
+          {appLocaleName(userContext, 'BatchUpdate')}
+        </Button>
+      )}
 
- 
-const showListActionBar = (targetComponent)=>{
+      {hasDeletePermission(metaInfo) && (
+        <Button
+          onClick={event => handleDeletionModalVisible(event, targetComponent)}
+          type="danger"
+          icon="delete"
+          disabled={disable}
+        >
+          {appLocaleName(userContext, 'BatchDelete')}
+        </Button>
+      )}
+    </div>
+  );
+};
 
-  const {selectedRows} = targetComponent.state
-  const {metaInfo} = targetComponent.props
-  const disable = (selectedRows.length === 0)
-  const userContext = null
-  return (<div className={styles.tableListOperator}>
-  
+const showAssociateDialog = targetComponent => {
+  const { data, owner, visible, onCancel, onCreate } = targetComponent.props;
+  const { currentAssociateModal } = targetComponent.state;
 
-    {hasCreatePermission(metaInfo)&&<Button icon="plus" type="primary" onClick={() => handleElementCreate(targetComponent)}>{appLocaleName(userContext,"New")}</Button>}
+  const { selectedRows } = targetComponent.state;
 
-
-    {hasUpdatePermission(metaInfo)&&<Button onClick={()=>handleUpdate(targetComponent)} icon="edit" disabled={disable}>{appLocaleName(userContext,"BatchUpdate")}</Button>}
- 
- 
-    {hasDeletePermission(metaInfo)&&<Button onClick={(event)=>handleDeletionModalVisible(event,targetComponent)} type="danger" icon="delete" disabled={disable}>{appLocaleName(userContext,"BatchDelete")}</Button>}
-
-</div> )
-
-
-}
-
-
-const showAssociateDialog = (targetComponent) => {
-  const {data, owner, visible,onCancel,onCreate} = targetComponent.props
-  const {currentAssociateModal} = targetComponent.state
-  
-  const {selectedRows} = targetComponent.state
-  
-  const { ChannelAssociateForm } = GlobalComponents
-  const { ChainCodeAssociateForm } = GlobalComponents
-  const { ApplicationAssociateForm } = GlobalComponents
-  const { HyperledgerNetworkAssociateForm } = GlobalComponents
-
+  const { ChannelAssociateForm } = GlobalComponents;
+  const { ChainCodeAssociateForm } = GlobalComponents;
+  const { ApplicationAssociateForm } = GlobalComponents;
+  const { HyperledgerNetworkAssociateForm } = GlobalComponents;
+  const { TransactionStatusAssociateForm } = GlobalComponents;
 
   return (
-  <div>
-  
-    <ApplicationAssociateForm 
-	visible={currentAssociateModal==='application'} 
-	data={{serviceRecordList:selectedRows}} owner={owner}  
-	onCancel={()=>toggleAssociateModalVisible(targetComponent,'application')} 
-	onCreate={()=>toggleAssociateModalVisible(targetComponent,'application')}/>
-  
-    <ChannelAssociateForm 
-	visible={currentAssociateModal==='channel'} 
-	data={{serviceRecordList:selectedRows}} owner={owner}  
-	onCancel={()=>toggleAssociateModalVisible(targetComponent,'channel')} 
-	onCreate={()=>toggleAssociateModalVisible(targetComponent,'channel')}/> <ChainCodeAssociateForm 
-	visible={currentAssociateModal==='chainCode'} 
-	data={{serviceRecordList:selectedRows}} owner={owner}  
-	onCancel={()=>toggleAssociateModalVisible(targetComponent,'chainCode')} 
-	onCreate={()=>toggleAssociateModalVisible(targetComponent,'chainCode')}/> <HyperledgerNetworkAssociateForm 
-	visible={currentAssociateModal==='network'} 
-	data={{serviceRecordList:selectedRows}} owner={owner}  
-	onCancel={()=>toggleAssociateModalVisible(targetComponent,'network')} 
-	onCreate={()=>toggleAssociateModalVisible(targetComponent,'network')}/> 
- 
-
-
+    <div>
+      <ChannelAssociateForm
+        visible={currentAssociateModal === 'channel'}
+        data={{ serviceRecordList: selectedRows }}
+        owner={owner}
+        onCancel={() => toggleAssociateModalVisible(targetComponent, 'channel')}
+        onCreate={() => toggleAssociateModalVisible(targetComponent, 'channel')}
+      />{' '}
+      <ChainCodeAssociateForm
+        visible={currentAssociateModal === 'chainCode'}
+        data={{ serviceRecordList: selectedRows }}
+        owner={owner}
+        onCancel={() => toggleAssociateModalVisible(targetComponent, 'chainCode')}
+        onCreate={() => toggleAssociateModalVisible(targetComponent, 'chainCode')}
+      />{' '}
+      <ApplicationAssociateForm
+        visible={currentAssociateModal === 'appClient'}
+        data={{ serviceRecordList: selectedRows }}
+        owner={owner}
+        onCancel={() => toggleAssociateModalVisible(targetComponent, 'appClient')}
+        onCreate={() => toggleAssociateModalVisible(targetComponent, 'appClient')}
+      />{' '}
+      <HyperledgerNetworkAssociateForm
+        visible={currentAssociateModal === 'network'}
+        data={{ serviceRecordList: selectedRows }}
+        owner={owner}
+        onCancel={() => toggleAssociateModalVisible(targetComponent, 'network')}
+        onCreate={() => toggleAssociateModalVisible(targetComponent, 'network')}
+      />{' '}
+      <TransactionStatusAssociateForm
+        visible={currentAssociateModal === 'status'}
+        data={{ serviceRecordList: selectedRows }}
+        owner={owner}
+        onCancel={() => toggleAssociateModalVisible(targetComponent, 'status')}
+        onCreate={() => toggleAssociateModalVisible(targetComponent, 'status')}
+      />
     </div>
-    
-    
-    
-    )
-}
-
+  );
+};
 
 class ServiceRecordSearch extends PureComponent {
   state = {
@@ -107,25 +155,40 @@ class ServiceRecordSearch extends PureComponent {
     selectedRows: [],
     showDeleteResult: false,
     currentAssociateModal: null,
-  }
+  };
 
-  render(){
-    const { data, loading, count, currentPage, owner,partialList } = this.props;
-    const {displayName} = owner.ref
-    const { showDeleteResult, selectedRows, deletionModalVisible, showAssociatePaymentForm } = this.state;
-    const {ServiceRecordTable} = GlobalComponents;
-    const {ServiceRecordSearchForm} = GlobalComponents;
-    const {ServiceRecordModalTable} = GlobalComponents;
-    
-    const userContext = null
-    
-    const renderTitle=()=>{
-      const {returnURL} = this.props
-      
-      const linkComp=returnURL?<Link to={returnURL}> <Icon type="double-left" style={{marginRight:"10px"}} /> </Link>:null
-      return (<div>{linkComp}{`${displayName}:${this.props.name}${appLocaleName(userContext,"List")}`}</div>);
-    }
-  
+  render() {
+    const { data, loading, count, currentPage, owner, partialList } = this.props;
+    const { displayName } = owner.ref;
+    const {
+      showDeleteResult,
+      selectedRows,
+      deletionModalVisible,
+      showAssociatePaymentForm,
+    } = this.state;
+    const { ServiceRecordTable } = GlobalComponents;
+    const { ServiceRecordSearchForm } = GlobalComponents;
+    const { ServiceRecordModalTable } = GlobalComponents;
+
+    const userContext = null;
+
+    const renderTitle = () => {
+      const { returnURL } = this.props;
+
+      const linkComp = returnURL ? (
+        <Link to={returnURL}>
+          {' '}
+          <Icon type="double-left" style={{ marginRight: '10px' }} />{' '}
+        </Link>
+      ) : null;
+      return (
+        <div>
+          {linkComp}
+          {`${displayName}:${this.props.name}${appLocaleName(userContext, 'List')}`}
+        </div>
+      );
+    };
+
     return (
       <PageHeaderLayout title={renderTitle()}>
         <Card bordered={false}>
@@ -134,15 +197,17 @@ class ServiceRecordSearch extends PureComponent {
               <ServiceRecordSearchForm {...this.props} />
             </div>
             <div className={styles.tableListOperator}>
-           
-   
               {showListActionBar(this)}
-              {partialList&&(
-              <div className={styles.searchAlert}>
-                	<Alert message={appLocaleName(userContext,"CloseToShowAll")} type="success" closable  afterClose={()=>handleCloseAlert(displayName, this)}/>
-              </div>  	
+              {partialList && (
+                <div className={styles.searchAlert}>
+                  <Alert
+                    message={appLocaleName(userContext, 'CloseToShowAll')}
+                    type="success"
+                    closable
+                    afterClose={() => handleCloseAlert(displayName, this)}
+                  />
+                </div>
               )}
-              
             </div>
             <ServiceRecordTable
               selectedRows={selectedRows}
@@ -150,20 +215,20 @@ class ServiceRecordSearch extends PureComponent {
               data={data}
               count={count}
               current={currentPage}
-              onSelectRow={(selectedRows)=>handleSelectRows(selectedRows,this)}
-              onChange={(pagination, filtersArg, sorter)=>handleStandardTableChange(pagination, filtersArg, sorter,this)}
+              onSelectRow={selectedRows => handleSelectRows(selectedRows, this)}
+              onChange={(pagination, filtersArg, sorter) =>
+                handleStandardTableChange(pagination, filtersArg, sorter, this)
+              }
               owner={owner}
               {...this.props}
             />
           </div>
         </Card>
-        {showDeletionDialog(this,ServiceRecordModalTable,"serviceRecordIds")}
+        {showDeletionDialog(this, ServiceRecordModalTable, 'serviceRecordIds')}
         {showAssociateDialog(this)}
       </PageHeaderLayout>
-    )
+    );
   }
 }
 
-export default Form.create()(ServiceRecordSearch)
-
-
+export default Form.create()(ServiceRecordSearch);

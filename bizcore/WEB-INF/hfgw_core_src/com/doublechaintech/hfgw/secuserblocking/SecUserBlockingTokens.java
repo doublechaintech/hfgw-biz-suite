@@ -140,7 +140,7 @@ public class SecUserBlockingTokens extends CommonTokens{
 	
 	
 	public SecUserBlockingTokens searchAllTextOfSecUserList(String verb, String value){	
-		String field = "id|login|mobile|email|pwd|weixinOpenid|weixinAppid|accessToken|currentStatus";
+		String field = "id|login|mobile|email|pwd|weixinOpenid|weixinAppid|accessToken";
 		addSearchMoreOptions(SEC_USER_LIST,secUserListSearchCounter++, field, verb, value);
 		return this;
 	}

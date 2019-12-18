@@ -90,6 +90,34 @@ public class NodeForm extends BaseForm {
 	}
 
 
+	public NodeForm networkIdField(String parameterName, String initValue){
+		FormField field = networkIdFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeForm networkIdField(String initValue){
+		return networkIdField("networkId",initValue);
+	}
+	public NodeForm networkIdField(){
+		return networkIdField("networkId","");
+	}
+
+
+	public NodeForm tlsCacertField(String parameterName, String initValue){
+		FormField field = tlsCacertFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeForm tlsCacertField(String initValue){
+		return tlsCacertField("tlsCacert",initValue);
+	}
+	public NodeForm tlsCacertField(){
+		return tlsCacertField("tlsCacert","");
+	}
+
+
 	public NodeForm typeIdField(String parameterName, String initValue){
 		FormField field = typeIdFromNode(parameterName, initValue);		
 		this.addFormField(field);
@@ -101,6 +129,48 @@ public class NodeForm extends BaseForm {
 	}
 	public NodeForm typeIdField(){
 		return typeIdField("typeId","");
+	}
+
+
+	public NodeForm addressField(String parameterName, String initValue){
+		FormField field = addressFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeForm addressField(String initValue){
+		return addressField("address",initValue);
+	}
+	public NodeForm addressField(){
+		return addressField("address","");
+	}
+
+
+	public NodeForm contactPersonField(String parameterName, String initValue){
+		FormField field = contactPersonFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeForm contactPersonField(String initValue){
+		return contactPersonField("contactPerson",initValue);
+	}
+	public NodeForm contactPersonField(){
+		return contactPersonField("contactPerson","");
+	}
+
+
+	public NodeForm contactTelephoneField(String parameterName, String initValue){
+		FormField field = contactTelephoneFromNode(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public NodeForm contactTelephoneField(String initValue){
+		return contactTelephoneField("contactTelephone",initValue);
+	}
+	public NodeForm contactTelephoneField(){
+		return contactTelephoneField("contactTelephone","");
 	}
 
 	
@@ -205,6 +275,48 @@ public class NodeForm extends BaseForm {
 	}
 
 
+	public NodeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  idFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(String initValue){
+		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId",initValue);
+	}
+	public NodeForm hyperledgerNetworkIdFieldOfHyperledgerNetwork(){
+		return hyperledgerNetworkIdFieldOfHyperledgerNetwork("hyperledgerNetworkId","");
+	}
+
+
+	public NodeForm nameFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  nameFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeForm nameFieldOfHyperledgerNetwork(String initValue){
+		return nameFieldOfHyperledgerNetwork("name",initValue);
+	}
+	public NodeForm nameFieldOfHyperledgerNetwork(){
+		return nameFieldOfHyperledgerNetwork("name","");
+	}
+
+
+	public NodeForm descriptionFieldOfHyperledgerNetwork(String parameterName, String initValue){
+		FormField field =  descriptionFromHyperledgerNetwork(parameterName, initValue);
+		this.addFormField(field);	
+		return this;
+	}
+	
+	public NodeForm descriptionFieldOfHyperledgerNetwork(String initValue){
+		return descriptionFieldOfHyperledgerNetwork("description",initValue);
+	}
+	public NodeForm descriptionFieldOfHyperledgerNetwork(){
+		return descriptionFieldOfHyperledgerNetwork("description","");
+	}
+
+
 	public NodeForm nodeTypeIdFieldOfNodeType(String parameterName, String initValue){
 		FormField field =  idFromNodeType(parameterName, initValue);
 		this.addFormField(field);	
@@ -258,48 +370,6 @@ public class NodeForm extends BaseForm {
 	}
 	public NodeForm networkIdFieldOfNodeType(){
 		return networkIdFieldOfNodeType("networkId","");
-	}
-
-
-	public NodeForm addressFieldOfNodeType(String parameterName, String initValue){
-		FormField field =  addressFromNodeType(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public NodeForm addressFieldOfNodeType(String initValue){
-		return addressFieldOfNodeType("address",initValue);
-	}
-	public NodeForm addressFieldOfNodeType(){
-		return addressFieldOfNodeType("address","");
-	}
-
-
-	public NodeForm contactPersonFieldOfNodeType(String parameterName, String initValue){
-		FormField field =  contactPersonFromNodeType(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public NodeForm contactPersonFieldOfNodeType(String initValue){
-		return contactPersonFieldOfNodeType("contactPerson",initValue);
-	}
-	public NodeForm contactPersonFieldOfNodeType(){
-		return contactPersonFieldOfNodeType("contactPerson","");
-	}
-
-
-	public NodeForm contactTelephoneFieldOfNodeType(String parameterName, String initValue){
-		FormField field =  contactTelephoneFromNodeType(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public NodeForm contactTelephoneFieldOfNodeType(String initValue){
-		return contactTelephoneFieldOfNodeType("contactTelephone",initValue);
-	}
-	public NodeForm contactTelephoneFieldOfNodeType(){
-		return contactTelephoneFieldOfNodeType("contactTelephone","");
 	}
 
 	
@@ -362,59 +432,59 @@ public class NodeForm extends BaseForm {
 	}
 
 
-	public NodeForm tlsCacertIdFieldForTlsCacert(String parameterName, String initValue){
-		FormField field =  idFromTlsCacert(parameterName, initValue);		
+	public NodeForm channelPeerRoleIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  idFromChannelPeerRole(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public NodeForm tlsCacertIdFieldForTlsCacert(String initValue){
-		return tlsCacertIdFieldForTlsCacert("tlsCacertId",initValue);
+	public NodeForm channelPeerRoleIdFieldForChannelPeerRole(String initValue){
+		return channelPeerRoleIdFieldForChannelPeerRole("channelPeerRoleId",initValue);
 	}
-	public NodeForm tlsCacertIdFieldForTlsCacert(){
-		return tlsCacertIdFieldForTlsCacert("tlsCacertId","");
+	public NodeForm channelPeerRoleIdFieldForChannelPeerRole(){
+		return channelPeerRoleIdFieldForChannelPeerRole("channelPeerRoleId","");
 	}
 
 
-	public NodeForm pathFieldForTlsCacert(String parameterName, String initValue){
-		FormField field =  pathFromTlsCacert(parameterName, initValue);		
+	public NodeForm channelIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  channelIdFromChannelPeerRole(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public NodeForm pathFieldForTlsCacert(String initValue){
-		return pathFieldForTlsCacert("path",initValue);
+	public NodeForm channelIdFieldForChannelPeerRole(String initValue){
+		return channelIdFieldForChannelPeerRole("channelId",initValue);
 	}
-	public NodeForm pathFieldForTlsCacert(){
-		return pathFieldForTlsCacert("path","");
+	public NodeForm channelIdFieldForChannelPeerRole(){
+		return channelIdFieldForChannelPeerRole("channelId","");
 	}
 
 
-	public NodeForm certFieldForTlsCacert(String parameterName, String initValue){
-		FormField field =  certFromTlsCacert(parameterName, initValue);		
+	public NodeForm nodeIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  nodeIdFromChannelPeerRole(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public NodeForm certFieldForTlsCacert(String initValue){
-		return certFieldForTlsCacert("cert",initValue);
+	public NodeForm nodeIdFieldForChannelPeerRole(String initValue){
+		return nodeIdFieldForChannelPeerRole("nodeId",initValue);
 	}
-	public NodeForm certFieldForTlsCacert(){
-		return certFieldForTlsCacert("cert","");
+	public NodeForm nodeIdFieldForChannelPeerRole(){
+		return nodeIdFieldForChannelPeerRole("nodeId","");
 	}
 
 
-	public NodeForm nodeIdFieldForTlsCacert(String parameterName, String initValue){
-		FormField field =  nodeIdFromTlsCacert(parameterName, initValue);		
+	public NodeForm peerRoleIdFieldForChannelPeerRole(String parameterName, String initValue){
+		FormField field =  peerRoleIdFromChannelPeerRole(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public NodeForm nodeIdFieldForTlsCacert(String initValue){
-		return nodeIdFieldForTlsCacert("nodeId",initValue);
+	public NodeForm peerRoleIdFieldForChannelPeerRole(String initValue){
+		return peerRoleIdFieldForChannelPeerRole("peerRoleId",initValue);
 	}
-	public NodeForm nodeIdFieldForTlsCacert(){
-		return nodeIdFieldForTlsCacert("nodeId","");
+	public NodeForm peerRoleIdFieldForChannelPeerRole(){
+		return peerRoleIdFieldForChannelPeerRole("peerRoleId","");
 	}
 
 	
@@ -435,6 +505,16 @@ public class NodeForm extends BaseForm {
 		action.setLabel("显示");
 		action.setLocaleKey("show");
 		action.setUrl("transferToAnotherChannel/nodeId/");
+		this.addFormAction(action);
+		return this;
+	}
+
+ 	
+ 	public NodeForm transferToAnotherNetworkAction(){
+		FormAction action = new FormAction();
+		action.setLabel("显示");
+		action.setLocaleKey("show");
+		action.setUrl("transferToAnotherNetwork/nodeId/");
 		this.addFormAction(action);
 		return this;
 	}

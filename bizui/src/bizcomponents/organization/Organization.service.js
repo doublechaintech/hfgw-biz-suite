@@ -38,14 +38,14 @@ const transferToAnotherNetwork = (id, parameters) => {
 
 
 const addNode = (targetObjectId, parameters) => {
-  const url = `${PREFIX}organizationManager/addNode/organizationId/name/url/channelId/typeId/tokensExpr/`
+  const url = `${PREFIX}organizationManager/addNode/organizationId/name/url/channelId/networkId/tlsCacert/typeId/address/contactPerson/contactTelephone/tokensExpr/`
   const organizationId = targetObjectId
   const requestParameters = { ...parameters, organizationId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
 const updateNode = (targetObjectId, parameters) => {
-  const url = `${PREFIX}organizationManager/updateNodeProperties/organizationId/id/name/url/tokensExpr/`
+  const url = `${PREFIX}organizationManager/updateNodeProperties/organizationId/id/name/url/tlsCacert/address/contactPerson/contactTelephone/tokensExpr/`
   const organizationId = targetObjectId
   const requestParameters = { ...parameters, organizationId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})

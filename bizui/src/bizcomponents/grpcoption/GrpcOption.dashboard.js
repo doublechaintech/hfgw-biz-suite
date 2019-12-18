@@ -1,216 +1,266 @@
-
-
-import React, { Component } from 'react'
-import { connect } from 'dva'
-import moment from 'moment'
+import React, { Component } from 'react';
+import { connect } from 'dva';
+import moment from 'moment';
 import BooleanOption from '../../components/BooleanOption';
-import { Button, Row, Col, Icon, Card, Tabs, Table, Radio, DatePicker, Tooltip, Menu, Dropdown,Badge, Switch,Select,Form,AutoComplete,Modal } from 'antd'
-import { Link, Route, Redirect} from 'dva/router'
-import numeral from 'numeral'
 import {
-  ChartCard, yuan, MiniArea, MiniBar, MiniProgress, Field, Bar, Pie, TimelineChart,
-} from '../../components/Charts'
-import Trend from '../../components/Trend'
-import NumberInfo from '../../components/NumberInfo'
-import { getTimeDistance } from '../../utils/utils'
-import PageHeaderLayout from '../../layouts/PageHeaderLayout'
-import styles from './GrpcOption.dashboard.less'
+  Button,
+  Row,
+  Col,
+  Icon,
+  Card,
+  Tabs,
+  Table,
+  Radio,
+  DatePicker,
+  Tooltip,
+  Menu,
+  Dropdown,
+  Badge,
+  Switch,
+  Select,
+  Form,
+  AutoComplete,
+  Modal,
+} from 'antd';
+import { Link, Route, Redirect } from 'dva/router';
+import numeral from 'numeral';
+import {
+  ChartCard,
+  yuan,
+  MiniArea,
+  MiniBar,
+  MiniProgress,
+  Field,
+  Bar,
+  Pie,
+  TimelineChart,
+} from '../../components/Charts';
+import Trend from '../../components/Trend';
+import NumberInfo from '../../components/NumberInfo';
+import { getTimeDistance } from '../../utils/utils';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './GrpcOption.dashboard.less';
 import DescriptionList from '../../components/DescriptionList';
 import ImagePreview from '../../components/ImagePreview';
 import GlobalComponents from '../../custcomponents';
-import DashboardTool from '../../common/Dashboard.tool'
-import appLocaleName from '../../common/Locale.tool'
+import DashboardTool from '../../common/Dashboard.tool';
+import appLocaleName from '../../common/Locale.tool';
 
-const {aggregateDataset,calcKey, defaultHideCloseTrans,
-  defaultImageListOf,defaultSettingListOf,defaultBuildTransferModal,
-  defaultExecuteTrans,defaultHandleTransferSearch,defaultShowTransferModel,
+const {
+  aggregateDataset,
+  calcKey,
+  defaultHideCloseTrans,
+  defaultImageListOf,
+  defaultSettingListOf,
+  defaultBuildTransferModal,
+  defaultExecuteTrans,
+  defaultHandleTransferSearch,
+  defaultShowTransferModel,
   defaultRenderExtraHeader,
-  defaultSubListsOf,defaultRenderAnalytics,
-  defaultRenderExtraFooter,renderForTimeLine,renderForNumbers,
-  defaultQuickFunctions, defaultRenderSubjectList,
-}= DashboardTool
-
-
+  defaultSubListsOf,
+  defaultRenderAnalytics,
+  defaultRenderExtraFooter,
+  renderForTimeLine,
+  renderForNumbers,
+  defaultQuickFunctions,
+  defaultRenderSubjectList,
+} = DashboardTool;
 
 const { Description } = DescriptionList;
-const { TabPane } = Tabs
-const { RangePicker } = DatePicker
-const { Option } = Select
+const { TabPane } = Tabs;
+const { RangePicker } = DatePicker;
+const { Option } = Select;
 
+const imageList = grpcOption => {
+  return [];
+};
 
-const imageList =(grpcOption)=>{return [
-	 ]}
+const internalImageListOf = grpcOption => defaultImageListOf(grpcOption, imageList);
 
-const internalImageListOf = (grpcOption) =>defaultImageListOf(grpcOption,imageList)
+const optionList = grpcOption => {
+  return [];
+};
 
-const optionList =(grpcOption)=>{return [ 
-	]}
+const buildTransferModal = defaultBuildTransferModal;
+const showTransferModel = defaultShowTransferModel;
+const internalRenderSubjectList = defaultRenderSubjectList;
+const internalSettingListOf = grpcOption => defaultSettingListOf(grpcOption, optionList);
+const internalLargeTextOf = grpcOption => {
+  return null;
+};
 
-const buildTransferModal = defaultBuildTransferModal
-const showTransferModel = defaultShowTransferModel
-const internalRenderSubjectList = defaultRenderSubjectList
-const internalSettingListOf = (grpcOption) =>defaultSettingListOf(grpcOption, optionList)
-const internalLargeTextOf = (grpcOption) =>{
+const internalRenderExtraHeader = defaultRenderExtraHeader;
 
-	return null
-	
+const internalRenderExtraFooter = defaultRenderExtraFooter;
+const internalSubListsOf = defaultSubListsOf;
 
-}
-
-
-const internalRenderExtraHeader = defaultRenderExtraHeader
-
-const internalRenderExtraFooter = defaultRenderExtraFooter
-const internalSubListsOf = defaultSubListsOf
-
-
-const renderSettingDropDown = (cardsData,targetComponent)=>{
-
-  return (<div style={{float: 'right'}} >
-        <Dropdown overlay={renderSettingMenu(cardsData,targetComponent)} placement="bottomRight" >
-       
+const renderSettingDropDown = (cardsData, targetComponent) => {
+  return (
+    <div style={{ float: 'right' }}>
+      <Dropdown overlay={renderSettingMenu(cardsData, targetComponent)} placement="bottomRight">
         <Button>
-        <Icon type="setting" theme="filled" twoToneColor="#00b" style={{color:'#3333b0'}}/> 设置  <Icon type="down"/>
-      </Button>
-      </Dropdown></div>)
+          <Icon type="setting" theme="filled" twoToneColor="#00b" style={{ color: '#3333b0' }} />{' '}
+          设置 <Icon type="down" />
+        </Button>
+      </Dropdown>
+    </div>
+  );
+};
 
-}
-
-const renderSettingMenuItem = (item,cardsData,targetComponent) =>{
-
-  const userContext = null
-  return (<Menu.Item key={item.name}>
-      <Link to={`/grpcOption/${targetComponent.props.grpcOption.id}/list/${item.name}/${item.displayName}/`}>
+const renderSettingMenuItem = (item, cardsData, targetComponent) => {
+  const userContext = null;
+  return (
+    <Menu.Item key={item.name}>
+      <Link
+        to={`/grpcOption/${targetComponent.props.grpcOption.id}/list/${item.name}/${
+          item.displayName
+        }/`}
+      >
         <span>{item.displayName}</span>
+      </Link>
+    </Menu.Item>
+  );
+};
+const renderSettingMenu = (cardsData, targetComponent) => {
+  const userContext = null;
+  return (
+    <Menu>
+      <Menu.Item key="profile">
+        <Link to={`/grpcOption/${targetComponent.props.grpcOption.id}/permission`}>
+          <Icon type="safety-certificate" theme="twoTone" twoToneColor="#52c41a" />
+          <span>{appLocaleName(userContext, 'Permission')}</span>
         </Link>
-        </Menu.Item>
-  )
+      </Menu.Item>
+      <Menu.Divider />
+      {cardsData.subSettingItems.map(item =>
+        renderSettingMenuItem(item, cardsData, targetComponent)
+      )}
+    </Menu>
+  );
+};
 
-}
-const renderSettingMenu = (cardsData,targetComponent) =>{
+const internalRenderTitle = (cardsData, targetComponent) => {
+  const linkComp = cardsData.returnURL ? (
+    <Link to={cardsData.returnURL}>
+      {' '}
+      <Icon type="double-left" style={{ marginRight: '10px' }} />{' '}
+    </Link>
+  ) : null;
+  return (
+    <div>
+      {linkComp}
+      {cardsData.cardsName}: {cardsData.displayName}{' '}
+      {renderSettingDropDown(cardsData, targetComponent)}
+    </div>
+  );
+};
 
-  const userContext = null
-  return (<Menu>
-    	<Menu.Item key="profile">
-  			<Link to={`/grpcOption/${targetComponent.props.grpcOption.id}/permission`}><Icon type="safety-certificate" theme="twoTone" twoToneColor="#52c41a"/><span>{appLocaleName(userContext,"Permission")}</span></Link>
-		</Menu.Item>
-		<Menu.Divider />
-		{cardsData.subSettingItems.map(item=>renderSettingMenuItem(item,cardsData,targetComponent))}
-		</Menu>)
+const internalSummaryOf = (grpcOption, targetComponent) => {
+  const { GrpcOptionService } = GlobalComponents;
+  const userContext = null;
+  return (
+    <DescriptionList className={styles.headerList} size="small" col="4">
+      <Description term="ID" style={{ wordBreak: 'break-all' }}>
+        {grpcOption.id}
+      </Description>
+      <Description term="参数名称" style={{ wordBreak: 'break-all' }}>
+        {grpcOption.parameterName}
+      </Description>
+      <Description term="参数值" style={{ wordBreak: 'break-all' }}>
+        {grpcOption.parameterValue}
+      </Description>
+      <Description term="节点">
+        {grpcOption.node == null
+          ? appLocaleName(userContext, 'NotAssigned')
+          : `${grpcOption.node.displayName}(${grpcOption.node.id})`}
+        <Icon
+          type="swap"
+          onClick={() =>
+            showTransferModel(
+              targetComponent,
+              '节点',
+              'node',
+              GrpcOptionService.requestCandidateNode,
+              GrpcOptionService.transferToAnotherNode,
+              'anotherNodeId',
+              grpcOption.node ? grpcOption.node.id : ''
+            )
+          }
+          style={{ fontSize: 20, color: 'red' }}
+        />
+      </Description>
 
-}
+      {buildTransferModal(grpcOption, targetComponent)}
+    </DescriptionList>
+  );
+};
 
-const internalRenderTitle = (cardsData,targetComponent) =>{
-  
-  
-  const linkComp=cardsData.returnURL?<Link to={cardsData.returnURL}> <Icon type="double-left" style={{marginRight:"10px"}} /> </Link>:null
-  return (<div>{linkComp}{cardsData.cardsName}: {cardsData.displayName} {renderSettingDropDown(cardsData,targetComponent)}</div>)
-
-}
-
-
-const internalSummaryOf = (grpcOption,targetComponent) =>{
-	
-	
-	const {GrpcOptionService} = GlobalComponents
-	const userContext = null
-	return (
-	<DescriptionList className={styles.headerList} size="small" col="4">
-<Description term="ID">{grpcOption.id}</Description> 
-<Description term="参数名称">{grpcOption.parameterName}</Description> 
-<Description term="参数值">{grpcOption.parameterValue}</Description> 
-<Description term="节点">{grpcOption.node==null?appLocaleName(userContext,"NotAssigned"):`${grpcOption.node.displayName}(${grpcOption.node.id})`}
- <Icon type="swap" onClick={()=>
-  showTransferModel(targetComponent,"节点","node",GrpcOptionService.requestCandidateNode,
-	      GrpcOptionService.transferToAnotherNode,"anotherNodeId",grpcOption.node?grpcOption.node.id:"")} 
-  style={{fontSize: 20,color:"red"}} />
-</Description>
-	
-        {buildTransferModal(grpcOption,targetComponent)}
-      </DescriptionList>
-	)
-
-}
-
-const internalQuickFunctions = defaultQuickFunctions
+const internalQuickFunctions = defaultQuickFunctions;
 
 class GrpcOptionDashboard extends Component {
-
- state = {
+  state = {
     transferModalVisiable: false,
     candidateReferenceList: {},
-    candidateServiceName:"",
-    candidateObjectType:"city",
-    targetLocalName:"",
-    transferServiceName:"",
-    currentValue:"",
-    transferTargetParameterName:"",  
-    defaultType: 'grpcOption'
-
-
-  }
-  componentDidMount() {
-
-  }
-  
+    candidateServiceName: '',
+    candidateObjectType: 'city',
+    targetLocalName: '',
+    transferServiceName: '',
+    currentValue: '',
+    transferTargetParameterName: '',
+    defaultType: 'grpcOption',
+  };
+  componentDidMount() {}
 
   render() {
     // eslint-disable-next-line max-len
-    const { id,displayName,  } = this.props.grpcOption
-    if(!this.props.grpcOption.class){
-      return null
+    const { id, displayName } = this.props.grpcOption;
+    if (!this.props.grpcOption.class) {
+      return null;
     }
-    const returnURL = this.props.returnURL
-    
-    const cardsData = {cardsName:"Grpc选项",cardsFor: "grpcOption",
-    	cardsSource: this.props.grpcOption,returnURL,displayName,
-  		subItems: [
-    
-      	],
-   		subSettingItems: [
-    
-      	],     	
-      	
-  	};
-    
-    const renderExtraHeader = this.props.renderExtraHeader || internalRenderExtraHeader
-    const settingListOf = this.props.settingListOf || internalSettingListOf
-    const imageListOf = this.props.imageListOf || internalImageListOf
-    const subListsOf = this.props.subListsOf || internalSubListsOf
-    const largeTextOf = this.props.largeTextOf ||internalLargeTextOf
-    const summaryOf = this.props.summaryOf || internalSummaryOf
-    const renderTitle = this.props.renderTitle || internalRenderTitle
-    const renderExtraFooter = this.props.renderExtraFooter || internalRenderExtraFooter
-    const renderAnalytics = this.props.renderAnalytics || defaultRenderAnalytics
-    const quickFunctions = this.props.quickFunctions || internalQuickFunctions
-    const renderSubjectList = this.props.renderSubjectList || internalRenderSubjectList
-    
-    return (
+    const returnURL = this.props.returnURL;
 
+    const cardsData = {
+      cardsName: 'Grpc选项',
+      cardsFor: 'grpcOption',
+      cardsSource: this.props.grpcOption,
+      returnURL,
+      displayName,
+      subItems: [],
+      subSettingItems: [],
+    };
+
+    const renderExtraHeader = this.props.renderExtraHeader || internalRenderExtraHeader;
+    const settingListOf = this.props.settingListOf || internalSettingListOf;
+    const imageListOf = this.props.imageListOf || internalImageListOf;
+    const subListsOf = this.props.subListsOf || internalSubListsOf;
+    const largeTextOf = this.props.largeTextOf || internalLargeTextOf;
+    const summaryOf = this.props.summaryOf || internalSummaryOf;
+    const renderTitle = this.props.renderTitle || internalRenderTitle;
+    const renderExtraFooter = this.props.renderExtraFooter || internalRenderExtraFooter;
+    const renderAnalytics = this.props.renderAnalytics || defaultRenderAnalytics;
+    const quickFunctions = this.props.quickFunctions || internalQuickFunctions;
+    const renderSubjectList = this.props.renderSubjectList || internalRenderSubjectList;
+
+    return (
       <PageHeaderLayout
-        title={renderTitle(cardsData,this)}
-        content={summaryOf(cardsData.cardsSource,this)}
+        title={renderTitle(cardsData, this)}
+        content={summaryOf(cardsData.cardsSource, this)}
         wrapperClassName={styles.advancedForm}
       >
-       
         {renderExtraHeader(cardsData.cardsSource)}
-        {imageListOf(cardsData.cardsSource)}  
-        {quickFunctions(cardsData)} 
+        {imageListOf(cardsData.cardsSource)}
+        {quickFunctions(cardsData)}
         {renderAnalytics(cardsData.cardsSource)}
         {settingListOf(cardsData.cardsSource)}
-        {renderSubjectList(cardsData)}       
+        {renderSubjectList(cardsData)}
         {largeTextOf(cardsData.cardsSource)}
         {renderExtraFooter(cardsData.cardsSource)}
-  		
       </PageHeaderLayout>
-    
-    )
+    );
   }
 }
 
 export default connect(state => ({
   grpcOption: state._grpcOption,
   returnURL: state.breadcrumb.returnURL,
-  
-}))(Form.create()(GrpcOptionDashboard))
-
+}))(Form.create()(GrpcOptionDashboard));

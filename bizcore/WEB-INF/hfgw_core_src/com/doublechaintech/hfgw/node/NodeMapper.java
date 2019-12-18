@@ -8,6 +8,7 @@ import com.doublechaintech.hfgw.BaseRowMapper;
 import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.channel.Channel;
 import com.doublechaintech.hfgw.nodetype.NodeType;
+import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
 
 public class NodeMapper extends BaseRowMapper<Node>{
 	
@@ -19,7 +20,12 @@ public class NodeMapper extends BaseRowMapper<Node>{
  		setUrl(node, rs, rowNumber); 		
  		setOrganization(node, rs, rowNumber); 		
  		setChannel(node, rs, rowNumber); 		
+ 		setNetwork(node, rs, rowNumber); 		
+ 		setTlsCacert(node, rs, rowNumber); 		
  		setType(node, rs, rowNumber); 		
+ 		setAddress(node, rs, rowNumber); 		
+ 		setContactPerson(node, rs, rowNumber); 		
+ 		setContactTelephone(node, rs, rowNumber); 		
  		setVersion(node, rs, rowNumber);
 
 		return node;
@@ -101,6 +107,36 @@ public class NodeMapper extends BaseRowMapper<Node>{
  		node.setChannel(createEmptyChannel(channelId));
  	}
  	 		
+ 	protected void setNetwork(Node node, ResultSet rs, int rowNumber) throws SQLException{
+ 		String hyperledgerNetworkId = rs.getString(NodeTable.COLUMN_NETWORK);
+ 		if( hyperledgerNetworkId == null){
+ 			return;
+ 		}
+ 		if( hyperledgerNetworkId.isEmpty()){
+ 			return;
+ 		}
+ 		HyperledgerNetwork hyperledgerNetwork = node.getNetwork();
+ 		if( hyperledgerNetwork != null ){
+ 			//if the root object 'node' already have the property, just set the id for it;
+ 			hyperledgerNetwork.setId(hyperledgerNetworkId);
+ 			
+ 			return;
+ 		}
+ 		node.setNetwork(createEmptyNetwork(hyperledgerNetworkId));
+ 	}
+ 	
+	protected void setTlsCacert(Node node, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String tlsCacert = rs.getString(NodeTable.COLUMN_TLS_CACERT);
+		if(tlsCacert == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		node.setTlsCacert(tlsCacert);
+	}
+		 		
  	protected void setType(Node node, ResultSet rs, int rowNumber) throws SQLException{
  		String nodeTypeId = rs.getString(NodeTable.COLUMN_TYPE);
  		if( nodeTypeId == null){
@@ -119,6 +155,42 @@ public class NodeMapper extends BaseRowMapper<Node>{
  		node.setType(createEmptyType(nodeTypeId));
  	}
  	
+	protected void setAddress(Node node, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String address = rs.getString(NodeTable.COLUMN_ADDRESS);
+		if(address == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		node.setAddress(address);
+	}
+		
+	protected void setContactPerson(Node node, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String contactPerson = rs.getString(NodeTable.COLUMN_CONTACT_PERSON);
+		if(contactPerson == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		node.setContactPerson(contactPerson);
+	}
+		
+	protected void setContactTelephone(Node node, ResultSet rs, int rowNumber) throws SQLException{
+	
+		//there will be issue when the type is double/int/long
+		String contactTelephone = rs.getString(NodeTable.COLUMN_CONTACT_TELEPHONE);
+		if(contactTelephone == null){
+			//do nothing when nothing found in database
+			return;
+		}
+		
+		node.setContactTelephone(contactTelephone);
+	}
+		
 	protected void setVersion(Node node, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long
@@ -145,6 +217,13 @@ public class NodeMapper extends BaseRowMapper<Node>{
  		channel.setId(channelId);
  		channel.setVersion(Integer.MAX_VALUE);
  		return channel;
+ 	}
+ 	
+ 	protected HyperledgerNetwork  createEmptyNetwork(String hyperledgerNetworkId){
+ 		HyperledgerNetwork hyperledgerNetwork = new HyperledgerNetwork();
+ 		hyperledgerNetwork.setId(hyperledgerNetworkId);
+ 		hyperledgerNetwork.setVersion(Integer.MAX_VALUE);
+ 		return hyperledgerNetwork;
  	}
  	
  	protected NodeType  createEmptyType(String nodeTypeId){

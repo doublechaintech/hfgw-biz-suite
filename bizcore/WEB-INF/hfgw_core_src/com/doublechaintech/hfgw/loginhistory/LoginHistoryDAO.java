@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.loginhistory;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -13,7 +14,7 @@ import com.doublechaintech.hfgw.secuser.SecUser;
 import com.doublechaintech.hfgw.secuser.SecUserDAO;
 
 
-public interface LoginHistoryDAO{
+public interface LoginHistoryDAO extends BaseDAO{
 
 	public SmartList<LoginHistory> loadAll();
 	public LoginHistory load(String id, Map<String,Object> options) throws Exception;

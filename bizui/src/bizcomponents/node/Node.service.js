@@ -48,6 +48,21 @@ const transferToAnotherChannel = (id, parameters) => {
 
 
 
+const requestCandidateNetwork = (ownerClass, id, filterKey, pageNo) => {
+ 
+  const url = `${PREFIX}nodeManager/requestCandidateNetwork/ownerClass/id/filterKey/pageNo/`
+  const requestParameters = {id, ownerClass,filterKey, pageNo}
+  return postForm({url,requestParameters})
+}	
+
+const transferToAnotherNetwork = (id, parameters) => {
+  const url = `${PREFIX}nodeManager/transferToAnotherNetwork/id/anotherNetworkId/`
+  const requestParameters = {id, ...parameters}
+  return postForm({url,requestParameters})
+}
+
+
+
 const requestCandidateType = (ownerClass, id, filterKey, pageNo) => {
  
   const url = `${PREFIX}nodeManager/requestCandidateType/ownerClass/id/filterKey/pageNo/`
@@ -89,22 +104,22 @@ const removeGrpcOptionList = (targetObjectId, parameters) => {
 
 
 
-const addTlsCacert = (targetObjectId, parameters) => {
-  const url = `${PREFIX}nodeManager/addTlsCacert/nodeId/path/cert/tokensExpr/`
+const addChannelPeerRole = (targetObjectId, parameters) => {
+  const url = `${PREFIX}nodeManager/addChannelPeerRole/nodeId/channelId/peerRoleId/tokensExpr/`
   const nodeId = targetObjectId
   const requestParameters = { ...parameters, nodeId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
-const updateTlsCacert = (targetObjectId, parameters) => {
-  const url = `${PREFIX}nodeManager/updateTlsCacertProperties/nodeId/id/path/cert/tokensExpr/`
+const updateChannelPeerRole = (targetObjectId, parameters) => {
+  const url = `${PREFIX}nodeManager/updateChannelPeerRoleProperties/nodeId/id/tokensExpr/`
   const nodeId = targetObjectId
   const requestParameters = { ...parameters, nodeId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
 
-const removeTlsCacertList = (targetObjectId, parameters) => {
-  const url = `${PREFIX}nodeManager/removeTlsCacertList/nodeId/tlsCacertIds/tokensExpr/`
+const removeChannelPeerRoleList = (targetObjectId, parameters) => {
+  const url = `${PREFIX}nodeManager/removeChannelPeerRoleList/nodeId/channelPeerRoleIds/tokensExpr/`
   const requestParameters = { ...parameters, nodeId: targetObjectId, tokensExpr: 'none' }
   return postForm({ url,requestParameters})
 }
@@ -140,16 +155,18 @@ const  processRequest = (data) => {
 const NodeService = { view,
   load,
   addGrpcOption,
-  addTlsCacert,
+  addChannelPeerRole,
   updateGrpcOption,
-  updateTlsCacert,
+  updateChannelPeerRole,
   removeGrpcOptionList,
-  removeTlsCacertList,
+  removeChannelPeerRoleList,
   requestCandidateOrganization,
   requestCandidateChannel,
+  requestCandidateNetwork,
   requestCandidateType,
   transferToAnotherOrganization,
   transferToAnotherChannel,
+  transferToAnotherNetwork,
   transferToAnotherType, listFunctions, saveRequest, processRequest}
 export default NodeService
 

@@ -236,6 +236,20 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
+	public ApplicationForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm transactionIdFieldForServiceRecord(String initValue){
+		return transactionIdFieldForServiceRecord("transactionId",initValue);
+	}
+	public ApplicationForm transactionIdFieldForServiceRecord(){
+		return transactionIdFieldForServiceRecord("transactionId","");
+	}
+
+
 	public ApplicationForm nameFieldForServiceRecord(String parameterName, String initValue){
 		FormField field =  nameFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
@@ -250,17 +264,17 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm payLoadFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  payLoadFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm payloadFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  payloadFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm payLoadFieldForServiceRecord(String initValue){
-		return payLoadFieldForServiceRecord("payLoad",initValue);
+	public ApplicationForm payloadFieldForServiceRecord(String initValue){
+		return payloadFieldForServiceRecord("payload",initValue);
 	}
-	public ApplicationForm payLoadFieldForServiceRecord(){
-		return payLoadFieldForServiceRecord("payLoad","");
+	public ApplicationForm payloadFieldForServiceRecord(){
+		return payloadFieldForServiceRecord("payload","");
 	}
 
 
@@ -292,17 +306,17 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm transactionIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  transactionIdFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm chainCodeFunctionFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  chainCodeFunctionFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm transactionIdFieldForServiceRecord(String initValue){
-		return transactionIdFieldForServiceRecord("transactionId",initValue);
+	public ApplicationForm chainCodeFunctionFieldForServiceRecord(String initValue){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction",initValue);
 	}
-	public ApplicationForm transactionIdFieldForServiceRecord(){
-		return transactionIdFieldForServiceRecord("transactionId","");
+	public ApplicationForm chainCodeFunctionFieldForServiceRecord(){
+		return chainCodeFunctionFieldForServiceRecord("chainCodeFunction","");
 	}
 
 
@@ -334,17 +348,17 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm applicationIdFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  applicationIdFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm appClientIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  appClientIdFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm applicationIdFieldForServiceRecord(String initValue){
-		return applicationIdFieldForServiceRecord("applicationId",initValue);
+	public ApplicationForm appClientIdFieldForServiceRecord(String initValue){
+		return appClientIdFieldForServiceRecord("appClientId",initValue);
 	}
-	public ApplicationForm applicationIdFieldForServiceRecord(){
-		return applicationIdFieldForServiceRecord("applicationId","");
+	public ApplicationForm appClientIdFieldForServiceRecord(){
+		return appClientIdFieldForServiceRecord("appClientId","");
 	}
 
 
@@ -362,17 +376,101 @@ public class ApplicationForm extends BaseForm {
 	}
 
 
-	public ApplicationForm currentStatusFieldForServiceRecord(String parameterName, String initValue){
-		FormField field =  currentStatusFromServiceRecord(parameterName, initValue);		
+	public ApplicationForm responseFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  responseFromServiceRecord(parameterName, initValue);		
 		this.addFormField(field);
 		return this;
 	}
 	
-	public ApplicationForm currentStatusFieldForServiceRecord(String initValue){
-		return currentStatusFieldForServiceRecord("currentStatus",initValue);
+	public ApplicationForm responseFieldForServiceRecord(String initValue){
+		return responseFieldForServiceRecord("response",initValue);
 	}
-	public ApplicationForm currentStatusFieldForServiceRecord(){
-		return currentStatusFieldForServiceRecord("currentStatus","");
+	public ApplicationForm responseFieldForServiceRecord(){
+		return responseFieldForServiceRecord("response","");
+	}
+
+
+	public ApplicationForm statusIdFieldForServiceRecord(String parameterName, String initValue){
+		FormField field =  statusIdFromServiceRecord(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm statusIdFieldForServiceRecord(String initValue){
+		return statusIdFieldForServiceRecord("statusId",initValue);
+	}
+	public ApplicationForm statusIdFieldForServiceRecord(){
+		return statusIdFieldForServiceRecord("statusId","");
+	}
+
+
+	public ApplicationForm chainCodeInvokerIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  idFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm chainCodeInvokerIdFieldForChainCodeInvoker(String initValue){
+		return chainCodeInvokerIdFieldForChainCodeInvoker("chainCodeInvokerId",initValue);
+	}
+	public ApplicationForm chainCodeInvokerIdFieldForChainCodeInvoker(){
+		return chainCodeInvokerIdFieldForChainCodeInvoker("chainCodeInvokerId","");
+	}
+
+
+	public ApplicationForm appClientIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  appClientIdFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm appClientIdFieldForChainCodeInvoker(String initValue){
+		return appClientIdFieldForChainCodeInvoker("appClientId",initValue);
+	}
+	public ApplicationForm appClientIdFieldForChainCodeInvoker(){
+		return appClientIdFieldForChainCodeInvoker("appClientId","");
+	}
+
+
+	public ApplicationForm chainCodeIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  chainCodeIdFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm chainCodeIdFieldForChainCodeInvoker(String initValue){
+		return chainCodeIdFieldForChainCodeInvoker("chainCodeId",initValue);
+	}
+	public ApplicationForm chainCodeIdFieldForChainCodeInvoker(){
+		return chainCodeIdFieldForChainCodeInvoker("chainCodeId","");
+	}
+
+
+	public ApplicationForm parametersFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  parametersFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm parametersFieldForChainCodeInvoker(String initValue){
+		return parametersFieldForChainCodeInvoker("parameters",initValue);
+	}
+	public ApplicationForm parametersFieldForChainCodeInvoker(){
+		return parametersFieldForChainCodeInvoker("parameters","");
+	}
+
+
+	public ApplicationForm changeRequestIdFieldForChainCodeInvoker(String parameterName, String initValue){
+		FormField field =  changeRequestIdFromChainCodeInvoker(parameterName, initValue);		
+		this.addFormField(field);
+		return this;
+	}
+	
+	public ApplicationForm changeRequestIdFieldForChainCodeInvoker(String initValue){
+		return changeRequestIdFieldForChainCodeInvoker("changeRequestId",initValue);
+	}
+	public ApplicationForm changeRequestIdFieldForChainCodeInvoker(){
+		return changeRequestIdFieldForChainCodeInvoker("changeRequestId","");
 	}
 
 	

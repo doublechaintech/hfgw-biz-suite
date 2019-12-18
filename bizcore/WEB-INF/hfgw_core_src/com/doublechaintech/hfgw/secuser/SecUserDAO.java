@@ -3,6 +3,7 @@ package com.doublechaintech.hfgw.secuser;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
+import com.doublechaintech.hfgw.BaseDAO;
 import com.doublechaintech.hfgw.BaseEntity;
 import com.doublechaintech.hfgw.SmartList;
 import com.doublechaintech.hfgw.MultipleAccessKey;
@@ -19,7 +20,7 @@ import com.doublechaintech.hfgw.secuserblocking.SecUserBlockingDAO;
 import com.doublechaintech.hfgw.userapp.UserAppDAO;
 
 
-public interface SecUserDAO{
+public interface SecUserDAO extends BaseDAO{
 
 	public SmartList<SecUser> loadAll();
 	public SecUser load(String id, Map<String,Object> options) throws Exception;

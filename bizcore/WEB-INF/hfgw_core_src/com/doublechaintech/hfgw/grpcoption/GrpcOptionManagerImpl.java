@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.node.CandidateNode;
 public class GrpcOptionManagerImpl extends CustomHfgwCheckerManager implements GrpcOptionManager {
 	
 	private static final String SERVICE_TYPE = "GrpcOption";
+	@Override
+	public GrpcOptionDAO daoOf(HfgwUserContext userContext) {
+		return grpcOptionDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

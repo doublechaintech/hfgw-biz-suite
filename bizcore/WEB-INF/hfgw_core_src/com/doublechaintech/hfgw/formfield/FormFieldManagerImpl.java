@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.genericform.CandidateGenericForm;
 public class FormFieldManagerImpl extends CustomHfgwCheckerManager implements FormFieldManager {
 	
 	private static final String SERVICE_TYPE = "FormField";
+	@Override
+	public FormFieldDAO daoOf(HfgwUserContext userContext) {
+		return formFieldDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

@@ -36,6 +36,10 @@ import com.doublechaintech.hfgw.genericform.GenericForm;
 public class GenericFormManagerImpl extends CustomHfgwCheckerManager implements GenericFormManager {
 	
 	private static final String SERVICE_TYPE = "GenericForm";
+	@Override
+	public GenericFormDAO daoOf(HfgwUserContext userContext) {
+		return genericFormDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

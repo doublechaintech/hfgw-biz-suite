@@ -330,20 +330,6 @@ public class UserAppForm extends BaseForm {
 		return blockingIdFieldOfSecUser("blockingId","");
 	}
 
-
-	public UserAppForm currentStatusFieldOfSecUser(String parameterName, String initValue){
-		FormField field =  currentStatusFromSecUser(parameterName, initValue);
-		this.addFormField(field);	
-		return this;
-	}
-	
-	public UserAppForm currentStatusFieldOfSecUser(String initValue){
-		return currentStatusFieldOfSecUser("currentStatus",initValue);
-	}
-	public UserAppForm currentStatusFieldOfSecUser(){
-		return currentStatusFieldOfSecUser("currentStatus","");
-	}
-
 	
 
 

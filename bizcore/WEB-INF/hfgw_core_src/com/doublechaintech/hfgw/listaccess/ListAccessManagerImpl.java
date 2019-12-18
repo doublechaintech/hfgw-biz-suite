@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.userapp.CandidateUserApp;
 public class ListAccessManagerImpl extends CustomHfgwCheckerManager implements ListAccessManager {
 	
 	private static final String SERVICE_TYPE = "ListAccess";
+	@Override
+	public ListAccessDAO daoOf(HfgwUserContext userContext) {
+		return listAccessDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){

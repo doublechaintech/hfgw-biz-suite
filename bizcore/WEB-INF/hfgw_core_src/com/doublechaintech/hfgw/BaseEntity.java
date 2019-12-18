@@ -24,6 +24,14 @@ import com.terapico.caf.RemoteInitiable;
 import com.terapico.utils.TextUtil;
 
 public class BaseEntity implements Serializable, RemoteInitiable{
+	private String internalType = null; // 禁止直接操作这个成员
+	public static BaseEntity pretendToBe(String classShortName, String id) {
+		BaseEntity result = new BaseEntity();
+		result.internalType = classShortName;
+		result.setId(id);
+		result.setDisplayName(id);
+		return result;
+	}
 	public  void ensureAccess(Map<String,Object> accessTokens) {
 		
 		List<SmartList<?>> allLists = this.getAllRelatedLists();
@@ -91,6 +99,9 @@ public class BaseEntity implements Serializable, RemoteInitiable{
 		return null;
 	}
 	public String getInternalType(){
+		if (internalType != null){
+			return internalType;
+		}
 		return this.getClass().getSimpleName();
 	}
 	boolean endsWithOneOf(String value, String candiates[]){

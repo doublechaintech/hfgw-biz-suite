@@ -6,9 +6,10 @@ import java.util.Map;
 import com.terapico.caf.DateTime;
 import com.doublechaintech.hfgw.HfgwUserContext;
 import com.doublechaintech.hfgw.BaseEntity;
+import com.doublechaintech.hfgw.BaseManager;
 import com.doublechaintech.hfgw.SmartList;
 
-public interface ChangeRequestManager{
+public interface ChangeRequestManager extends BaseManager{
 
 		
 
@@ -28,6 +29,16 @@ public interface ChangeRequestManager{
 
 	/*======================================================DATA MAINTENANCE===========================================================*/
 	
+
+	//public  ChainCodeInvokerManager getChainCodeInvokerManager(HfgwUserContext userContext, String changeRequestId, String appClientId, String chainCodeId, String parameters ,String [] tokensExpr)  throws Exception;
+	
+	public  ChangeRequest addChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String appClientId, String chainCodeId, String parameters , String [] tokensExpr)  throws Exception;
+	public  ChangeRequest removeChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String chainCodeInvokerId, int chainCodeInvokerVersion,String [] tokensExpr)  throws Exception;
+	public  ChangeRequest updateChainCodeInvoker(HfgwUserContext userContext, String changeRequestId, String chainCodeInvokerId, int chainCodeInvokerVersion, String property, String newValueExpr,String [] tokensExpr)  throws Exception;
+
+	/*
+
+	*/
 
 
 

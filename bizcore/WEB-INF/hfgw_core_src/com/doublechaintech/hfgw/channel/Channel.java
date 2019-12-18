@@ -14,6 +14,7 @@ import com.doublechaintech.hfgw.KeyValuePair;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.doublechaintech.hfgw.chaincode.ChainCode;
 import com.doublechaintech.hfgw.node.Node;
+import com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRole;
 import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 import com.doublechaintech.hfgw.hyperledgernetwork.HyperledgerNetwork;
@@ -28,6 +29,7 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 	public static final String VERSION_PROPERTY               = "version"           ;
 
 	public static final String NODE_LIST                                = "nodeList"          ;
+	public static final String CHANNEL_PEER_ROLE_LIST                   = "channelPeerRoleList";
 	public static final String CHAIN_CODE_LIST                          = "chainCodeList"     ;
 	public static final String APPLICATION_LIST                         = "applicationList"   ;
 	public static final String SERVICE_RECORD_LIST                      = "serviceRecordList" ;
@@ -58,6 +60,7 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 	
 	
 	protected		SmartList<Node>     	mNodeList           ;
+	protected		SmartList<ChannelPeerRole>	mChannelPeerRoleList;
 	protected		SmartList<ChainCode>	mChainCodeList      ;
 	protected		SmartList<Application>	mApplicationList    ;
 	protected		SmartList<ServiceRecord>	mServiceRecordList  ;
@@ -124,6 +127,10 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 		}
 		if(NODE_LIST.equals(property)){
 			List<BaseEntity> list = getNodeList().stream().map(item->item).collect(Collectors.toList());
+			return list;
+		}
+		if(CHANNEL_PEER_ROLE_LIST.equals(property)){
+			List<BaseEntity> list = getChannelPeerRoleList().stream().map(item->item).collect(Collectors.toList());
 			return list;
 		}
 		if(CHAIN_CODE_LIST.equals(property)){
@@ -320,6 +327,113 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 	
 	public  void cleanUpNodeList(){
 		getNodeList().clear();
+	}
+	
+	
+	
+
+
+	public  SmartList<ChannelPeerRole> getChannelPeerRoleList(){
+		if(this.mChannelPeerRoleList == null){
+			this.mChannelPeerRoleList = new SmartList<ChannelPeerRole>();
+			this.mChannelPeerRoleList.setListInternalName (CHANNEL_PEER_ROLE_LIST );
+			//有名字，便于做权限控制
+		}
+		
+		return this.mChannelPeerRoleList;	
+	}
+	public  void setChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList){
+		for( ChannelPeerRole channelPeerRole:channelPeerRoleList){
+			channelPeerRole.setChannel(this);
+		}
+
+		this.mChannelPeerRoleList = channelPeerRoleList;
+		this.mChannelPeerRoleList.setListInternalName (CHANNEL_PEER_ROLE_LIST );
+		
+	}
+	
+	public  void addChannelPeerRole(ChannelPeerRole channelPeerRole){
+		channelPeerRole.setChannel(this);
+		getChannelPeerRoleList().add(channelPeerRole);
+	}
+	public  void addChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList){
+		for( ChannelPeerRole channelPeerRole:channelPeerRoleList){
+			channelPeerRole.setChannel(this);
+		}
+		getChannelPeerRoleList().addAll(channelPeerRoleList);
+	}
+	public  void mergeChannelPeerRoleList(SmartList<ChannelPeerRole> channelPeerRoleList){
+		if(channelPeerRoleList==null){
+			return;
+		}
+		if(channelPeerRoleList.isEmpty()){
+			return;
+		}
+		addChannelPeerRoleList( channelPeerRoleList );
+		
+	}
+	public  ChannelPeerRole removeChannelPeerRole(ChannelPeerRole channelPeerRoleIndex){
+		
+		int index = getChannelPeerRoleList().indexOf(channelPeerRoleIndex);
+        if(index < 0){
+        	String message = "ChannelPeerRole("+channelPeerRoleIndex.getId()+") with version='"+channelPeerRoleIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        ChannelPeerRole channelPeerRole = getChannelPeerRoleList().get(index);        
+        // channelPeerRole.clearChannel(); //disconnect with Channel
+        channelPeerRole.clearFromAll(); //disconnect with Channel
+		
+		boolean result = getChannelPeerRoleList().planToRemove(channelPeerRole);
+        if(!result){
+        	String message = "ChannelPeerRole("+channelPeerRoleIndex.getId()+") with version='"+channelPeerRoleIndex.getVersion()+"' NOT found!";
+            throw new IllegalStateException(message);
+        }
+        return channelPeerRole;
+        
+	
+	}
+	//断舍离
+	public  void breakWithChannelPeerRole(ChannelPeerRole channelPeerRole){
+		
+		if(channelPeerRole == null){
+			return;
+		}
+		channelPeerRole.setChannel(null);
+		//getChannelPeerRoleList().remove();
+	
+	}
+	
+	public  boolean hasChannelPeerRole(ChannelPeerRole channelPeerRole){
+	
+		return getChannelPeerRoleList().contains(channelPeerRole);
+  
+	}
+	
+	public void copyChannelPeerRoleFrom(ChannelPeerRole channelPeerRole) {
+
+		ChannelPeerRole channelPeerRoleInList = findTheChannelPeerRole(channelPeerRole);
+		ChannelPeerRole newChannelPeerRole = new ChannelPeerRole();
+		channelPeerRoleInList.copyTo(newChannelPeerRole);
+		newChannelPeerRole.setVersion(0);//will trigger copy
+		getChannelPeerRoleList().add(newChannelPeerRole);
+		addItemToFlexiableObject(COPIED_CHILD, newChannelPeerRole);
+	}
+	
+	public  ChannelPeerRole findTheChannelPeerRole(ChannelPeerRole channelPeerRole){
+		
+		int index =  getChannelPeerRoleList().indexOf(channelPeerRole);
+		//The input parameter must have the same id and version number.
+		if(index < 0){
+ 			String message = "ChannelPeerRole("+channelPeerRole.getId()+") with version='"+channelPeerRole.getVersion()+"' NOT found!";
+			throw new IllegalStateException(message);
+		}
+		
+		return  getChannelPeerRoleList().get(index);
+		//Performance issue when using LinkedList, but it is almost an ArrayList for sure!
+	}
+	
+	public  void cleanUpChannelPeerRoleList(){
+		getChannelPeerRoleList().clear();
 	}
 	
 	
@@ -658,6 +772,7 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 		
 		List<BaseEntity> entityList = new ArrayList<BaseEntity>();
 		collectFromList(this, entityList, getNodeList(), internalType);
+		collectFromList(this, entityList, getChannelPeerRoleList(), internalType);
 		collectFromList(this, entityList, getChainCodeList(), internalType);
 		collectFromList(this, entityList, getApplicationList(), internalType);
 		collectFromList(this, entityList, getServiceRecordList(), internalType);
@@ -669,6 +784,7 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 		List<SmartList<?>> listOfList = new ArrayList<SmartList<?>>();
 		
 		listOfList.add( getNodeList());
+		listOfList.add( getChannelPeerRoleList());
 		listOfList.add( getChainCodeList());
 		listOfList.add( getApplicationList());
 		listOfList.add( getServiceRecordList());
@@ -689,6 +805,11 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 		if(!getNodeList().isEmpty()){
 			appendKeyValuePair(result, "nodeCount", getNodeList().getTotalCount());
 			appendKeyValuePair(result, "nodeCurrentPageNumber", getNodeList().getCurrentPageNumber());
+		}
+		appendKeyValuePair(result, CHANNEL_PEER_ROLE_LIST, getChannelPeerRoleList());
+		if(!getChannelPeerRoleList().isEmpty()){
+			appendKeyValuePair(result, "channelPeerRoleCount", getChannelPeerRoleList().getTotalCount());
+			appendKeyValuePair(result, "channelPeerRoleCurrentPageNumber", getChannelPeerRoleList().getCurrentPageNumber());
 		}
 		appendKeyValuePair(result, CHAIN_CODE_LIST, getChainCodeList());
 		if(!getChainCodeList().isEmpty()){
@@ -724,6 +845,7 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 			dest.setNetwork(getNetwork());
 			dest.setVersion(getVersion());
 			dest.setNodeList(getNodeList());
+			dest.setChannelPeerRoleList(getChannelPeerRoleList());
 			dest.setChainCodeList(getChainCodeList());
 			dest.setApplicationList(getApplicationList());
 			dest.setServiceRecordList(getServiceRecordList());
@@ -745,6 +867,7 @@ public class Channel extends BaseEntity implements  java.io.Serializable{
 			dest.mergeNetwork(getNetwork());
 			dest.mergeVersion(getVersion());
 			dest.mergeNodeList(getNodeList());
+			dest.mergeChannelPeerRoleList(getChannelPeerRoleList());
 			dest.mergeChainCodeList(getChainCodeList());
 			dest.mergeApplicationList(getApplicationList());
 			dest.mergeServiceRecordList(getServiceRecordList());

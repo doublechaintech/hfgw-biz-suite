@@ -14,6 +14,16 @@ import org.springframework.cglib.proxy.MethodInterceptor;
 import org.springframework.cglib.proxy.MethodProxy;
 
 public class HfgwCheckerManager extends BaseManagerImpl {
+	public SmartList<BaseEntity> requestCandidateValuesForSearch(HfgwUserContext ctx, String ownerMemberName,
+			String ownerId, String resultMemberName, String resutlClassName, String targetClassName, String filterKey, int pageNo) {
+		return ((BaseDAO)daoOf(ctx)).requestCandidateValuesForSearch(ownerMemberName, ownerId, resultMemberName,
+				resutlClassName, targetClassName, filterKey, pageNo);
+	}
+	
+	protected Object daoOf(HfgwUserContext ctx) {
+		throw new UnsupportedOperationException("You must implement it in your specific Manager implementation");
+	}
+	
 	protected HfgwObjectChecker checkerOf(HfgwUserContext ctx) {
 		return ctx.getChecker();
 	}
@@ -169,17 +179,23 @@ public class HfgwCheckerManager extends BaseManagerImpl {
 	public com.doublechaintech.hfgw.grpcoption.GrpcOptionDAO grpcOptionDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getGrpcOptionDAO();
 	}
-	public com.doublechaintech.hfgw.tlscacert.TlsCacertManager tlsCacertManagerOf(HfgwUserContext userContext){
-		return userContext.getManagerGroup().getTlsCacertManager();
-	}
-	public com.doublechaintech.hfgw.tlscacert.TlsCacertDAO tlsCacertDaoOf(HfgwUserContext userContext){
-		return userContext.getDAOGroup().getTlsCacertDAO();
-	}
 	public com.doublechaintech.hfgw.channel.ChannelManager channelManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getChannelManager();
 	}
 	public com.doublechaintech.hfgw.channel.ChannelDAO channelDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getChannelDAO();
+	}
+	public com.doublechaintech.hfgw.peerrole.PeerRoleManager peerRoleManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getPeerRoleManager();
+	}
+	public com.doublechaintech.hfgw.peerrole.PeerRoleDAO peerRoleDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getPeerRoleDAO();
+	}
+	public com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleManager channelPeerRoleManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getChannelPeerRoleManager();
+	}
+	public com.doublechaintech.hfgw.channelpeerrole.ChannelPeerRoleDAO channelPeerRoleDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getChannelPeerRoleDAO();
 	}
 	public com.doublechaintech.hfgw.chaincode.ChainCodeManager chainCodeManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getChainCodeManager();
@@ -199,6 +215,12 @@ public class HfgwCheckerManager extends BaseManagerImpl {
 	public com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO serviceRecordDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getServiceRecordDAO();
 	}
+	public com.doublechaintech.hfgw.transactionstatus.TransactionStatusManager transactionStatusManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getTransactionStatusManager();
+	}
+	public com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO transactionStatusDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getTransactionStatusDAO();
+	}
 	public com.doublechaintech.hfgw.changerequesttype.ChangeRequestTypeManager changeRequestTypeManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getChangeRequestTypeManager();
 	}
@@ -210,6 +232,12 @@ public class HfgwCheckerManager extends BaseManagerImpl {
 	}
 	public com.doublechaintech.hfgw.changerequest.ChangeRequestDAO changeRequestDaoOf(HfgwUserContext userContext){
 		return userContext.getDAOGroup().getChangeRequestDAO();
+	}
+	public com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerManager chainCodeInvokerManagerOf(HfgwUserContext userContext){
+		return userContext.getManagerGroup().getChainCodeInvokerManager();
+	}
+	public com.doublechaintech.hfgw.chaincodeinvoker.ChainCodeInvokerDAO chainCodeInvokerDaoOf(HfgwUserContext userContext){
+		return userContext.getDAOGroup().getChainCodeInvokerDAO();
 	}
 	public com.doublechaintech.hfgw.userdomain.UserDomainManager userDomainManagerOf(HfgwUserContext userContext){
 		return userContext.getManagerGroup().getUserDomainManager();

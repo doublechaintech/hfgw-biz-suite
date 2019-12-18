@@ -135,9 +135,12 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"version",this::checkVersionOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"organizationList",this::checkOrganizationListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"nodeTypeList",this::checkNodeTypeListOfHyperledgerNetwork);
+		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"nodeList",this::checkNodeListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"channelList",this::checkChannelListOfHyperledgerNetwork);
+		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"peerRoleList",this::checkPeerRoleListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"applicationList",this::checkApplicationListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfHyperledgerNetwork);
+		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"transactionStatusList",this::checkTransactionStatusListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"changeRequestTypeList",this::checkChangeRequestTypeListOfHyperledgerNetwork);
 		commonObjectPropertyCheck(hyperledgerNetworkAsBaseEntity,"changeRequestList",this::checkChangeRequestListOfHyperledgerNetwork);
 		return this;
@@ -170,9 +173,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"name",this::checkNameOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"code",this::checkCodeOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"network",this::checkNetworkOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"address",this::checkAddressOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"contactPerson",this::checkContactPersonOfNodeType);
-		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"contactTelephone",this::checkContactTelephoneOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"version",this::checkVersionOfNodeType);
 		commonObjectPropertyCheck(nodeTypeAsBaseEntity,"nodeList",this::checkNodeListOfNodeType);
 		return this;
@@ -190,10 +190,15 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(nodeAsBaseEntity,"url",this::checkUrlOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"organization",this::checkOrganizationOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"channel",this::checkChannelOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"network",this::checkNetworkOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"tlsCacert",this::checkTlsCacertOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"type",this::checkTypeOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"address",this::checkAddressOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"contactPerson",this::checkContactPersonOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"contactTelephone",this::checkContactTelephoneOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"version",this::checkVersionOfNode);
 		commonObjectPropertyCheck(nodeAsBaseEntity,"grpcOptionList",this::checkGrpcOptionListOfNode);
-		commonObjectPropertyCheck(nodeAsBaseEntity,"tlsCacertList",this::checkTlsCacertListOfNode);
+		commonObjectPropertyCheck(nodeAsBaseEntity,"channelPeerRoleList",this::checkChannelPeerRoleListOfNode);
 		return this;
 
 	}
@@ -213,21 +218,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 
 	}
 
-	public HfgwObjectChecker checkAndFixTlsCacert(BaseEntity tlsCacertAsBaseEntity){
-
-		if( isChecked(tlsCacertAsBaseEntity) ){
-			return this;
-		}
-		markAsChecked(tlsCacertAsBaseEntity);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"id",this::checkIdOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"path",this::checkPathOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"cert",this::checkCertOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"node",this::checkNodeOfTlsCacert);
-		commonObjectPropertyCheck(tlsCacertAsBaseEntity,"version",this::checkVersionOfTlsCacert);
-		return this;
-
-	}
-
 	public HfgwObjectChecker checkAndFixChannel(BaseEntity channelAsBaseEntity){
 
 		if( isChecked(channelAsBaseEntity) ){
@@ -239,9 +229,41 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(channelAsBaseEntity,"network",this::checkNetworkOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"version",this::checkVersionOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"nodeList",this::checkNodeListOfChannel);
+		commonObjectPropertyCheck(channelAsBaseEntity,"channelPeerRoleList",this::checkChannelPeerRoleListOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"chainCodeList",this::checkChainCodeListOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"applicationList",this::checkApplicationListOfChannel);
 		commonObjectPropertyCheck(channelAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfChannel);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixPeerRole(BaseEntity peerRoleAsBaseEntity){
+
+		if( isChecked(peerRoleAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(peerRoleAsBaseEntity);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"id",this::checkIdOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"name",this::checkNameOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"code",this::checkCodeOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"network",this::checkNetworkOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"version",this::checkVersionOfPeerRole);
+		commonObjectPropertyCheck(peerRoleAsBaseEntity,"channelPeerRoleList",this::checkChannelPeerRoleListOfPeerRole);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixChannelPeerRole(BaseEntity channelPeerRoleAsBaseEntity){
+
+		if( isChecked(channelPeerRoleAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(channelPeerRoleAsBaseEntity);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"id",this::checkIdOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"channel",this::checkChannelOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"node",this::checkNodeOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"peerRole",this::checkPeerRoleOfChannelPeerRole);
+		commonObjectPropertyCheck(channelPeerRoleAsBaseEntity,"version",this::checkVersionOfChannelPeerRole);
 		return this;
 
 	}
@@ -259,6 +281,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(chainCodeAsBaseEntity,"channel",this::checkChannelOfChainCode);
 		commonObjectPropertyCheck(chainCodeAsBaseEntity,"version",this::checkVersionOfChainCode);
 		commonObjectPropertyCheck(chainCodeAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfChainCode);
+		commonObjectPropertyCheck(chainCodeAsBaseEntity,"chainCodeInvokerList",this::checkChainCodeInvokerListOfChainCode);
 		return this;
 
 	}
@@ -279,6 +302,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(applicationAsBaseEntity,"network",this::checkNetworkOfApplication);
 		commonObjectPropertyCheck(applicationAsBaseEntity,"version",this::checkVersionOfApplication);
 		commonObjectPropertyCheck(applicationAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfApplication);
+		commonObjectPropertyCheck(applicationAsBaseEntity,"chainCodeInvokerList",this::checkChainCodeInvokerListOfApplication);
 		return this;
 
 	}
@@ -290,16 +314,35 @@ public class HfgwObjectChecker extends HfgwChecker{
 		}
 		markAsChecked(serviceRecordAsBaseEntity);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"id",this::checkIdOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"transactionId",this::checkTransactionIdOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"name",this::checkNameOfServiceRecord);
-		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"payLoad",this::checkPayLoadOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"payload",this::checkPayloadOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"channel",this::checkChannelOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"chainCode",this::checkChainCodeOfServiceRecord);
-		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"transactionId",this::checkTransactionIdOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"chainCodeFunction",this::checkChainCodeFunctionOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"blockId",this::checkBlockIdOfServiceRecord);
 		commonObjectPropertyAssign(serviceRecordAsBaseEntity,"createTime",this::assignCreateTimeOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"appClient",this::checkAppClientOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"network",this::checkNetworkOfServiceRecord);
-		commonObjectPropertyAssign(serviceRecordAsBaseEntity,"currentStatus",this::assignCurrentStatusOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"response",this::checkResponseOfServiceRecord);
+		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"status",this::checkStatusOfServiceRecord);
 		commonObjectPropertyCheck(serviceRecordAsBaseEntity,"version",this::checkVersionOfServiceRecord);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixTransactionStatus(BaseEntity transactionStatusAsBaseEntity){
+
+		if( isChecked(transactionStatusAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(transactionStatusAsBaseEntity);
+		commonObjectPropertyCheck(transactionStatusAsBaseEntity,"id",this::checkIdOfTransactionStatus);
+		commonObjectPropertyCheck(transactionStatusAsBaseEntity,"name",this::checkNameOfTransactionStatus);
+		commonObjectPropertyCheck(transactionStatusAsBaseEntity,"code",this::checkCodeOfTransactionStatus);
+		commonObjectPropertyCheck(transactionStatusAsBaseEntity,"network",this::checkNetworkOfTransactionStatus);
+		commonObjectPropertyCheck(transactionStatusAsBaseEntity,"version",this::checkVersionOfTransactionStatus);
+		commonObjectPropertyCheck(transactionStatusAsBaseEntity,"serviceRecordList",this::checkServiceRecordListOfTransactionStatus);
 		return this;
 
 	}
@@ -337,6 +380,23 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"requestType",this::checkRequestTypeOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"network",this::checkNetworkOfChangeRequest);
 		commonObjectPropertyCheck(changeRequestAsBaseEntity,"version",this::checkVersionOfChangeRequest);
+		commonObjectPropertyCheck(changeRequestAsBaseEntity,"chainCodeInvokerList",this::checkChainCodeInvokerListOfChangeRequest);
+		return this;
+
+	}
+
+	public HfgwObjectChecker checkAndFixChainCodeInvoker(BaseEntity chainCodeInvokerAsBaseEntity){
+
+		if( isChecked(chainCodeInvokerAsBaseEntity) ){
+			return this;
+		}
+		markAsChecked(chainCodeInvokerAsBaseEntity);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"id",this::checkIdOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"appClient",this::checkAppClientOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"chainCode",this::checkChainCodeOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"parameters",this::checkParametersOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"changeRequest",this::checkChangeRequestOfChainCodeInvoker);
+		commonObjectPropertyCheck(chainCodeInvokerAsBaseEntity,"version",this::checkVersionOfChainCodeInvoker);
 		return this;
 
 	}
@@ -389,7 +449,7 @@ public class HfgwObjectChecker extends HfgwChecker{
 		commonObjectPropertyCheck(secUserAsBaseEntity,"verificationCodeExpire",this::checkVerificationCodeExpireOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"lastLoginTime",this::checkLastLoginTimeOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"domain",this::checkDomainOfSecUser);
-		commonObjectPropertyAssign(secUserAsBaseEntity,"currentStatus",this::assignCurrentStatusOfSecUser);
+		commonObjectPropertyCheck(secUserAsBaseEntity,"blocking",this::checkBlockingOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"version",this::checkVersionOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"userAppList",this::checkUserAppListOfSecUser);
 		commonObjectPropertyCheck(secUserAsBaseEntity,"loginHistoryList",this::checkLoginHistoryListOfSecUser);
@@ -654,10 +714,24 @@ public class HfgwObjectChecker extends HfgwChecker{
 		return this;
 	}
 
+	public HfgwObjectChecker checkNodeListOfHyperledgerNetwork(List<BaseEntity> nodeList){
+		AtomicInteger index = new AtomicInteger();
+		nodeList.stream().forEach(node->
+			commonObjectElementCheck(node,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixNode));
+		return this;
+	}
+
 	public HfgwObjectChecker checkChannelListOfHyperledgerNetwork(List<BaseEntity> channelList){
 		AtomicInteger index = new AtomicInteger();
 		channelList.stream().forEach(channel->
 			commonObjectElementCheck(channel,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannel));
+		return this;
+	}
+
+	public HfgwObjectChecker checkPeerRoleListOfHyperledgerNetwork(List<BaseEntity> peerRoleList){
+		AtomicInteger index = new AtomicInteger();
+		peerRoleList.stream().forEach(peerRole->
+			commonObjectElementCheck(peerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixPeerRole));
 		return this;
 	}
 
@@ -672,6 +746,13 @@ public class HfgwObjectChecker extends HfgwChecker{
 		AtomicInteger index = new AtomicInteger();
 		serviceRecordList.stream().forEach(serviceRecord->
 			commonObjectElementCheck(serviceRecord,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixServiceRecord));
+		return this;
+	}
+
+	public HfgwObjectChecker checkTransactionStatusListOfHyperledgerNetwork(List<BaseEntity> transactionStatusList){
+		AtomicInteger index = new AtomicInteger();
+		transactionStatusList.stream().forEach(transactionStatus->
+			commonObjectElementCheck(transactionStatus,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixTransactionStatus));
 		return this;
 	}
 
@@ -738,10 +819,10 @@ public class HfgwObjectChecker extends HfgwChecker{
 		return this;
 	}
 
-	public HfgwObjectChecker checkTlsCacertListOfNode(List<BaseEntity> tlsCacertList){
+	public HfgwObjectChecker checkChannelPeerRoleListOfNode(List<BaseEntity> channelPeerRoleList){
 		AtomicInteger index = new AtomicInteger();
-		tlsCacertList.stream().forEach(tlsCacert->
-			commonObjectElementCheck(tlsCacert,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixTlsCacert));
+		channelPeerRoleList.stream().forEach(channelPeerRole->
+			commonObjectElementCheck(channelPeerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannelPeerRole));
 		return this;
 	}
 
@@ -769,6 +850,20 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		checkAndFixChannel(channelAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String NETWORK_OF_NODE = "node.network";
+
+
+	public HfgwObjectChecker checkNetworkOfNode(BaseEntity networkAsBaseEntity){
+
+		if(networkAsBaseEntity == null){
+			checkBaseEntityReference(networkAsBaseEntity,true,NETWORK_OF_NODE);
+			return this;
+		}
+		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
 		return this;
 	}
 
@@ -801,24 +896,17 @@ public class HfgwObjectChecker extends HfgwChecker{
 	}
 
 
-	public static final String NODE_OF_TLS_CACERT = "tls_cacert.node";
-
-
-	public HfgwObjectChecker checkNodeOfTlsCacert(BaseEntity nodeAsBaseEntity){
-
-		if(nodeAsBaseEntity == null){
-			checkBaseEntityReference(nodeAsBaseEntity,true,NODE_OF_TLS_CACERT);
-			return this;
-		}
-		checkAndFixNode(nodeAsBaseEntity);
-		return this;
-	}
-
-
 	public HfgwObjectChecker checkNodeListOfChannel(List<BaseEntity> nodeList){
 		AtomicInteger index = new AtomicInteger();
 		nodeList.stream().forEach(node->
 			commonObjectElementCheck(node,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixNode));
+		return this;
+	}
+
+	public HfgwObjectChecker checkChannelPeerRoleListOfChannel(List<BaseEntity> channelPeerRoleList){
+		AtomicInteger index = new AtomicInteger();
+		channelPeerRoleList.stream().forEach(channelPeerRole->
+			commonObjectElementCheck(channelPeerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannelPeerRole));
 		return this;
 	}
 
@@ -857,10 +945,80 @@ public class HfgwObjectChecker extends HfgwChecker{
 	}
 
 
+	public HfgwObjectChecker checkChannelPeerRoleListOfPeerRole(List<BaseEntity> channelPeerRoleList){
+		AtomicInteger index = new AtomicInteger();
+		channelPeerRoleList.stream().forEach(channelPeerRole->
+			commonObjectElementCheck(channelPeerRole,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChannelPeerRole));
+		return this;
+	}
+
+	public static final String NETWORK_OF_PEER_ROLE = "peer_role.network";
+
+
+	public HfgwObjectChecker checkNetworkOfPeerRole(BaseEntity networkAsBaseEntity){
+
+		if(networkAsBaseEntity == null){
+			checkBaseEntityReference(networkAsBaseEntity,true,NETWORK_OF_PEER_ROLE);
+			return this;
+		}
+		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String CHANNEL_OF_CHANNEL_PEER_ROLE = "channel_peer_role.channel";
+
+
+	public HfgwObjectChecker checkChannelOfChannelPeerRole(BaseEntity channelAsBaseEntity){
+
+		if(channelAsBaseEntity == null){
+			checkBaseEntityReference(channelAsBaseEntity,true,CHANNEL_OF_CHANNEL_PEER_ROLE);
+			return this;
+		}
+		checkAndFixChannel(channelAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String NODE_OF_CHANNEL_PEER_ROLE = "channel_peer_role.node";
+
+
+	public HfgwObjectChecker checkNodeOfChannelPeerRole(BaseEntity nodeAsBaseEntity){
+
+		if(nodeAsBaseEntity == null){
+			checkBaseEntityReference(nodeAsBaseEntity,true,NODE_OF_CHANNEL_PEER_ROLE);
+			return this;
+		}
+		checkAndFixNode(nodeAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String PEER_ROLE_OF_CHANNEL_PEER_ROLE = "channel_peer_role.peer_role";
+
+
+	public HfgwObjectChecker checkPeerRoleOfChannelPeerRole(BaseEntity peerRoleAsBaseEntity){
+
+		if(peerRoleAsBaseEntity == null){
+			checkBaseEntityReference(peerRoleAsBaseEntity,true,PEER_ROLE_OF_CHANNEL_PEER_ROLE);
+			return this;
+		}
+		checkAndFixPeerRole(peerRoleAsBaseEntity);
+		return this;
+	}
+
+
 	public HfgwObjectChecker checkServiceRecordListOfChainCode(List<BaseEntity> serviceRecordList){
 		AtomicInteger index = new AtomicInteger();
 		serviceRecordList.stream().forEach(serviceRecord->
 			commonObjectElementCheck(serviceRecord,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixServiceRecord));
+		return this;
+	}
+
+	public HfgwObjectChecker checkChainCodeInvokerListOfChainCode(List<BaseEntity> chainCodeInvokerList){
+		AtomicInteger index = new AtomicInteger();
+		chainCodeInvokerList.stream().forEach(chainCodeInvoker->
+			commonObjectElementCheck(chainCodeInvoker,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChainCodeInvoker));
 		return this;
 	}
 
@@ -882,6 +1040,13 @@ public class HfgwObjectChecker extends HfgwChecker{
 		AtomicInteger index = new AtomicInteger();
 		serviceRecordList.stream().forEach(serviceRecord->
 			commonObjectElementCheck(serviceRecord,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixServiceRecord));
+		return this;
+	}
+
+	public HfgwObjectChecker checkChainCodeInvokerListOfApplication(List<BaseEntity> chainCodeInvokerList){
+		AtomicInteger index = new AtomicInteger();
+		chainCodeInvokerList.stream().forEach(chainCodeInvoker->
+			commonObjectElementCheck(chainCodeInvoker,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChainCodeInvoker));
 		return this;
 	}
 
@@ -941,16 +1106,16 @@ public class HfgwObjectChecker extends HfgwChecker{
 	}
 
 
-	public static final String APPLICATION_OF_SERVICE_RECORD = "service_record.application";
+	public static final String APP_CLIENT_OF_SERVICE_RECORD = "service_record.app_client";
 
 
-	public HfgwObjectChecker checkApplicationOfServiceRecord(BaseEntity applicationAsBaseEntity){
+	public HfgwObjectChecker checkAppClientOfServiceRecord(BaseEntity appClientAsBaseEntity){
 
-		if(applicationAsBaseEntity == null){
-			checkBaseEntityReference(applicationAsBaseEntity,true,APPLICATION_OF_SERVICE_RECORD);
+		if(appClientAsBaseEntity == null){
+			checkBaseEntityReference(appClientAsBaseEntity,true,APP_CLIENT_OF_SERVICE_RECORD);
 			return this;
 		}
-		checkAndFixApplication(applicationAsBaseEntity);
+		checkAndFixApplication(appClientAsBaseEntity);
 		return this;
 	}
 
@@ -962,6 +1127,41 @@ public class HfgwObjectChecker extends HfgwChecker{
 
 		if(networkAsBaseEntity == null){
 			checkBaseEntityReference(networkAsBaseEntity,true,NETWORK_OF_SERVICE_RECORD);
+			return this;
+		}
+		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String STATUS_OF_SERVICE_RECORD = "service_record.status";
+
+
+	public HfgwObjectChecker checkStatusOfServiceRecord(BaseEntity statusAsBaseEntity){
+
+		if(statusAsBaseEntity == null){
+			checkBaseEntityReference(statusAsBaseEntity,true,STATUS_OF_SERVICE_RECORD);
+			return this;
+		}
+		checkAndFixTransactionStatus(statusAsBaseEntity);
+		return this;
+	}
+
+
+	public HfgwObjectChecker checkServiceRecordListOfTransactionStatus(List<BaseEntity> serviceRecordList){
+		AtomicInteger index = new AtomicInteger();
+		serviceRecordList.stream().forEach(serviceRecord->
+			commonObjectElementCheck(serviceRecord,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixServiceRecord));
+		return this;
+	}
+
+	public static final String NETWORK_OF_TRANSACTION_STATUS = "transaction_status.network";
+
+
+	public HfgwObjectChecker checkNetworkOfTransactionStatus(BaseEntity networkAsBaseEntity){
+
+		if(networkAsBaseEntity == null){
+			checkBaseEntityReference(networkAsBaseEntity,true,NETWORK_OF_TRANSACTION_STATUS);
 			return this;
 		}
 		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
@@ -990,6 +1190,13 @@ public class HfgwObjectChecker extends HfgwChecker{
 	}
 
 
+	public HfgwObjectChecker checkChainCodeInvokerListOfChangeRequest(List<BaseEntity> chainCodeInvokerList){
+		AtomicInteger index = new AtomicInteger();
+		chainCodeInvokerList.stream().forEach(chainCodeInvoker->
+			commonObjectElementCheck(chainCodeInvoker,wrapArrayIndex(index.getAndIncrement()),this::checkAndFixChainCodeInvoker));
+		return this;
+	}
+
 	public static final String REQUEST_TYPE_OF_CHANGE_REQUEST = "change_request.request_type";
 
 
@@ -1014,6 +1221,48 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		checkAndFixHyperledgerNetwork(networkAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String APP_CLIENT_OF_CHAIN_CODE_INVOKER = "chain_code_invoker.app_client";
+
+
+	public HfgwObjectChecker checkAppClientOfChainCodeInvoker(BaseEntity appClientAsBaseEntity){
+
+		if(appClientAsBaseEntity == null){
+			checkBaseEntityReference(appClientAsBaseEntity,true,APP_CLIENT_OF_CHAIN_CODE_INVOKER);
+			return this;
+		}
+		checkAndFixApplication(appClientAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String CHAIN_CODE_OF_CHAIN_CODE_INVOKER = "chain_code_invoker.chain_code";
+
+
+	public HfgwObjectChecker checkChainCodeOfChainCodeInvoker(BaseEntity chainCodeAsBaseEntity){
+
+		if(chainCodeAsBaseEntity == null){
+			checkBaseEntityReference(chainCodeAsBaseEntity,true,CHAIN_CODE_OF_CHAIN_CODE_INVOKER);
+			return this;
+		}
+		checkAndFixChainCode(chainCodeAsBaseEntity);
+		return this;
+	}
+
+
+	public static final String CHANGE_REQUEST_OF_CHAIN_CODE_INVOKER = "chain_code_invoker.change_request";
+
+
+	public HfgwObjectChecker checkChangeRequestOfChainCodeInvoker(BaseEntity changeRequestAsBaseEntity){
+
+		if(changeRequestAsBaseEntity == null){
+			checkBaseEntityReference(changeRequestAsBaseEntity,true,CHANGE_REQUEST_OF_CHAIN_CODE_INVOKER);
+			return this;
+		}
+		checkAndFixChangeRequest(changeRequestAsBaseEntity);
 		return this;
 	}
 
@@ -1310,22 +1559,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 		setEntityProperty(targetEntity,"createTime",userContext.now());
 		return this;
 	}
-	public HfgwObjectChecker assignApplicationOfServiceRecord(BaseEntity targetEntity){
-		if(!isObjectForCreate(targetEntity)){
-			return this;
-		}
-		return this;
-	}
-	public HfgwObjectChecker assignCurrentStatusOfServiceRecord(BaseEntity targetEntity){
-		if(!isObjectForCreate(targetEntity)){
-			return this;
-		}
-		if(userContext==null){
-			return this;
-		}
-		setEntityProperty(targetEntity,"currentStatus","INIT");
-		return this;
-	}
 	public HfgwObjectChecker assignCreateTimeOfChangeRequest(BaseEntity targetEntity){
 		if(!isObjectForCreate(targetEntity)){
 			return this;
@@ -1341,22 +1574,6 @@ public class HfgwObjectChecker extends HfgwChecker{
 			return this;
 		}
 		setEntityProperty(targetEntity,"remoteIp",userContext.getRemoteIP());
-		return this;
-	}
-	public HfgwObjectChecker assignBlockingOfSecUser(BaseEntity targetEntity){
-		if(!isObjectForCreate(targetEntity)){
-			return this;
-		}
-		return this;
-	}
-	public HfgwObjectChecker assignCurrentStatusOfSecUser(BaseEntity targetEntity){
-		if(!isObjectForCreate(targetEntity)){
-			return this;
-		}
-		if(userContext==null){
-			return this;
-		}
-		setEntityProperty(targetEntity,"currentStatus","INIT");
 		return this;
 	}
 	public HfgwObjectChecker assignBlockTimeOfSecUserBlocking(BaseEntity targetEntity){

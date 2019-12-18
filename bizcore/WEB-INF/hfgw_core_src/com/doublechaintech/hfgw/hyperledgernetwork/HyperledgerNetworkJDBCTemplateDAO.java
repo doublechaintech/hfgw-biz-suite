@@ -20,7 +20,10 @@ import com.doublechaintech.hfgw.MultipleAccessKey;
 import com.doublechaintech.hfgw.HfgwUserContext;
 
 
+import com.doublechaintech.hfgw.peerrole.PeerRole;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatus;
 import com.doublechaintech.hfgw.changerequest.ChangeRequest;
+import com.doublechaintech.hfgw.node.Node;
 import com.doublechaintech.hfgw.organization.Organization;
 import com.doublechaintech.hfgw.nodetype.NodeType;
 import com.doublechaintech.hfgw.channel.Channel;
@@ -28,9 +31,12 @@ import com.doublechaintech.hfgw.application.Application;
 import com.doublechaintech.hfgw.changerequesttype.ChangeRequestType;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecord;
 
+import com.doublechaintech.hfgw.node.NodeDAO;
 import com.doublechaintech.hfgw.organization.OrganizationDAO;
+import com.doublechaintech.hfgw.peerrole.PeerRoleDAO;
 import com.doublechaintech.hfgw.servicerecord.ServiceRecordDAO;
 import com.doublechaintech.hfgw.channel.ChannelDAO;
+import com.doublechaintech.hfgw.transactionstatus.TransactionStatusDAO;
 import com.doublechaintech.hfgw.changerequest.ChangeRequestDAO;
 import com.doublechaintech.hfgw.application.ApplicationDAO;
 import com.doublechaintech.hfgw.nodetype.NodeTypeDAO;
@@ -87,6 +93,25 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 			
 		
 	
+  	private  NodeDAO  nodeDAO;
+ 	public void setNodeDAO(NodeDAO pNodeDAO){
+ 	
+ 		if(pNodeDAO == null){
+ 			throw new IllegalStateException("Do not try to set nodeDAO to null.");
+ 		}
+	 	this.nodeDAO = pNodeDAO;
+ 	}
+ 	public NodeDAO getNodeDAO(){
+ 		if(this.nodeDAO == null){
+ 			throw new IllegalStateException("The nodeDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.nodeDAO;
+ 	}	
+ 	
+			
+		
+	
   	private  ChannelDAO  channelDAO;
  	public void setChannelDAO(ChannelDAO pChannelDAO){
  	
@@ -101,6 +126,25 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  		}
  		
 	 	return this.channelDAO;
+ 	}	
+ 	
+			
+		
+	
+  	private  PeerRoleDAO  peerRoleDAO;
+ 	public void setPeerRoleDAO(PeerRoleDAO pPeerRoleDAO){
+ 	
+ 		if(pPeerRoleDAO == null){
+ 			throw new IllegalStateException("Do not try to set peerRoleDAO to null.");
+ 		}
+	 	this.peerRoleDAO = pPeerRoleDAO;
+ 	}
+ 	public PeerRoleDAO getPeerRoleDAO(){
+ 		if(this.peerRoleDAO == null){
+ 			throw new IllegalStateException("The peerRoleDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.peerRoleDAO;
  	}	
  	
 			
@@ -139,6 +183,25 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  		}
  		
 	 	return this.serviceRecordDAO;
+ 	}	
+ 	
+			
+		
+	
+  	private  TransactionStatusDAO  transactionStatusDAO;
+ 	public void setTransactionStatusDAO(TransactionStatusDAO pTransactionStatusDAO){
+ 	
+ 		if(pTransactionStatusDAO == null){
+ 			throw new IllegalStateException("Do not try to set transactionStatusDAO to null.");
+ 		}
+	 	this.transactionStatusDAO = pTransactionStatusDAO;
+ 	}
+ 	public TransactionStatusDAO getTransactionStatusDAO(){
+ 		if(this.transactionStatusDAO == null){
+ 			throw new IllegalStateException("The transactionStatusDAO is not configured yet, please config it some where.");
+ 		}
+ 		
+	 	return this.transactionStatusDAO;
  	}	
  	
 			
@@ -245,8 +308,22 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  		}
 		
  		
+ 		if(isSaveNodeListEnabled(options)){
+ 			for(Node item: newHyperledgerNetwork.getNodeList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
  		if(isSaveChannelListEnabled(options)){
  			for(Channel item: newHyperledgerNetwork.getChannelList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
+ 		if(isSavePeerRoleListEnabled(options)){
+ 			for(PeerRole item: newHyperledgerNetwork.getPeerRoleList()){
  				item.setVersion(0);
  			}
  		}
@@ -261,6 +338,13 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  		
  		if(isSaveServiceRecordListEnabled(options)){
  			for(ServiceRecord item: newHyperledgerNetwork.getServiceRecordList()){
+ 				item.setVersion(0);
+ 			}
+ 		}
+		
+ 		
+ 		if(isSaveTransactionStatusListEnabled(options)){
+ 			for(TransactionStatus item: newHyperledgerNetwork.getTransactionStatusList()){
  				item.setVersion(0);
  			}
  		}
@@ -399,6 +483,20 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  	
 		
 	
+	protected boolean isExtractNodeListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,HyperledgerNetworkTokens.NODE_LIST);
+ 	}
+ 	protected boolean isAnalyzeNodeListEnabled(Map<String,Object> options){		 		
+ 		return HyperledgerNetworkTokens.of(options).analyzeNodeListEnabled();
+ 	}
+	
+	protected boolean isSaveNodeListEnabled(Map<String,Object> options){
+		return checkOptions(options, HyperledgerNetworkTokens.NODE_LIST);
+		
+ 	}
+ 	
+		
+	
 	protected boolean isExtractChannelListEnabled(Map<String,Object> options){		
  		return checkOptions(options,HyperledgerNetworkTokens.CHANNEL_LIST);
  	}
@@ -408,6 +506,20 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	
 	protected boolean isSaveChannelListEnabled(Map<String,Object> options){
 		return checkOptions(options, HyperledgerNetworkTokens.CHANNEL_LIST);
+		
+ 	}
+ 	
+		
+	
+	protected boolean isExtractPeerRoleListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,HyperledgerNetworkTokens.PEER_ROLE_LIST);
+ 	}
+ 	protected boolean isAnalyzePeerRoleListEnabled(Map<String,Object> options){		 		
+ 		return HyperledgerNetworkTokens.of(options).analyzePeerRoleListEnabled();
+ 	}
+	
+	protected boolean isSavePeerRoleListEnabled(Map<String,Object> options){
+		return checkOptions(options, HyperledgerNetworkTokens.PEER_ROLE_LIST);
 		
  	}
  	
@@ -436,6 +548,20 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	
 	protected boolean isSaveServiceRecordListEnabled(Map<String,Object> options){
 		return checkOptions(options, HyperledgerNetworkTokens.SERVICE_RECORD_LIST);
+		
+ 	}
+ 	
+		
+	
+	protected boolean isExtractTransactionStatusListEnabled(Map<String,Object> options){		
+ 		return checkOptions(options,HyperledgerNetworkTokens.TRANSACTION_STATUS_LIST);
+ 	}
+ 	protected boolean isAnalyzeTransactionStatusListEnabled(Map<String,Object> options){		 		
+ 		return HyperledgerNetworkTokens.of(options).analyzeTransactionStatusListEnabled();
+ 	}
+	
+	protected boolean isSaveTransactionStatusListEnabled(Map<String,Object> options){
+		return checkOptions(options, HyperledgerNetworkTokens.TRANSACTION_STATUS_LIST);
 		
  	}
  	
@@ -511,11 +637,27 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  		}
  		
 		
+		if(isExtractNodeListEnabled(loadOptions)){
+	 		extractNodeList(hyperledgerNetwork, loadOptions);
+ 		}	
+ 		if(isAnalyzeNodeListEnabled(loadOptions)){
+	 		analyzeNodeList(hyperledgerNetwork, loadOptions);
+ 		}
+ 		
+		
 		if(isExtractChannelListEnabled(loadOptions)){
 	 		extractChannelList(hyperledgerNetwork, loadOptions);
  		}	
  		if(isAnalyzeChannelListEnabled(loadOptions)){
 	 		analyzeChannelList(hyperledgerNetwork, loadOptions);
+ 		}
+ 		
+		
+		if(isExtractPeerRoleListEnabled(loadOptions)){
+	 		extractPeerRoleList(hyperledgerNetwork, loadOptions);
+ 		}	
+ 		if(isAnalyzePeerRoleListEnabled(loadOptions)){
+	 		analyzePeerRoleList(hyperledgerNetwork, loadOptions);
  		}
  		
 		
@@ -532,6 +674,14 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
  		}	
  		if(isAnalyzeServiceRecordListEnabled(loadOptions)){
 	 		analyzeServiceRecordList(hyperledgerNetwork, loadOptions);
+ 		}
+ 		
+		
+		if(isExtractTransactionStatusListEnabled(loadOptions)){
+	 		extractTransactionStatusList(hyperledgerNetwork, loadOptions);
+ 		}	
+ 		if(isAnalyzeTransactionStatusListEnabled(loadOptions)){
+	 		analyzeTransactionStatusList(hyperledgerNetwork, loadOptions);
  		}
  		
 		
@@ -657,6 +807,56 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	}	
 	
 		
+	protected void enhanceNodeList(SmartList<Node> nodeList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected HyperledgerNetwork extractNodeList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		if(hyperledgerNetwork == null){
+			return null;
+		}
+		if(hyperledgerNetwork.getId() == null){
+			return hyperledgerNetwork;
+		}
+
+		
+		
+		SmartList<Node> nodeList = getNodeDAO().findNodeByNetwork(hyperledgerNetwork.getId(),options);
+		if(nodeList != null){
+			enhanceNodeList(nodeList,options);
+			hyperledgerNetwork.setNodeList(nodeList);
+		}
+		
+		return hyperledgerNetwork;
+	
+	}	
+	
+	protected HyperledgerNetwork analyzeNodeList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		if(hyperledgerNetwork == null){
+			return null;
+		}
+		if(hyperledgerNetwork.getId() == null){
+			return hyperledgerNetwork;
+		}
+
+		
+		
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();
+		if(nodeList != null){
+			getNodeDAO().analyzeNodeByNetwork(nodeList, hyperledgerNetwork.getId(), options);
+			
+		}
+		
+		return hyperledgerNetwork;
+	
+	}	
+	
+		
 	protected void enhanceChannelList(SmartList<Channel> channelList,Map<String,Object> options){
 		//extract multiple list from difference sources
 		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
@@ -699,6 +899,56 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		SmartList<Channel> channelList = hyperledgerNetwork.getChannelList();
 		if(channelList != null){
 			getChannelDAO().analyzeChannelByNetwork(channelList, hyperledgerNetwork.getId(), options);
+			
+		}
+		
+		return hyperledgerNetwork;
+	
+	}	
+	
+		
+	protected void enhancePeerRoleList(SmartList<PeerRole> peerRoleList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected HyperledgerNetwork extractPeerRoleList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		if(hyperledgerNetwork == null){
+			return null;
+		}
+		if(hyperledgerNetwork.getId() == null){
+			return hyperledgerNetwork;
+		}
+
+		
+		
+		SmartList<PeerRole> peerRoleList = getPeerRoleDAO().findPeerRoleByNetwork(hyperledgerNetwork.getId(),options);
+		if(peerRoleList != null){
+			enhancePeerRoleList(peerRoleList,options);
+			hyperledgerNetwork.setPeerRoleList(peerRoleList);
+		}
+		
+		return hyperledgerNetwork;
+	
+	}	
+	
+	protected HyperledgerNetwork analyzePeerRoleList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		if(hyperledgerNetwork == null){
+			return null;
+		}
+		if(hyperledgerNetwork.getId() == null){
+			return hyperledgerNetwork;
+		}
+
+		
+		
+		SmartList<PeerRole> peerRoleList = hyperledgerNetwork.getPeerRoleList();
+		if(peerRoleList != null){
+			getPeerRoleDAO().analyzePeerRoleByNetwork(peerRoleList, hyperledgerNetwork.getId(), options);
 			
 		}
 		
@@ -799,6 +1049,56 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();
 		if(serviceRecordList != null){
 			getServiceRecordDAO().analyzeServiceRecordByNetwork(serviceRecordList, hyperledgerNetwork.getId(), options);
+			
+		}
+		
+		return hyperledgerNetwork;
+	
+	}	
+	
+		
+	protected void enhanceTransactionStatusList(SmartList<TransactionStatus> transactionStatusList,Map<String,Object> options){
+		//extract multiple list from difference sources
+		//Trying to use a single SQL to extract all data from database and do the work in java side, java is easier to scale to N ndoes;
+	}
+	
+	protected HyperledgerNetwork extractTransactionStatusList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		if(hyperledgerNetwork == null){
+			return null;
+		}
+		if(hyperledgerNetwork.getId() == null){
+			return hyperledgerNetwork;
+		}
+
+		
+		
+		SmartList<TransactionStatus> transactionStatusList = getTransactionStatusDAO().findTransactionStatusByNetwork(hyperledgerNetwork.getId(),options);
+		if(transactionStatusList != null){
+			enhanceTransactionStatusList(transactionStatusList,options);
+			hyperledgerNetwork.setTransactionStatusList(transactionStatusList);
+		}
+		
+		return hyperledgerNetwork;
+	
+	}	
+	
+	protected HyperledgerNetwork analyzeTransactionStatusList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		if(hyperledgerNetwork == null){
+			return null;
+		}
+		if(hyperledgerNetwork.getId() == null){
+			return hyperledgerNetwork;
+		}
+
+		
+		
+		SmartList<TransactionStatus> transactionStatusList = hyperledgerNetwork.getTransactionStatusList();
+		if(transactionStatusList != null){
+			getTransactionStatusDAO().analyzeTransactionStatusByNetwork(transactionStatusList, hyperledgerNetwork.getId(), options);
 			
 		}
 		
@@ -1091,9 +1391,23 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	 		
  		}		
 		
+		if(isSaveNodeListEnabled(options)){
+	 		saveNodeList(hyperledgerNetwork, options);
+	 		//removeNodeList(hyperledgerNetwork, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
 		if(isSaveChannelListEnabled(options)){
 	 		saveChannelList(hyperledgerNetwork, options);
 	 		//removeChannelList(hyperledgerNetwork, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
+		if(isSavePeerRoleListEnabled(options)){
+	 		savePeerRoleList(hyperledgerNetwork, options);
+	 		//removePeerRoleList(hyperledgerNetwork, options);
 	 		//Not delete the record
 	 		
  		}		
@@ -1108,6 +1422,13 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		if(isSaveServiceRecordListEnabled(options)){
 	 		saveServiceRecordList(hyperledgerNetwork, options);
 	 		//removeServiceRecordList(hyperledgerNetwork, options);
+	 		//Not delete the record
+	 		
+ 		}		
+		
+		if(isSaveTransactionStatusListEnabled(options)){
+	 		saveTransactionStatusList(hyperledgerNetwork, options);
+	 		//removeTransactionStatusList(hyperledgerNetwork, options);
 	 		//Not delete the record
 	 		
  		}		
@@ -1192,6 +1513,166 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	}
 
 
+	public HyperledgerNetwork planToRemoveNodeList(HyperledgerNetwork hyperledgerNetwork, String nodeIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(Node.ID_PROPERTY, nodeIds);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalNodeList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+
+			nodeItem.clearFromAll();
+		}
+		
+		
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return hyperledgerNetwork;	
+	
+	}
+
+
+	//disconnect HyperledgerNetwork with organization in Node
+	public HyperledgerNetwork planToRemoveNodeListWithOrganization(HyperledgerNetwork hyperledgerNetwork, String organizationId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(Node.ORGANIZATION_PROPERTY, organizationId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalNodeList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearOrganization();
+			nodeItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countNodeListWithOrganization(String hyperledgerNetworkId, String organizationId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(Node.ORGANIZATION_PROPERTY, organizationId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect HyperledgerNetwork with channel in Node
+	public HyperledgerNetwork planToRemoveNodeListWithChannel(HyperledgerNetwork hyperledgerNetwork, String channelId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(Node.CHANNEL_PROPERTY, channelId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalNodeList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearChannel();
+			nodeItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countNodeListWithChannel(String hyperledgerNetworkId, String channelId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(Node.CHANNEL_PROPERTY, channelId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect HyperledgerNetwork with type in Node
+	public HyperledgerNetwork planToRemoveNodeListWithType(HyperledgerNetwork hyperledgerNetwork, String typeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(Node.TYPE_PROPERTY, typeId);
+		
+		SmartList<Node> externalNodeList = getNodeDAO().
+				findNodeWithKey(key, options);
+		if(externalNodeList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalNodeList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(Node nodeItem: externalNodeList){
+			nodeItem.clearType();
+			nodeItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();		
+		nodeList.addAllToRemoveList(externalNodeList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countNodeListWithType(String hyperledgerNetworkId, String typeId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(Node.TYPE_PROPERTY, typeId);
+		
+		int count = getNodeDAO().countNodeWithKey(key, options);
+		return count;
+	}
+	
 	public HyperledgerNetwork planToRemoveChannelList(HyperledgerNetwork hyperledgerNetwork, String channelIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
@@ -1215,6 +1696,34 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		
 		SmartList<Channel> channelList = hyperledgerNetwork.getChannelList();		
 		channelList.addAllToRemoveList(externalChannelList);
+		return hyperledgerNetwork;	
+	
+	}
+
+
+	public HyperledgerNetwork planToRemovePeerRoleList(HyperledgerNetwork hyperledgerNetwork, String peerRoleIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(PeerRole.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(PeerRole.ID_PROPERTY, peerRoleIds);
+		
+		SmartList<PeerRole> externalPeerRoleList = getPeerRoleDAO().
+				findPeerRoleWithKey(key, options);
+		if(externalPeerRoleList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalPeerRoleList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(PeerRole peerRoleItem: externalPeerRoleList){
+
+			peerRoleItem.clearFromAll();
+		}
+		
+		
+		SmartList<PeerRole> peerRoleList = hyperledgerNetwork.getPeerRoleList();		
+		peerRoleList.addAllToRemoveList(externalPeerRoleList);
 		return hyperledgerNetwork;	
 	
 	}
@@ -1320,6 +1829,50 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	}
 
 
+	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
+	public HyperledgerNetwork planToRemoveServiceRecordListWithTransactionId(HyperledgerNetwork hyperledgerNetwork, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearTransactionId();
+			serviceRecordItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countServiceRecordListWithTransactionId(String hyperledgerNetworkId, String transactionIdId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
 	//disconnect HyperledgerNetwork with channel in ServiceRecord
 	public HyperledgerNetwork planToRemoveServiceRecordListWithChannel(HyperledgerNetwork hyperledgerNetwork, String channelId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -1408,50 +1961,6 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		return count;
 	}
 	
-	//disconnect HyperledgerNetwork with transaction_id in ServiceRecord
-	public HyperledgerNetwork planToRemoveServiceRecordListWithTransactionId(HyperledgerNetwork hyperledgerNetwork, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-		
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetwork.getId());
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
-		
-		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
-				findServiceRecordWithKey(key, options);
-		if(externalServiceRecordList == null){
-			return hyperledgerNetwork;
-		}
-		if(externalServiceRecordList.isEmpty()){
-			return hyperledgerNetwork;
-		}
-		
-		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
-			serviceRecordItem.clearTransactionId();
-			serviceRecordItem.clearNetwork();
-			
-		}
-		
-		
-		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();		
-		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
-		return hyperledgerNetwork;
-	}
-	
-	public int countServiceRecordListWithTransactionId(String hyperledgerNetworkId, String transactionIdId, Map<String,Object> options)throws Exception{
-				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
-		//the list will not be null here, empty, maybe
-		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
-
-		MultipleAccessKey key = new MultipleAccessKey();
-		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
-		key.put(ServiceRecord.TRANSACTION_ID_PROPERTY, transactionIdId);
-		
-		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
-		return count;
-	}
-	
 	//disconnect HyperledgerNetwork with block_id in ServiceRecord
 	public HyperledgerNetwork planToRemoveServiceRecordListWithBlockId(HyperledgerNetwork hyperledgerNetwork, String blockIdId, Map<String,Object> options)throws Exception{
 				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
@@ -1496,6 +2005,122 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		return count;
 	}
 	
+	//disconnect HyperledgerNetwork with app_client in ServiceRecord
+	public HyperledgerNetwork planToRemoveServiceRecordListWithAppClient(HyperledgerNetwork hyperledgerNetwork, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, appClientId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearAppClient();
+			serviceRecordItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countServiceRecordListWithAppClient(String hyperledgerNetworkId, String appClientId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(ServiceRecord.APP_CLIENT_PROPERTY, appClientId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
+	//disconnect HyperledgerNetwork with status in ServiceRecord
+	public HyperledgerNetwork planToRemoveServiceRecordListWithStatus(HyperledgerNetwork hyperledgerNetwork, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+		
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
+		
+		SmartList<ServiceRecord> externalServiceRecordList = getServiceRecordDAO().
+				findServiceRecordWithKey(key, options);
+		if(externalServiceRecordList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalServiceRecordList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(ServiceRecord serviceRecordItem: externalServiceRecordList){
+			serviceRecordItem.clearStatus();
+			serviceRecordItem.clearNetwork();
+			
+		}
+		
+		
+		SmartList<ServiceRecord> serviceRecordList = hyperledgerNetwork.getServiceRecordList();		
+		serviceRecordList.addAllToRemoveList(externalServiceRecordList);
+		return hyperledgerNetwork;
+	}
+	
+	public int countServiceRecordListWithStatus(String hyperledgerNetworkId, String statusId, Map<String,Object> options)throws Exception{
+				//SmartList<ThreadLike> toRemoveThreadLikeList = threadLikeList.getToRemoveList();
+		//the list will not be null here, empty, maybe
+		//getThreadLikeDAO().removeThreadLikeList(toRemoveThreadLikeList,options);
+
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(ServiceRecord.NETWORK_PROPERTY, hyperledgerNetworkId);
+		key.put(ServiceRecord.STATUS_PROPERTY, statusId);
+		
+		int count = getServiceRecordDAO().countServiceRecordWithKey(key, options);
+		return count;
+	}
+	
+	public HyperledgerNetwork planToRemoveTransactionStatusList(HyperledgerNetwork hyperledgerNetwork, String transactionStatusIds[], Map<String,Object> options)throws Exception{
+	
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(TransactionStatus.NETWORK_PROPERTY, hyperledgerNetwork.getId());
+		key.put(TransactionStatus.ID_PROPERTY, transactionStatusIds);
+		
+		SmartList<TransactionStatus> externalTransactionStatusList = getTransactionStatusDAO().
+				findTransactionStatusWithKey(key, options);
+		if(externalTransactionStatusList == null){
+			return hyperledgerNetwork;
+		}
+		if(externalTransactionStatusList.isEmpty()){
+			return hyperledgerNetwork;
+		}
+		
+		for(TransactionStatus transactionStatusItem: externalTransactionStatusList){
+
+			transactionStatusItem.clearFromAll();
+		}
+		
+		
+		SmartList<TransactionStatus> transactionStatusList = hyperledgerNetwork.getTransactionStatusList();		
+		transactionStatusList.addAllToRemoveList(externalTransactionStatusList);
+		return hyperledgerNetwork;	
+	
+	}
+
+
 	public HyperledgerNetwork planToRemoveChangeRequestTypeList(HyperledgerNetwork hyperledgerNetwork, String changeRequestTypeIds[], Map<String,Object> options)throws Exception{
 	
 		MultipleAccessKey key = new MultipleAccessKey();
@@ -1730,6 +2355,72 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	
 	
 		
+	protected HyperledgerNetwork saveNodeList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();
+		if(nodeList == null){
+			//null list means nothing
+			return hyperledgerNetwork;
+		}
+		SmartList<Node> mergedUpdateNodeList = new SmartList<Node>();
+		
+		
+		mergedUpdateNodeList.addAll(nodeList); 
+		if(nodeList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateNodeList.addAll(nodeList.getToRemoveList());
+			nodeList.removeAll(nodeList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getNodeDAO().saveNodeList(mergedUpdateNodeList,options);
+		
+		if(nodeList.getToRemoveList() != null){
+			nodeList.removeAll(nodeList.getToRemoveList());
+		}
+		
+		
+		return hyperledgerNetwork;
+	
+	}
+	
+	protected HyperledgerNetwork removeNodeList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+	
+	
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();
+		if(nodeList == null){
+			return hyperledgerNetwork;
+		}	
+	
+		SmartList<Node> toRemoveNodeList = nodeList.getToRemoveList();
+		
+		if(toRemoveNodeList == null){
+			return hyperledgerNetwork;
+		}
+		if(toRemoveNodeList.isEmpty()){
+			return hyperledgerNetwork;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getNodeDAO().removeNodeList(toRemoveNodeList,options);
+		
+		return hyperledgerNetwork;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
 	protected HyperledgerNetwork saveChannelList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
 		
 		
@@ -1783,6 +2474,72 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		//Call DAO to remove the list
 		
 		getChannelDAO().removeChannelList(toRemoveChannelList,options);
+		
+		return hyperledgerNetwork;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
+	protected HyperledgerNetwork savePeerRoleList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<PeerRole> peerRoleList = hyperledgerNetwork.getPeerRoleList();
+		if(peerRoleList == null){
+			//null list means nothing
+			return hyperledgerNetwork;
+		}
+		SmartList<PeerRole> mergedUpdatePeerRoleList = new SmartList<PeerRole>();
+		
+		
+		mergedUpdatePeerRoleList.addAll(peerRoleList); 
+		if(peerRoleList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdatePeerRoleList.addAll(peerRoleList.getToRemoveList());
+			peerRoleList.removeAll(peerRoleList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getPeerRoleDAO().savePeerRoleList(mergedUpdatePeerRoleList,options);
+		
+		if(peerRoleList.getToRemoveList() != null){
+			peerRoleList.removeAll(peerRoleList.getToRemoveList());
+		}
+		
+		
+		return hyperledgerNetwork;
+	
+	}
+	
+	protected HyperledgerNetwork removePeerRoleList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+	
+	
+		SmartList<PeerRole> peerRoleList = hyperledgerNetwork.getPeerRoleList();
+		if(peerRoleList == null){
+			return hyperledgerNetwork;
+		}	
+	
+		SmartList<PeerRole> toRemovePeerRoleList = peerRoleList.getToRemoveList();
+		
+		if(toRemovePeerRoleList == null){
+			return hyperledgerNetwork;
+		}
+		if(toRemovePeerRoleList.isEmpty()){
+			return hyperledgerNetwork;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getPeerRoleDAO().removePeerRoleList(toRemovePeerRoleList,options);
 		
 		return hyperledgerNetwork;
 	
@@ -1915,6 +2672,72 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		//Call DAO to remove the list
 		
 		getServiceRecordDAO().removeServiceRecordList(toRemoveServiceRecordList,options);
+		
+		return hyperledgerNetwork;
+	
+	}
+	
+	
+
+ 	
+ 	
+	
+	
+	
+		
+	protected HyperledgerNetwork saveTransactionStatusList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+		
+		
+		
+		
+		SmartList<TransactionStatus> transactionStatusList = hyperledgerNetwork.getTransactionStatusList();
+		if(transactionStatusList == null){
+			//null list means nothing
+			return hyperledgerNetwork;
+		}
+		SmartList<TransactionStatus> mergedUpdateTransactionStatusList = new SmartList<TransactionStatus>();
+		
+		
+		mergedUpdateTransactionStatusList.addAll(transactionStatusList); 
+		if(transactionStatusList.getToRemoveList() != null){
+			//ensures the toRemoveList is not null
+			mergedUpdateTransactionStatusList.addAll(transactionStatusList.getToRemoveList());
+			transactionStatusList.removeAll(transactionStatusList.getToRemoveList());
+			//OK for now, need fix later
+		}
+
+		//adding new size can improve performance
+	
+		getTransactionStatusDAO().saveTransactionStatusList(mergedUpdateTransactionStatusList,options);
+		
+		if(transactionStatusList.getToRemoveList() != null){
+			transactionStatusList.removeAll(transactionStatusList.getToRemoveList());
+		}
+		
+		
+		return hyperledgerNetwork;
+	
+	}
+	
+	protected HyperledgerNetwork removeTransactionStatusList(HyperledgerNetwork hyperledgerNetwork, Map<String,Object> options){
+	
+	
+		SmartList<TransactionStatus> transactionStatusList = hyperledgerNetwork.getTransactionStatusList();
+		if(transactionStatusList == null){
+			return hyperledgerNetwork;
+		}	
+	
+		SmartList<TransactionStatus> toRemoveTransactionStatusList = transactionStatusList.getToRemoveList();
+		
+		if(toRemoveTransactionStatusList == null){
+			return hyperledgerNetwork;
+		}
+		if(toRemoveTransactionStatusList.isEmpty()){
+			return hyperledgerNetwork;// Does this mean delete all from the parent object?
+		}
+		//Call DAO to remove the list
+		
+		getTransactionStatusDAO().removeTransactionStatusList(toRemoveTransactionStatusList,options);
 		
 		return hyperledgerNetwork;
 	
@@ -2065,9 +2888,12 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	
 		presentOrganizationList(hyperledgerNetwork,options);
 		presentNodeTypeList(hyperledgerNetwork,options);
+		presentNodeList(hyperledgerNetwork,options);
 		presentChannelList(hyperledgerNetwork,options);
+		presentPeerRoleList(hyperledgerNetwork,options);
 		presentApplicationList(hyperledgerNetwork,options);
 		presentServiceRecordList(hyperledgerNetwork,options);
+		presentTransactionStatusList(hyperledgerNetwork,options);
 		presentChangeRequestTypeList(hyperledgerNetwork,options);
 		presentChangeRequestList(hyperledgerNetwork,options);
 
@@ -2116,6 +2942,26 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 	}			
 		
 	//Using java8 feature to reduce the code significantly
+ 	protected HyperledgerNetwork presentNodeList(
+			HyperledgerNetwork hyperledgerNetwork,
+			Map<String, Object> options) {
+
+		SmartList<Node> nodeList = hyperledgerNetwork.getNodeList();		
+				SmartList<Node> newList= presentSubList(hyperledgerNetwork.getId(),
+				nodeList,
+				options,
+				getNodeDAO()::countNodeByNetwork,
+				getNodeDAO()::findNodeByNetwork
+				);
+
+		
+		hyperledgerNetwork.setNodeList(newList);
+		
+
+		return hyperledgerNetwork;
+	}			
+		
+	//Using java8 feature to reduce the code significantly
  	protected HyperledgerNetwork presentChannelList(
 			HyperledgerNetwork hyperledgerNetwork,
 			Map<String, Object> options) {
@@ -2130,6 +2976,26 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 
 		
 		hyperledgerNetwork.setChannelList(newList);
+		
+
+		return hyperledgerNetwork;
+	}			
+		
+	//Using java8 feature to reduce the code significantly
+ 	protected HyperledgerNetwork presentPeerRoleList(
+			HyperledgerNetwork hyperledgerNetwork,
+			Map<String, Object> options) {
+
+		SmartList<PeerRole> peerRoleList = hyperledgerNetwork.getPeerRoleList();		
+				SmartList<PeerRole> newList= presentSubList(hyperledgerNetwork.getId(),
+				peerRoleList,
+				options,
+				getPeerRoleDAO()::countPeerRoleByNetwork,
+				getPeerRoleDAO()::findPeerRoleByNetwork
+				);
+
+		
+		hyperledgerNetwork.setPeerRoleList(newList);
 		
 
 		return hyperledgerNetwork;
@@ -2170,6 +3036,26 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 
 		
 		hyperledgerNetwork.setServiceRecordList(newList);
+		
+
+		return hyperledgerNetwork;
+	}			
+		
+	//Using java8 feature to reduce the code significantly
+ 	protected HyperledgerNetwork presentTransactionStatusList(
+			HyperledgerNetwork hyperledgerNetwork,
+			Map<String, Object> options) {
+
+		SmartList<TransactionStatus> transactionStatusList = hyperledgerNetwork.getTransactionStatusList();		
+				SmartList<TransactionStatus> newList= presentSubList(hyperledgerNetwork.getId(),
+				transactionStatusList,
+				options,
+				getTransactionStatusDAO()::countTransactionStatusByNetwork,
+				getTransactionStatusDAO()::findTransactionStatusByNetwork
+				);
+
+		
+		hyperledgerNetwork.setTransactionStatusList(newList);
 		
 
 		return hyperledgerNetwork;
@@ -2229,7 +3115,19 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		return findAllCandidateByFilter(HyperledgerNetworkTable.COLUMN_NAME, filterKey, pageNo, pageSize, getHyperledgerNetworkMapper());
     }
 		
+    public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForNode(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(HyperledgerNetworkTable.COLUMN_NAME, filterKey, pageNo, pageSize, getHyperledgerNetworkMapper());
+    }
+		
     public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForChannel(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(HyperledgerNetworkTable.COLUMN_NAME, filterKey, pageNo, pageSize, getHyperledgerNetworkMapper());
+    }
+		
+    public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForPeerRole(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(HyperledgerNetworkTable.COLUMN_NAME, filterKey, pageNo, pageSize, getHyperledgerNetworkMapper());
@@ -2242,6 +3140,12 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
     }
 		
     public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForServiceRecord(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
+        // NOTE: by default, ignore owner info, just return all by filter key.
+		// You need override this method if you have different candidate-logic
+		return findAllCandidateByFilter(HyperledgerNetworkTable.COLUMN_NAME, filterKey, pageNo, pageSize, getHyperledgerNetworkMapper());
+    }
+		
+    public SmartList<HyperledgerNetwork> requestCandidateHyperledgerNetworkForTransactionStatus(HfgwUserContext userContext, String ownerClass, String id, String filterKey, int pageNo, int pageSize) throws Exception {
         // NOTE: by default, ignore owner info, just return all by filter key.
 		// You need override this method if you have different candidate-logic
 		return findAllCandidateByFilter(HyperledgerNetworkTable.COLUMN_NAME, filterKey, pageNo, pageSize, getHyperledgerNetworkMapper());
@@ -2317,6 +3221,29 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 		return loadedObjs;
 	}
 	
+	// 需要一个加载引用我的对象的enhance方法:Node的network的NodeList
+	public SmartList<Node> loadOurNodeList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(Node.NETWORK_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<Node> loadedObjs = userContext.getDAOGroup().getNodeDAO().findNodeWithKey(key, options);
+		Map<String, List<Node>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getNetwork().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<Node> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<Node> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setNodeList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
 	// 需要一个加载引用我的对象的enhance方法:Channel的network的ChannelList
 	public SmartList<Channel> loadOurChannelList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception{
 		if (us == null || us.isEmpty()){
@@ -2336,6 +3263,29 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 			SmartList<Channel> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setChannelList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
+	// 需要一个加载引用我的对象的enhance方法:PeerRole的network的PeerRoleList
+	public SmartList<PeerRole> loadOurPeerRoleList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(PeerRole.NETWORK_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<PeerRole> loadedObjs = userContext.getDAOGroup().getPeerRoleDAO().findPeerRoleWithKey(key, options);
+		Map<String, List<PeerRole>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getNetwork().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<PeerRole> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<PeerRole> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setPeerRoleList(loadedSmartList);
 		});
 		return loadedObjs;
 	}
@@ -2382,6 +3332,29 @@ public class HyperledgerNetworkJDBCTemplateDAO extends HfgwBaseDAOImpl implement
 			SmartList<ServiceRecord> loadedSmartList = new SmartList<>();
 			loadedSmartList.addAll(loadedList);
 			it.setServiceRecordList(loadedSmartList);
+		});
+		return loadedObjs;
+	}
+	
+	// 需要一个加载引用我的对象的enhance方法:TransactionStatus的network的TransactionStatusList
+	public SmartList<TransactionStatus> loadOurTransactionStatusList(HfgwUserContext userContext, List<HyperledgerNetwork> us, Map<String,Object> options) throws Exception{
+		if (us == null || us.isEmpty()){
+			return new SmartList<>();
+		}
+		Set<String> ids = us.stream().map(it->it.getId()).collect(Collectors.toSet());
+		MultipleAccessKey key = new MultipleAccessKey();
+		key.put(TransactionStatus.NETWORK_PROPERTY, ids.toArray(new String[ids.size()]));
+		SmartList<TransactionStatus> loadedObjs = userContext.getDAOGroup().getTransactionStatusDAO().findTransactionStatusWithKey(key, options);
+		Map<String, List<TransactionStatus>> loadedMap = loadedObjs.stream().collect(Collectors.groupingBy(it->it.getNetwork().getId()));
+		us.forEach(it->{
+			String id = it.getId();
+			List<TransactionStatus> loadedList = loadedMap.get(id);
+			if (loadedList == null || loadedList.isEmpty()) {
+				return;
+			}
+			SmartList<TransactionStatus> loadedSmartList = new SmartList<>();
+			loadedSmartList.addAll(loadedList);
+			it.setTransactionStatusList(loadedSmartList);
 		});
 		return loadedObjs;
 	}

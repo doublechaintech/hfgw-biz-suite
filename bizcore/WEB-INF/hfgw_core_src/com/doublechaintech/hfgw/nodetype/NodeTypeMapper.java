@@ -16,9 +16,6 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
  		setName(nodeType, rs, rowNumber); 		
  		setCode(nodeType, rs, rowNumber); 		
  		setNetwork(nodeType, rs, rowNumber); 		
- 		setAddress(nodeType, rs, rowNumber); 		
- 		setContactPerson(nodeType, rs, rowNumber); 		
- 		setContactTelephone(nodeType, rs, rowNumber); 		
  		setVersion(nodeType, rs, rowNumber);
 
 		return nodeType;
@@ -82,42 +79,6 @@ public class NodeTypeMapper extends BaseRowMapper<NodeType>{
  		nodeType.setNetwork(createEmptyNetwork(hyperledgerNetworkId));
  	}
  	
-	protected void setAddress(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String address = rs.getString(NodeTypeTable.COLUMN_ADDRESS);
-		if(address == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		nodeType.setAddress(address);
-	}
-		
-	protected void setContactPerson(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String contactPerson = rs.getString(NodeTypeTable.COLUMN_CONTACT_PERSON);
-		if(contactPerson == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		nodeType.setContactPerson(contactPerson);
-	}
-		
-	protected void setContactTelephone(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
-	
-		//there will be issue when the type is double/int/long
-		String contactTelephone = rs.getString(NodeTypeTable.COLUMN_CONTACT_TELEPHONE);
-		if(contactTelephone == null){
-			//do nothing when nothing found in database
-			return;
-		}
-		
-		nodeType.setContactTelephone(contactTelephone);
-	}
-		
 	protected void setVersion(NodeType nodeType, ResultSet rs, int rowNumber) throws SQLException{
 	
 		//there will be issue when the type is double/int/long

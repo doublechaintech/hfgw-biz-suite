@@ -33,6 +33,10 @@ import com.doublechaintech.hfgw.candidatecontainer.CandidateCandidateContainer;
 public class CandidateElementManagerImpl extends CustomHfgwCheckerManager implements CandidateElementManager {
 	
 	private static final String SERVICE_TYPE = "CandidateElement";
+	@Override
+	public CandidateElementDAO daoOf(HfgwUserContext userContext) {
+		return candidateElementDaoOf(userContext);
+	}
 	
 	@Override
 	public String serviceFor(){
